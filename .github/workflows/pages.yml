@@ -1,0 +1,33 @@
+# main에 push하면 GitHub Pages에 올린다 (1분쯤).
+# 페이지의 노트 링크(../폴더/x.md)는 Pages가 .md를 화면에 그려 주지 않으므로, 올릴 때만 GitHub 파일 보기 주소로 바꾼다. 원본 파일은 그대로다.
+name: Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rewrite note links
+        run: |
+          BLOB="https://github.com/${GITHUB_REPOSITORY}/blob/main"
+          sed -i -E "s#href=\"\.\./([^\"]+\.md)\"#href=\"$BLOB/\1\"#g; s#href=\"README\.md\"#href=\"$BLOB/concepts/README.md\"#g" concepts/*.html
+          rm -rf .git .github
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deploy
+        uses: actions/deploy-pages@v4
