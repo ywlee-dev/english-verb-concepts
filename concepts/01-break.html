@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BREAK 묶음 개념</title>
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --hit: #D85A30; --press: #BA7517; --ok: #1D9E75;
+    --obj: #dfe8f3; --obj-hi: #f4f8fc; --obj-line: #5f5e5a; --floor: #f1efe8; --wood: #b98b5e; --steel: #8a8984; --chip-on: #fbe9e2; --bad: #C0392B;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-hi: #4a5f76; --obj-line: #b4b2a9; --floor: #302f2b;
+      --wood: #9a7350; --steel: #9d9c96; --chip-on: #4a2c22; --bad: #e0705f; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .controls { display: grid; grid-template-columns: auto 1fr auto; gap: 10px 14px; align-items: center; margin-top: 8px; font-size: 15px; color: var(--muted); }
+  .controls output { min-width: 130px; color: var(--text); }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--hit); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--hit); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--hit); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  .en { color: var(--en); font-weight: 500; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--hit); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--press); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--press); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 망치는 머리 가운데, 조각은 각자 바닥 쪽을 축으로 움직인다 */
+  #hammer { transform-box: view-box; transform-origin: 520px 165px; transition: transform .25s ease-out; }
+  #hammer.a { animation: strikeA .28s cubic-bezier(.5,0,.9,.5); }
+  #hammer.b { animation: strikeB .28s cubic-bezier(.5,0,.9,.5); }
+  @keyframes strikeA { from { transform: translate(70px,-46px) rotate(-14deg); } }
+  @keyframes strikeB { from { transform: translate(70px,-46px) rotate(-14deg); } }
+  #chL, #chR, #chB { transform-box: view-box; transition: transform .3s ease-out; }
+  #chL { transform-origin: 420px 250px; } #chR { transform-origin: 500px 190px; } #chB { transform-origin: 490px 250px; }
+  @media (max-width: 600px) {
+    /* 휴대폰: 그림을 읽을 수 있는 크기로 두고 옆으로 밀어 본다, 슬라이더 이름은 슬라이더 위 한 줄로 */
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .controls { grid-template-columns: 1fr auto; gap: 2px 12px; }
+    .controls label { grid-column: 1 / -1; margin-top: 8px; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 다음: <a href="02-phrasal-direction.html">구동사의 방향 (up · down · out · in)</a> · 모든 질문의 출발점: <a href="04-core-question.html">핵심 질문 하나</a></p>
+  <h1>BREAK 묶음 — 같은 화분, 다른 HOW</h1>
+  <p class="lead">결과(망가짐)는 같고 <b>어떻게 힘을 주었나</b>만 바꾸면 동사가 갈린다. 버튼으로 힘 주는 방식을 고르고, 슬라이더로 힘을 올려 보세요.</p>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">힘 주는 방식과 세기에 따라 화분이나 캔이 망가지는 모양</title>
+      <desc id="d1">왼쪽은 RESULT + HOW = 동사 식이고, 오른쪽은 장면이다. 치기를 고르면 망치가 화분 옆을 친다. 약하면 금이 가고, 세면 큰 덩어리로 부서지고, 아주 세면 작은 조각으로 흩어진다. 누르기를 고르면 압축기가 캔을 위에서 눌러 납작하게 만든다.</desc>
+      <defs>
+        <path id="vaseBody" d="M410 250 C392 214 388 176 424 146 L428 124 L472 124 L476 146 C512 176 508 214 490 250 Z"/>
+        <clipPath id="vaseClip"><use href="#vaseBody"/></clipPath>
+        <g id="vase">
+          <use href="#vaseBody" fill="var(--obj)" stroke="var(--obj-line)" stroke-width="1.3"/>
+          <g clip-path="url(#vaseClip)">
+            <path d="M404 220 C398 188 410 164 432 150" fill="none" stroke="var(--obj-hi)" stroke-width="7" stroke-linecap="round" opacity="0.8"/>
+            <path d="M380 192 Q450 204 520 192" fill="none" stroke="var(--obj-line)" stroke-width="1" opacity="0.45"/>
+            <path d="M380 200 Q450 212 520 200" fill="none" stroke="var(--obj-line)" stroke-width="1" opacity="0.45"/>
+          </g>
+          <rect x="418" y="114" width="64" height="12" rx="5" fill="var(--obj)" stroke="var(--obj-line)" stroke-width="1.3"/>
+        </g>
+        <clipPath id="cL"><polygon points="380,100 452,100 444,170 458,262 380,262"/></clipPath>
+        <clipPath id="cR"><polygon points="452,100 530,100 530,190 466,198 444,170"/></clipPath>
+        <clipPath id="cB"><polygon points="444,170 466,198 530,190 530,262 458,262"/></clipPath>
+      </defs>
+
+      <!-- 왼쪽: RESULT + HOW = 동사 -->
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">RESULT (결과)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">BREAK · 망가짐</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect id="howBox" x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--hit)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">순간 충격 · 약하게</text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect id="verbBox" x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--hit)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="24" font-weight="700" fill="var(--hit)">CRACK</text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+
+      <!-- 오른쪽: 장면 -->
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)">TARGET · the vase (화분)</text>
+      <line x1="244" y1="250" x2="664" y2="250" stroke="var(--obj-line)" stroke-width="1"/>
+      <ellipse id="shadow" cx="450" cy="252" rx="58" ry="5" fill="var(--obj-line)" opacity="0.18"/>
+
+      <!-- 화분 (치기) -->
+      <g id="vaseWhole">
+        <use href="#vase"/>
+        <g clip-path="url(#vaseClip)">
+          <path id="crackLine" d="M452 124 L446 140 L455 154 L444 174 L452 196 L445 216 M455 154 L466 163 L470 177 M444 174 L434 184" fill="none" stroke="var(--obj-line)" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" opacity="0"/>
+        </g>
+      </g>
+      <g id="chunks" opacity="0">
+        <g id="chL"><use href="#vase" clip-path="url(#cL)"/></g>
+        <g id="chR"><use href="#vase" clip-path="url(#cR)"/></g>
+        <g id="chB"><use href="#vase" clip-path="url(#cB)"/></g>
+      </g>
+      <g id="shards" opacity="0" fill="var(--obj)" stroke="var(--obj-line)" stroke-width="0.9" stroke-linejoin="round"></g>
+
+      <!-- 캔과 압축기 (누르기) -->
+      <g id="pressG" opacity="0">
+        <rect x="364" y="44" width="10" height="206" rx="2" fill="var(--steel)"/>
+        <rect x="526" y="44" width="10" height="206" rx="2" fill="var(--steel)"/>
+        <rect x="356" y="36" width="188" height="16" rx="3" fill="var(--steel)"/>
+        <rect id="rod" x="444" y="52" width="12" height="40" fill="var(--steel)"/>
+        <path id="canBody" d="" fill="var(--obj)" stroke="var(--obj-line)" stroke-width="1.3" stroke-linejoin="round"/>
+        <ellipse id="canTop" cx="450" cy="130" rx="35" ry="5" fill="var(--obj-hi)" stroke="var(--obj-line)" stroke-width="1.1"/>
+        <rect id="plate" x="392" y="110" width="116" height="12" rx="3" fill="var(--press)"/>
+      </g>
+
+      <!-- 망치 (치기): 머리의 왼쪽 면이 화분 오른쪽 어깨(492,165)에 닿는 자리를 기준으로 그림 -->
+      <g id="hammer">
+        <rect x="514" y="76" width="11" height="92" rx="4" fill="var(--wood)" transform="rotate(38 519 160)"/>
+        <rect x="492" y="152" width="56" height="26" rx="4" fill="var(--steel)"/>
+        <rect x="492" y="152" width="9" height="26" rx="2" fill="var(--obj-line)"/>
+      </g>
+      <g id="bang" opacity="0" stroke="var(--hit)" stroke-linecap="round">
+        <line x1="486" y1="150" x2="478" y2="134"/><line x1="494" y1="146" x2="498" y2="130"/>
+        <line x1="486" y1="182" x2="478" y2="198"/><line x1="494" y1="186" x2="498" y2="202"/>
+      </g>
+
+      <text id="resultLabel" x="450" y="276" text-anchor="middle" font-size="14" fill="var(--muted)">가느다란 금이 감 — 아직 한 덩어리</text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons">
+      <span class="cap">힘 주는 방식</span>
+      <button id="bHit" aria-pressed="true">치기 — 순간 충격</button>
+      <button id="bPress" aria-pressed="false">누르기 — 계속 누르는 압력</button>
+    </div>
+    <div class="controls">
+      <label for="forceR">힘의 세기</label>
+      <input type="range" id="forceR" min="0" max="100" step="1" value="25">
+      <output id="forceV">25 · 약하게</output>
+    </div>
+    <div class="chips" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <button class="chip" data-v="BREAK">BREAK</button><button class="chip" data-v="CRACK">CRACK</button><button class="chip" data-v="SMASH">SMASH</button><button class="chip" data-v="SHATTER">SHATTER</button><button class="chip" data-v="CRUSH">CRUSH</button>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 힘이 얼마면 금이 가고 얼마면 부서지는지는 그림용으로 정한 숫자이고, 실제 물건마다 다르다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>망가지는 방식은 셀 수 없이 많은데 왜 낱말이 다섯 개나 될까? 영어로 말하는 사람들이 <b>자주 그려야 했던 그림</b>마다 그것을 한 낱말로 그리는 동사가 생겼기 때문이다. 동사를 하나씩 빼 보면 그 그림이 빈다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="t0 d0">
+      <title id="t0">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="d0">카드 여섯 장이 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — 결과 하나에 HOW가 붙는다</h2>
+  <p>이 노트 모음은 동사를 <b>BASIC/RESULT + HOW + TARGET</b> 세 칸으로 나눠 본다.</p>
+  <ul>
+    <li><b>RESULT(결과)</b> — 무엇이 되었나. 여기서는 "온전하던 것이 망가졌다" = <span class="en">BREAK</span>.</li>
+    <li><b>HOW(방식)</b> — 어떻게 그렇게 만들었나. 쳤나, 눌렀나, 조각이 많이 났나, 금만 갔나.</li>
+    <li><b>TARGET(대상)</b> — 무엇이 망가졌나. 화분처럼 잘 깨지는 것인지, 캔처럼 눌려 찌그러지는 것인지.</li>
+  </ul>
+  <div class="formula">
+    <span class="r">BREAK</span><span class="op">+</span><span>강한 충격으로 세게 부숨</span><span class="op">=</span><span class="v">SMASH</span>
+    <span class="r">BREAK</span><span class="op">+</span><span>많은 조각으로 흩어짐</span><span class="op">=</span><span class="v">SHATTER</span>
+    <span class="r">BREAK</span><span class="op">+</span><span>가느다란 금 · 부분 갈라짐</span><span class="op">=</span><span class="v">CRACK</span>
+    <span class="r">BREAK</span><span class="op">+</span><span>위나 양쪽에서 눌러 형태가 무너짐</span><span class="op">=</span><span class="v">CRUSH</span>
+  </div>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>치기 · 약하게</b> → 금만 간다. 아직 한 덩어리다. <span class="en">The vase cracked.</span></li>
+    <li><b>치기 · 세게</b> → 큰 덩어리로 부서진다. 부순 <b>방식</b>(쾅!)이 중심이다. <span class="en">He smashed the vase with a hammer.</span></li>
+    <li><b>치기 · 아주 세게</b> → 작은 조각이 흩어진다. 이제 <b>결과 모양</b>(조각조각)을 말하고 싶으면 <span class="en">The vase shattered into pieces.</span> 방식을 말하고 싶으면 여전히 <span class="en">smash</span>다. 둘 다 맞고, 무엇을 강조하느냐가 다르다.</li>
+    <li><b>누르기</b> → 순간 충격이 아니라 계속 누르는 힘이다. TARGET도 캔으로 바뀐다. <span class="en">The machine crushed the can.</span></li>
+    <li>어느 경우든 <b>방식을 빼고 망가졌다는 사실만</b> 말하면 <span class="en">break</span>다. 그래서 BREAK 칩은 망가지면 늘 켜진다.</li>
+  </ul>
+
+  <h2>3. 언제 무엇을 꺼내나</h2>
+  <table>
+    <tr><th>동사</th><th>장면 (노트의 예)</th><th>HOW / 결과</th></tr>
+    <tr><td><b>BREAK</b></td><td><span class="en">The vase broke.</span></td><td>방식은 말하지 않음</td></tr>
+    <tr><td><b>SMASH</b></td><td>비상 버튼 앞 유리 덮개를 망치로 쾅</td><td>강한 순간 충격. 꼭 산산조각일 필요는 없음</td></tr>
+    <tr><td><b>SHATTER</b></td><td>떨어진 유리 화분이 바닥에서 흩어짐</td><td>많은 조각이 된 결과에 초점</td></tr>
+    <tr><td><b>CRACK</b></td><td>화분에 가느다란 금 하나</td><td>부분 균열, 아직 한 덩어리</td></tr>
+    <tr><td><b>CRUSH</b></td><td>재활용 압축기가 빈 캔을 납작하게</td><td>지속적인 압력. 순간 충격인 smash와 반대쪽</td></tr>
+  </table>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>말할 때는 질문 네 개를 차례로 묻는다. 핵심은 <b>Q2</b>다. 동작을 앞에 세우면 사람이 주어(<span class="en">He smashed…</span>), 상태를 앞에 세우면 물건이 주어(<span class="en">The vase shattered.</span>)가 되어 동사와 문장 모양이 한 번에 정해진다. 동사를 눌러 길을 따라가 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="t3 d3">
+      <title id="t3">질문을 따라 BREAK 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="d3">맨 위 Q1 망가졌나에서 아니오면 hit·press, 예면 Q2 무엇을 앞에 세우나로 간다. 동작이면 Q3 어떤 힘이었나에서 smash와 crush로, 상태면 Q4 모양까지 말하나에서 crack, shatter, break로 갈린다. 맨 아래 띠는 왼쪽 방식만에서 오른쪽 결과만까지 이어지는 스펙트럼이고, 고른 동사의 자리가 켜진다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <p>새 동사를 만나 <b>스펙트럼의 어디에 놓을지</b> 정할 때는 다른 질문 세 개를 묻는다(공부할 때 쓰는 질문).</p>
+  <table>
+    <tr><th>동사</th><th>① "~했는데 안 망가졌다"가 말이 되나?</th><th>② 방식이 단어 안에 들어 있나?</th><th>③ -ed형으로 모양이 그려지나?</th><th>자리</th></tr>
+    <tr><td><b>hit · press</b></td><td>예 — 결과가 없다</td><td>—</td><td>—</td><td>방식만</td></tr>
+    <tr><td><b>smash</b></td><td>아니오</td><td>예 — 순간 충격</td><td>—</td><td>방식 + 결과</td></tr>
+    <tr><td><b>crush</b></td><td>아니오</td><td>예 — 계속 누름</td><td>—</td><td>방식 + 결과 (납작이 그려져 결과 쪽으로 기움)</td></tr>
+    <tr><td><b>crack</b></td><td>아니오</td><td>아니오</td><td>예 — 금</td><td>결과 모양</td></tr>
+    <tr><td><b>shatter</b></td><td>아니오</td><td>아니오</td><td>예 — 조각조각</td><td>결과 모양</td></tr>
+    <tr><td><b>break</b></td><td>아니오</td><td>아니오</td><td>아니오 — 망가짐만</td><td>결과만</td></tr>
+  </table>
+  <p class="note">이 질문들은 <b>무엇을 더 부각하나</b>를 고르는 길잡이지 칼같은 규칙이 아니다. smash에도 부서진 결과가, crush에도 납작해진 결과가 들어 있다. 한 장면에 crack·smash·shatter가 겹쳐 쓰이는 일도 흔하고, 그림의 힘 기준(약하면 금, 세면 부서짐)도 그림용이다.</p>
+
+  <h2>5. 실제 문장으로 — 목적어 자리 세 가지</h2>
+  <p>BREAK 묶음은 구동사가 아니라서 it이 가운데로 들어가는 일은 없다. 대신 <b>누가 깼다</b>(목적어 있음), <b>물건이 깨졌다</b>(목적어 없이 물건이 주어), <b>결과 말 붙이기</b>(into pieces 등)에서 동사마다 받는 모양이 다르다. 동사와 모양을 골라 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="t2 d2">
+      <title id="t2">문장 모양에 따라 낱말 순서가 바뀌는 그림</title>
+      <desc id="d2">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다. 물건이 주어가 되면 목적어 상자가 사라지고, 결과 말은 점선 상자로 문장 끝에 붙는다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons">
+      <span class="cap">동사</span>
+      <button data-ov="break">break</button>
+      <button data-ov="crack">crack</button>
+      <button data-ov="smash">smash</button>
+      <button data-ov="shatter">shatter</button>
+      <button data-ov="crush">crush</button>
+    </div>
+    <div class="buttons">
+      <span class="cap">문장 모양</span>
+      <button data-slot="tr">누가 → 무엇을</button>
+      <button data-slot="in">물건이 주어</button>
+      <button data-slot="res">결과 말 붙이기</button>
+    </div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <p>정리하면:</p>
+  <table>
+    <tr><th>동사</th><th>누가 → 무엇을</th><th>물건이 주어</th><th>결과 말</th></tr>
+    <tr><td><b>break</b></td><td><span class="en">He broke the vase.</span></td><td><span class="en">The vase broke.</span></td><td><span class="en">into pieces</span></td></tr>
+    <tr><td><b>crack</b></td><td><span class="en">He cracked the vase.</span></td><td><span class="en">The vase cracked.</span> — 가장 흔함</td><td><span class="en">in two · in half</span></td></tr>
+    <tr><td><b>smash</b></td><td><span class="en">He smashed the vase.</span> — 가장 흔함</td><td>되지만 덜 흔함</td><td><span class="en">to pieces · into pieces</span></td></tr>
+    <tr><td><b>shatter</b></td><td>되지만 덜 흔함</td><td><span class="en">The vase shattered.</span> — 가장 흔함</td><td><span class="en">into pieces</span></td></tr>
+    <tr><td><b>crush</b></td><td><span class="en">The machine crushed the can.</span></td><td>어색함 → <span class="en">The can got crushed.</span></td><td><span class="en">flat</span></td></tr>
+  </table>
+  <p><b>방식</b> 동사(smash, crush)는 친 사람·누른 것이 주어인 모양이 자연스럽고, <b>결과</b> 동사(crack, shatter)는 물건이 주어인 모양이 자연스럽다. 4절의 "방식이냐 결과냐"가 문장 모양에도 그대로 나온다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>SMASH</b> — 주먹으로 책상을 <b>탁!</b> 한 번 친다. 짧고 세다.</li>
+    <li><b>CRUSH</b> — 빈 페트병을 발바닥으로 <b>지그시</b> 밟아 납작하게 만든다. 길고 꾸준하다.</li>
+    <li><b>CRACK</b> — 손톱으로 달걀 껍데기를 <b>톡</b> 쳐서 금만 낸다.</li>
+    <li><b>SHATTER</b> — 손을 쫙 펴며 <b>파사삭</b> 흩어지는 손짓. 결과 모양을 손으로 그린다.</li>
+  </ul>
+  <p>"쳤나, 눌렀나"를 먼저 몸으로 고르고, 그다음 "방식을 말할까, 결과 모양을 말할까"를 고르면 된다.</p>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0절 "대신 말하면" 문장(<span class="en">The vase broke a little.</span> 등)이 어떻게 들리는지는 노트에 없는 풀이다. 사전 예문으로 확인할 것.</li>
+      <li>그림에서 "약하면 금, 세면 부서짐"으로 나눈 것은 보기 쉽게 하려고 정한 것이다. 노트에는 힘의 크기 기준이 없다. 금은 약한 충격에서만 생기는 게 아니고, <span class="en">crush the vase</span>도 압축 장면이 있으면 쓸 수 있다고 노트에 적혀 있다.</li>
+      <li>5절 "목적어 자리"(어느 모양이 더 흔한지, <span class="en">The can crushed</span>가 어색하다는 것, <span class="en">in two · to pieces · flat</span> 같은 결과 말)는 노트에 없는 내용이다. 각 노트의 Forms 칸에 옮기기 전에 사전 예문으로 확인할 것.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 노트와 연결하면</h2>
+  <ul>
+    <li>묶음 비교: <a href="https://github.com/ywlee-dev/english-verb-concepts/blob/main/break/_family.md">break/_family.md</a></li>
+    <li>개별 노트: <a href="https://github.com/ywlee-dev/english-verb-concepts/blob/main/break/break--damage-wholeness.md">break</a> · <a href="https://github.com/ywlee-dev/english-verb-concepts/blob/main/break/smash--break-by-impact.md">smash</a> · <a href="https://github.com/ywlee-dev/english-verb-concepts/blob/main/break/shatter--break-into-fragments.md">shatter</a> · <a href="https://github.com/ywlee-dev/english-verb-concepts/blob/main/break/crack--form-a-split.md">crack</a> · <a href="https://github.com/ywlee-dev/english-verb-concepts/blob/main/break/crush--break-by-compression.md">crush</a></li>
+    <li>형태: <span class="en">break → broke → broken</span>은 불규칙. 나머지 넷은 <span class="en">-ed</span>를 붙인다.</li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  let mode = 'hit', lastStage = -1;
+  // 그림용: 힘 기준값 (실제 물건마다 다름)
+  const T_NONE = 10, T_SMASH = 40, T_SHATTER = 75;
+  // 그림용: 흩어진 조각 (중심 x, y, 크기, 각도, 모양 번호)
+  const SHARDS = [[372,246,13,10,0],[396,241,9,70,1],[418,247,15,200,2],[440,236,8,40,0],[462,246,12,120,1],[482,240,10,300,2],
+    [504,247,14,30,0],[526,241,8,160,1],[548,246,11,250,2],[350,247,8,90,1],[572,247,9,20,0],[452,247,7,210,2],[428,232,6,330,1],[494,231,6,80,0],
+    [338,248,5,15,2],[590,248,5,60,1],[470,249,5,140,0],[410,249,4,280,2]];
+  const SHAPES = [[[0,-1],[0.9,0.4],[-0.7,0.6]], [[-0.8,-0.6],[0.7,-0.8],[0.9,0.5],[-0.5,0.7]], [[0,-1],[0.6,-0.2],[0.8,0.7],[-0.9,0.4]]];
+  $('shards').innerHTML = SHARDS.map(([x, y, s, a, k]) =>
+    '<polygon points="' + SHAPES[k].map(([px, py]) => (x + px * s).toFixed(1) + ',' + (y + py * s).toFixed(1)).join(' ') +
+    '" transform="rotate(' + a + ' ' + x + ' ' + y + ')"/>').join('');
+
+  function setVerbs(list) {
+    document.querySelectorAll('.chip').forEach((c) => c.classList.toggle('on', list.includes(c.dataset.v)));
+  }
+  // 그림용: 단계가 바뀌면 망치를 뒤로 뺐다가 다시 친다
+  // 클래스 이름을 a/b로 번갈아 붙여야 같은 애니메이션이 처음부터 다시 돈다
+  let swingA = false;
+  function swing() {
+    swingA = !swingA;
+    $('hammer').setAttribute('class', swingA ? 'a' : 'b');
+  }
+  function canPath(h, k) {
+    // 그림용: 눌릴수록 옆면이 지그재그로 접힌다
+    const top = 250 - h, a = 13 * k, n = 6;
+    let l = 'M415 250', r = '';
+    for (let i = 1; i < n; i++) { const y = 250 - h * i / n, dx = (i % 2 ? a : -a * 0.35); l += ' L' + (415 - dx).toFixed(1) + ' ' + y.toFixed(1); }
+    l += ' L415 ' + top.toFixed(1) + ' L485 ' + top.toFixed(1);
+    for (let i = n - 1; i >= 1; i--) { const y = 250 - h * i / n, dx = (i % 2 ? a : -a * 0.35); r += ' L' + (485 + dx).toFixed(1) + ' ' + y.toFixed(1); }
+    return l + r + ' L485 250 Z';
+  }
+  function draw() {
+    const f = +$('forceR').value;
+    const strength = f < T_NONE ? '아주 살짝' : f < T_SMASH ? '약하게' : f < T_SHATTER ? '세게' : '아주 세게';
+    $('forceV').textContent = f + ' · ' + strength;
+    $('bHit').setAttribute('aria-pressed', mode === 'hit');
+    $('bPress').setAttribute('aria-pressed', mode === 'press');
+    const hit = mode === 'hit', color = hit ? 'var(--hit)' : 'var(--press)';
+    $('hammer').setAttribute('opacity', hit ? 1 : 0);
+    $('pressG').setAttribute('opacity', hit ? 0 : 1);
+    $('howLabel').textContent = (hit ? '순간 충격' : '계속 누름') + ' · ' + strength;
+    $('targetLabel').textContent = hit ? 'TARGET · the vase (화분)' : 'TARGET · the can (빈 캔)';
+
+    let verb, result, say, verbs;
+    if (hit) {
+      const stage = f < T_NONE ? 0 : f < T_SMASH ? 1 : f < T_SHATTER ? 2 : 3;
+      if (stage !== lastStage) swing();
+      lastStage = stage;
+      // 그림용: 산산조각이 나면 망치가 화분이 있던 자리를 지나 조금 더 나간다
+      $('hammer').style.transform = stage === 3 ? 'translate(-34px,14px) rotate(-6deg)' : 'none';
+      $('bang').setAttribute('opacity', stage === 1 || stage === 2 ? Math.min(1, 0.4 + f / 100) : 0);
+      $('bang').setAttribute('stroke-width', 1 + f / 35);
+      $('vaseWhole').setAttribute('opacity', stage <= 1 ? 1 : 0);
+      $('crackLine').setAttribute('opacity', stage === 1 ? 1 : 0);
+      $('chunks').setAttribute('opacity', stage === 2 ? 1 : 0);
+      $('shards').setAttribute('opacity', stage === 3 ? 1 : 0);
+      $('shadow').setAttribute('opacity', stage === 3 ? 0 : 0.18);
+      const k = stage === 2 ? (f - T_SMASH) / (T_SHATTER - T_SMASH) : 0;
+      $('chL').style.transform = 'translate(' + (-12 - 18 * k) + 'px,' + (5 + 3 * k) + 'px) rotate(' + (-7 - 6 * k) + 'deg)';
+      $('chR').style.transform = 'translate(' + (-10 - 8 * k) + 'px,' + (-6 - 4 * k) + 'px) rotate(' + (-5 - 4 * k) + 'deg)';
+      $('chB').style.transform = 'translate(' + (-4 - 6 * k) + 'px,' + (3 + 2 * k) + 'px)';
+      if (stage === 0) { verb = '—'; verbs = []; result = '아직 그대로 — 망가지지 않음'; say = '힘이 너무 약해 아무 일도 없다. 아직 BREAK 묶음의 어느 동사도 쓸 수 없다.'; }
+      else if (stage === 1) { verb = 'CRACK'; verbs = ['BREAK', 'CRACK']; result = '가느다란 금이 감 — 아직 한 덩어리';
+        say = '<span class="en">The vase cracked.</span> 금이라는 <b>결과 모양</b>까지 말하면 CRACK. 모양을 빼면 <span class="en">The vase broke.</span>도 맞다.'; }
+      else if (stage === 2) { verb = 'SMASH'; verbs = ['BREAK', 'SMASH']; result = '큰 덩어리로 부서짐';
+        say = '<span class="en">He smashed the vase with a hammer.</span> 쾅 하고 친 <b>방식</b>이 중심이면 SMASH. <span class="en">with a hammer</span>는 충격을 전한 도구다.'; }
+      else { verb = 'SHATTER'; verbs = ['BREAK', 'SMASH', 'SHATTER']; result = '작은 조각으로 흩어짐';
+        say = '<span class="en">The vase shattered into pieces.</span> 조각조각이 된 <b>결과</b>를 말하면 SHATTER. 쾅 친 <b>방식</b>을 말하면 여전히 <span class="en">smashed</span> — 둘 다 맞다.'; }
+    } else {
+      lastStage = -1;
+      const k = f < T_NONE ? 0 : (f - T_NONE) / (100 - T_NONE);
+      const h = 110 * (1 - 0.72 * k), top = 250 - h;
+      $('canBody').setAttribute('d', canPath(h, k));
+      $('canTop').setAttribute('cy', top);
+      $('plate').setAttribute('y', top - 14);
+      $('rod').setAttribute('height', Math.max(0, top - 14 - 52));
+      $('bang').setAttribute('opacity', 0);
+      $('shadow').setAttribute('opacity', 0.18);
+      ['vaseWhole', 'chunks', 'shards'].forEach((id) => $(id).setAttribute('opacity', 0));
+      if (k === 0) { verb = '—'; verbs = []; result = '아직 그대로 — 캔이 버팀'; say = '누르는 힘이 약해 캔이 버틴다. 아직 망가지지 않았다.'; }
+      else { verb = 'CRUSH'; verbs = ['BREAK', 'CRUSH']; result = '눌려서 납작해짐 (' + Math.round(72 * k) + '% 낮아짐)';
+        say = '<span class="en">The machine crushed the can.</span> 순간 충격이 아니라 <b>계속 누르는 압력</b>이면 CRUSH. 그래서 TARGET도 눌려 찌그러지는 캔이 잘 어울린다.'; }
+    }
+    $('verbLabel').textContent = verb;
+    $('verbLabel').setAttribute('fill', verbs.length ? color : 'var(--muted)');
+    $('verbBox').setAttribute('stroke', verbs.length ? color : 'var(--line)');
+    $('verbBox').setAttribute('fill', verbs.length ? 'var(--chip-on)' : 'var(--bg)');
+    $('howBox').setAttribute('stroke', color);
+    $('resultLabel').textContent = result;
+    $('say').innerHTML = say;
+    $('say').style.borderLeftColor = color;
+    setVerbs(verbs);
+  }
+  $('forceR').addEventListener('input', draw);
+  $('bHit').addEventListener('click', () => { mode = 'hit'; draw(); });
+  $('bPress').addEventListener('click', () => { mode = 'press'; draw(); });
+  // 동사를 누르면 그 동사가 가장 잘 보이는 장면으로 (힘 값은 그림용)
+  const SCENE_OF = { CRACK: ['hit', 25], SMASH: ['hit', 58], SHATTER: ['hit', 90], CRUSH: ['press', 70] };
+  document.querySelectorAll('.chip').forEach((c) => c.addEventListener('click', () => {
+    const v = c.dataset.v;
+    if (v === 'BREAK') {
+      // BREAK는 방식을 말하지 않는다 — 이미 망가진 장면이면 그대로 두고, 아니면 금 간 장면으로
+      if (+$('forceR').value < T_NONE) { $('forceR').value = 25; }
+    } else { [mode, $('forceR').value] = SCENE_OF[v]; }
+    draw();
+    if (v === 'BREAK') $('say').innerHTML += '<br><b>BREAK</b>는 어느 장면이든 맞다 — 방식과 모양을 빼고 "망가졌다"는 사실만 말한다. <span class="en">The vase broke.</span>';
+  }));
+  draw();
+
+  // 5절: 문장 모양. 낱말 = [글자, 역할], 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--hit)', true], r: ['결과', 'var(--press)', false, true], x: ['', 'var(--line)'] };
+  const SLOTS = {
+    break: {
+      tr:  { ok: [['He', 's'], ['broke', 'v'], ['the vase', 'o']], say: '누가 깼는지 말한다. <span class="en">break → broke → broken</span>은 불규칙.' },
+      in:  { ok: [['The vase', 's'], ['broke', 'v']], say: '목적어 없이 물건이 주어가 된다. 누가 했는지 모르거나 중요하지 않을 때.' },
+      res: { ok: [['The vase', 's'], ['broke', 'v'], ['into pieces', 'r']], say: '<span class="en">into pieces</span>로 결과 모양을 덧붙인다. 처음부터 조각조각을 말하고 싶으면 shatter 한 낱말로 된다.' },
+    },
+    crack: {
+      tr:  { ok: [['He', 's'], ['cracked', 'v'], ['the vase', 'o']], say: '누가 금을 냈는지 말할 수도 있다.' },
+      in:  { ok: [['The vase', 's'], ['cracked', 'v']], say: '노트의 장면처럼 <b>물건이 주어</b>인 모양이 가장 흔하다. 금이라는 결과가 중심인 동사라서.' },
+      res: { ok: [['The vase', 's'], ['cracked', 'v'], ['in two', 'r']], say: '<span class="en">in two · in half</span>를 붙이면 금이 아니라 <b>두 동강</b>으로 갈라진 결과가 된다.' },
+    },
+    smash: {
+      tr:  { ok: [['He', 's'], ['smashed', 'v'], ['the vase', 'o'], ['with a hammer', 'x']], say: '가장 흔한 모양. 쾅 친 <b>사람(방식)</b>이 앞에 서고, <span class="en">with a hammer</span>로 도구를 붙인다.' },
+      in:  { ok: [['The vase', 's'], ['smashed', 'v'], ['on the floor', 'x']], say: '물건이 주어도 되지만 누가 → 무엇을 모양보다 덜 흔하다. 어디에 부딪혔는지(<span class="en">on the floor</span>)를 함께 말하는 일이 많다.' },
+      res: { ok: [['He', 's'], ['smashed', 'v'], ['the vase', 'o'], ['to pieces', 'r']], say: '<span class="en">smash to pieces · into pieces</span> 둘 다 쓴다.' },
+    },
+    shatter: {
+      tr:  { ok: [['The ball', 's'], ['shattered', 'v'], ['the window', 'o']], say: '누가 → 무엇을 모양도 되지만, 물건이 주어인 모양보다 덜 흔하다.' },
+      in:  { ok: [['The vase', 's'], ['shattered', 'v']], say: '<b>물건이 주어</b>인 모양이 가장 흔하다. 조각조각이 된 결과가 중심인 동사라서.' },
+      res: { ok: [['The vase', 's'], ['shattered', 'v'], ['into pieces', 'r']], say: '노트의 문장. <span class="en">into a thousand pieces</span>처럼 과장해서도 말한다.' },
+    },
+    crush: {
+      tr:  { ok: [['The machine', 's'], ['crushed', 'v'], ['the can', 'o']], say: '노트의 문장. <b>누르는 쪽</b>이 주어에 선다.' },
+      in:  { ok: [['The can', 's'], ['got crushed', 'v']], bad: [['The can', 's'], ['crushed', 'v']], say: 'crush는 물건을 주어로 한 <span class="en">The can crushed.</span>가 어색하다. 수동으로 <span class="en">got crushed · was crushed</span>를 쓴다.' },
+      res: { ok: [['The machine', 's'], ['crushed', 'v'], ['the can', 'o'], ['flat', 'r']], say: '<span class="en">flat</span>을 붙이면 납작해진 결과까지 말한다.' },
+    },
+  };
+  // 낱말 상자 한 줄 (03-solve와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px
+  const wordRow = (words, y, good) => {
+    const tx = (x, yy, size, txt, fill, extra) => '<text x="' + x + '" y="' + yy + '" font-size="' + size + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const wd = Math.round(w.length * 10.5 + 22), [name, stroke, hi, dash] = ROLE[r];
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+  // 4절: 질문 흐름 (03-solve와 같은 함수). 좌표는 그림용
+  //   nodes 질문 상자 {x, y, w, t, sub} · leaves 동사 상자 {x, y, w, v, sub, seg, say}
+  //   edges [부모, 자식, 답, 'left'|'right'|아래, 답 글자 자리, 점선] · segs 스펙트럼 띠 [x1, x2, 이름, 키]
+  //   region 묶음 테두리 {x, y, w, h, label, at} · 잎의 out = 묶음 밖으로 나가는 문
+  const FLOW = {
+    color: 'var(--hit)', segY: 300,
+    region: { x: 108, y: 66, w: 558, h: 258, label: 'BREAK 묶음 · RESULT = 망가짐', at: [116, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 170, t: 'Q1. 망가졌나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 앞에 세우나?' },
+      q3: { x: 205, y: 180, w: 170, t: 'Q3. 어떤 힘이었나?', sub: '동작 · 사람이 주어' },
+      q4: { x: 505, y: 180, w: 190, t: 'Q4. 모양까지 말하나?', sub: '상태 · 물건이 주어' },
+    },
+    leaves: {
+      hit:     { x: 60, y: 262, w: 88, v: 'hit · press', sub: '쳤다 · 눌렀다', seg: 'm', say: '쳤거나 눌렀다는 동작만 말한다. <span class="en">I hit the vase, but it didn\'t break.</span>가 말이 된다 — BREAK 묶음 밖.' },
+      smash:   { x: 155, y: 262, w: 92, v: 'smash', sub: '순간 충격', seg: 'mr', say: '<span class="en">He smashed the vase with a hammer.</span> 친 사람이 주어.' },
+      crush:   { x: 255, y: 262, w: 92, v: 'crush', sub: '계속 누름', seg: 'mr', say: '<span class="en">The machine crushed the can.</span> 누르는 쪽이 주어.' },
+      crack:   { x: 405, y: 262, w: 92, v: 'crack', sub: '금만', seg: 'r', say: '<span class="en">The vase cracked.</span> 물건이 주어.' },
+      shatter: { x: 510, y: 262, w: 92, v: 'shatter', sub: '조각조각', seg: 'r', say: '<span class="en">The vase shattered into pieces.</span> 물건이 주어.' },
+      break:   { x: 615, y: 262, w: 92, v: 'break', sub: '모양 없이', seg: 'b', say: '<span class="en">The vase broke.</span> 방식도 모양도 빼고 사실만.' },
+    },
+    edges: [
+      ['q1', 'hit', '아니오', 'left', [150, 28]], ['q1', 'q2', '예', '', [350, 75]],
+      ['q2', 'q3', '동작 (누가 어떻게 했나)', 'left'], ['q2', 'q4', '상태 (물건이 어떻게 됐나)', 'right'],
+      ['q3', 'smash', '순간 충격'], ['q3', 'crush', '계속 누름'],
+      ['q4', 'crack', '금만'], ['q4', 'shatter', '조각조각'], ['q4', 'break', '모양은 말하지 않음'],
+    ],
+    segs: [[16, 104, '방식만', 'm'], [109, 301, '방식 + 결과', 'mr'], [359, 556, '결과 모양', 'r'], [569, 661, '결과만', 'b']],
+  };
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 RESULT를 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+  let flowPick = 'smash';
+  function drawFlow() {
+    const [svg, say] = flowChart(FLOW, flowPick);
+    $('flowScene').innerHTML = svg;
+    $('fsay').innerHTML = say;
+    document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === flowPick));
+  }
+  Object.keys(FLOW.leaves).forEach((k) => {
+    const b = document.createElement('button');
+    b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+    b.addEventListener('click', () => { flowPick = k; drawFlow(); });
+    $('flowBtns').appendChild(b);
+  });
+  $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { flowPick = g.dataset.leaf; drawFlow(); } });
+  drawFlow();
+
+  let ov = 'smash', slot = 'tr';
+  function drawSlot() {
+    const c = SLOTS[ov][slot];
+    $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, c.ok ? 132 : 58, false) : '') + '</g>';
+    $('osay').innerHTML = c.say;
+    document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+    document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+  }
+  document.querySelectorAll('button[data-ov]').forEach((b) => b.addEventListener('click', () => { ov = b.dataset.ov; drawSlot(); }));
+  document.querySelectorAll('button[data-slot]').forEach((b) => b.addEventListener('click', () => { slot = b.dataset.slot; drawSlot(); }));
+  drawSlot();
+  const exVase = (op) => '<path d="M-18 27 C-26 11 -28 -6 -12 -20 L-10 -29 L10 -29 L12 -20 C28 -6 26 11 18 27 Z" fill="var(--obj)" stroke="var(--obj-line)" stroke-width="1.2"' + (op ? ' opacity="' + op + '"' : '') + '/>';
+  const exHammer = '<g transform="translate(24 -10) rotate(-20)"><rect x="-3" y="2" width="6" height="30" rx="2" fill="var(--wood)"/><rect x="-13" y="-7" width="26" height="12" rx="2" fill="var(--steel)"/></g>';
+  const exBang = '<g stroke="var(--hit)" stroke-width="2.5" stroke-linecap="round"><line x1="14" y1="-14" x2="8" y2="-24"/><line x1="18" y1="-8" x2="26" y2="-16"/></g>';
+  const EXIST = {
+    color: 'var(--hit)', outColor: 'var(--press)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 동사 하나를 빼 보세요. 그 카드가 빈칸이 되고, 다른 동사로 대신 말하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다.',
+    cards: [
+      { id: 'break', t: ['그냥 망가짐', '모양은 모름'], v: 'break', icon: exVase(.5) + '<path d="M2 -29 L-4 -14 L4 -2 L-3 12 L2 27" fill="none" stroke="var(--obj-line)" stroke-width="1.5"/>',
+        instead: 'The vase cracked? shattered?', lost: '모양을 모르거나 말하고 싶지 않을 때도 금인지 조각인지 하나를 골라야 한다.', why: '방식도 모양도 빼고 "망가졌다"는 사실만 말한다.' },
+      { id: 'crack', t: ['금만 감', '아직 한 덩어리'], v: 'crack', icon: exVase() + '<path d="M2 -29 L-3 -16 L3 -8 L-1 2" fill="none" stroke="var(--obj-line)" stroke-width="1.4"/>',
+        instead: 'The vase broke a little. △', lost: 'broke는 다 깨진 것처럼 들린다. "아직 한 덩어리"라는 그림이 없다.', why: '망가졌지만 아직 한 덩어리인 결과 모양.' },
+      { id: 'shatter', t: ['조각조각', '흩어짐'], v: 'shatter', icon: '<g fill="var(--obj)" stroke="var(--obj-line)" stroke-width=".9"><polygon points="-30,22 -22,14 -18,24"/><polygon points="-14,18 -4,10 -2,22"/><polygon points="4,24 10,12 16,22"/><polygon points="20,18 30,12 32,24"/><polygon points="-24,4 -16,-2 -14,8"/><polygon points="6,0 14,-6 16,4"/><polygon points="-6,-8 2,-14 2,-4"/></g>',
+        instead: 'The vase broke into many small pieces. △', lost: '말이 길어지고, 와장창 흩어지는 한순간의 그림이 약해진다.', why: '수많은 조각으로 흩어진 결과를 한 낱말로.' },
+      { id: 'smash', t: ['쾅! 세게 침', '그래서 부서짐'], v: 'smash', icon: '<g transform="translate(-10 0)">' + exVase() + '<path d="M2 -29 L-6 -12 L6 0 L-4 14 L2 27" fill="none" stroke="var(--bg)" stroke-width="4"/></g>' + exHammer + exBang,
+        instead: 'He hit the vase hard, and it broke. △', lost: '동작과 결과를 두 마디로 나눠야 한다. 쾅 하는 힘과 부서짐이 한 그림에 안 담긴다.', why: '세게 친 동작과 부서진 결과를 한 낱말로.' },
+      { id: 'crush', t: ['눌러서', '납작해짐'], v: 'crush', icon: '<rect x="-30" y="-14" width="60" height="7" rx="2" fill="var(--press)"/><path d="M-22 26 L-27 20 L-18 15 L-27 10 L-22 4 L22 4 L27 10 L18 15 L27 20 L22 26 Z" fill="var(--obj)" stroke="var(--obj-line)" stroke-width="1.1"/>',
+        instead: 'The machine broke the can. ✗', lost: '캔은 깨지지 않는다. 눌려서 납작해진 그림이 없다.', why: '계속 누르는 힘으로 형태가 무너진 것.' },
+      { id: 'hit', out: true, t: ['쳤지만', '멀쩡함'], v: 'hit', icon: '<g transform="translate(-10 0)">' + exVase() + '</g>' + exHammer,
+        instead: 'He smashed it, but it was fine. ✗', lost: 'smash에는 이미 부서진 결과가 들어 있어 "멀쩡함"을 말할 수 없다.', why: '결과 없이 동작만 — BREAK 묶음 밖의 이웃.' },
+    ],
+  };
+
+  // 0절: 왜 존재하나 — 그림 카드마다 그것을 그리는 동사. 하나를 빼면 그 카드가 빈다 (01·03·05에 같은 함수)
+  //   E = { color, outColor, intro, cards: [{ id, t: [제목 두 줄], v, out, icon, instead, lost, why }] }
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+  let existGone = '';
+  function drawExist() {
+    const [svg, say] = existChart(EXIST, existGone);
+    $('existScene').innerHTML = '<g data-gone="' + (existGone || 'none') + '">' + svg + '</g>';
+    $('esay').innerHTML = say;
+    document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === existGone));
+  }
+  [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+    const b = document.createElement('button');
+    b.textContent = label; b.dataset.gone = id;
+    b.addEventListener('click', () => { existGone = id; drawExist(); });
+    $('existBtns').appendChild(b);
+  });
+  drawExist();
+</script>
+</body>
+</html>
