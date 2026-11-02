@@ -138,15 +138,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 14 | [14-give.html](14-give.html) | GIVE 묶음 — give · hand · offer · lend · donate. "lend와 borrow — 한국어 빌리다의 함정". offer만 결과 미정 | HOW 버튼 → 나에게서 친구에게 가는 책(넘어감·손에서 손·내밀며 받을까?·돌아오는 점선·기증함) / 질문 흐름 + BORROW로 가는 문 / 사람 + 물건 · 물건 + to · it이면 |
 | 15 | [15-put.html](15-put.html) | PUT 묶음 — 결과(자리) 묶음. put · place · set · lay · drop. "put이 그리는 그림"(put on · out · off) | HOW 버튼 → 탁자 위 책(아무 데나·점선 자리·독서대·눕힘·툭) / 질문 흐름 + HOLD로 가는 문 / 장소가 꼭 필요한지 · lay와 lie |
 | 16 | [16-keep.html](16-keep.html) | KEEP 묶음 — keep · retain · store · save · preserve. "keep이 그리는 그림"(-ing · 형용사 · 약속) | HOW 버튼 → 파일과 시간 축(요일·삭제 정책 방패·보관함·정전·보존 유리) / 질문 흐름 + GIVE로 가는 문 / keep going ✗ to go |
+| 17 | [17-say.html](17-say.html) | SAY 묶음 — 목소리로 say · whisper · shout · mutter · murmur. "say와 tell — 가장 많이 틀리는 쌍" | HOW 버튼 → 입에서 퍼지는 물결의 크기·모양(말풍선·귓속말·체육관·뭉개진 말·병실) / 질문 흐름 + TELL로 가는 문 / 따옴표 · that 절 · 듣는 사람(✗ said me) |
+| 18 | [18-tell.html](18-tell.html) | TELL 묶음 — tell · inform · explain · warn · remind. "tell · explain — 사람을 어디에 두나" | HOW 버튼 → 미나가 알게 되는 장면(소식·학교 문자·칠판 ①②③·빙판 경고·다시 떠오르는 메모) / 질문 흐름 + ASK로 가는 문 / 사람 + 내용 · of · to + 동사 |
+| 19 | [19-ask.html](19-ask.html) | ASK 묶음 — 규모·깊이로 ask · poll · survey · interview · question. "ask가 그리는 그림"(정보·부탁·허락) | HOW 버튼 → 물음표·투표 막대·문항지와 표본·후속 질문·조명 아래 / 질문 흐름 + TELL로 가는 문 / 간접 의문문 어순 |
 
-01~16 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~16)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~16과 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~19 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~19)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~19와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- 나머지 묶음(66개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: say · tell · ask
+- 나머지 묶음(63개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: come · see · know
 
 ## 생성기로 만들기 (08부터)
 

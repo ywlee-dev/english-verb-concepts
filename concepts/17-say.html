@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAY 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/17-say.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="16-keep.html">KEEP 묶음</a> · 다음: <a href="18-tell.html">TELL 묶음</a> · 출발점: <a href="04-core-question.html">핵심 질문 하나</a></p>
+  <h1>SAY 묶음 — 같은 말, 다른 목소리</h1>
+  <p class="lead">"정답은 12야." <b>같은 말을 소리로 낸다</b>. 이 사실은 같고, <b>얼마나 크게, 어떤 목소리로</b> 냈는지만 바꾸면 say · whisper · shout · mutter · murmur로 갈린다. say는 목소리를 말하지 않고 <b>무슨 말을 했나</b>만 그린다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="say" title="say 소리로 듣기"><span class="en">say</span><span class="ipa">/seɪ/</span><span class="ko">[세이]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="whisper" title="whisper 소리로 듣기"><span class="en">whisper</span><span class="ipa">/ˈwɪs.pɚ/</span><span class="ko">[<b>위스</b>퍼]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="shout" title="shout 소리로 듣기"><span class="en">shout</span><span class="ipa">/ʃaʊt/</span><span class="ko">[샤우트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="mutter" title="mutter 소리로 듣기"><span class="en">mutter</span><span class="ipa">/ˈmʌt̬.ɚ/</span><span class="ko">[<b>머</b>터]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="murmur" title="murmur 소리로 듣기"><span class="en">murmur</span><span class="ipa">/ˈmɝː.mɚ/</span><span class="ko">[<b>머어</b>머]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">목소리에 따라 같은 말이 퍼져 나가는 모양이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 말하는 사람과 듣는 사람이다. say는 보통 말풍선, whisper는 귀 가까이 점선 물결, shout는 체육관 반대편까지 큰 물결, mutter는 고개를 숙이고 뭉개진 말풍선, murmur는 병실에서 낮고 부드러운 곡선이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">SAY · 말을 소리로 냄</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떤 목소리로</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 물결 크기는 그림용이다. 장면은 <a href="../say/_family.md">say/_family.md</a>와 각 노트 장면(교실·도서관 열람실·체육관·시험지 받는 교실·병실)을 옮겼다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"말했다"면 say 하나로 될 것 같은데, 듣는 사람이 그려야 하는 것이 <b>목소리</b>일 때가 많다 — 몰래 귓속말인지, 외쳤는지, 투덜댔는지, 다정하게 속삭였는지. 반대로 목소리는 상관없고 <b>무슨 말</b>인지만 옮길 때는 say가 꼭 있어야 한다. 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>SAY 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "말을 소리로 냄"에 목소리(HOW)가 붙는다</h2>
+  <p>이 묶음의 BASIC은 <b>말이나 메시지를 음성으로 표현함</b> = <span class="en">SAY</span>다. 여기에 장소의 소음과 사회적 목적이 목소리를 고른다. 노트의 비교표를 식으로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">SAY</span><span class="op">+</span><span>방식 미지정</span><span class="op">=</span><span class="v">SAY</span>
+    <span class="r">SAY</span><span class="op">+</span><span>성대를 거의 안 울리고 아주 작게</span><span class="op">=</span><span class="v">WHISPER</span>
+    <span class="r">SAY</span><span class="op">+</span><span>멀리 들리게 아주 크게</span><span class="op">=</span><span class="v">SHOUT</span>
+    <span class="r">SAY</span><span class="op">+</span><span>작고 불분명하게, 흔히 불만스럽게</span><span class="op">=</span><span class="v">MUTTER</span>
+    <span class="r">SAY</span><span class="op">+</span><span>낮고 부드러운 목소리로</span><span class="op">=</span><span class="v">MURMUR</span>
+  </div>
+  <p>노트가 꼭 짚은 것: 이 묶음은 <b>소리를 낸 방식</b>만 말한다. 외쳤어도 팀원이 <b>실제로 들었는지</b>, 속삭였어도 남이 <b>못 들었는지</b>는 따로 말해야 한다. 그래서 방식 묶음이다(06 PUSH · 08 GO처럼).</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>그냥 말함</b> → 보통 말풍선. 무슨 말인지가 중요하다. <span class="en">She said the answer.</span></li>
+    <li><b>귓속말</b> → 도서관, 귀 가까이 아주 작은 점선 물결. <span class="en">She whispered the answer to me.</span></li>
+    <li><b>외침</b> → 시끄러운 체육관 반대편까지 큰 물결. <span class="en">She shouted the answer across the gym.</span></li>
+    <li><b>투덜댐</b> → 시험지를 받고 고개를 숙여, 입안에서 뭉개진 말. <span class="en">He muttered a complaint.</span></li>
+    <li><b>나지막이</b> → 어두운 병실, 낮고 둥근 물결. 안심시키려고. <span class="en">She murmured a reassuring answer.</span></li>
+    <li>어느 장면이든 "말을 소리로 냈다"는 맞으니 <span class="en">say</span>도 쓸 수 있다. 그래서 SAY 칩은 늘 켜진다.</li>
+  </ul>
+
+  <h2>3. say와 tell — 가장 많이 틀리는 쌍</h2>
+  <p>둘 다 "말하다"지만 그림이 다르다. say는 <b>말 자체</b>(무슨 말을 했나)를, tell은 <b>듣는 사람이 알게 됨</b>(누구에게 무엇을 알렸나)을 그린다. 그래서 say는 듣는 사람을 목적어로 바로 받지 못한다.</p>
+  <table>
+    <tr><th></th><th>SAY (이 묶음)</th><th>TELL (<a href="18-tell.html">18</a>)</th></tr>
+    <tr><td>그림의 중심</td><td>말 · 소리</td><td>듣는 사람 · 알게 된 내용</td></tr>
+    <tr><td>듣는 사람</td><td>안 써도 됨. 쓰면 <span class="en">to me</span></td><td>바로 뒤에 — <span class="en">told me</span></td></tr>
+    <tr><td>예</td><td><span class="en">She said, "Hi." · She said hello to me.</span></td><td><span class="en">She told me the news.</span></td></tr>
+    <tr><td>틀린 문장</td><td>✗ <span class="en">She said me the news.</span></td><td>✗ <span class="en">She told, "Hi."</span></td></tr>
+  </table>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>SAY 묶음</b>이다. 목소리보다 <b>듣는 사람이 알게 된 것</b>을 말하고 싶으면 테두리 밖 문으로 TELL 묶음에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 SAY 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 말을 소리로 냈나에서 아니오면 write, 듣는 사람이 알게 된 게 중심이면 묶음 밖 문 tell, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 say, 얼마나 크게면 Q3에서 whisper와 shout, 어떤 목소리면 Q4에서 mutter와 murmur로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① "~했는데 아무도 못 들었다"가 말이 되나?</th><th>② 목소리가 단어 안에 들어 있나?</th><th>③ 흔한 마음</th><th>자리</th></tr>
+    <tr><td><b>say</b></td><td>예</td><td>아니오</td><td>—</td><td>방식만 (기본)</td></tr>
+    <tr><td><b>whisper</b></td><td>예</td><td>예 — 아주 작게</td><td>비밀 · 배려</td><td>방식만</td></tr>
+    <tr><td><b>shout</b></td><td>예 — <span class="en">I shouted, but no one heard.</span></td><td>예 — 아주 크게</td><td>급함 · 화</td><td>방식만</td></tr>
+    <tr><td><b>mutter</b></td><td>예 — 거의 혼잣말</td><td>예 — 작고 불분명</td><td>불만</td><td>방식만</td></tr>
+    <tr><td><b>murmur</b></td><td>예</td><td>예 — 낮고 부드럽게</td><td>위로 · 다정</td><td>방식만</td></tr>
+  </table>
+  <p class="note">길잡이지 칼같은 규칙이 아니다. ①의 판정은 노트("실제 들었는지는 확인해야 한다") 그대로이고, ③은 짐작이다.</p>
+
+  <h2>5. 실제 문장으로 — 말을 어떻게 붙이나</h2>
+  <p>이 묶음은 <b>한 말을 그대로</b>(따옴표) 옮기거나, <b>that 절</b>로 옮기거나, 듣는 사람을 <b>to</b>로 붙인다. 듣는 사람을 목적어로 바로 넣으면 틀린다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">붙이는 방법에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">붙이는 말</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>말 그대로 "…"</th><th>that 절</th><th>듣는 사람</th></tr>
+    <tr><td><b>say</b></td><td><span class="en">She said, "Hello."</span></td><td><span class="en">She said (that) the test is on Monday.</span></td><td><span class="en">said hello to me</span> (✗ said me)</td></tr>
+    <tr><td><b>whisper</b></td><td><span class="en">"Be quiet," she whispered.</span></td><td><span class="en">whispered that the movie had started</span></td><td><span class="en">whispered the answer to me</span></td></tr>
+    <tr><td><b>shout</b></td><td><span class="en">"Run!" he shouted.</span></td><td><span class="en">shouted that the bus was coming</span></td><td><span class="en">shout to me</span>(멀리 전달) · <span class="en">shout at me</span>(화내며)</td></tr>
+    <tr><td><b>mutter</b></td><td><span class="en">"Unfair," he muttered.</span></td><td><span class="en">muttered something about the test</span></td><td><span class="en">muttered to himself</span> — 혼잣말</td></tr>
+    <tr><td><b>murmur</b></td><td><span class="en">"It's okay," she murmured.</span></td><td><span class="en">murmured that everything would be fine</span></td><td><span class="en">murmured to the baby</span></td></tr>
+  </table>
+  <p class="note">경향 한 줄: 소설에서는 따옴표 뒤에 이 동사들이 와서 <b>목소리</b>를 그린다 — <span class="en">"Run!" he shouted.</span> 회화에서는 대개 say 하나로 충분하다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>SAY</b> — "12" 하고 <b>보통 목소리</b>로.</li>
+    <li><b>WHISPER</b> — 손으로 입을 가리고 옆 사람 귀에 <b>숨소리로</b> "12".</li>
+    <li><b>SHOUT</b> — 두 손을 입에 모으고 방 끝을 향해 "<b>12!</b>"</li>
+    <li><b>MUTTER</b> — 고개를 숙이고 입을 거의 안 벌리고 "<b>십이…</b> 쳇".</li>
+    <li><b>MURMUR</b> — 아기를 재우듯 <b>낮고 둥글게</b> "괜찮아…".</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>3절의 say·tell 표, 5절의 shout to / shout at 구분, 4절 ③의 "흔한 마음" 칸은 노트에 없는 풀이다.</li>
+      <li>0절 "대신 말하면"의 △·✗ 판정은 짐작이다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../say/_family.md">say/_family.md</a> — "장소의 소음과 사회적 목적이 목소리 HOW를 선택한다"</li>
+    <li>동사 노트: <a href="../say/say--express-words.md">say</a> · <a href="../say/whisper--say-very-quietly.md">whisper</a> · <a href="../say/shout--say-loudly.md">shout</a> · <a href="../say/mutter--say-indistinctly.md">mutter</a> · <a href="../say/murmur--say-softly.md">murmur</a></li>
+    <li>묶음 밖 이웃: <a href="18-tell.html">18 TELL</a>(<a href="../tell/_family.md">tell/_family.md</a>) — 듣는 사람이 알게 됨. 소리 없이 글로는 <a href="../write/_family.md">write 묶음</a>.</li>
+    <li>견줘 보기: <a href="09-look.html">09 LOOK</a> — 같은 "방식 고르기" 묶음(눈길 ↔ 목소리).</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — say 묶음은 <b>입에서 나가는 소리의 크기와 모양</b>을 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 말하는 사람 x = 300 (입 ≈ 318, 172) (그림용) ──
+  const SPK = (lean) => '<g transform="rotate(' + (lean || 0) + ' 300 240)">' + P(300, 240, 1.3, 'var(--sleeve)') + '</g>';
+  const BUB = (x, y, w, t, c, dash) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="34" rx="12" fill="var(--card)" stroke="' + (c || 'var(--obj-line)') + '"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' + tx(x + w / 2, y + 22, 13, t, c || 'var(--text)');
+  const waves = (x, y, n, r0, gap, c, w, dash) => Array.from({ length: n }, (_, i) => { const r = r0 + i * gap; return '<path d="M' + (x + r * .5) + ' ' + (y - r * .86) + ' A' + r + ' ' + r + ' 0 0 1 ' + (x + r * .5) + ' ' + (y + r * .86) + '" fill="none" stroke="' + c + '" stroke-width="' + w + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : '') + '/>'; }).join('');
+  const TOP = {
+    first: 'whisper', keep: 'SAY',
+    keepSay: '<b>SAY</b>는 이 장면에도 맞다 — 목소리를 빼고 그 말을 소리로 냈다는 것만 말한다. <span class="en">She said the answer.</span>',
+    chips: ['SAY', 'WHISPER', 'SHOUT', 'MUTTER', 'MURMUR'], out: [['TELL (듣는 사람이 알게 함)', '18-tell.html']],
+    hows: {
+      say: { btn: '그냥 말함', how: '목소리 미지정', verb: 'SAY', chips: ['SAY'], target: 'TARGET · "The answer is 12."',
+        result: '보통 목소리로 — 무슨 말인지가 중심',
+        pic: () => FLOOR + SPK() + P(560, 240, 1.3, 'var(--fog)') + step(.2, waves(318, 172, 2, 14, 12, 'var(--muted)', 2)) + step(.3, BUB(370, 100, 160, 'The answer is 12.')),
+        say: '<span class="en">She said the answer.</span> 크기도 말투도 말하지 않는다. <b>무슨 말을 했나</b>가 중심 — 남의 말을 옮길 때 가장 많이 쓴다.' },
+      whisper: { btn: '귓속말', how: '숨소리로 아주 작게', verb: 'WHISPER', chips: ['SAY', 'WHISPER'], target: 'TARGET · "The answer is 12."',
+        result: '도서관 · 귀 가까이 — 아주 작은 숨소리',
+        pic: () => FLOOR + SPK(8) + P(360, 240, 1.3, 'var(--fog)') + '<rect x="314" y="164" width="10" height="14" rx="3" fill="var(--skin)" stroke="var(--obj-line)"/>' + step(.2, waves(326, 170, 2, 8, 6, 'var(--accent)', 1.5, '2 3')) +
+          '<g opacity=".5">' + P(520, 240, 1.1, 'var(--fog)') + P(600, 240, 1.1, 'var(--fog)') + '</g><rect x="490" y="196" width="140" height="8" fill="var(--wood)"/>' + tx(560, 140, 12, '쉿 — 열람실', 'var(--muted)') + step(.3, tx(372, 120, 11, '(12…)', 'var(--accent)')),
+        say: '<span class="en">She whispered the answer to me.</span> 성대를 거의 안 울리고 <b>숨소리로 아주 작게</b>. 남이 못 들었는지는 단어가 말해 주지 않는다 — 노트가 짚은 점.' },
+      shout: { btn: '외침', how: '멀리 들리게 아주 크게', verb: 'SHOUT', chips: ['SAY', 'SHOUT'], target: 'TARGET · "The answer is 12!"',
+        result: '시끄러운 체육관 반대편까지 — 아주 크게',
+        pic: () => FLOOR + SPK(-4) + P(630, 240, 1.1, 'var(--ok)') + tx(630, 150, 11, '팀원', 'var(--muted)') + step(.2, waves(318, 172, 4, 14, 16, 'var(--accent)', 3)) +
+          step(.4, tx(470, 104, 22, '12!!', 'var(--accent)', ' font-weight="700"')) + '<path d="M420 230 l10 -16 l10 16 M560 230 l10 -16 l10 16" stroke="var(--muted)" stroke-width="2" fill="none"/>' + tx(500, 228, 11, '시끌시끌', 'var(--muted)'),
+        say: '<span class="en">She shouted the answer across the gym.</span> 소음 너머 <b>멀리까지 크게</b>. 급할 때도, 화날 때도. 팀원이 실제로 들었는지는 별도다.' },
+      mutter: { btn: '투덜댐', how: '작고 불분명 · 불만', verb: 'MUTTER', chips: ['SAY', 'MUTTER'], target: 'TARGET · a complaint (불만)',
+        result: '시험지를 받고 고개 숙여 — 입안에서 뭉개진 말',
+        pic: () => FLOOR + '<g transform="rotate(10 300 240)">' + P(300, 240, 1.3, 'var(--sleeve)') + '</g>' + '<rect x="330" y="196" width="40" height="30" rx="2" fill="var(--card)" stroke="var(--obj-line)"/>' + tx(350, 216, 13, '45', 'var(--bad)', ' font-weight="700"') +
+          step(.2, waves(326, 180, 2, 8, 7, 'var(--muted)', 2)) + step(.3, '<rect x="380" y="120" width="130" height="34" rx="12" fill="var(--card)" stroke="var(--muted)" stroke-dasharray="4 3"/><path d="M396 138 q8 -8 16 0 t16 0 t16 0 t16 0 t16 0 t16 0" fill="none" stroke="var(--muted)" stroke-width="2"/>') + tx(445, 172, 11, '(…불공평해…)', 'var(--muted)'),
+        say: '<span class="en">He muttered a complaint.</span> 남에게 들으라는 말이 아니다. <b>작고 불분명하게, 투덜투덜</b>. 혼잣말(<span class="en">mutter to himself</span>)에 가깝다.' },
+      murmur: { btn: '나지막이', how: '낮고 부드럽게', verb: 'MURMUR', chips: ['SAY', 'MURMUR'], target: 'TARGET · a reassuring answer (안심의 말)',
+        result: '어두운 병실 · 침대 옆 — 낮고 둥근 목소리',
+        pic: () => '<rect x="236" y="40" width="430" height="200" fill="#000" opacity=".2"/>' + FLOOR + SPK(6) + '<rect x="400" y="190" width="220" height="16" rx="4" fill="var(--card)" stroke="var(--obj-line)"/><path d="M410 206 V240 M610 206 V240" stroke="var(--obj-line)" stroke-width="3"/>' +
+          '<rect x="430" y="178" width="120" height="14" rx="7" fill="var(--fog)"/><circle cx="560" cy="180" r="10" fill="var(--skin)" stroke="var(--obj-line)"/>' +
+          step(.2, waves(320, 172, 3, 12, 10, 'var(--ok)', 2)) + step(.3, BUB(360, 100, 120, '괜찮아질 거야…', 'var(--ok)')),
+        say: '<span class="en">She murmured a reassuring answer.</span> <b>낮고 부드럽게</b>. 위로·다정함의 목소리. 멀리서 들리는 웅성거림(<span class="en">the murmur of voices</span>)도 같은 소리.' },
+    },
+  };
+
+  const mouth = (x, y) => '<circle cx="' + x + '" cy="' + y + '" r="10" fill="var(--skin)" stroke="var(--obj-line)"/>';
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. say를 먼저 빼 보세요.',
+    cards: [
+      { id: 'say', t: ['무슨 말을', '했나'], v: 'say', icon: mouth(-26, 0) + '<rect x="-12" y="-14" width="52" height="24" rx="9" fill="var(--card)" stroke="var(--obj-line)"/>' + tx(14, 3, 10, '"Hi."', 'var(--text)'),
+        instead: 'She told, "Good morning." ✗', lost: '들은 사람 없이 "말 그 자체"를 옮길 말이 없다. tell은 듣는 사람이 있어야 한다.', why: '말을 소리로 냄. 목소리는 말하지 않는다.' },
+      { id: 'whisper', t: ['숨소리로', '작게'], v: 'whisper', icon: mouth(-14, 0) + waves(-4, 0, 2, 6, 5, 'var(--accent)', 1.5, '2 2') + mouth(22, -2),
+        instead: 'She said it very quietly. △', lost: '조용하게는 담기지만, 귓속말의 숨소리·비밀스러움이 빠진다.', why: '성대를 거의 안 울리고 아주 작게.' },
+      { id: 'shout', t: ['멀리까지', '크게'], v: 'shout', icon: mouth(-30, 0) + waves(-20, 0, 4, 8, 10, 'var(--accent)', 2.5),
+        instead: 'He said it very loudly. △', lost: '크기는 담기지만, 소리치는 급함·힘이 빠진다.', why: '멀리 들리게 아주 크게.' },
+      { id: 'mutter', t: ['투덜', '투덜'], v: 'mutter', icon: '<g transform="rotate(14 -20 0)">' + mouth(-20, 0) + '</g><path d="M-4 4 q5 -5 10 0 t10 0 t10 0 t10 0" fill="none" stroke="var(--muted)" stroke-width="2"/>',
+        instead: 'He said something quietly and unclearly. △', lost: '길고, 불만을 입안에서 굴리는 투덜거림이 빠진다.', why: '작고 불분명하게, 흔히 불만스럽게.' },
+      { id: 'murmur', t: ['낮고', '부드럽게'], v: 'murmur', icon: mouth(-26, 0) + waves(-16, 0, 3, 8, 7, 'var(--ok)', 2),
+        instead: 'She said softly, "It\'s okay." △', lost: '말은 되지만 낮게 감싸는 다정한 목소리가 약하다.', why: '낮고 부드러운 목소리.' },
+      { id: 'tell', out: true, t: ['듣는 사람이', '알게 됨'], v: 'tell', icon: mouth(-26, 0) + arrow(-14, 14, 0, 'var(--accent2)', 2) + mouth(26, 0) + '<path d="M22 -16 l4 4 l8 -9" fill="none" stroke="var(--ok)" stroke-width="2.5"/>',
+        instead: 'She said me the news. ✗', lost: 'say는 듣는 사람을 바로 받지 못한다. 누구에게 알렸는지가 중심이면 tell.', why: '듣는 사람에게 내용을 알게 함 — 이웃 TELL 묶음.' },
+    ],
+  };
+
+  const SCENES = {
+    home: { btn: '하교 후', place: '집 · 아이가 학교에서 돌아와서',
+      pic: () => FL + P(270, 150, 1.1, FOG) + P(380, 150, .85, SL) + ST(.2, '<rect x="420" y="40" width="200" height="34" rx="12" fill="' + CARD + '" stroke="' + OL + '"/>' + T(520, 62, 12, '"시험은 다음 주 월요일"', 'var(--text)')) + L(520, 90, '선생님 말을 옮김'),
+      lines: [
+        ['엄마', 'What did your teacher <b>say</b>?', '선생님이 뭐라고 하셨어?', 1],
+        ['아이', 'She <b>said</b> the test is next Monday.', '시험이 다음 주 월요일이래요.', 1],
+      ],
+      say: '목소리는 상관없고 <b>무슨 말이었나</b>만 옮긴다 — <span class="en">say</span>. 남의 말 전하기의 기본.' },
+    movie: { btn: '영화관', place: '영화관 · 상영 중',
+      pic: () => '<rect x="0" y="0" width="680" height="170" fill="#000" opacity=".25"/><rect x="380" y="20" width="270" height="70" fill="' + CARD + '" opacity=".6"/>' + FL + P(250, 150, 1, FOG) + '<g transform="rotate(10 310 150)">' + P(310, 150, 1, SL) + '</g>' +
+        ST(.2, '<path d="M296 96 q-6 4 0 8 M290 92 q-10 8 0 16" fill="none" stroke="' + AC + '" stroke-width="1.5" stroke-dasharray="2 2"/>'),
+      lines: [
+        ['나', 'Why are you <b>whispering</b>?', '왜 속삭여?', 1],
+        ['친구', 'Because the movie already started!', '영화 벌써 시작했잖아!'],
+      ],
+      say: '남에게 방해되지 않게 <b>숨소리로 아주 작게</b> — <span class="en">whisper</span>.' },
+    concert: { btn: '공연장', place: '공연장 · 음악이 쿵쾅',
+      pic: () => FL + '<rect x="480" y="40" width="160" height="60" fill="' + BG + '" stroke="' + OL + '"/>' + T(560, 76, 14, '♪ ♫ ♪', AC, ' font-weight="700"') + P(260, 150, 1.1, FOG) + P(340, 150, 1.1, SL) +
+        ST(.2, '<path d="M356 92 a10 10 0 0 1 0 14 M362 86 a18 18 0 0 1 0 26 M368 80 a26 26 0 0 1 0 38" fill="none" stroke="' + AC + '" stroke-width="2.5"/>'),
+      lines: [
+        ['친구', 'Why are you <b>shouting</b>?', '왜 소리를 질러?'],
+        ['나', 'Because the music is so loud!', '음악이 너무 시끄러우니까!', 1],
+      ],
+      say: '소음 너머로 들리게 <b>크게</b> — <span class="en">shout</span>. 화내는 말이면 <span class="en">shout at</span>.' },
+    office: { btn: '회의 끝나고', place: '사무실 · 회의 끝난 뒤',
+      pic: () => FL + P(250, 150, 1.1, OKC) + P(330, 150, 1.1, FOG) + '<g transform="rotate(8 520 150)">' + P(520, 150, 1.1, SL) + '</g>' +
+        ST(.2, '<path d="M540 96 q5 -5 10 0 t10 0 t10 0 t10 0" fill="none" stroke="' + MU + '" stroke-width="2"/>') + L(560, 120, '(…또 야근…)'),
+      lines: [
+        ['동료', 'What did he <b>mutter</b> after the meeting?', '회의 끝나고 그 사람 뭐라고 투덜댔어?', 1],
+        ['나', 'Something about working late again.', '또 야근한다는 얘기 같던데.'],
+      ],
+      say: '들으라고 한 말이 아니라 <b>입안에서 투덜</b> — <span class="en">mutter</span>. 그래서 "뭐라고 했어?"가 따라온다.' },
+    nursery: { btn: '아기 재우기', place: '아기 방 · 밤',
+      pic: () => '<rect x="0" y="0" width="680" height="170" fill="#000" opacity=".22"/>' + FL + P(260, 150, 1.1, FOG) + P(400, 150, 1.1, SL) + '<rect x="440" y="104" width="60" height="16" rx="8" fill="' + CARD + '" stroke="' + OL + '"/><circle cx="492" cy="106" r="8" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/>' +
+        ST(.2, '<path d="M416 96 a8 8 0 0 1 0 12 M422 92 a14 14 0 0 1 0 20" fill="none" stroke="' + OKC + '" stroke-width="2"/>' + T(470, 80, 12, '♪ 자장자장…', OKC)) + T(590, 40, 16, '☾', 'var(--gold, #d9a21b)'),
+      lines: [
+        ['아빠', 'How did you get the baby to sleep?', '아기 어떻게 재웠어?'],
+        ['엄마', 'I just <b>murmured</b> a song until she fell asleep.', '잠들 때까지 노래를 나지막이 불러 줬어.', 1],
+      ],
+      say: '<b>낮고 부드럽게</b> 감싸는 목소리 — <span class="en">murmur</span>.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'whisper',
+    region: { x: 106, y: 66, w: 538, h: 258, label: 'SAY 묶음 · BASIC = 말을 소리로 냄', at: [114, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 220, t: 'Q1. 말을 소리로 냈나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 205, y: 180, w: 170, t: 'Q3. 얼마나 크게?', sub: '소리 크기' },
+      q4: { x: 520, y: 180, w: 170, t: 'Q4. 어떤 목소리?', sub: '불만 · 다정' },
+    },
+    leaves: {
+      write:   { x: 60, y: 262, w: 88, v: 'write', sub: '글로', seg: 't', say: '<span class="en">She wrote the answer.</span> 소리 없이 글로 → SAY 묶음 밖, write 묶음.' },
+      whisper: { x: 160, y: 262, w: 88, v: 'whisper', sub: '아주 작게', seg: 'm', say: '<span class="en">She whispered to me.</span> 숨소리로.' },
+      shout:   { x: 255, y: 262, w: 88, v: 'shout', sub: '아주 크게', seg: 'm', say: '<span class="en">He shouted across the gym.</span> 멀리까지.' },
+      say:     { x: 360, y: 262, w: 92, v: 'say', sub: '목소리 말 안 함', seg: 'm', say: '<span class="en">She said, "Hi."</span> 이 묶음의 기본 동사.' },
+      mutter:  { x: 470, y: 262, w: 88, v: 'mutter', sub: '투덜 · 불분명', seg: 'm', say: '<span class="en">He muttered a complaint.</span>' },
+      murmur:  { x: 575, y: 262, w: 88, v: 'murmur', sub: '낮고 부드럽게', seg: 'm', say: '<span class="en">She murmured, "It\'s okay."</span>' },
+      tell:    { x: 600, y: 36, w: 120, v: 'tell', sub: '→ TELL 묶음', seg: '', out: true, say: '<span class="en">She told me the news.</span> 목소리가 아니라 <b>듣는 사람이 알게 된 것</b>이 중심 → SAY 묶음 밖, <a href="18-tell.html">18 TELL</a>.' },
+    },
+    edges: [
+      ['q1', 'write', '아니오 · 글로', 'left', [150, 28]], ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'tell', '듣는 사람 중심', 'right', [490, 28], true],
+      ['q2', 'q3', '크기'], ['q2', 'say', '말하지 않음'], ['q2', 'q4', '목소리'],
+      ['q3', 'whisper', '아주 작게'], ['q3', 'shout', '아주 크게'],
+      ['q4', 'mutter', '불만'], ['q4', 'murmur', '다정'],
+    ],
+    segs: [[16, 104, '소리 없음', 't'], [109, 640, '방식 — 어떤 목소리로 (들렸는지는 말하지 않음)', 'm']],
+  };
+
+  const SLOTS = {
+    first: ['say', 'to'],
+    slots: { quote: '말 그대로 "…"', that: 'that 절', to: '듣는 사람' },
+    verbs: {
+      say: {
+        quote: { ok: [['She', 's'], ['said,', 'v'], ['"Hello."', 'o']], say: '말 그대로 따옴표로.' },
+        that:  { ok: [['She', 's'], ['said', 'v'], ['(that) the test is Monday', 'x']], say: 'that은 회화에서 자주 빠진다.' },
+        to:    { ok: [['She', 's'], ['said', 'v'], ['hello', 'o'], ['to me', 'r']], bad: [['She', 's'], ['said', 'v'], ['me', 'o'], ['hello', 'o']], say: '듣는 사람은 <b>to</b>로. say 바로 뒤에 사람을 넣으면 틀린다 — 그 자리는 tell의 것.' },
+      },
+      whisper: {
+        quote: { ok: [['"Be quiet,"', 'o'], ['she', 's'], ['whispered', 'v']], say: '소설식 — 따옴표 뒤에 동사.' },
+        that:  { ok: [['He', 's'], ['whispered', 'v'], ['that the movie had started', 'x']], say: '내용을 that으로.' },
+        to:    { ok: [['She', 's'], ['whispered', 'v'], ['the answer', 'o'], ['to me', 'r']], say: '노트 예문.' },
+      },
+      shout: {
+        quote: { ok: [['"Run!"', 'o'], ['he', 's'], ['shouted', 'v']], say: '급한 외침.' },
+        that:  { ok: [['He', 's'], ['shouted', 'v'], ['that the bus was coming', 'x']], say: '내용을 that으로.' },
+        to:    { ok: [['Don\'t', 'x'], ['shout', 'v'], ['at me', 'r']], say: '<b>at</b>은 화내며 퍼붓기, <b>to</b>는 멀리 있는 사람에게 전하기. 전치사 하나로 마음이 갈린다.' },
+      },
+      mutter: {
+        quote: { ok: [['"Unfair,"', 'o'], ['he', 's'], ['muttered', 'v']], say: '투덜거린 말.' },
+        that:  { ok: [['He', 's'], ['muttered', 'v'], ['something about the test', 'o']], say: '무슨 말인지 잘 안 들리니 something이 자주 붙는다.' },
+        to:    { ok: [['He', 's'], ['muttered', 'v'], ['to himself', 'r']], say: '혼잣말 — 듣는 사람이 자기 자신.' },
+      },
+      murmur: {
+        quote: { ok: [['"It\'s okay,"', 'o'], ['she', 's'], ['murmured', 'v']], say: '다정한 한마디.' },
+        that:  { ok: [['She', 's'], ['murmured', 'v'], ['that everything would be fine', 'x']], say: '내용을 that으로.' },
+        to:    { ok: [['She', 's'], ['murmured', 'v'], ['to the baby', 'r']], say: '듣는 사람은 to.' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>
