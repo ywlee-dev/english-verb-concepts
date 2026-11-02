@@ -144,15 +144,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 20 | [20-come.html](20-come.html) | COME 묶음 — come · arrive · return · approach · enter. "come과 go" | HOW 버튼 → 집·학교 사이 아이의 이동(이리 오렴·정문 도착·되돌아옴·남은 거리·문턱) / 질문 흐름 + GO로 가는 문 / 장소 앞 전치사 ✓·✗ | |
 | 21 | [21-see.html](21-see.html) | SEE 묶음 — see · notice · spot · observe · recognize. "see · look at · watch · observe" | HOW 버튼 → 학생과 새(창밖 빛줄기·흔들리는 잎·잎 속 찾기·10분 관찰 기록·지난주 그 새) / 질문 흐름 + LOOK으로 가는 문 / ✗ saw at | |
 | 22 | [22-know.html](22-know.html) | KNOW 묶음 — know · understand · remember · realize · recognize. "상태와 사건" | HOW 버튼 → 머릿속 카드(이미 켜짐·이어짐·꺼내 옴·새 카드·사진과 대조) / 질문 흐름 + THINK로 가는 문 / 명사·절·다른 모양 | |
+| 23 | [23-think.html](23-think.html) | THINK 묶음 — think · consider · imagine · guess · decide. "think about와 I think" | HOW 버튼 → 쉼터 계획(생각 구름·두 계획 비교·빈자리의 상상·$30? 짐작·투표로 확정) / 질문 흐름 + KNOW로 가는 문 / to · -ing · that | |
+| 24 | [24-want.html](24-want.html) | WANT 묶음 — want · need · wish · hope · prefer. "want 뒤의 세 모양" | HOW 버튼 → 자전거와 소풍(새 자전거·헬멧 없으면 출발 못 함·비 오는 창 ≠ 맑은 날·갤 가능성·빨강 < 파랑) / 질문 흐름 + ASK FOR로 가는 문 | |
+| 25 | [25-use.html](25-use.html) | USE 묶음 — use · operate · apply · spend · reuse. "use의 두 발음과 used to" | HOW 버튼 → 미술 시간 고래 그림(태블릿 사진·프린터 ①②③·붓칠·15분 중 10분·택배 상자 재사용) / 질문 흐름 + BORROW로 가는 문 | |
 
-01~22 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~22)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~22와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~25 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~25)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~25와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- 나머지 묶음(60개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: think · want · use
+- 나머지 묶음(57개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: find · feel · start
 
 ## 생성기로 만들기 (08부터)
 

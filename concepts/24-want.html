@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WANT 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/24-want.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="23-think.html">THINK 묶음</a> · 다음: <a href="25-use.html">USE 묶음</a> · 견줘 보기: <a href="19-ask.html">ASK — 바람을 말로 꺼냄</a> · 출발점: <a href="04-core-question.html">핵심 질문 하나</a></p>
+  <h1>WANT 묶음 — 같은 바람, 다른 마음의 방향</h1>
+  <p class="lead">Mina의 마음이 <b>아직 없는 것</b>으로 향한다 — 새 자전거, 헬멧, 맑은 날씨. 마음이 실현되지 않은 대상이나 상태를 향한다는 것은 같고, <b>왜 원하는지, 이루어질 수 있는지, 무엇과 견주는지</b>만 바꾸면 want · need · wish · hope · prefer로 갈린다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="want" title="want 소리로 듣기"><span class="en">want</span><span class="ipa">/wɑːnt/</span><span class="ko">[<b>원</b>트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="need" title="need 소리로 듣기"><span class="en">need</span><span class="ipa">/niːd/</span><span class="ko">[<b>니</b>드]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="wish" title="wish 소리로 듣기"><span class="en">wish</span><span class="ipa">/wɪʃ/</span><span class="ko">[<b>위</b>시]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="hope" title="hope 소리로 듣기"><span class="en">hope</span><span class="ipa">/hoʊp/</span><span class="ko">[<b>호</b>프]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="prefer" title="prefer 소리로 듣기"><span class="en">prefer</span><span class="ipa">/prɪˈfɜːr/</span><span class="ko">[프리<b>퍼</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">마음의 방향에 따라 Mina가 바라보는 장면이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 Mina와 바라는 대상이다. want는 진열창 속 새 자전거로 마음이 향함, need는 헬멧이 없어 공원 입구에서 출발하지 못함, wish는 비 오는 창가에서 맑은 운동장을 마음속에 그림, hope는 갤 가능성이 있다는 예보 아래 밝아지는 하늘을 봄, prefer는 빨간 자전거와 파란 자전거를 견줘 파란 쪽에 더 끌리는 장면이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">WANT · 마음이 향함</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떤 바람인가</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 하트 크기·예보 문구는 그림용이다. 자전거와 소풍 장면은 <a href="../want/_family.md">want/_family.md</a>의 고정 예(새 자전거 · 헬멧 · 맑은 날씨)와 각 노트 장면(가게 진열창·공원 입구·비 오는 창가·소풍 날 아침 교실·자전거 가게 안)을 옮겼다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"~하고 싶다 · 있어야 한다 · ~면 좋겠다 · 더 좋다" — 다 "바란다"인데 왜 다섯일까? <b>없으면 안 되는지</b>, <b>현실과 반대인지 가능한지</b>, <b>둘을 견줬는지</b>가 다르기 때문이다. 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>WANT 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "마음이 향함"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>agent의 마음에 아직 실현되지 않은 대상이나 상태를 얻고 싶다는 방향이 생김</b> = <span class="en">WANT</span>다. 여기에 필수인지 · 현실과 거리가 있는지 · 가능한 미래인지 · 비교했는지가 붙는다. 노트의 식을 옮겼다.</p>
+  <div class="formula">
+    <span class="r">WANT</span><span class="op">+</span><span>현재 상태 ≠ 바라는 상태 → 마음이 TARGET을 향함</span><span class="op">=</span><span class="v">WANT</span>
+    <span class="r">WANT</span><span class="op">+</span><span>목표에 필수인 조건</span><span class="op">=</span><span class="v">NEED</span>
+    <span class="r">WANT</span><span class="op">+</span><span>현실과 거리가 있거나 통제하기 어려운 바람</span><span class="op">=</span><span class="v">WISH</span>
+    <span class="r">WANT</span><span class="op">+</span><span>가능한 미래의 좋은 결과를 기대</span><span class="op">=</span><span class="v">HOPE</span>
+    <span class="r">WANT</span><span class="op">+</span><span>대안 비교에서 한쪽을 더 원함</span><span class="op">=</span><span class="v">PREFER</span>
+  </div>
+  <p>노트가 짚은 점: 이 묶음은 <b>마음의 방향</b>이다. 실제로 가졌는지(want), 샀는지(prefer), 비가 그쳤는지(hope)는 단어가 말해 주지 않는다. 그리고 <span class="en">need</span>가 늘 객관적 필수는 아니다 — 말하는 사람이 필요하다고 판단하면 need다.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>갖고 싶음</b> → 진열창 속 새 자전거로 마음이 향한다. 꼭 필요한지는 말하지 않는다. <span class="en">Mina wants a new bike.</span></li>
+    <li><b>없으면 안 됨</b> → 공원 입구. 헬멧이 없으면 출발할 수 없다. 목표(안전하게 타기)의 <b>필수 조건</b>. <span class="en">Mina needs a helmet.</span></li>
+    <li><b>현실과 다르게</b> → 비 오는 창가에서 맑은 운동장을 마음속에 그린다. 날씨는 Mina가 바꿀 수 없다. <span class="en">Mina wishes for sunny weather.</span></li>
+    <li><b>될 수도 있는 좋은 일</b> → 예보는 "오전 중 갤 가능성". 열린 미래에 마음을 둔다. <span class="en">Mina hopes the rain will stop.</span></li>
+    <li><b>둘 중 이쪽이 더</b> → 빨강과 파랑을 타 보고 파란 쪽이 더 편하다. <b>비교</b>가 들어 있다. <span class="en">Mina prefers the blue bike.</span></li>
+    <li>어느 장면이든 "마음이 그쪽으로 향한다"는 맞으니 <span class="en">want</span>도 쓸 수 있다. 그래서 WANT 칩은 늘 켜진다.</li>
+  </ul>
+
+  <h2>3. want가 그리는 그림 — 무엇을 · 하기를 · 남이 하기를, 그리고 공손하게</h2>
+  <p>want는 뒤에 무엇이 오느냐로 세 모양이 된다. 그리고 가게·식당에서 <span class="en">I want …</span>는 아이 말처럼 직설적으로 들릴 수 있어 <span class="en">I'd like …</span>로 바꿔 말한다. need의 부정은 "안 해도 돼"라서 한국어와 어긋나기 쉽다.</p>
+  <table>
+    <tr><th>모양</th><th>문장</th><th>한국어</th></tr>
+    <tr><td>want + 물건</td><td><span class="en">I want a new bike.</span></td><td>새 자전거 갖고 싶어</td></tr>
+    <tr><td>want to + 동사</td><td><span class="en">I want to go home.</span></td><td>집에 가고 싶어</td></tr>
+    <tr><td>want + 사람 + to</td><td><span class="en">I want you to come.</span> (✗ I want that you come)</td><td>네가 왔으면 좋겠어</td></tr>
+    <tr><td>공손하게</td><td><span class="en">I'd like a coffee, please.</span></td><td>커피 한 잔 주세요</td></tr>
+    <tr><td>need의 부정</td><td><span class="en">You don't need to come.</span></td><td>안 와도 돼 (와야 할 필요 없어)</td></tr>
+  </table>
+  <p class="note">wish와 hope는 한국어로 둘 다 "~면 좋겠다"라서 헷갈린다. 지금과 <b>반대</b>면 wish(<span class="en">I wish it were sunny.</span>), <b>될 수도 있으면</b> hope(<span class="en">I hope the rain stops tomorrow.</span>) — 노트의 Minimal Contrast.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>WANT 묶음</b>이다. 바람을 마음에 두지 않고 <b>상대에게 말로 꺼내 청하면</b> 테두리 밖 문으로 ASK 묶음(ask for)에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 WANT 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 아직 없는 것으로 마음이 향하나에서 아니오면 like, 상대에게 말로 청했으면 묶음 밖 문 ask, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 want, 왜 무엇과 견줘면 Q3에서 need와 prefer, 이루어질 수 있나면 Q4에서 wish와 hope로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 무엇 때문에</th><th>② 이루어질 수 있나</th><th>③ 비교가 있나</th><th>자리</th></tr>
+    <tr><td><b>want</b></td><td>말하지 않음 (끌림)</td><td>말하지 않음</td><td>없음</td><td>마음 (기본)</td></tr>
+    <tr><td><b>need</b></td><td>목표 · 안전 · 기능</td><td>구해야 함</td><td>없음</td><td>마음 + 판단</td></tr>
+    <tr><td><b>wish</b></td><td>현실이 다름</td><td>어렵거나 반대</td><td>없음</td><td>마음</td></tr>
+    <tr><td><b>hope</b></td><td>좋은 결과</td><td>가능 (아직 열림)</td><td>없음</td><td>마음</td></tr>
+    <tr><td><b>prefer</b></td><td>취향 · 편함</td><td>말하지 않음</td><td>있음 — A보다 B</td><td>마음 + 비교</td></tr>
+  </table>
+  <p class="note">길잡이지 칼같은 규칙이 아니다. 표는 노트의 비교표와 Minimal Contrast를 풀어 적은 것이고, 칸 나눔은 짐작이다.</p>
+
+  <h2>5. 실제 문장으로 — 뒤에 무엇이 붙나</h2>
+  <p>want · need · prefer는 <b>물건</b>이나 <b>to + 동사</b>를 받는다. wish · hope는 <b>문장을 통째로</b> 받는 일이 많고, 물건이면 <b>for</b>를 다리로 쓴다. 틀리기 쉬운 자리는 hope + 사람 + to, prefer … than.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">붙이는 방법에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">붙이는 방법</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>무엇을</th><th>하기를 · 라고</th><th>자주 쓰는 모양</th></tr>
+    <tr><td><b>want</b></td><td><span class="en">want a new bike</span></td><td><span class="en">I want you to come.</span> (✗ want that you)</td><td><span class="en">Do you want some coffee?</span></td></tr>
+    <tr><td><b>need</b></td><td><span class="en">need a helmet</span></td><td><span class="en">You don't need to come.</span></td><td><span class="en">Do you need a hand?</span></td></tr>
+    <tr><td><b>wish</b></td><td><span class="en">wish for sunny weather</span></td><td><span class="en">I wish it were sunny.</span> (✗ it is)</td><td><span class="en">I wish I could.</span> — 그러고 싶은데 못 해</td></tr>
+    <tr><td><b>hope</b></td><td><span class="en">hope for sunny weather</span></td><td><span class="en">I hope you win.</span> (✗ hope you to win)</td><td><span class="en">I hope so.</span></td></tr>
+    <tr><td><b>prefer</b></td><td><span class="en">prefer the blue bike to the red one</span> (✗ than)</td><td><span class="en">I prefer to walk.</span></td><td><span class="en">I'd prefer inside.</span></td></tr>
+  </table>
+  <p class="note">경향 한 줄: wish 뒤 문장은 <b>한 시제 뒤로</b>(is → were, can → could) 물러난다 — 현실과 거리가 있다는 그림이 문법에도 보인다. hope 뒤는 그대로(현재·미래).</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>WANT</b> — 진열창을 보듯 손을 <b>뻗어</b> "저거!"</li>
+    <li><b>NEED</b> — 손바닥을 내밀고 고개를 저으며 "이거 <b>없으면 안 돼</b>."</li>
+    <li><b>WISH</b> — 창밖을 보며 두 손을 모으고 <b>한숨</b>, "맑았으면…"</li>
+    <li><b>HOPE</b> — 손가락을 <b>꼬고</b>(행운을 빌 때) 하늘을 본다.</li>
+    <li><b>PREFER</b> — 양손에 하나씩 들고, 한쪽을 <b>더 높이</b> 든다.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>3절 표(want 세 모양 · I'd like · need의 부정)와 5절 "자주 쓰는 모양", ✗ 표시(want that · hope … to · prefer … than · wish … is), wish 시제 풀이는 노트에 없다.</li>
+      <li>4절 표의 칸 나눔과 흐름의 왼쪽 잎 like는 짐작이다.</li>
+      <li>0절 "대신 말하면"의 △·✗ 판정은 짐작이다.</li>
+      <li>노트 want/_family.md의 "Shared Result" 제목 바로 밑이 비어 있고, 그 내용 문장은 "상황에서 꺼내기" 뒤로 밀려 있다. 1절 BASIC 문장은 그 밀린 문장에서 옮겼다 — 노트 순서를 고칠 것.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../want/_family.md">want/_family.md</a> — "원하는 것과 실제로 필요한 것을 구별"</li>
+    <li>동사 노트: <a href="../want/want--desire.md">want</a> · <a href="../want/need--require.md">need</a> · <a href="../want/wish--desire-unreal.md">wish</a> · <a href="../want/hope--expect-good-result.md">hope</a> · <a href="../want/prefer--want-more.md">prefer</a></li>
+    <li>묶음 밖 이웃: <a href="19-ask.html">19 ASK</a>(<a href="../ask/_family.md">ask/_family.md</a>) — 바람을 상대에게 말로 꺼냄(ask for).</li>
+    <li>견줘 보기: <a href="23-think.html">23 THINK</a> — imagine은 없는 장면을 그리고, wish는 그 장면이 현실이길 바란다. <a href="11-get.html">11 GET</a> — want의 끝에 오는 "얻음".</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — want는 <b>아직 없는 것으로 향한 마음의 화살표</b>를 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, Mina x = 290 (그림용) ──
+  // 자전거: (x, y)가 두 바퀴 사이 바닥, 높이 약 54×s
+  const BIKE = (x, y, c, s, op) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"' + (op ? ' opacity="' + op + '"' : '') + '>' +
+    '<circle cx="-26" cy="-17" r="16" fill="none" stroke="var(--obj-line)" stroke-width="3"/><circle cx="26" cy="-17" r="16" fill="none" stroke="var(--obj-line)" stroke-width="3"/>' +
+    '<path d="M-26 -17 L-4 -17 L12 -42 L-14 -42 Z M-4 -17 L-16 -48 M12 -42 L26 -17 M12 -42 L10 -52" fill="none" stroke="' + c + '" stroke-width="4" stroke-linejoin="round"/>' +
+    '<path d="M-22 -49 h12 M5 -53 h12" stroke="var(--obj-line)" stroke-width="4" stroke-linecap="round"/></g>';
+  const MINA = P(290, 240, 1.3, 'var(--accent2)') + tx(290, 140, 11, 'Mina', 'var(--muted)');
+  const HEART = (x, y, s, c) => '<path transform="translate(' + x + ' ' + y + ') scale(' + s + ')" d="M0 6 C-14 -4 -10 -16 0 -9 C10 -16 14 -4 0 6 Z" fill="' + (c || 'var(--accent)') + '"/>';
+  const HELMET = (x, y, c, dash, r) => { r = r || 22; return '<path d="M' + (x - r) + ' ' + y + ' a' + r + ' ' + (r - 2) + ' 0 0 1 ' + (2 * r) + ' 0 z" fill="' + (dash ? 'none' : c) + '" stroke="' + (dash ? 'var(--bad)' : 'var(--obj-line)') + '" stroke-width="' + (dash ? 2 : 1.5) + '"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>'; };
+  const RAIN = (x1, x2, y1, y2, op) => { let s = ''; for (let x = x1; x < x2; x += 18) for (let y = y1; y < y2; y += 26) s += '<path d="M' + (x + ((y / 26 | 0) % 2) * 9) + ' ' + y + ' l-5 12" stroke="var(--water)" stroke-width="2" opacity="' + (op || 1) + '"/>'; return s; };
+  const SUN = (x, y, r, dash) => '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + (dash ? 'none' : 'var(--gold)') + '" stroke="var(--gold)" stroke-width="2"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>';
+  const CLOUDS = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')" fill="' + (c || 'var(--fog)') + '"><circle cx="-16" cy="0" r="12"/><circle cx="2" cy="-8" r="16"/><circle cx="20" cy="0" r="12"/><rect x="-16" y="0" width="36" height="12"/></g>';
+  const WINDOW = (x, y, w, h) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="var(--bg)" stroke="var(--obj-line)" stroke-width="2"/>';
+  const WFRAME = (x, y, w, h) => '<path d="M' + (x + w / 2) + ' ' + y + ' v' + h + ' M' + x + ' ' + (y + h / 2) + ' h' + w + '" stroke="var(--obj-line)" stroke-width="2"/>';
+  const TOP = {
+    first: 'wish', keep: 'WANT',
+    keepSay: '<b>WANT</b>는 이 장면에도 맞다 — 이유·가능성·비교를 빼고 마음이 그쪽으로 향한다는 것만 말한다. <span class="en">Mina wants sunny weather.</span>',
+    chips: ['WANT', 'NEED', 'WISH', 'HOPE', 'PREFER'], out: [['ASK FOR (말로 청함)', '19-ask.html']],
+    hows: {
+      want: { btn: '갖고 싶음', how: '얻거나 이루고 싶음', verb: 'WANT', chips: ['WANT'], target: 'TARGET · a new bike',
+        result: '진열창 앞 — 마음이 새 자전거로 향함',
+        pic: () => FLOOR + '<rect x="450" y="96" width="196" height="144" fill="var(--water)" opacity=".15" stroke="var(--obj-line)" stroke-width="2"/>' + tx(548, 88, 12, '자전거 가게', 'var(--muted)', ' font-weight="600"') +
+          BIKE(548, 238, 'var(--accent)', 1.4) + MINA + BIKE(372, 240, 'var(--fog)', .75) + tx(372, 186, 10, '작아진 내 자전거', 'var(--muted)') +
+          step(.2, AR(318, 150, 470, 150, 'var(--accent)', 2.5, true)) + step(.4, HEART(394, 130, 1.3)),
+        say: '<span class="en">Mina wants a new bike.</span> 아직 갖지 않은 것으로 <b>마음이 향한다</b>. 꼭 필요한지, 실제로 가질 수 있는지는 별개다.' },
+      need: { btn: '없으면 안 됨', how: '목표에 필수인 조건', verb: 'NEED', chips: ['WANT', 'NEED'], target: 'TARGET · a helmet',
+        result: '헬멧이 없으면 — 출발할 수 없음',
+        pic: () => FLOOR + MINA + HELMET(290, 168, '', true, 17) + BIKE(370, 240, 'var(--sleeve)', 1) +
+          '<path d="M612 240 V140" stroke="var(--obj-line)" stroke-width="3"/><path d="M612 140 l34 12 l-34 12 z" fill="var(--ok)"/>' + tx(612, 128, 12, '안전하게 타기', 'var(--ok)', ' font-weight="600"') +
+          step(.2, AR(420, 206, 596, 206, 'var(--line)', 2.5, true)) +
+          step(.4, '<path d="M508 184 V228" stroke="var(--bad)" stroke-width="4" stroke-linecap="round"/>' + tx(508, 176, 12, '출발 못 함', 'var(--bad)', ' font-weight="700"')) +
+          step(.6, HELMET(490, 120, 'var(--accent)') + tx(490, 140, 12, '꼭 있어야 함', 'var(--accent)', ' font-weight="600"')),
+        say: '<span class="en">Mina needs a helmet.</span> 갖고 싶어서가 아니라 <b>안전하게 탄다는 목표의 필수 조건</b>이라 need. 무엇이 필수인지는 상황과 말하는 사람의 판단에 달린다.' },
+      wish: { btn: '현실과 다르게', how: '현실과 거리가 있는 바람', verb: 'WISH', chips: ['WANT', 'WISH'], target: 'TARGET · sunny weather (지금은 비)',
+        result: '소풍 전날 비 오는 창가 — 맑았으면 (지금과 반대)',
+        pic: () => FLOOR + WINDOW(470, 70, 170, 140) + CLOUDS(520, 92, .9) + CLOUDS(596, 100, .8) + RAIN(480, 624, 116, 206) + WFRAME(470, 70, 170, 140) + MINA +
+          '<circle cx="312" cy="150" r="4" fill="var(--card)" stroke="var(--obj-line)"/><circle cx="322" cy="134" r="6" fill="var(--card)" stroke="var(--obj-line)"/>' +
+          step(.2, '<ellipse cx="350" cy="86" rx="76" ry="38" fill="var(--card)" stroke="var(--obj-line)" stroke-dasharray="5 4"/>' + SUN(326, 82, 14) + tx(376, 82, 11, '맑은', 'var(--text)') + tx(376, 98, 11, '운동장', 'var(--text)')) +
+          step(.4, tx(448, 92, 20, '≠', 'var(--bad)', ' font-weight="700"')),
+        say: '<span class="en">Mina wishes for sunny weather.</span> 지금 현실(비)과 <b>다른 모습</b>을 마음에 그린다. 날씨는 Mina가 바꿀 수 없다. 현재와 반대면 <span class="en">I wish it were sunny.</span>' },
+      hope: { btn: '될 수도 있는 좋은 일', how: '가능한 미래의 좋은 결과', verb: 'HOPE', chips: ['WANT', 'HOPE'], target: 'TARGET · the rain stopping',
+        result: '소풍 날 아침 — 그칠 가능성에 마음을 둠',
+        pic: () => FLOOR + WINDOW(470, 70, 170, 140) + RAIN(476, 560, 140, 206, .35) + step(.3, SUN(600, 104, 18)) + CLOUDS(560, 104, .9) + WFRAME(470, 70, 170, 140) + MINA +
+          '<rect x="330" y="70" width="120" height="60" rx="6" fill="var(--card)" stroke="var(--obj-line)"/>' + tx(390, 92, 11, '일기예보', 'var(--muted)', ' font-weight="600"') + tx(390, 114, 12, '오전 중 갤 가능성', 'var(--text)') +
+          step(.5, AR(318, 160, 520, 150, 'var(--ok)', 2.5, true)),
+        say: '<span class="en">Mina hopes the rain will stop.</span> 일어날 <b>가능성이 있는</b> 좋은 결과를 기대한다. 확실한 근거가 있어야만 hope하는 것은 아니다.' },
+      prefer: { btn: '둘 중 이쪽이 더', how: '비교해서 한쪽을 더', verb: 'PREFER', chips: ['WANT', 'PREFER'], target: 'TARGET · the blue bike (vs the red one)',
+        result: '빨강보다 파랑 — 둘을 견줘 한쪽을 더',
+        pic: () => FLOOR + MINA + BIKE(410, 240, 'var(--bad)', 1.2) + BIKE(570, 240, 'var(--sleeve)', 1.2) + tx(410, 160, 12, '빨간 자전거', 'var(--muted)') + tx(570, 160, 12, '파란 자전거', 'var(--muted)') +
+          step(.2, HEART(410, 128, .8, 'var(--line)')) + step(.4, '<rect x="514" y="146" width="112" height="22" rx="11" fill="none" stroke="var(--accent)" stroke-width="2"/>' + HEART(570, 120, 1.6)) +
+          step(.6, tx(490, 214, 20, '&lt;', 'var(--accent)', ' font-weight="700"')),
+        say: '<span class="en">Mina prefers the blue bike.</span> 하나를 원하는 게 아니라 <b>둘을 견줘 한쪽을 더</b> 원한다. 실제로 샀거나 빨강을 싫어한다는 뜻은 아니다.' },
+    },
+  };
+
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. wish를 먼저 빼 보세요.',
+    cards: [
+      { id: 'want', t: ['갖고', '싶음'], v: 'want', icon: BIKE(6, 26, 'var(--accent)', .7) + HEART(-22, -24, .9),
+        instead: 'I need a new bike. △', lost: '꼭 있어야 한다는 말이 되어 버린다. 그냥 갖고 싶다는 가벼운 바람이 사라진다.', why: '대상을 얻거나 이루고 싶음.' },
+      { id: 'need', t: ['없으면', '안 됨'], v: 'need', icon: '<path d="M-26 6 a26 24 0 0 1 52 0 z" fill="var(--accent)" stroke="var(--obj-line)"/>' + tx(0, 30, 18, '!', 'var(--bad)', ' font-weight="700"'),
+        instead: 'I want a helmet to ride safely. △', lost: '갖고 싶다는 마음일 뿐, 없으면 출발할 수 없는 필수 조건이라는 그림이 빠진다.', why: '목표에 반드시 필요한 것으로 판단.' },
+      { id: 'wish', t: ['지금과', '반대로'], v: 'wish', icon: CLOUDS(-12, -8, .9) + RAIN(-30, 10, 10, 34) + SUN(22, -20, 12, true),
+        instead: 'I hope it were sunny. ✗', lost: 'hope는 현실과 반대인 소망(were)을 받지 못한다. "맑았으면 좋겠는데(지금은 비)"를 말할 길이 없다.', why: '현실과 거리가 있는 바람을 마음에 그림.' },
+      { id: 'hope', t: ['될 수도', '있는 좋은 일'], v: 'hope', icon: SUN(12, -12, 16) + CLOUDS(-8, 4, .9) + '<path d="M-30 30 h60" stroke="var(--line)"/>',
+        instead: 'I wish the rain stops tomorrow. ✗', lost: 'wish 뒤에 현재형을 두면 어색하다. 이루어질 수 있는 일을 기대한다는 그림이 사라진다.', why: '실제 가능성이 있는 좋은 결과를 기대.' },
+      { id: 'prefer', t: ['둘 중', '이쪽이 더'], v: 'prefer', icon: BIKE(-20, 20, 'var(--bad)', .45, .5) + BIKE(20, 20, 'var(--sleeve)', .55) + HEART(20, -20, .9),
+        instead: 'I want the blue bike more. △', lost: '말은 되지만, 둘을 놓고 견줬다는 그림이 약하다.', why: '비교 대상 중 하나를 더 원함.' },
+      { id: 'ask', out: true, t: ['바람을', '말로 꺼냄'], v: 'ask for', icon: '<circle cx="-22" cy="4" r="8" fill="var(--skin)" stroke="var(--obj-line)"/><rect x="-29" y="12" width="14" height="16" rx="5" fill="var(--fog)"/>' +
+          '<rect x="-8" y="-28" width="44" height="24" rx="8" fill="var(--card)" stroke="var(--accent2)"/>' + tx(14, -12, 10, 'water?', 'var(--text)') + arrow(-8, 30, 12, 'var(--accent2)', 2),
+        instead: 'I wanted some water to the waiter. ✗', lost: 'want는 마음속 방향일 뿐, 그 바람을 상대에게 말로 꺼내는 그림이 없다.', why: '바람을 상대에게 말로 청함 — 이웃 ASK 묶음 (ask for).' },
+    ],
+  };
+
+  const SCENES = {
+    home: { btn: '집에서', place: '집 · 친구가 편의점에 가려 함',
+      pic: () => FL + BX(220, 116, 100, 34, A2) + P(270, 150, 1.1, SL) + L(270, 70, '나') +
+        '<rect x="570" y="40" width="60" height="110" rx="2" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/><circle cx="582" cy="98" r="3" fill="' + OL + '"/>' + P(520, 150, 1.1, OKC) + L(520, 70, '친구') +
+        ST(.2, '<rect x="390" y="40" width="80" height="26" rx="10" fill="' + CARD + '" stroke="' + OL + '"/>' + T(430, 58, 12, '편의점 →', MU)),
+      lines: [
+        ['친구', 'I\'m going to the store. Do you <b>want</b> anything?', '편의점 가는데, 뭐 필요한 거 있어?', 1],
+        ['나', 'Just some water, thanks.', '물만 좀 사다 줘, 고마워.'],
+      ],
+      say: '상대의 마음이 무엇으로 향하는지 묻는 가장 흔한 말 — <span class="en">Do you want …?</span> 한국어로는 "필요한 거 있어?"가 자연스럽지만 영어는 want로 묻는다.' },
+    boxes: { btn: '아파트 입구', place: '아파트 입구 · 짐이 많음',
+      pic: () => FL + '<rect x="560" y="30" width="100" height="120" fill="' + BG + '" stroke="' + OL + '" stroke-width="1.5"/><rect x="590" y="80" width="40" height="70" fill="' + CARD + '" stroke="' + OL + '"/>' + T(610, 50, 11, '101동', MU) +
+        P(300, 150, 1.1, AC) + L(300, 70, '나') + BX(272, 110, 56, 18, A2) + BX(276, 128, 48, 18, A2) + P(450, 150, 1.1, SL) + L(450, 70, '이웃') +
+        ST(.3, AR(430, 110, 340, 110, OKC, 2.5)),
+      lines: [
+        ['이웃', 'Do you <b>need</b> a hand?', '좀 도와드릴까요?', 1],
+        ['나', 'Yes, please. Thank you so much!', '네, 부탁드려요. 정말 감사해요!'],
+      ],
+      say: '"손이 필요하세요?" — 지금 이 일에 <b>없으면 곤란한 것</b>을 묻는 말 — <span class="en">need</span>. 도움을 제안할 때 아주 흔하다.' },
+    invite: { btn: '파티 초대', place: '메신저 · 오늘 밤 파티',
+      pic: () => FL + TB(220, 400, 110) + P(300, 150, 1.05, AC) + L(300, 70, '나') + [0, 1, 2, 3].map((i) => '<rect x="' + (352 - i * 2) + '" y="' + (98 - i * 6) + '" width="36" height="6" fill="' + CARD + '" stroke="' + OL + '"/>').join('') + L(370, 70, '할 일') +
+        '<rect x="500" y="22" width="110" height="126" rx="14" fill="' + CARD + '" stroke="' + OL + '" stroke-width="2"/>' +
+        ST(.2, '<rect x="512" y="44" width="86" height="34" rx="8" fill="' + BG + '" stroke="var(--line)"/>' + T(555, 66, 11, '파티 올 거지?', 'var(--text)')) +
+        ST(.4, '<rect x="512" y="90" width="86" height="34" rx="8" fill="var(--chip-on)" stroke="' + AC + '"/>' + T(555, 112, 11, '가고 싶은데…', AC)),
+      lines: [
+        ['친구', 'Are you coming to the party tonight?', '오늘 밤 파티 올 거지?'],
+        ['나', 'I <b>wish</b> I could, but I have to work.', '가고 싶은데, 일해야 해.', 1],
+      ],
+      say: '실제로는 못 가니 <b>현실과 반대</b>인 바람 — <span class="en">I wish I could.</span> 초대를 부드럽게 거절하는 말로 자주 쓴다.' },
+    airport: { btn: '공항 배웅', place: '공항 · 출국장 앞',
+      pic: () => FL + '<rect x="440" y="24" width="200" height="56" rx="4" fill="#1f2a36" stroke="' + OL + '"/>' + T(540, 46, 11, 'DEPARTURES', '#f5d76e', ' font-weight="700"') + T(540, 68, 11, '14:20  JEJU  ON TIME', '#f5d76e') +
+        P(270, 150, 1.1, AC) + L(270, 70, '나') + P(380, 150, 1.1, SL) + L(380, 70, '친구') + '<rect x="404" y="112" width="26" height="38" rx="4" fill="' + A2 + '" stroke="' + OL + '"/><path d="M410 112 v-8 h14 v8" fill="none" stroke="' + OL + '" stroke-width="2"/>' +
+        ST(.3, '<path d="M520 130 l60 -24 l8 4 l-30 18 l18 8 l-6 4 l-26 -4 z" fill="' + MU + '"/>'),
+      lines: [
+        ['나', 'Have a safe flight. I <b>hope</b> you have a great trip!', '조심히 가. 즐거운 여행 되길 바라!', 1],
+        ['친구', 'Thanks! I\'ll send you pictures.', '고마워! 사진 보낼게.'],
+      ],
+      say: '아직 열린 미래의 <b>좋은 결과</b>를 바란다 — <span class="en">hope</span>. 인사말 끝에 아주 흔하다.' },
+    terrace: { btn: '식당 자리', place: '식당 입구 · 자리 안내',
+      pic: () => FL + '<path d="M210 70 h120 l-60 -26 z" fill="' + A2 + '" opacity=".8"/><path d="M270 70 V150" stroke="' + OL + '" stroke-width="3"/>' + T(270, 36, 11, '테라스', MU) + TB(230, 310, 120) +
+        '<rect x="560" y="40" width="100" height="110" fill="' + BG + '" stroke="' + OL + '" stroke-width="1.5"/>' + T(610, 62, 11, '실내', MU) +
+        P(420, 150, 1.1, AC) + L(420, 70, '나') + P(510, 150, 1.1, OKC) + L(510, 70, '직원') +
+        ST(.3, AR(440, 44, 552, 44, AC, 2.5) + '<path d="M300 100 l-14 10" stroke="' + SL + '" stroke-width="2"/>' + T(330, 104, 11, '쌀쌀', SL)),
+      lines: [
+        ['직원', 'Inside or on the terrace?', '실내로 드릴까요, 테라스로 드릴까요?'],
+        ['나', 'We\'d <b>prefer</b> inside. It\'s a bit cold.', '실내가 좋겠어요. 좀 춥네요.', 1],
+      ],
+      say: '둘 중 <b>한쪽을 더</b> 원한다 — <span class="en">prefer</span>. <span class="en">I\'d prefer …</span>는 고를 때 부드럽게 말하는 모양.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'hope',
+    region: { x: 106, y: 66, w: 538, h: 258, label: 'WANT 묶음 · BASIC = 마음이 향함', at: [114, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 270, t: 'Q1. 아직 없는 것으로 마음이 향하나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 205, y: 180, w: 190, t: 'Q3. 왜 · 무엇과 견줘?', sub: '필수 · 비교' },
+      q4: { x: 520, y: 180, w: 170, t: 'Q4. 이루어질 수 있나?', sub: '반대 · 가능' },
+    },
+    leaves: {
+      like:   { x: 60, y: 262, w: 88, v: 'like', sub: '이미 좋아함', seg: 't', say: '<span class="en">I like my bike.</span> 아직 없는 것을 바라는 게 아니라 지금 좋아함 → WANT 묶음 밖.' },
+      need:   { x: 160, y: 262, w: 88, v: 'need', sub: '필수 조건', seg: 'm', say: '<span class="en">Mina needs a helmet.</span>' },
+      prefer: { x: 255, y: 262, w: 88, v: 'prefer', sub: 'A보다 B', seg: 'm', say: '<span class="en">Mina prefers the blue bike.</span>' },
+      want:   { x: 360, y: 262, w: 92, v: 'want', sub: '이유 말 안 함', seg: 'm', say: '<span class="en">Mina wants a new bike.</span> 이 묶음의 기본 동사.' },
+      wish:   { x: 470, y: 262, w: 96, v: 'wish', sub: '현실과 반대', seg: 'r', say: '<span class="en">I wish it were sunny.</span>' },
+      hope:   { x: 575, y: 262, w: 96, v: 'hope', sub: '가능한 미래', seg: 'r', say: '<span class="en">I hope the rain stops tomorrow.</span>' },
+      ask:    { x: 610, y: 36, w: 100, v: 'ask for', sub: '→ ASK 묶음', seg: '', out: true, say: '<span class="en">I asked for some water.</span> 바람을 <b>상대에게 말로 꺼냄</b> → WANT 묶음 밖, <a href="19-ask.html">19 ASK</a>.' },
+    },
+    edges: [
+      ['q1', 'like', '이미 있음', 'left', [150, 28]], ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'ask', '말로 청함', 'right', [520, 28], true],
+      ['q2', 'q3', '이유·비교'], ['q2', 'want', '말하지 않음'], ['q2', 'q4', '가능성'],
+      ['q3', 'need', '없으면 안 됨'], ['q3', 'prefer', '둘 중 더'],
+      ['q4', 'wish', '어렵거나 반대'], ['q4', 'hope', '될 수 있음'],
+    ],
+    segs: [[16, 104, '이미 있음', 't'], [109, 416, '대상 — 갖고 싶은 것 · 고를 것', 'm'], [421, 640, '일 — 일어나길 바람', 'r']],
+  };
+
+  const SLOTS = {
+    first: ['hope', 'how'],
+    slots: { what: '무엇을', how: '하기를 · 라고', more: '자주 쓰는 모양' },
+    verbs: {
+      want: {
+        what: { ok: [['Mina', 's'], ['wants', 'v'], ['a new bike', 'o']], say: '노트 예문. 바라는 대상을 바로 목적어로.' },
+        how:  { ok: [['I', 's'], ['want', 'v'], ['you', 'o'], ['to come', 'r']], bad: [['I', 's'], ['want', 'v'], ['that you come', 'x']], say: '남이 하기를 바라면 <b>사람 + to</b>. that 절은 받지 않는다.' },
+        more: { ok: [['I\'d like', 'v'], ['a coffee', 'o'], ['please', 'x']], say: '가게·식당에서는 <span class="en">I want</span>보다 <b>I\'d like</b>가 부드럽다.' },
+      },
+      need: {
+        what: { ok: [['Mina', 's'], ['needs', 'v'], ['a helmet', 'o']], say: '노트 예문.' },
+        how:  { ok: [['You', 's'], ['don\'t need', 'v'], ['to come', 'o']], bad: [['You', 's'], ['don\'t need', 'v'], ['come', 'o']], say: '"안 와도 돼" — need의 부정은 <b>필요 없음</b>. to를 빼먹기 쉽다.' },
+        more: { ok: [['I', 's'], ['need', 'v'], ['some help', 'o']], say: '도움·시간·휴식 — 목표에 없으면 곤란한 것.' },
+      },
+      wish: {
+        what: { ok: [['Mina', 's'], ['wishes', 'v'], ['for sunny weather', 'o']], say: '노트 예문. 물건·상태면 <b>for</b>가 다리.' },
+        how:  { ok: [['I', 's'], ['wish', 'v'], ['it were sunny', 'x']], bad: [['I', 's'], ['wish', 'v'], ['it is sunny', 'x']], say: '지금과 반대인 바람은 <b>한 시제 뒤로</b>(is → were). 현실과의 거리.' },
+        more: { ok: [['I', 's'], ['wish', 'v'], ['I could', 'x']], say: '"그러고 싶은데 못 해" — 부드러운 거절.' },
+      },
+      hope: {
+        what: { ok: [['Mina', 's'], ['hopes', 'v'], ['for sunny weather', 'o']], say: '물건·상태면 wish처럼 <b>for</b>.' },
+        how:  { ok: [['I', 's'], ['hope', 'v'], ['you win', 'x']], bad: [['I', 's'], ['hope', 'v'], ['you', 'o'], ['to win', 'r']], say: 'hope는 문장을 통째로 받는다. want처럼 <b>사람 + to</b>를 쓰지 않는다.' },
+        more: { ok: [['I', 's'], ['hope', 'v'], ['so', 'x']], say: '"그러면 좋겠다" — 짧은 대답.' },
+      },
+      prefer: {
+        what: { ok: [['I', 's'], ['prefer', 'v'], ['the blue bike', 'o'], ['to the red one', 'r']], bad: [['I', 's'], ['prefer', 'v'], ['the blue bike', 'o'], ['than the red one', 'r']], say: '견줄 대상은 than이 아니라 <b>to</b>. 노트의 상황 문장 그대로.' },
+        how:  { ok: [['I', 's'], ['prefer', 'v'], ['to walk', 'o']], say: '하는 것을 더 원하면 to + 동사.' },
+        more: { ok: [['We\'d prefer', 'v'], ['inside', 'x']], say: '<span class="en">I\'d prefer …</span> — 고를 때 부드럽게.' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>
