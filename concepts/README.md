@@ -192,15 +192,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 68 | [68-freeze.html](68-freeze.html) | FREEZE 묶음 — freeze · flash-freeze · deep-freeze · refreeze(네 동사). "froze와 frozen" | HOW 버튼 → 콩의 상태 띠(냉동실·급속 냉동기·장기 냉동 창고·녹았다 다시) / 질문 흐름 + MELT로 가는 문 | |
 | 69 | [69-melt.html](69-melt.html) | MELT 묶음 — melt · remelt · melt down · liquefy(네 동사). "melt · thaw · dissolve" | HOW 버튼 → 초콜릿 상태 띠(중탕·굳은 걸 다시·바 여러 개 → 한 냄비·기계로 흐르게) / 질문 흐름 + FREEZE로 가는 문 | |
 | 70 | [70-mix.html](70-mix.html) | MIX 묶음 — mix · stir · blend · whisk · fold in. "add와 mix" | HOW 버튼 → 전·후 그릇과 손동작 띠(하나로·천천히 돌림·믹서·거품·크게 접어 넣음) / 질문 흐름 + SEPARATE로 가는 문 | |
+| 71 | [71-cook.html](71-cook.html) | COOK 묶음 — cook · bake · boil · fry · steam. "굽다·삶다·끓이다·찌다" | HOW 버튼 → 열 → 매체 → 감자 띠(말 안 함·오븐·끓는 물·기름·수증기) / 질문 흐름 + MAKE로 가는 문 | |
+| 72 | [72-clean.html](72-clean.html) | CLEAN 묶음 — clean · wash · wipe · scrub · sweep. "닦다·씻다·청소하다" | HOW 버튼 → 교실 바닥(말 안 함·물걸레·마른 천·솔로 문지름·빗자루) / 질문 흐름 + FIX로 가는 문 | |
+| 73 | [73-fill.html](73-fill.html) | FILL 묶음 — fill · load · pack · stuff · refill. "그릇과 내용물, 어느 쪽이 목적어" | HOW 버튼 → 상자와 채움 막대(가득·트럭으로·떠날 준비·빈틈 꽉꽉·비운 걸 다시) / 질문 흐름 + EMPTY로 가는 문 | |
 
-01~70 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~70)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~70와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~73 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~73)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~73와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- 나머지 묶음(9개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: cook · clean · fill
+- 나머지 묶음(6개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: achieve · connect · count · draw · hide · measure
 
 ## 생성기로 만들기 (08부터)
 
