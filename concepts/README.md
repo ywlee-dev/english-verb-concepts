@@ -186,15 +186,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 62 | [62-touch.html](62-touch.html) | TOUCH 묶음 — touch · tap · pat · stroke · poke. "몸 부위를 어떻게 말하나" | HOW 버튼 → 어깨와 접촉 기록 띠(한 번·톡 톡·토닥토닥·쓰다듬음·콕) / 질문 흐름 + PUSH로 가는 문 | |
 | 63 | [63-pull.html](63-pull.html) | PULL 묶음 — pull · tug · yank · tow · reel in. "결과는 동사 뒤에" | HOW 버튼 → 줄과 힘 그래프(고른 당김·짧게 두 번·한 번 확·견인·감아 들임) / 질문 흐름 + PUSH로 가는 문 | |
 | 64 | [64-cut.html](64-cut.html) | CUT 묶음 — cut · slice · chop · trim · carve. "cut과 break" | HOW 버튼 → 도마 위 당근과 칼질 띠(둘로·얇게·잘게·끝만·꽃 모양) / 질문 흐름 + BREAK로 가는 문 | |
+| 65 | [65-grow.html](65-grow.html) | GROW 묶음 — grow · germinate · sprout · mature · flourish. "grow와 increase" | HOW 버튼 → 콩의 한살이 띠(키가 큼·씨앗 안 뿌리·싹이 밖·꼬투리·무성하게) / 질문 흐름 + INCREASE로 가는 문 | |
+| 66 | [66-increase.html](66-increase.html) | INCREASE 묶음 — increase · raise · hike · double(네 동사). "raise와 rise" | HOW 버튼 → 표 값 $10 막대(누가 올렸나 모름·▲ 조정·$20 덧붙임·×2) / 질문 흐름 + DECREASE로 가는 문 | |
+| 67 | [67-decrease.html](67-decrease.html) | DECREASE 묶음 — decrease · lower · cut · halve(네 동사). "cut의 두 뜻" | HOW 버튼 → 66과 같은 표 값 $20(모름·▼·−$5·÷2) / 질문 흐름 + INCREASE로 가는 문 | |
 
-01~64 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~64)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~64와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~67 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~67)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~67와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- 나머지 묶음(15개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: grow · increase · decrease
+- 나머지 묶음(12개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: freeze · melt · mix
 
 ## 생성기로 만들기 (08부터)
 
