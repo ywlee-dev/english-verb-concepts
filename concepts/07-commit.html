@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COMMIT 개념</title>
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f;  }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 출발점: <a href="04-core-question.html">핵심 질문 하나</a> · 코딩 말 이웃: <a href="05-resolve.html">RESOLVE — 하나로 확정</a></p>
+  <h1>COMMIT — 넘겨서 되돌릴 수 없게 묶음</h1>
+  <p class="lead">commit은 대상이 제각각이다. 코드, 돈, 나 자신, 죄, 기억. 그래도 그림은 하나다. <b>내 손 안에서 언제든 바꿀 수 있던 것을 선 너머로 넘겨, 쉽게 되돌릴 수 없게 묶어 두는 것</b>이다. 무엇을 넘기는지만 바꿔 보세요.</p>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">넘기는 대상에 따라 선 너머의 모습이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + TARGET = 뜻 식이고, 오른쪽 가운데에 주황 점선인 넘기는 선이 있다. 선 왼쪽은 아직 내 손 안이라 바꿀 수 있는 상태, 오른쪽은 넘긴 뒤라 되돌리기 어려운 상태다. 코드는 기록 사슬의 새 고리가 되고, 돈은 프로젝트 항아리에 잠기고, 사람은 여러 갈래 길 중 한 길에 서고, 죄는 기록에 도장이 찍히고, 시는 머릿속에 들어간다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">TARGET (대상)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">COMMIT · 넘겨서 묶음</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="tgtLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="tgtBtns"><span class="cap">무엇을 넘기나</span></div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 커밋 번호(a1b2c3), 금액, 요일 같은 값은 그림용으로 만든 것이다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>약속은 promise, 결정은 decide, 저장은 save가 있는데 왜 commit이 또 있을까? 그 셋은 모두 <b>나중에 쉽게 바꿀 수 있다</b>. 약속은 어기면 되고, 결정은 바꾸면 되고, 저장은 덮어쓰면 된다. commit은 <b>이미 넘겨 버려서 없던 일로 할 수 없는</b> 그림이다. 이웃 말을 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="t0 d0">
+      <title id="t0">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="d0">카드 여섯 장이 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 가운데 commit 카드가 이 페이지의 동사이고 나머지는 이웃 말이다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — 대상은 달라도 그림은 하나</h2>
+  <p>commit은 BREAK·PUSH처럼 HOW가 다른 동사 묶음이 아니라, <b>한 동사가 여러 TARGET을 받는</b> 경우다. 그래서 식을 BASIC + TARGET으로 쓴다. 한국어 뜻은 다섯 개로 갈라지지만 BASIC은 그대로다.</p>
+  <div class="formula">
+    <span class="r">COMMIT</span><span class="op">+</span><span>코드 변경 (the changes)</span><span class="op">=</span><span class="v">기록 확정</span>
+    <span class="r">COMMIT</span><span class="op">+</span><span>돈·인력 (money, troops)</span><span class="op">=</span><span class="v">투입</span>
+    <span class="r">COMMIT</span><span class="op">+</span><span>나 자신 (to 일·사람)</span><span class="op">=</span><span class="v">전념·약속</span>
+    <span class="r">COMMIT</span><span class="op">+</span><span>죄·잘못 (a crime, an error)</span><span class="op">=</span><span class="v">저지름</span>
+    <span class="r">COMMIT</span><span class="op">+</span><span>to memory</span><span class="op">=</span><span class="v">외움</span>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th></th><th>무엇을 정하나</th><th>나중에 바꾸려면</th><th>명사</th></tr>
+    <tr><td><b>decide</b></td><td>마음속 선택</td><td>마음만 바꾸면 됨</td><td>decision</td></tr>
+    <tr><td><b>promise</b></td><td>상대에게 한 말</td><td>어기면 됨 (실망은 남음)</td><td>promise</td></tr>
+    <tr><td><b>save</b></td><td>파일의 지금 상태</td><td>다시 덮어쓰면 됨</td><td>—</td></tr>
+    <tr><td><b>commit</b></td><td>시간·돈·나·기록을 <b>넘겨 묶음</b></td><td><b>새 행동이 필요</b> — 철회 발표, revert, 사과</td><td>commitment</td></tr>
+  </table>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>코드</b> → 고치던 파일이 선을 넘어 기록 사슬의 새 고리가 된다. <span class="en">I committed the changes.</span></li>
+    <li><b>돈·인력</b> → 지갑의 동전이 "프로젝트 A" 항아리에 들어가고 뚜껑이 잠긴다. 아직 다 쓰지 않았어도 다른 데는 못 쓴다. <span class="en">The city committed $2 million to the park.</span></li>
+    <li><b>나 자신</b> → 여러 갈래 길 앞에 서 있던 사람이 한 길에 들어선다. <span class="en">She committed to volunteering every Saturday.</span></li>
+    <li><b>죄·잘못</b> → 해 버린 일이 기록에 찍힌다. 나쁜 일에만 쓴다. <span class="en">He committed a crime.</span></li>
+    <li><b>기억</b> → 종이 위의 시가 머릿속으로 들어간다. <span class="en">I committed the poem to memory.</span></li>
+    <li>어느 장면이든 <b>선을 넘는 순간</b>이 commit이다. 선 왼쪽에서는 마음대로 바꿀 수 있고, 오른쪽에서는 되돌리려면 새로운 일을 해야 한다.</li>
+  </ul>
+
+  <h2>3. 왜 git은 save가 아니라 commit인가</h2>
+  <p>코딩에서 commit이 쓰이는 이유가 바로 이 그림이다. save는 파일을 <b>덮어써서</b> 옛 모습이 사라진다. commit은 지금 모습을 <b>기록 사슬에 넘겨 확정</b>한다. 확정된 고리는 고치지 않고, 되돌릴 때도 <b>되돌리는 새 고리</b>를 단다. 차례대로 눌러 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 250" role="img" aria-labelledby="t2 d2">
+      <title id="t2">작업 폴더, 스테이징, 저장소 기록 사이에서 파일이 넘어가는 그림</title>
+      <desc id="d2">세 칸이 있다. 왼쪽은 마음대로 고치는 작업 폴더, 가운데는 넘길 것을 골라 두는 스테이징, 오른쪽은 동그라미 고리가 이어진 저장소 기록이다. save는 작업 폴더 안에서 옛 파일을 덮어쓰고, add는 파일을 스테이징으로 옮기고, commit은 스테이징의 파일을 자물쇠 달린 새 고리로 만든다. revert는 옛 고리를 지우지 않고 되돌리는 고리를 하나 더 단다. 데이터베이스는 두 변경을 한꺼번에 확정하거나, 실패하면 둘 다 없던 일로 한다.</desc>
+      <g id="gitScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="gitBtns"><span class="cap">무엇을 하나</span></div>
+    <output class="say" id="gsay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>명령</th><th>선의 어느 쪽</th><th>되돌리려면</th></tr>
+    <tr><td><code>save</code></td><td>작업 폴더 안 — 선을 안 넘음</td><td>되돌릴 옛 모습이 없다 (덮어씀)</td></tr>
+    <tr><td><code>git add</code></td><td>스테이징 — 넘기기 직전</td><td><code>git restore --staged</code>로 그냥 뺀다</td></tr>
+    <tr><td><code>git commit</code></td><td>저장소 기록 — 선을 넘음</td><td>고리를 지우지 않고 <code>git revert</code>로 새 고리를 단다</td></tr>
+    <tr><td><code>COMMIT;</code> (DB)</td><td>트랜잭션 → 데이터베이스</td><td>확정 전이면 <code>ROLLBACK</code>, 확정 뒤면 반대 거래를 새로 넣는다</td></tr>
+  </table>
+  <p>그래서 커밋 메시지는 "이 고리에 무엇을 넘겼나"를 적는 칸이다. 저장 버튼에는 메시지가 없다. 넘겨서 남기는 것이 아니기 때문이다.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>01·03·05·06과 같은 흐름이다. 점선 테두리 안이 <b>commit이 되는 자리</b>다. 넘기지 않고 말로만 약속했으면 <b>테두리 밖으로 나가는 문</b>으로 PROMISE 묶음에 간다. 마음속에서만 정했으면 decide다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="t3 d3">
+      <title id="t3">질문을 따라 commit의 뜻을 고르는 흐름 그림</title>
+      <desc id="d3">맨 위 Q1 되돌리기 어렵게 넘겼나에서 마음속에서만이면 decide, 말로만 약속했으면 묶음 밖으로 나가는 점선 문 promise, 예면 Q2 무엇을 넘겼나로 간다. 앞일을 묶었으면 Q3에서 나를 묶는 commit to와 돈·인력을 묶는 commit 자원으로, 이미 한 일이면 Q4에서 죄, 코드, 기억으로 갈린다. 맨 아래 띠는 동작 쪽에서 상태 쪽까지의 스펙트럼이다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">뜻까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <p>새 표현을 만나 commit인지 아닌지 가를 때는 질문 세 개를 묻는다(공부할 때 쓰는 질문).</p>
+  <table>
+    <tr><th>말</th><th>① 그냥 없던 일로 할 수 있나?</th><th>② 무엇이 묶이나?</th><th>③ 누가·무엇이 받아 주나?</th></tr>
+    <tr><td><b>decide</b></td><td>예 — 마음을 바꾸면 끝</td><td>내 생각</td><td>없음</td></tr>
+    <tr><td><b>promise</b></td><td>예 — 어길 수는 있다</td><td>내 말</td><td>듣는 사람</td></tr>
+    <tr><td><b>commit to</b></td><td>아니오 — 철회하려면 알리고 빠져야 함</td><td>내 시간·나 자신</td><td>일·팀·관계</td></tr>
+    <tr><td><b>commit 자원</b></td><td>아니오 — 예산을 다시 짜야 함</td><td>돈·인력</td><td>프로젝트</td></tr>
+    <tr><td><b>commit 코드</b></td><td>아니오 — revert라는 새 기록</td><td>지금 상태</td><td>저장소</td></tr>
+    <tr><td><b>commit 죄</b></td><td>아니오 — 이미 일어남</td><td>해 버린 일</td><td>세상·법 기록</td></tr>
+  </table>
+  <p class="note">길잡이지 칼같은 규칙이 아니다. promise도 무겁게 쓰면 commit에 가깝고, 일상 대화의 <span class="en">I'm committed!</span>은 "진심이야" 정도로 가볍게 쓰이기도 한다.</p>
+
+  <h2>5. 실제 문장으로 — 뒤에 붙는 모양</h2>
+  <p>commit은 뒤에 붙는 모양이 뜻을 갈라 준다. 특히 <b>to 뒤에 -ing</b>가 오는 것이 자주 틀리는 곳이다. 여기서 to는 "~로 가는" 전치사라서 동사 원형이 아니라 명사·-ing가 온다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="t4 d4">
+      <title id="t4">뒤에 붙는 모양에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="d4">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어 같은 역할을 적었다. 전치사 to는 점선 상자다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons">
+      <span class="cap">뒤에 붙는 것</span>
+      <button data-slot="noun">목적어 (코드)</button>
+      <button data-slot="crime">목적어 (죄)</button>
+      <button data-slot="toing">to + -ing</button>
+      <button data-slot="self">oneself to</button>
+      <button data-slot="memory">A to memory</button>
+      <button data-slot="adj">be committed</button>
+    </div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>모양</th><th>예</th><th>뜻</th></tr>
+    <tr><td>commit + 변경·자원</td><td><span class="en">commit the changes · commit funds to the project</span></td><td>확정 기록 · 투입</td></tr>
+    <tr><td>commit + 죄·잘못</td><td><span class="en">commit a crime · commit an error</span></td><td>저지름 (나쁜 일만)</td></tr>
+    <tr><td>commit to + 명사/-ing</td><td><span class="en">commit to the plan · commit to finishing it</span></td><td>전념·확약</td></tr>
+    <tr><td>commit oneself to</td><td><span class="en">She committed herself to the project.</span></td><td>자신을 바침 (격식)</td></tr>
+    <tr><td>commit A to memory</td><td><span class="en">commit the poem to memory</span></td><td>외움</td></tr>
+    <tr><td>be committed (to)</td><td><span class="en">He is committed to his team.</span></td><td>헌신적이다 (형용사)</td></tr>
+  </table>
+  <p class="note">경향 한 줄: 목적어가 <b>좋은 것을 위한 자원</b>이면 투입, <b>나쁜 일</b>이면 저지름, <b>to 뒤의 일</b>이면 전념이다. 모두 "넘겨서 묶었다"를 다른 자리에서 본 것이다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>commit (코드)</b> — 손에 쥔 쪽지를 상자에 넣고 <b>뚜껑을 탁</b> 닫는다. 꺼내려면 상자를 다시 열어야 한다.</li>
+    <li><b>commit (자원)</b> — 지갑에서 돈을 꺼내 봉투에 넣고 <b>겉에 이름을 쓴다</b>. "이건 이 일 몫."</li>
+    <li><b>commit to</b> — 바닥에 그은 선 앞에서 망설이다가 <b>한 발로 넘어선다</b>. 그리고 그 자리에 선다.</li>
+    <li><b>commit (죄)</b> — 손바닥으로 탁자에 <b>도장을 쾅</b>. 찍힌 것은 지워지지 않는다.</li>
+    <li><b>commit to memory</b> — 종이를 보다가 <b>접어서 주머니에 넣고</b> 눈을 감고 왼다.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li><b>commit 노트가 아직 없다.</b> 이 페이지는 노트보다 먼저 만들었다. BASIC("넘겨서 되돌릴 수 없게 묶음")과 다섯 갈래는 모두 짐작이다. 사전 예문으로 확인한 뒤 노트(발음 /kəˈmɪt/, 형태 commit — committed — committed, t 겹침)를 만들 것.</li>
+      <li>어원(라틴어 com- "함께" + mittere "보내다" → "넘겨 맡기다")은 확인하지 않았다.</li>
+      <li><span class="en">commit to finish</span>(to 뒤 동사 원형)을 ✗로 둔 것은 교과서 기준이다. 실제로는 쓰이기도 하는지 확인할 것.</li>
+      <li>0절의 "대신 말하면" 문장과 △·✗ 판정, 4절 표의 ①~③은 짐작이다.</li>
+      <li>이웃 PROMISE 묶음 노트(<a href="../promise/promise--commit-to-future-action.md">promise</a>)의 영어 뜻풀이가 "commit to future action"이다. 노트끼리 경계(promise는 말, commit은 묶음)를 맞출 것.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>이웃 묶음: <a href="../promise/_family.md">promise/_family.md</a> — promise · vow · pledge · swear. "모두 약속이지만 실제 재건 성공을 보장하지 않는다" — 말의 무게만 다르다. commit은 말이 아니라 무언가를 넘겨 묶는다.</li>
+    <li>동의 묶음: <a href="../agree/_family.md">agree/_family.md</a> — 비교표 머리가 "Distinctive HOW / commitment"다. 동의할 때 얼마나 묶이는지를 본다.</li>
+    <li>코딩 말 이웃: <a href="05-resolve.html">05 RESOLVE</a> — merge conflict를 resolve(하나로 확정)한 다음 commit(기록으로 넘김)한다. 두 낱말이 차례로 이어진다.</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — "듣는 사람 머릿속에 무엇을 그리게 하나?" commit은 <b>선 하나를 넘는 순간</b>을 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 그림 부품. 좌표는 모두 그림용
+  //   FILE: (x, y)가 왼쪽 위, 36×46 · LOCK: (x, y)가 몸통 가운데 · person: (x, y)가 발
+  const FILE = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + x + ' ' + y + ' h26 l10 10 v36 h-36 z" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 7) + ' ' + (y + 18) + ' h22 M' + (x + 7) + ' ' + (y + 26) + ' h22 M' + (x + 7) + ' ' + (y + 34) + ' h14" stroke="var(--muted)" stroke-width="1.5"/></g>';
+  const LOCK = (x, y) => '<path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="var(--accent2)" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="var(--accent2)"/>';
+  const person = (x, y, s, color) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin)" stroke="var(--obj-line)"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + color + '"/></g>';
+  const coin = (x, y) => '<ellipse cx="' + x + '" cy="' + y + '" rx="13" ry="5" fill="var(--gold)" stroke="var(--obj-line)"/>';
+  const ring = (x, y, fill, label) => '<circle cx="' + x + '" cy="' + y + '" r="12" fill="' + fill + '" stroke="var(--obj-line)" stroke-width="1.5"/>' + (label ? tx(x, y + 30, 11, label, 'var(--muted)') : '');
+
+  // ── 1번 그림: 넘기는 선(x = 450). 왼쪽 = 아직 내 손 안, 오른쪽 = 넘긴 뒤 ──
+  const LINE = '<line x1="450" y1="74" x2="450" y2="236" stroke="var(--accent)" stroke-width="2" stroke-dasharray="6 5"/>' + tx(450, 254, 12, '넘기는 선', 'var(--accent)', ' font-weight="600"') +
+    tx(340, 64, 12, '아직 내 손 안 · 바꿀 수 있음', 'var(--muted)') + tx(560, 64, 12, '넘긴 뒤 · 되돌리기 어려움', 'var(--muted)');
+  const CROSS = step(.2, arrow(404, 494, 150, 'var(--accent)', 3));
+  const TARGETS = {
+    code: { btn: '코드 변경', tgt: 'the changes · 코드', verb: '기록 확정', target: 'TARGET · the changes (고친 코드)', result: '고치던 파일이 기록 사슬의 새 고리로 — 잠김',
+      pic: () => FILE(322, 124) + '<path d="M368 118 l-14 22" stroke="var(--accent2)" stroke-width="4" stroke-linecap="round"/>' + tx(340, 196, 12, '고치는 중', 'var(--muted)') + CROSS +
+        '<path d="M520 150 H600" stroke="var(--obj-line)" stroke-width="2"/>' + ring(520, 150, 'var(--bg)', '처음') + ring(560, 150, 'var(--bg)', '화면') +
+        step(.5, '<path d="M572 150 H600" stroke="var(--accent)" stroke-width="2.5"/>' + ring(612, 150, 'var(--accent)') + LOCK(612, 122) + tx(612, 180, 11, 'a1b2c3', 'var(--text)', ' font-weight="600"') + tx(612, 196, 11, '버그 고침', 'var(--muted)')),
+      say: '<span class="en">I committed the changes.</span> 고치던 것을 <b>기록 사슬에 넘겨 확정</b>했다. 이 고리는 고치지 않는다. 되돌리고 싶으면 되돌리는 새 고리를 단다(3절).' },
+    funds: { btn: '돈 · 인력', tgt: 'money · 돈·인력', verb: '투입', target: 'TARGET · money, staff (돈·인력)', result: '동전이 프로젝트 항아리로 — 다른 데는 못 씀',
+      pic: () => coin(330, 176) + coin(330, 168) + coin(330, 160) + coin(356, 176) + coin(356, 168) + tx(342, 206, 12, '어디든 쓸 수 있음', 'var(--muted)') + CROSS +
+        '<rect x="530" y="112" width="84" height="92" rx="10" fill="var(--bg)" stroke="var(--obj-line)" stroke-width="1.5"/><rect x="524" y="102" width="96" height="12" rx="4" fill="var(--obj-line)"/>' +
+        tx(572, 136, 12, '프로젝트 A', 'var(--text)', ' font-weight="600"') + step(.5, coin(560, 192) + coin(560, 184) + coin(586, 192) + LOCK(572, 98)) + tx(572, 224, 12, '아직 다 안 써도 묶임', 'var(--muted)'),
+      say: '<span class="en">The city committed $2 million to the park.</span> 아직 <b>쓴 것은 아니다</b>. 이 일 몫으로 넘겨 묶었다. 그래서 다른 데는 못 쓴다. 써 버린 것은 <span class="en">spend</span>.' },
+    self: { btn: '나 자신', tgt: 'myself · 나 자신', verb: '전념·약속', target: 'TARGET · myself (to 일·사람)', result: '여러 갈래 앞에 있다가 — 한 길에 들어섬',
+      pic: () => person(330, 210, 1.2, 'var(--sleeve)') +
+        '<g stroke="var(--muted)" stroke-width="2" stroke-dasharray="3 5" fill="none"><path d="M350 150 L420 96"/><path d="M352 160 L428 150"/><path d="M350 172 L420 212"/></g>' + tx(340, 236, 12, '이것도 저것도', 'var(--muted)') + CROSS +
+        step(.5, person(520, 210, 1.2, 'var(--sleeve)') + '<path d="M536 196 L640 120" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/><path d="M640 120 v-30 l18 8 l-18 8" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"/>') +
+        tx(600, 226, 12, '매주 토요일 · 1년', 'var(--text)', ' font-weight="600"'),
+      say: '<span class="en">She committed to volunteering every Saturday.</span> 여러 갈래 중 <b>한 길에 나를 묶었다</b>. promise는 "하겠다"는 말이고, commit은 시간·일정을 실제로 그쪽에 넘겨 둔 것이다. to 뒤에는 -ing.' },
+    crime: { btn: '죄 · 잘못', tgt: 'a crime · 죄·잘못', verb: '저지름', target: 'TARGET · a crime, an error (죄·잘못)', result: '해 버린 일이 기록에 찍힘 — 없던 일로 못 함',
+      pic: () => person(330, 210, 1.2, 'var(--fog)') + '<rect x="350" y="94" width="34" height="30" rx="8" fill="var(--card)" stroke="var(--line)"/>' + tx(367, 116, 16, '?', 'var(--muted)', ' font-weight="700"') + tx(340, 236, 12, '아직 안 함', 'var(--muted)') + CROSS +
+        '<rect x="530" y="96" width="84" height="112" rx="4" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(572, 118, 12, '기록', 'var(--text)', ' font-weight="600"') +
+        '<path d="M544 132 h56 M544 144 h56 M544 156 h40" stroke="var(--muted)" stroke-width="1.5"/>' +
+        step(.5, '<circle cx="584" cy="182" r="18" fill="none" stroke="var(--bad)" stroke-width="3"/>' + tx(584, 187, 12, '확정', 'var(--bad)', ' font-weight="700"')) + tx(572, 228, 12, '나쁜 일에만 씀', 'var(--muted)'),
+      say: '<span class="en">He committed a crime.</span> 해 버려서 <b>세상의 기록으로 넘어갔다</b>. 없던 일로 할 수 없다. 좋은 일에는 안 쓴다 — <span class="en">commit a good deed</span>는 어색하고, 숙제는 <span class="en">do</span>.' },
+    memory: { btn: '기억', tgt: 'to memory · 기억에', verb: '외움', target: 'TARGET · a poem → to memory (기억에)', result: '종이 위의 시가 머릿속으로 — 안 보고도 욈',
+      pic: () => FILE(322, 124) + tx(340, 196, 12, '종이를 보며', 'var(--muted)') + CROSS +
+        '<circle cx="572" cy="146" r="42" fill="var(--bg)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M548 192 q24 16 48 0" fill="none" stroke="var(--obj-line)" stroke-width="1.5"/>' +
+        step(.5, '<path d="M552 136 h40 M552 148 h40 M552 160 h26" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>' + LOCK(592, 116)) + tx(572, 228, 12, '종이를 덮어도 남음', 'var(--muted)'),
+      say: '<span class="en">I committed the poem to memory.</span> 종이에 있던 것을 <b>머릿속에 넘겨 묶었다</b>. 그냥 <span class="en">memorize</span>보다 격식 있고, "확실히 박아 두었다"는 그림이다.' },
+  };
+  let tgt = 'code';
+  function draw() {
+    const T = TARGETS[tgt];
+    $('scene').innerHTML = '<g data-scene="' + tgt + '">' + LINE + T.pic() + '</g>';
+    $('tgtLabel').textContent = T.tgt;
+    $('verbLabel').textContent = T.verb;
+    $('targetLabel').textContent = T.target;
+    $('resultLabel').textContent = T.result;
+    $('say').innerHTML = T.say;
+    document.querySelectorAll('#tgtBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.tgt === tgt));
+  }
+  Object.keys(TARGETS).forEach((k) => {
+    const b = document.createElement('button');
+    b.textContent = TARGETS[k].btn; b.dataset.tgt = k;
+    b.addEventListener('click', () => { tgt = k; draw(); });
+    $('tgtBtns').appendChild(b);
+  });
+  draw();
+
+  // ── 0절: 왜 존재하나 — 가운데 commit 카드와 이웃 말 (아이콘은 (0,0) 가운데, 대략 ±42 안) ──
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 가운데가 commit이고 양옆은 이웃 말이다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 낱말이 <b>존재하는 이유</b>다. commit을 먼저 빼 보세요.',
+    cards: [
+      { id: 'decide', t: ['마음속에서', '정함'], v: 'decide',
+        icon: '<circle cx="0" cy="-4" r="22" fill="none" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M-8 -6 l6 6 l12 -14" fill="none" stroke="var(--ok)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>',
+        instead: 'I committed to quitting. △', lost: '남과 일에 묶인 것처럼 무겁게 들린다. 마음속에서만 정한 것이면 decide.', why: '혼자 마음속에서 고름. 바꾸고 싶으면 마음만 바꾸면 된다.' },
+      { id: 'promise', t: ['말로', '약속함'], v: 'promise',
+        icon: '<rect x="-30" y="-24" width="60" height="30" rx="10" fill="var(--card)" stroke="var(--obj-line)"/><path d="M-12 6 l-4 12 l14 -12" fill="var(--card)" stroke="var(--obj-line)"/>' + tx(0, -4, 12, '할게!', 'var(--text)', ' font-weight="600"'),
+        instead: 'I committed to call you. △', lost: '친구에게 하기엔 계약서 말처럼 딱딱하다. 말 한마디로 하는 약속은 promise.', why: '상대에게 미래 행동을 말로 확약.' },
+      { id: 'commit', t: ['넘겨서', '못 되돌림'], v: 'commit',
+        icon: '<line x1="0" y1="-30" x2="0" y2="30" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 4"/>' + arrow(-34, 22, 0, 'var(--accent)', 2.5) + LOCK(30, 0),
+        instead: 'I promised to the project. ✗', lost: 'promise는 말 한마디라, 시간·돈·나 자신을 넘겨 다른 데 못 가게 묶었다는 그림이 없다. git에서 save로 바꾸면 기록이 사라진다.', why: '선을 넘겨 묶음 — 되돌리려면 새 행동이 필요하다. 그래서 기록·투입·전념·저지름이 다 이 한 낱말이다.' },
+      { id: 'save', t: ['지금 상태를', '덮어 둠'], v: 'save',
+        icon: FILE(-26, -26, '.35') + FILE(-10, -20),
+        instead: 'I committed the file. △', lost: '기록·메시지 없이 지금 상태를 덮어 둔 것뿐인데, 확정 기록을 남긴 것처럼 들린다.', why: '파일의 지금 모습을 덮어써 저장. 옛 모습은 남지 않는다.' },
+      { id: 'spend', t: ['돈을', '써 버림'], v: 'spend',
+        icon: coin(-14, 12) + coin(-14, 4) + arrow(2, 34, 0, 'var(--muted)', 2.5) + '<path d="M-20 -26 h24" stroke="var(--bad)" stroke-width="2"/>',
+        instead: 'I committed $100 on shoes. ✗', lost: 'commit은 "이 일 몫으로 묶어 둠"이라 아직 안 썼을 수 있다. 실제로 써 버린 것은 spend.', why: '돈을 실제로 써서 없어짐.' },
+      { id: 'do', t: ['그냥', '함'], v: 'do',
+        icon: '<rect x="-24" y="-26" width="48" height="52" rx="4" fill="var(--card)" stroke="var(--obj-line)"/><path d="M-14 -10 l5 5 l9 -10 M-14 10 l5 5 l9 -10" fill="none" stroke="var(--ok)" stroke-width="2.5" stroke-linecap="round"/>',
+        instead: 'I committed my homework. ✗', lost: 'commit은 일을 할 때 죄·잘못에만 쓴다. 숙제를 저지른 것처럼 들린다.', why: '좋은 일·평범한 일을 함.' },
+    ],
+  };
+  // 01·03·05·06과 같은 함수
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+  let existGone = '';
+  function drawExist() {
+    const [svg, say] = existChart(EXIST, existGone);
+    $('existScene').innerHTML = '<g data-gone="' + (existGone || 'none') + '">' + svg + '</g>';
+    $('esay').innerHTML = say;
+    document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === existGone));
+  }
+  [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+    const b = document.createElement('button');
+    b.textContent = label; b.dataset.gone = id;
+    b.addEventListener('click', () => { existGone = id; drawExist(); });
+    $('existBtns').appendChild(b);
+  });
+  drawExist();
+
+  // ── 3절: git·DB. 세 칸 = 작업 폴더 | 스테이징 | 저장소 기록 (그림용 좌표) ──
+  const AREAS = (stageOn) => '<rect x="16" y="40" width="190" height="140" rx="10" fill="var(--bg)" stroke="var(--line)"/>' + tx(111, 30, 12, '작업 폴더 · 마음대로 고침', 'var(--muted)') +
+    '<rect x="226" y="40" width="160" height="140" rx="10" fill="var(--bg)" stroke="' + (stageOn ? 'var(--accent2)' : 'var(--line)') + '" stroke-dasharray="5 4"/>' + tx(306, 30, 12, '스테이징 · 넘기기 직전', 'var(--muted)') +
+    '<rect x="406" y="40" width="258" height="140" rx="10" fill="var(--bg)" stroke="var(--line)"/>' + tx(535, 30, 12, '저장소 기록 · 고리 사슬', 'var(--muted)') +
+    '<line x1="396" y1="40" x2="396" y2="180" stroke="var(--accent)" stroke-width="2" stroke-dasharray="6 5"/>';
+  const CHAIN = (n) => { // n = 처음 두 고리 뒤에 더 단 고리 수
+    let s = '<path d="M436 110 H' + (436 + (1 + n) * 58) + '" stroke="var(--obj-line)" stroke-width="2"/>' + ring(436, 110, 'var(--bg)', '처음') + ring(494, 110, 'var(--bg)', '화면');
+    if (n >= 1) s += ring(552, 110, 'var(--accent)', '버그 고침') + LOCK(552, 82);
+    if (n >= 2) s += ring(610, 110, 'var(--ok)', 'revert');
+    return s;
+  };
+  const GIT = {
+    save: { btn: 'save (저장)', cmd: 'Ctrl+S — 같은 파일을 덮어씀', pic: () => AREAS() + CHAIN(0) + FILE(50, 80, '.3') + '<path d="M46 76 l44 54" stroke="var(--bad)" stroke-width="2.5"/>' + step(.3, FILE(120, 80)) + tx(111, 160, 12, '옛 모습은 사라짐', 'var(--bad)'),
+      say: '<b>save</b>는 선을 넘지 않는다. 작업 폴더 안에서 파일을 덮어쓸 뿐이라 <b>옛 모습이 남지 않고</b> 메시지도 없다.' },
+    add: { btn: 'git add', cmd: 'git add login.js — 넘길 것을 골라 둠', pic: () => AREAS(true) + CHAIN(0) + FILE(92, 80) + step(.2, arrow(140, 270, 104, 'var(--accent2)', 2.5)) + step(.4, FILE(288, 80)) + tx(306, 160, 12, '아직 뺄 수 있음', 'var(--accent2)'),
+      say: '<b>git add</b>는 넘길 것을 <b>스테이징에 골라 둔다</b>. 아직 선을 넘지 않았다. <code>git restore --staged</code>로 그냥 빼면 끝.' },
+    commit: { btn: 'git commit', cmd: 'git commit -m "버그 고침" — 선을 넘겨 확정', pic: () => AREAS(true) + FILE(288, 80, '.25') + step(.2, arrow(330, 536, 104, 'var(--accent)', 3)) + step(.4, CHAIN(1)) + tx(535, 160, 12, '이 고리는 고치지 않음', 'var(--accent)'),
+      say: '<b>git commit</b>은 스테이징의 것을 <b>선 너머 기록 사슬에 넘긴다</b>. 고리에는 번호(a1b2c3)와 메시지가 붙고, 이제 확정이다. 메시지는 "무엇을 넘겼나"를 적는 칸이다.' },
+    revert: { btn: '되돌리고 싶으면 (revert)', cmd: 'git revert a1b2c3 — 되돌리는 새 고리', pic: () => AREAS() + CHAIN(2) + tx(535, 160, 12, '옛 고리는 그대로 · 새 고리로 되돌림', 'var(--ok)'),
+      say: '확정된 고리는 지우지 않는다. <b>되돌리는 고리를 하나 더</b> 단다. 그래서 "넘겼다"는 사실도, "되돌렸다"는 사실도 다 남는다. 이것이 commit의 "되돌리기 어려움"이다.' },
+    db: { btn: 'DB commit · rollback', cmd: 'COMMIT; — 두 변경을 한꺼번에 확정', pic: () =>
+        '<rect x="16" y="40" width="270" height="100" rx="10" fill="var(--bg)" stroke="var(--accent2)" stroke-dasharray="5 4"/>' + tx(151, 30, 12, '트랜잭션 · 아직 확정 전', 'var(--muted)') +
+        tx(151, 80, 14, '계좌 A  −10만', 'var(--text)') + tx(151, 110, 14, '계좌 B  +10만', 'var(--text)') +
+        '<rect x="394" y="40" width="270" height="100" rx="10" fill="var(--bg)" stroke="var(--line)"/>' + tx(529, 30, 12, '데이터베이스', 'var(--muted)') +
+        '<line x1="340" y1="40" x2="340" y2="140" stroke="var(--accent)" stroke-width="2" stroke-dasharray="6 5"/>' +
+        step(.2, arrow(292, 386, 90, 'var(--accent)', 3) + tx(339, 160, 12, 'COMMIT', 'var(--accent)', ' font-weight="700"')) +
+        step(.5, tx(529, 80, 14, '계좌 A  −10만 ✓', 'var(--text)', ' font-weight="600"') + tx(529, 110, 14, '계좌 B  +10만 ✓', 'var(--text)', ' font-weight="600"') + LOCK(642, 58)) +
+        step(.6, '<path d="M90 140 V176 H110" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 4"/>' + tx(116, 181, 12, 'ROLLBACK이면 둘 다 없던 일', 'var(--muted)', '', 'start')),
+      say: '데이터베이스의 <b>COMMIT</b>도 같은 그림이다. 돈을 빼는 것과 넣는 것을 <b>한꺼번에 넘겨 확정</b>한다. 확정 전에 문제가 생기면 <b>ROLLBACK</b> — 둘 다 없던 일. 확정 뒤에는 반대 거래를 새로 넣어야 한다.' },
+  };
+  let gitPick = 'commit';
+  function drawGit() {
+    const G = GIT[gitPick];
+    $('gitScene').innerHTML = '<g data-git="' + gitPick + '">' + G.pic() + tx(340, 222, 14, G.cmd, 'var(--en)', ' font-family="Consolas, monospace"') + '</g>';
+    $('gsay').innerHTML = G.say;
+    document.querySelectorAll('#gitBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.git === gitPick));
+  }
+  Object.keys(GIT).forEach((k) => {
+    const b = document.createElement('button');
+    b.textContent = GIT[k].btn; b.dataset.git = k;
+    b.addEventListener('click', () => { gitPick = k; drawGit(); });
+    $('gitBtns').appendChild(b);
+  });
+  drawGit();
+
+  // 4절: 질문 흐름 (01·03·05·06과 같은 함수). 좌표는 그림용
+  //   nodes 질문 상자 {x, y, w, t, sub} · leaves 동사 상자 {x, y, w, v, sub, seg, say}
+  //   edges [부모, 자식, 답, 'left'|'right'|아래, 답 글자 자리, 점선] · segs 스펙트럼 띠 [x1, x2, 이름, 키]
+  //   region 묶음 테두리 {x, y, w, h, label, at} · 잎의 out = 묶음 밖으로 나가는 문
+  const FLOW = {
+    color: 'var(--accent)', segY: 300,
+    region: { x: 106, y: 66, w: 558, h: 258, label: 'COMMIT · 넘겨서 묶음', at: [114, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 230, t: 'Q1. 되돌리기 어렵게 넘겼나?' },
+      q2: { x: 340, y: 106, w: 200, t: 'Q2. 무엇을 넘겼나?' },
+      q3: { x: 232, y: 180, w: 180, t: 'Q3. 앞일을 묶음', sub: '나 · 내 자원' },
+      q4: { x: 512, y: 180, w: 200, t: 'Q4. 이미 한 일·기록', sub: '해 버림 · 확정함' },
+    },
+    leaves: {
+      decide:  { x: 60, y: 262, w: 88, v: 'decide', sub: '마음속에서만', seg: 't', say: '<span class="en">I decided to quit.</span> 마음속에서만 정했다. 마음을 바꾸면 끝이라 commit이 아니다.' },
+      self:    { x: 175, y: 262, w: 100, v: 'commit to', sub: '나를 묶음 · 전념', seg: 'b', say: '<span class="en">She committed to volunteering every Saturday.</span> 내 시간·나 자신을 그 일에 넘겨 묶었다.' },
+      funds:   { x: 290, y: 262, w: 100, v: 'commit 자원', sub: '돈·인력 투입', seg: 'b', say: '<span class="en">The city committed $2 million to the park.</span> 아직 안 써도 그 일 몫으로 묶였다.' },
+      crime:   { x: 408, y: 262, w: 96, v: 'commit 죄', sub: '저질러 버림', seg: 'b', say: '<span class="en">He committed a crime.</span> 이미 일어나 기록에 남았다. 나쁜 일에만.' },
+      code:    { x: 512, y: 262, w: 96, v: 'commit 코드', sub: '기록으로 확정', seg: 'b', say: '<span class="en">I committed the changes.</span> 기록 사슬에 넘겨 확정. 되돌리려면 revert라는 새 기록.' },
+      memory:  { x: 614, y: 262, w: 92, v: 'to memory', sub: '머릿속에 넣음', seg: 'b', say: '<span class="en">I committed the poem to memory.</span> 종이에서 머릿속으로 넘겨 박아 두었다.' },
+      promise: { x: 600, y: 36, w: 120, v: 'promise', sub: '→ PROMISE 묶음', seg: '', out: true, say: '<span class="en">I promised to help.</span> 넘긴 것 없이 <b>말로만</b> 약속했다 → commit 밖, PROMISE 묶음(<a href="../promise/_family.md">promise/_family.md</a>). promise는 어길 수 있고, commit은 이미 넘겨 버렸다.' },
+    },
+    edges: [
+      ['q1', 'decide', '아니오 · 마음만', 'left', [150, 28]], ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'promise', '말로만 약속', 'right', [500, 28], true],
+      ['q2', 'q3', '앞일'], ['q2', 'q4', '이미 한 일'],
+      ['q3', 'self', '나 자신'], ['q3', 'funds', '돈·인력'],
+      ['q4', 'crime', '죄·잘못'], ['q4', 'code', '코드·데이터'], ['q4', 'memory', '외울 것'],
+    ],
+    segs: [[16, 104, '마음만', 't'], [109, 664, '넘겨서 묶임 — 되돌리려면 새 행동이 필요', 'b']],
+  };
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+  let flowPick = 'code';
+  function drawFlow() {
+    const [svg, say] = flowChart(FLOW, flowPick);
+    $('flowScene').innerHTML = svg;
+    $('fsay').innerHTML = say;
+    document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === flowPick));
+  }
+  Object.keys(FLOW.leaves).forEach((k) => {
+    const b = document.createElement('button');
+    b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+    b.addEventListener('click', () => { flowPick = k; drawFlow(); });
+    $('flowBtns').appendChild(b);
+  });
+  $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { flowPick = g.dataset.leaf; drawFlow(); } });
+  drawFlow();
+
+  // 5절: 뒤에 붙는 것. 낱말 = [글자, 역할], 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], p: ['전치사', 'var(--accent2)', false, true], a: ['형용사', 'var(--accent)', true], x: ['', 'var(--line)'] };
+  const SLOTS = {
+    noun:   { ok: [['I', 's'], ['committed', 'v'], ['the changes', 'o']], say: '고친 것을 넘겨 확정. <span class="en">commit funds · troops · resources</span>(투입)도 같은 모양이다. 과거형은 <b>t를 겹쳐</b> committed.' },
+    crime:  { ok: [['He', 's'], ['committed', 'v'], ['a crime', 'o']], bad: [['He', 's'], ['committed', 'v'], ['his homework', 'o']], say: '죄·잘못·실수(<span class="en">a crime, an error, a foul</span>)만 온다. 좋은 일·평범한 일은 <span class="en">do</span>.' },
+    toing:  { ok: [['We', 's'], ['committed', 'v'], ['to', 'p'], ['finishing it', 'o']], bad: [['We', 's'], ['committed', 'v'], ['to', 'p'], ['finish it', 'o']], say: 'to는 "~쪽으로"의 <b>전치사</b>다. 그래서 동사 원형이 아니라 <b>-ing나 명사</b>가 온다 — <span class="en">commit to the plan</span>. <span class="en">look forward to seeing</span>과 같은 자리.' },
+    self:   { ok: [['She', 's'], ['committed', 'v'], ['herself', 'o'], ['to', 'p'], ['the project', 'o']], say: '나 자신을 목적어로 세워 <b>넘기는 것이 나</b>임을 보인다. <span class="en">commit to</span>보다 격식 있고 무겁다.' },
+    memory: { ok: [['I', 's'], ['committed', 'v'], ['the poem', 'o'], ['to', 'p'], ['memory', 'x']], say: '외울 것이 <b>가운데</b>, <span class="en">to memory</span>가 뒤. 외울 것이 아주 길면 <span class="en">commit to memory every word of it</span>처럼 뒤로 보내기도 한다.' },
+    adj:    { ok: [['He', 's'], ['is', 'v'], ['committed', 'a'], ['to', 'p'], ['his team', 'o']], bad: [['He', 's'], ['is', 'v'], ['commit', 'a'], ['to', 'p'], ['his team', 'o']], say: '<span class="en">be committed (to)</span> = 헌신적이다. 이미 넘겨 묶인 <b>상태</b>라 과거분사 committed. 명사는 <span class="en">commitment</span>(t 하나).' },
+  };
+  // 낱말 상자 한 줄 (01·02·03·05·06과 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+  let slot = 'toing';
+  function drawSlot() {
+    const c = SLOTS[slot];
+    $('slotScene').innerHTML = '<g data-slot="' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+    $('osay').innerHTML = c.say;
+    document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+  }
+  document.querySelectorAll('button[data-slot]').forEach((b) => b.addEventListener('click', () => { slot = b.dataset.slot; drawSlot(); }));
+  drawSlot();
+</script>
+</body>
+</html>

@@ -126,11 +126,13 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 04 | [04-core-question.html](04-core-question.html) | 핵심 질문 하나 — 듣는 사람 머릿속 그림으로 동사·주어·낱말 순서를 고른다. BREAK·SOLVE 두 사건, 이미 앎/처음 들음 | 말하는 사람 → 듣는 사람 머릿속 말풍선, 그림 고르기 버튼 → 말풍선 그림 + 문장 낱말 상자(주어 = 사람/물건, 이미 앎/새로 그림) |
 | 05 | [05-resolve.html](05-resolve.html) | RESOLVE 묶음 — 같은 다툼을 매듭짓는 방식으로 resolve · settle · sort out · clear up · work out. resolve 전용 "여러 갈래 → 하나"(다툼·merge conflict·Promise·DNS·결심). **노트 없이 먼저 만든 페이지** | HOW 버튼 → 두 사람 사이 장면(합의 도장·매듭 풀림·조각 정리·구름 걷힘) / 대상 버튼 → 갈래가 한 점에 모이는 그림 / 질문 흐름 + SOLVE로 가는 문 / 목적어 자리 |
 | 06 | [06-nudge.html](06-nudge.html) | PUSH 묶음 — 미는 세기·한 점·속도로 push · nudge · shove · press · thrust, nudge 전용 "작은 힘, 작은 변화"(컵·팔꿈치·선택·숫자·알림). **기본이 결과가 아니라 힘인 묶음** — 스펙트럼에서 모두 방식 쪽, 결과는 뒤의 말(into place) | HOW 버튼 → 탁자 위 상자가 움직이는 거리·모양(TARGET이 버튼·구조봉으로 바뀌는 장면 포함) / 대상 버튼 → 막대 위 점이 조금만 옮겨 가는 그림 / 질문 흐름 + PULL로 가는 문 / 목적어 · 결과 말 · 사람이 목적어 |
+| 07 | [07-commit.html](07-commit.html) | COMMIT — HOW 묶음이 아니라 **한 동사가 여러 TARGET**(코드·돈·나 자신·죄·기억)을 받는 경우라 식을 BASIC + TARGET = 뜻으로 쓴다. commit 전용 "왜 git은 save가 아니라 commit인가". **노트 없이 먼저 만든 페이지** | TARGET 버튼 → 넘기는 선을 건너 잠기는 장면 / 명령 버튼 → 작업 폴더·스테이징·기록 사슬(save·add·commit·revert·DB) / 질문 흐름 + PROMISE로 가는 문 / 뒤에 붙는 모양(to + -ing ✓·✗) |
 
-01~06 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06)에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~07 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06과 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
+- **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 - GO 묶음 — 속도 슬라이더 + 급함·낮은 자세로 walk · run · rush · crawl
 - LOOK 묶음 — 보는 시간 + 잘 안 보임으로 glance · look · stare · gaze · peer (목적어 칸: `look at it` vs `stare at it`, 전치사 자리)
