@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SLEEP 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/51-sleep.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+  /* FALL ASLEEP은 11글자라 동사 칸에서 자간을 줄인다 */
+  #verbLabel { letter-spacing: -1px; }
+  /* 표 칸이 많아 휴대폰 폭에서 칸 여백을 줄인다 */
+  @media (max-width: 600px) { th, td { padding: 6px 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="50-drink.html">DRINK 묶음</a> · 다음: <a href="52-hear.html">HEAR 묶음</a> · 견줘 보기: <a href="36-wait.html">WAIT 묶음 (깨어서 기다림)</a> · <a href="31-stop.html">STOP 묶음 (활동을 멈춤)</a></p>
+  <h1>SLEEP 묶음 — 같은 잠, 다른 시간선</h1>
+  <p class="lead">의식과 활동이 낮아져 <b>잠든 상태</b>가 된다. 이 그림은 같고, <b>잠든 상태에 머문 시간인지, 잠으로 넘어가는 순간인지, 낮의 짧은 잠인지, 얕게 잠깐 조는지, 일어날 시각을 넘겼는지</b>만 바꾸면 sleep · fall asleep · nap · doze · oversleep으로 갈린다. 이 묶음은 무엇을 하는 동작보다 <b>시간선 위의 어느 칸</b>을 말하는지가 핵심이다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="sleep" title="sleep 소리로 듣기"><span class="en">sleep</span><span class="ipa">/sliːp/</span><span class="ko">[슬<b>리</b>프]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="fall asleep" title="fall asleep 소리로 듣기"><span class="en">fall asleep</span><span class="ipa">/fɔːl əˈsliːp/</span><span class="ko">[폴어슬<b>리</b>프]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="nap" title="nap 소리로 듣기"><span class="en">nap</span><span class="ipa">/næp/</span><span class="ko">[<b>냅</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="doze" title="doze 소리로 듣기"><span class="en">doze</span><span class="ipa">/doʊz/</span><span class="ko">[<b>도</b>우즈]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="oversleep" title="oversleep 소리로 듣기"><span class="en">oversleep</span><span class="ipa">/ˌoʊ.vərˈsliːp/</span><span class="ko">[오버슬<b>리</b>프]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">잠의 어느 부분을 말하는지에 따라 위의 시간 띠와 아래 장면이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽 위는 시간 띠, 아래는 장면이다. sleep은 밤 22시부터 6시까지 꽉 찬 잠 띠와 침대의 미나, fall asleep은 깨어 있음 띠가 끝나는 한 점에 세로선과 이 순간 표시, nap은 낮 13시 무렵 20분짜리 짧은 띠와 소파의 진, doze는 대기실 의자에서 고개가 떨어진 할아버지와 깜빡깜빡 끊긴 얕은 띠, oversleep은 7시 일어날 시각 선을 넘어 8시까지 이어진 띠와 소리가 꺼진 알람이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">SLEEP · 잠든 상태</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">잠의 어느 칸?</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 시각·길이는 그림용이다. 장면은 각 노트의 Scene Scenario(밤의 침실 · 불을 끈 침실 · 주말 오후 거실 소파 · 대기실 · 월요일 아침 침실)를 옮겼다. 이 묶음은 목적어가 없어서 TARGET 자리에 <b>잠드는 사람</b>을 적었고, oversleep만 노트를 따라 "수면 사건"을 적었다. <b>fall asleep 장면에서는 SLEEP 칩을 켜지 않았다</b> — 묶음 노트가 "SLEEP은 상태의 지속이고 FALL ASLEEP은 그 상태로 들어가는 변화"라고 갈라 두었기 때문이다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"잤다" 하나로 다 될 것 같다. 그런데 <b>몇 시에 잠들었는지</b>, <b>몇 시간 잤는지</b>, <b>낮에 잠깐</b>, <b>의자에서 깜빡</b>, <b>늦잠</b>은 시간선의 다른 칸이다. 그리고 잠이 아니라 <b>깨어서 기다리는</b> 것이면? 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>SLEEP 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "잠든 상태"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>agent의 의식과 활동 수준이 낮아져 일정 시간 잠든 상태에 들어가거나 머묾</b> = <span class="en">SLEEP</span>이다. 여기에 들어가는 순간 · 낮의 짧은 길이 · 얕은 깊이 · 예정 시각을 넘김이 붙는다. 노트의 식을 그대로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">깨어 활동함</span><span class="op">→</span><span>의식과 활동이 낮은 상태 유지</span><span class="op">=</span><span class="v">SLEEP</span>
+    <span class="r">SLEEP</span><span class="op">+</span><span>깨어 있음에서 잠으로 진입</span><span class="op">=</span><span class="v">FALL ASLEEP</span>
+    <span class="r">SLEEP</span><span class="op">+</span><span>낮의 짧고 제한된 휴식</span><span class="op">=</span><span class="v">NAP</span>
+    <span class="r">SLEEP</span><span class="op">+</span><span>얕고 짧으며 불완전한 잠</span><span class="op">=</span><span class="v">DOZE</span>
+    <span class="r">SLEEP</span><span class="op">+</span><span>예정된 종료 시점을 넘김</span><span class="op">=</span><span class="v">OVERSLEEP</span>
+  </div>
+  <p>노트가 짚은 점: <span class="en">sleep — slept — slept</span>, <span class="en">fall asleep — fell asleep — fallen asleep</span>, <span class="en">oversleep — overslept</span>로 sleep · fall이 불규칙이다. <span class="en">nap — napped</span>는 자음을 겹쳐 적는다. 그리고 <b>sleep은 충분히 쉬었다는 뜻이 아니다</b> — 잠든 상태가 이어졌다는 것만.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>잠에 머묾</b> → 조용한 침실, 미나가 밤새 여덟 시간 잠들어 있다. 언제 잠들었는지, 얼마나 깊었는지는 말하지 않는다. <span class="en">Mina slept for eight hours.</span></li>
+    <li><b>잠듦</b> → 불을 끄고 누웠는데 처음엔 시계 소리가 들린다. 호흡이 느려지고 소리가 사라지는 <b>한 점</b>. <span class="en">Mina fell asleep quickly.</span></li>
+    <li><b>낮잠</b> → 주말 오후, 한 시간 뒤 숙제를 해야 하는 진이 소파에서 <b>20분</b> 자고 일어난다. <span class="en">Jin napped after lunch.</span></li>
+    <li><b>깜빡 졸음</b> → 따뜻한 대기실, 할아버지 고개가 떨어졌다가 작은 소리에 다시 깬다. <b>얕고 끊긴</b> 잠. <span class="en">Grandpa dozed in the chair.</span></li>
+    <li><b>늦잠</b> → 알람 소리가 꺼져 있어 7시를 넘겨 <b>8시</b>에 깬다. 오래 잔 것이 문제가 아니라 <b>일어날 시각을 넘긴 것</b>. <span class="en">Mina overslept on Monday.</span></li>
+    <li>nap · doze · oversleep 장면도 잠든 상태이니 <span class="en">sleep</span>이 맞다. fall asleep만 상태가 아니라 <b>들어가는 변화</b>라 SLEEP 칩이 켜지지 않는다.</li>
+  </ul>
+
+  <h2>3. 몇 시에 "잤다"? — 들어감 · 머묾 · 넘김</h2>
+  <p>한국어 "잤다"는 잠든 시각도, 잔 시간도, 늦잠도 다 말한다. 영어는 <b>시간선의 어느 칸</b>인지에 따라 낱말이 바뀐다. 노트: <span class="en">10시에 fall asleep한 뒤 아침까지 sleep할 수 있다.</span></p>
+  <table>
+    <tr><th>한국어</th><th>영어</th><th>시간선의 칸</th></tr>
+    <tr><td>10시에 잤다 (잠든 시각)</td><td><span class="en">I fell asleep at 10.</span></td><td>들어가는 한 점</td></tr>
+    <tr><td>10시에 잤다 (누운 시각)</td><td><span class="en">I went to bed at 10.</span></td><td>잠자리에 듦 — 아직 깨어 있을 수 있음</td></tr>
+    <tr><td>8시간 잤다</td><td><span class="en">I slept for eight hours.</span></td><td>머문 길이</td></tr>
+    <tr><td>낮잠 잤다</td><td><span class="en">I napped.</span> · <span class="en">I took a nap.</span></td><td>낮의 짧은 칸</td></tr>
+    <tr><td>깜빡 졸았다</td><td><span class="en">I dozed off.</span></td><td>얕고 끊긴 칸</td></tr>
+    <tr><td>늦잠 잤다</td><td><span class="en">I overslept.</span></td><td>일어날 시각 선을 넘김</td></tr>
+  </table>
+  <p class="note">노트: 주말에 계획대로 오래 자면 그냥 <span class="en">sleep</span>이다. <span class="en">oversleep</span>은 <b>일어나기로 한 시각이 있어야</b> 쓴다 — "많이 잤다"가 아니라 "늦잠 자서 일정이 꼬였다".</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>SLEEP 묶음</b>이다. 잠이 아니라 <b>깨어서 다음 일을 기다리는</b> 것이면 테두리 밖 문으로 WAIT 묶음에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 SLEEP 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 잠든 상태를 말하나에서 아니오, 깨어서 기다리면 묶음 밖 문 wait, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 sleep, 시작이나 끝이면 Q3에서 fall asleep과 oversleep, 길이나 깊이면 Q4에서 nap과 doze로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 시작할 때</th><th>② 끝 모습</th><th>③ 무엇이 HOW를 고르나</th></tr>
+    <tr><td><b>sleep</b></td><td>휴식이 필요 · 활동을 멈춰도 됨</td><td>회복됨</td><td>— (지속만)</td></tr>
+    <tr><td><b>fall asleep</b></td><td>아직 깨어 있음 · 피로</td><td>주변을 의식 못 함</td><td>깨어 있음 → 잠</td></tr>
+    <tr><td><b>nap</b></td><td>피곤하지만 곧 다시 활동</td><td>덜 피곤함</td><td>낮 · 짧게</td></tr>
+    <tr><td><b>doze</b></td><td>피곤 · 자극이 적음 · 잘 준비는 안 함</td><td>얕게 잠듦</td><td>얕고 잠깐</td></tr>
+    <tr><td><b>oversleep</b></td><td>잠들어 있음 · 일어날 시각이 정해짐</td><td>준비 시간이 부족</td><td>예정 시각을 넘김</td></tr>
+  </table>
+  <p class="note">칸 내용은 각 노트의 Precondition · 시제와 결과 · 선택 경계를 옮겼다. 흐름 그림의 질문 순서와 Q3 · Q4 묶음은 그림을 위해 정했다.</p>
+
+  <h2>5. 실제 문장으로 — 목적어 없이, 무엇을 붙이나</h2>
+  <p>이 묶음은 <b>목적어를 받지 않는다</b>. 대신 <b>얼마나 · 언제 · 어디서</b>를 뒤에 붙인다. fall asleep은 <b>asleep</b>(잠든 상태)이고, doze는 <b>off</b>와 자주 붙는다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">붙이는 말에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">붙이는 것</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>얼마나 · 언제</th><th>어디서</th><th>다른 모양</th></tr>
+    <tr><td><b>sleep</b></td><td><span class="en">slept for eight hours</span></td><td><span class="en">slept on the sofa</span></td><td><span class="en">went to sleep</span> — 잠자러 감</td></tr>
+    <tr><td><b>fall asleep</b></td><td><span class="en">fell asleep quickly</span></td><td><span class="en">fell asleep on the bus</span></td><td>✗ <span class="en">fell sleep</span> — asleep이어야</td></tr>
+    <tr><td><b>nap</b></td><td><span class="en">napped after lunch</span></td><td><span class="en">napped on the couch</span></td><td><span class="en">took a nap</span></td></tr>
+    <tr><td><b>doze</b></td><td><span class="en">dozed for a few minutes</span></td><td><span class="en">dozed in the chair</span></td><td><span class="en">dozed off</span> — 깜빡 잠듦</td></tr>
+    <tr><td><b>oversleep</b></td><td><span class="en">overslept on Monday</span></td><td><span class="en">overslept in her bedroom</span></td><td><span class="en">overslept and missed the bus</span></td></tr>
+  </table>
+  <p class="note">경향 한 줄: 길이 쪽(sleep · nap)은 <b>for + 시간</b>, 경계 쪽(fall asleep · oversleep)은 <b>at · on + 시각·요일</b>과 잘 어울린다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>SLEEP</b> — 두 손을 모아 뺨에 대고 눈을 감은 채 <b>오래</b> 가만히.</li>
+    <li><b>FALL ASLEEP</b> — 눈을 뜨고 있다가 천천히 감기며 고개가 <b>툭</b> — 그 한 순간.</li>
+    <li><b>NAP</b> — 팔베개를 하고 잠깐, 손가락으로 "20분" 표시 후 벌떡.</li>
+    <li><b>DOZE</b> — 앉은 채 고개가 <b>꾸벅</b> 떨어졌다가 화들짝 다시 든다.</li>
+    <li><b>OVERSLEEP</b> — 일어나서 시계를 보고 <b>"헉!"</b> 머리를 감싼다.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>3절의 <span class="en">I fell asleep at 10 · I went to bed at 10 · I took a nap</span>은 노트에 없다. "10시에 fall asleep한 뒤 아침까지 sleep"과 <span class="en">dozed off</span>(doze 노트의 시제 문장)는 노트에서 왔다.</li>
+      <li>5절의 <span class="en">slept on the sofa · went to sleep · fell asleep on the bus · napped on the couch · took a nap · dozed for a few minutes · overslept and missed the bus</span>과 ✗ fell sleep, 경향 한 줄은 노트에 없다.</li>
+      <li>0절 "대신 말하면"의 △·✗ 판정은 짐작이다. 묶음 밖 이웃을 WAIT로 둔 것도 판단이다(doze 장면이 대기실이라서).</li>
+      <li>맨 위 그림에서 fall asleep 장면만 SLEEP 칩을 껐다. 묶음 노트("두 표현을 억지로 같은 시간 순서의 HOW로 보지 않는다")를 따른 판단이다.</li>
+      <li>노트끼리 어긋남 ① 묶음 노트는 fall asleep을 SLEEP의 HOW로 보지 말라고 하는데, fall asleep 노트의 식은 <span class="en">SLEEP + 깨어 있음에서 잠으로 진입 = FALL ASLEEP</span>이다.</li>
+      <li>노트끼리 어긋남 ② nap을 "계획"과 묶을지: 묶음 Scenario contrast와 doze 노트는 "계획한 짧은 잠은 nap", nap 노트의 WHY는 "시작과 종료를 정한 짧은 수면"인데, nap 노트의 BASIC과 묶음 상황 풀이는 "계획했는지는 필수가 아니다"라고 한다.</li>
+      <li>TARGET 칸이 노트마다 다르다: sleep · fall asleep · nap · doze는 잠드는 사람(또는 의식 상태), oversleep은 "예정된 종료 시점이 있는 수면 사건"이다. 목적어가 없는 묶음이라 TARGET을 무엇으로 볼지 정할 것.</li>
+      <li>doze 노트의 Forms 줄에 <span class="en">doze off</span>가 없는데 시제 문장에는 <span class="en">has dozed off</span>가 나온다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../sleep/_family.md">sleep/_family.md</a> — "잠의 시작 · 지속 · 짧은 휴식 · 예정 시각"</li>
+    <li>동사 노트: <a href="../sleep/sleep--remain-asleep.md">sleep</a> · <a href="../sleep/fall-asleep--enter-sleep.md">fall asleep</a> · <a href="../sleep/nap--sleep-briefly.md">nap</a> · <a href="../sleep/doze--sleep-lightly.md">doze</a> · <a href="../sleep/oversleep--sleep-too-long.md">oversleep</a></li>
+    <li>묶음 밖 이웃: <a href="36-wait.html">36 WAIT</a>(<a href="../wait/_family.md">wait/_family.md</a>) — 잠들지 않고 <b>깨어서</b> 다음 일을 미룸. 대기실의 할아버지는 wait하다가 doze한다.</li>
+    <li>견줘 보기: <a href="31-stop.html">31 STOP</a> — 활동을 멈춤. sleep은 멈춘 <b>상태에 머묾</b>이다.</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — sleep 묶음은 <b>잠든 상태의 시간선</b>을 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240. 위는 시간 띠(y 80), 아래는 장면(y 120~240) (그림용) ──
+  // 시간 띠: 시각 h를 x로 (h0~h1 → 270~630). ticks = [[시각, 글자]]
+  const HX = (h, h0, h1) => 270 + (h - h0) / (h1 - h0) * 360;
+  const TBAR = (h0, h1, ticks, head) => '<rect x="270" y="71" width="360" height="18" rx="4" fill="var(--bg)" stroke="var(--line)"/>' +
+    ticks.map(([h, t]) => '<path d="M' + HX(h, h0, h1) + ' 89 v5" stroke="var(--muted)"/>' + tx(HX(h, h0, h1), 106, 11, t, 'var(--muted)')).join('') +
+    tx(270, 62, 11, head, 'var(--muted)', ' font-weight="600"', 'start');
+  const BAND = (a, b, h0, h1, c, op, hh) => '<rect x="' + HX(a, h0, h1) + '" y="' + (80 - (hh || 18) / 2) + '" width="' + (HX(b, h0, h1) - HX(a, h0, h1)) + '" height="' + (hh || 18) + '" rx="3" fill="' + (c || 'var(--accent)') + '" opacity="' + (op || .45) + '"/>';
+  // 침대 (x1~x2), 누운 사람: 머리 (x1 + 26, 180)
+  const BED = (x1, x2) => '<rect x="' + (x1 - 8) + '" y="160" width="8" height="80" rx="2" fill="var(--wood)"/><rect x="' + x1 + '" y="200" width="' + (x2 - x1) + '" height="12" fill="var(--wood)"/>' +
+    '<path d="M' + (x1 + 6) + ' 212 V240 M' + (x2 - 6) + ' 212 V240" stroke="var(--wood)" stroke-width="5"/>' +
+    '<rect x="' + x1 + '" y="192" width="' + (x2 - x1) + '" height="10" rx="3" fill="var(--card)" stroke="var(--obj-line)"/><ellipse cx="' + (x1 + 24) + '" cy="188" rx="20" ry="7" fill="var(--card)" stroke="var(--obj-line)"/>';
+  const LIE = (hx, hy, c, x2, open) => '<rect x="' + (hx + 12) + '" y="' + (hy - 8) + '" width="' + (x2 - hx - 16) + '" height="22" rx="10" fill="' + c + '"/>' +
+    '<circle cx="' + hx + '" cy="' + hy + '" r="13" fill="var(--skin)" stroke="var(--obj-line)"/>' +
+    (open ? '<circle cx="' + (hx + 4) + '" cy="' + (hy - 3) + '" r="2" fill="var(--obj-line)"/>' : '<path d="M' + (hx) + ' ' + (hy - 3) + ' q4 3 8 0" fill="none" stroke="var(--obj-line)" stroke-width="1.5"/>');
+  const ZZ = (x, y, op) => '<g opacity="' + (op || 1) + '">' + tx(x, y, 12, 'z', 'var(--muted)', ' font-weight="700"') + tx(x + 12, y - 12, 15, 'z', 'var(--muted)', ' font-weight="700"') + tx(x + 26, y - 26, 18, 'Z', 'var(--muted)', ' font-weight="700"') + '</g>';
+  const WIN = (x, y, night) => '<rect x="' + x + '" y="' + y + '" width="80" height="60" fill="' + (night ? 'var(--obj-line)' : 'var(--bg)') + '" opacity="' + (night ? .25 : 1) + '" stroke="var(--obj-line)" stroke-width="1.5"/>' +
+    '<rect x="' + x + '" y="' + y + '" width="80" height="60" fill="none" stroke="var(--obj-line)" stroke-width="1.5"/>' +
+    (night ? '<path d="M' + (x + 52) + ' ' + (y + 14) + ' a12 12 0 1 0 10 18 a9 9 0 0 1 -10 -18 z" fill="var(--gold)"/>' : '<circle cx="' + (x + 56) + '" cy="' + (y + 22) + '" r="10" fill="var(--gold)"/>');
+  const CLOCK = (x, y, r, op) => '<g opacity="' + (op || 1) + '"><circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M' + x + ' ' + y + ' V' + (y - r * .7) + ' M' + x + ' ' + y + ' H' + (x + r * .5) + '" stroke="var(--obj-line)" stroke-width="1.5"/></g>';
+  const ALARM = (x, y, t, c) => '<rect x="' + (x - 22) + '" y="' + (y - 13) + '" width="44" height="26" rx="6" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(x, y + 5, 13, t, c || 'var(--text)', ' font-weight="700"');
+  // 앉은 사람: 의자 x, 머리 기울기 tilt
+  const CHAIR = (x) => '<rect x="' + (x - 26) + '" y="150" width="7" height="56" rx="2" fill="var(--wood)"/><rect x="' + (x - 22) + '" y="198" width="50" height="8" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x - 18) + ' 206 V240 M' + (x + 24) + ' 206 V240" stroke="var(--wood)" stroke-width="4"/>';
+  const SIT = (x, c, tilt) => CHAIR(x) +
+    '<rect x="' + (x - 13) + '" y="156" width="26" height="44" rx="9" fill="' + c + '"/><rect x="' + (x - 4) + '" y="190" width="38" height="10" rx="4" fill="' + c + '"/><rect x="' + (x + 24) + '" y="192" width="10" height="48" rx="4" fill="' + c + '"/>' +
+    '<circle cx="' + (x + tilt) + '" cy="' + (142 + Math.abs(tilt) / 2) + '" r="13" fill="var(--skin)" stroke="var(--obj-line)"/>';
+  const NM = (x, y, t) => tx(x, y, 12, t, 'var(--muted)');
+  const TOP = {
+    first: 'fallasleep', keep: 'SLEEP',
+    keepSay: '<b>SLEEP</b>은 잠든 상태가 이어졌다는 것만 말한다. nap · doze · oversleep 장면에도 맞지만 짧은지 · 얕은지 · 시각을 넘겼는지는 빠진다. fall asleep 장면은 상태가 아니라 <b>들어가는 순간</b>이라 sleep으로 바꾸면 그림이 달라진다. <span class="en">Mina slept for eight hours.</span>',
+    chips: ['SLEEP', 'FALL ASLEEP', 'NAP', 'DOZE', 'OVERSLEEP'], out: [['WAIT (깨어서 기다림)', '36-wait.html']],
+    hows: {
+      sleep: { btn: '잠에 머묾', how: '들어감·깊이 미지정', verb: 'SLEEP', chips: ['SLEEP'], target: 'TARGET · Mina (잠자는 사람)',
+        result: '밤새 — 잠든 상태에 머묾',
+        pic: () => FLOOR + TBAR(21, 31, [[22, '22시'], [24, '0시'], [30, '6시']], '밤 → 아침') +
+          step(.2, BAND(22, 30, 21, 31) + tx(HX(26, 21, 31), 85, 12, '8시간', 'var(--text)', ' font-weight="700"')) +
+          BED(290, 470) + LIE(316, 180, 'var(--sleeve)', 466) + WIN(540, 128, true) + step(.4, ZZ(336, 160)),
+        say: '<span class="en">Mina slept for eight hours.</span> 잠든 상태가 <b>얼마나 이어졌는지</b>. 언제 잠들었는지, 얼마나 깊었는지는 말하지 않는다. 노트: 충분히 쉬었다는 뜻은 아니다.' },
+      fallasleep: { btn: '잠듦', how: '깨어 있음 → 잠', verb: 'FALL ASLEEP', chips: ['FALL ASLEEP'], target: 'TARGET · Mina (아직 깨어 있음)',
+        result: '불을 끄고 — 잠으로 넘어가는 순간',
+        pic: () => FLOOR + TBAR(22, 24, [[22, '22시'], [23, '23시']], '불 끈 뒤') + BAND(22, 22.6, 22, 24, 'var(--fog)', .9) + tx(HX(22.3, 22, 24), 85, 11, '깨어 있음', 'var(--text)') +
+          step(.3, '<path d="M' + HX(22.6, 22, 24) + ' 64 V96" stroke="var(--accent)" stroke-width="3"/>' + tx(HX(22.6, 22, 24) + 8, 62, 12, '이 순간', 'var(--accent)', ' font-weight="700"', 'start')) +
+          step(.5, BAND(22.6, 23.2, 22, 24, '', .45) + BAND(23.2, 23.6, 22, 24, '', .25) + BAND(23.6, 23.85, 22, 24, '', .1) + tx(HX(23.93, 22, 24), 86, 14, '?', 'var(--muted)', ' font-weight="700"')) +
+          BED(290, 470) + LIE(316, 180, 'var(--sleeve)', 466) + CLOCK(560, 150, 16) +
+          step(.15, tx(600, 142, 11, '똑딱', 'var(--muted)', '', 'start')) + step(.6, '<g opacity=".3">' + tx(600, 162, 11, '똑…', 'var(--muted)', '', 'start') + '</g>' + ZZ(336, 160, .6)),
+        say: '<span class="en">Mina fell asleep quickly.</span> 처음엔 시계 소리를 듣다가 그 소리가 사라지는 <b>한 점</b> — 깨어 있음에서 잠으로 넘어간다. 노트: 몇 시간 잤는지는 이 말만으로 모른다(띠 끝의 ?).' },
+      nap: { btn: '낮잠', how: '낮에 짧게 쉬는 잠', verb: 'NAP', chips: ['SLEEP', 'NAP'], target: 'TARGET · Jin',
+        result: '점심 뒤 소파 — 낮에 짧게',
+        pic: () => FLOOR + TBAR(12, 16, [[12, '12시'], [13, '13시'], [14, '14시'], [15, '15시']], '주말 오후') +
+          step(.2, BAND(13, 13.33, 12, 16) + tx(HX(13.17, 12, 16), 62, 12, '20분', 'var(--accent)', ' font-weight="700"')) +
+          tx(HX(14, 12, 16) + 6, 62, 11, '→ 숙제', 'var(--muted)', '', 'start') +
+          '<rect x="290" y="168" width="180" height="26" rx="8" fill="var(--fog)"/><rect x="284" y="186" width="192" height="24" rx="6" fill="var(--fog)" stroke="var(--obj-line)"/><path d="M296 210 V240 M464 210 V240" stroke="var(--obj-line)" stroke-width="4"/>' +
+          LIE(312, 174, 'var(--ok)', 440) + WIN(540, 128, false) + step(.4, ZZ(330, 154, .8)) + step(.6, ALARM(504, 172, '20′', 'var(--accent)')),
+        say: '<span class="en">Jin napped after lunch.</span> 밤의 긴 잠과 별개로 <b>낮에 잠깐</b> 자고 일어난다. 노트: 꼭 알람을 맞춰 계획해야 하는 것은 아니다.' },
+      doze: { btn: '깜빡 졸음', how: '얕고 잠깐 졸음', verb: 'DOZE', chips: ['SLEEP', 'DOZE'], target: 'TARGET · 할아버지',
+        result: '대기실 의자 — 얕게 졸다 깸',
+        pic: () => FLOOR + TBAR(10, 11, [[10, '10시'], [10.5, '10시 30분'], [11, '11시']], '기다리는 동안') +
+          [[10.15, 10.2], [10.38, 10.42], [10.66, 10.73]].map(([a, b], i) => step(.15 + i * .2, BAND(a, b, 10, 11, '', .35, 10))).join('') +
+          step(.75, tx(HX(10.86, 10, 11), 62, 11, '깜빡 · 깜빡', 'var(--accent)', ' font-weight="600"')) +
+          SIT(330, 'var(--fog)', 9) + '<path d="M338 140 q4 3 8 0" fill="none" stroke="var(--obj-line)" stroke-width="1.5"/>' + CHAIR(430) +
+          '<rect x="530" y="128" width="100" height="40" rx="4" fill="var(--card)" stroke="var(--obj-line)"/>' + tx(580, 154, 14, '23번', 'var(--accent)', ' font-weight="700"') + tx(580, 186, 11, '대기실', 'var(--muted)') +
+          step(.4, tx(356, 130, 13, 'z', 'var(--muted)', ' font-weight="700"')) + step(.6, tx(372, 176, 11, '꾸벅', 'var(--muted)', '', 'start')),
+        say: '<span class="en">Grandpa dozed in the chair.</span> 계획한 잠이 아니라 기다리다 <b>얕고 잠깐</b> 고개가 떨어졌다가 작은 소리에 다시 깬다. 노트: 의자에서만 가능하다는 뜻은 아니다.' },
+      oversleep: { btn: '늦잠', how: '일어날 시각을 넘김', verb: 'OVERSLEEP', chips: ['SLEEP', 'OVERSLEEP'], target: 'TARGET · 월요일 아침 잠',
+        result: '알람 7시를 넘겨 — 8시에 깸',
+        pic: () => FLOOR + TBAR(22, 33, [[22, '22시'], [31, '7시'], [32, '8시']], '일요일 밤 → 월요일') + BAND(22, 31, 22, 33) +
+          '<path d="M' + HX(31, 22, 33) + ' 64 V96" stroke="var(--bad)" stroke-width="3"/>' + tx(HX(31, 22, 33) - 6, 62, 11, '일어날 시각', 'var(--bad)', ' font-weight="600"', 'end') +
+          step(.3, BAND(31, 32, 22, 33, 'var(--bad)', .55) + tx(HX(32.5, 22, 33), 84, 12, '+1', 'var(--bad)', ' font-weight="700"')) +
+          BED(290, 470) + LIE(316, 180, 'var(--sleeve)', 466) + ZZ(336, 160, .7) +
+          '<rect x="500" y="200" width="60" height="40" fill="var(--wood)"/>' + ALARM(530, 184, '7:00') + tx(530, 158, 11, '소리 꺼짐', 'var(--muted)') +
+          step(.6, tx(600, 140, 15, '8:00 헉!', 'var(--bad)', ' font-weight="700"')),
+        say: '<span class="en">Mina overslept on Monday.</span> 알람 소리가 꺼져 7시를 넘겨 <b>8시</b>에 깬다. 오래 잤다는 것이 아니라 <b>일어나기로 한 시각을 넘긴 것</b>. 주말에 계획대로 오래 자면 그냥 sleep.' },
+    },
+  };
+
+  // 0절 아이콘 ((0, 0) 중심)
+  const EYEO = (x, y) => '<path d="M' + (x - 11) + ' ' + y + ' q11 -10 22 0 q-11 10 -22 0 z" fill="var(--bg)" stroke="var(--obj-line)" stroke-width="1.5"/><circle cx="' + x + '" cy="' + y + '" r="3.5" fill="var(--obj-line)"/>';
+  const EYEC = (x, y) => '<path d="M' + (x - 11) + ' ' + y + ' q11 8 22 0" fill="none" stroke="var(--obj-line)" stroke-width="2"/>';
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. fall asleep을 먼저 빼 보세요.',
+    cards: [
+      { id: 'sleep', t: ['잠든 상태에', '머묾'], v: 'sleep', icon: '<rect x="-36" y="10" width="72" height="8" rx="2" fill="var(--wood)"/><circle cx="-24" cy="2" r="8" fill="var(--skin)" stroke="var(--obj-line)"/><rect x="-16" y="-4" width="48" height="14" rx="6" fill="var(--sleeve)"/>' + tx(10, -16, 14, 'z z', 'var(--muted)', ' font-weight="700"'),
+        instead: 'I fell asleep for eight hours. ✗', lost: 'fall asleep은 들어가는 한 점이라 여덟 시간 동안 머문 그림을 못 그린다.', why: '잠든 상태가 이어짐.' },
+      { id: 'fallasleep', t: ['깨어 있다가', '잠으로'], v: 'fall asleep', icon: EYEO(-22, 0) + arrow(-6, 10, 0, 'var(--accent)', 2) + EYEC(26, -2) + '<path d="M2 -24 V24" stroke="var(--accent)" stroke-width="2" stroke-dasharray="3 3"/>',
+        instead: 'I slept quickly. ✗', lost: '"빨리 잤다"는 잠든 순간이 빨랐다는 뜻이 서지 않는다. 깨어 있음 → 잠의 경계를 그릴 낱말이 빈다.', why: '깨어 있음에서 잠으로 진입.' },
+      { id: 'nap', t: ['낮에', '짧게'], v: 'nap', icon: '<circle cx="-18" cy="-12" r="10" fill="var(--gold)"/>' + tx(14, -8, 14, 'z', 'var(--muted)', ' font-weight="700"') + '<rect x="-30" y="12" width="60" height="10" rx="3" fill="var(--bg)" stroke="var(--line)"/><rect x="-14" y="12" width="14" height="10" rx="3" fill="var(--accent)" opacity=".5"/>',
+        instead: 'I slept after lunch. △', lost: '잤다는 것뿐, 낮에 잠깐 쉬는 짧은 잠인지 오래 잤는지가 안 보인다.', why: '낮의 짧은 휴식 수면.' },
+      { id: 'doze', t: ['얕게', '깜빡 졸음'], v: 'doze', icon: '<rect x="-20" y="-6" width="20" height="30" rx="7" fill="var(--fog)"/><circle cx="-2" cy="-16" r="9" fill="var(--skin)" stroke="var(--obj-line)"/>' + tx(18, -18, 12, 'z', 'var(--muted)', ' font-weight="700"') + '<rect x="-30" y="16" width="60" height="8" rx="3" fill="var(--bg)" stroke="var(--line)"/>' + [-22, -2, 16].map((x) => '<rect x="' + x + '" y="17" width="5" height="6" fill="var(--accent)" opacity=".5"/>').join(''),
+        instead: 'Grandpa slept in the chair. △', lost: '잤다는 것뿐, 얕게 잠깐 졸다 작은 소리에 깨는 느낌이 빠진다.', why: '얕고 짧은 불완전한 잠.' },
+      { id: 'oversleep', t: ['일어날 시각을', '넘김'], v: 'oversleep', icon: ALARM(-12, -8, '7:00') + AR(14, -8, 30, 14, 'var(--bad)', 2) + tx(18, 30, 12, '8:00', 'var(--bad)', ' font-weight="700"'),
+        instead: 'I slept a lot on Monday. △', lost: '많이 잤다는 것뿐, 일어나기로 한 시각을 넘겨 일정이 꼬였다는 문제가 빠진다(노트: 단지 오래 잔 것과 다르다).', why: '예정된 기상 시각을 넘겨 잠.' },
+      { id: 'wait', out: true, t: ['깨어서', '기다림'], v: 'wait', icon: CLOCK(-14, 0, 18) + EYEO(22, 0),
+        instead: 'Grandpa dozed until they called his name. △', lost: '졸았다는 말이 된다. 잠들지 않고 깨어서 차례를 기다린 그림이 없다.', why: '깨어서 다음 일을 미룸 — 이웃 WAIT 묶음.' },
+    ],
+  };
+
+  const SCENES = {
+    breakfast: { btn: '아침 식탁', place: '집 · 아침 식탁',
+      pic: () => FL + TB(360, 520, 110) + '<ellipse cx="440" cy="104" rx="30" ry="6" fill="' + CARD + '" stroke="' + OL + '"/>' + WIN(560, 30, false) +
+        P(290, 150, 1.1, SL) + L(290, 74, '나') + P(600, 150, 1.1, A2) + L(600, 74, '아빠'),
+      lines: [
+        ['아빠', 'Did you <b>sleep</b> well?', '잘 잤니?'],
+        ['나', 'Yes, I slept like a baby.', '네, 푹 잤어요.', 1],
+      ],
+      say: '밤새 잠든 상태가 어땠는지 — <span class="en">sleep</span>. 묶음의 기본 동사.' },
+    movie: { btn: '거실 영화', place: '거실 · 영화 보던 밤',
+      pic: () => FL + BX(500, 40, 140, 80, 'var(--obj-line)') + '<path d="M570 120 V150" stroke="' + OL + '" stroke-width="4"/>' +
+        '<rect x="230" y="104" width="200" height="22" rx="8" fill="' + FOG + '"/><rect x="226" y="122" width="208" height="20" rx="6" fill="' + FOG + '" stroke="' + OL + '"/>' +
+        P(290, 122, .9, SL) + L(290, 58, '친구') + P(370, 122, .9, OKC) + L(370, 58, '나') + ST(.3, T(392, 70, 12, 'z', MU, ' font-weight="700"')),
+      lines: [
+        ['친구', 'You <b>fell asleep</b> during the movie!', '너 영화 보다가 잠들었잖아!'],
+        ['나', 'Did I? How did it end?', '내가? 어떻게 끝났어?', 1],
+      ],
+      say: '영화를 보다가 <b>잠으로 넘어간</b> 순간 — <span class="en">fall asleep</span>. 몇 시간 잤는지는 말하지 않는다.' },
+    baby: { btn: '아기 낮잠', place: '집 · 아기가 낮잠 자는 오후',
+      pic: () => FL + '<rect x="440" y="96" width="120" height="54" rx="4" fill="none" stroke="' + OL + '" stroke-width="2"/>' + [460, 480, 500, 520, 540].map((x) => '<path d="M' + x + ' 96 V150" stroke="' + OL + '"/>').join('') +
+        '<circle cx="472" cy="124" r="9" fill="var(--skin)" stroke="' + OL + '"/><rect x="480" y="118" width="54" height="14" rx="6" fill="' + A2 + '"/>' + ST(.2, T(500, 90, 13, 'z z', MU, ' font-weight="700"')) +
+        P(300, 150, 1.1, FOG) + L(300, 74, '엄마') + P(620, 150, 1.1, SL) + L(620, 74, '나'),
+      lines: [
+        ['엄마', 'Shh! The baby is <b>napping</b>.', '쉿! 아기 낮잠 자.'],
+        ['나', 'Oops, sorry.', '앗, 미안해요.', 1],
+      ],
+      say: '낮에 잠깐 자는 잠 — <span class="en">nap</span>. 밤잠이면 <span class="en">sleep</span>.' },
+    bus: { btn: '버스', place: '퇴근길 버스 · 전화 통화',
+      pic: () => FL + '<rect x="200" y="30" width="460" height="112" rx="14" fill="none" stroke="' + OL + '" stroke-width="2"/>' + [240, 340, 440, 540].map((x) => '<rect x="' + x + '" y="44" width="70" height="36" rx="4" fill="' + BG + '" stroke="' + OL + '"/>').join('') +
+        SIT2(380) + L(470, 104, '정류장 지나침') + ST(.3, AR(520, 116, 600, 116, AC, 2)),
+      lines: [
+        ['나', 'I <b>dozed off</b> on the bus and missed my stop.', '버스에서 깜빡 졸다가 내릴 곳을 지나쳤어.', 1],
+        ['친구', 'Oh no! Where are you now?', '이런! 지금 어디야?'],
+      ],
+      say: '자려던 게 아닌데 <b>얕게 깜빡</b> — <span class="en">doze off</span>. 노트의 대기실 할아버지와 같은 그림.' },
+    school: { btn: '학교 교문', place: '학교 · 1교시 종이 친 뒤',
+      pic: () => FL + '<path d="M480 150 V40 M620 150 V40 M470 40 H630" stroke="' + OL + '" stroke-width="5"/>' + T(550, 32, 11, '정문', MU) + CLOCK(550, 82, 18) +
+        P(300, 150, 1.1, SL) + L(300, 74, '나') + '<path d="M266 100 h-16 M264 112 h-20" stroke="' + AC + '" stroke-width="2" stroke-linecap="round"/>' + P(400, 150, 1.1, FOG) + L(400, 74, '선생님'),
+      lines: [
+        ['선생님', 'Why are you late again?', '왜 또 늦었니?'],
+        ['나', 'Sorry, I <b>overslept</b>.', '죄송해요, 늦잠 잤어요.', 1],
+      ],
+      say: '일어나기로 한 시각을 넘겨 일정이 꼬였다 — <span class="en">oversleep</span>. 그냥 많이 잔 게 아니다.' },
+  };
+  // 버스 좌석에 앉아 고개가 떨어진 사람 (장면 그림, 바닥 y = 150)
+  function SIT2(x) {
+    return '<rect x="' + (x - 20) + '" y="100" width="44" height="8" rx="2" fill="' + OL + '"/><rect x="' + (x - 24) + '" y="70" width="6" height="38" fill="' + OL + '"/>' +
+      '<rect x="' + (x - 12) + '" y="70" width="22" height="32" rx="8" fill="' + OKC + '"/><rect x="' + (x + 6) + '" y="102" width="9" height="48" rx="4" fill="' + OKC + '"/>' +
+      '<circle cx="' + (x + 8) + '" cy="62" r="10" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/>' + T(x + 28, 54, 12, 'z', MU, ' font-weight="700"');
+  }
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'fallasleep',
+    region: { x: 84, y: 66, w: 544, h: 258, label: 'SLEEP 묶음 · RESULT = 잠든 상태', at: [92, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 260, t: 'Q1. 잠든 상태 이야기?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 195, y: 180, w: 180, t: 'Q3. 경계는?', sub: '들어감 · 시각 넘김' },
+      q4: { x: 520, y: 180, w: 180, t: 'Q4. 길이 · 깊이는?', sub: '낮에 짧게 · 얕게' },
+    },
+    leaves: {
+      fallasleep: { x: 140, y: 262, w: 104, v: 'fall asleep', sub: '잠으로 진입', seg: 'w', say: '<span class="en">Mina fell asleep quickly.</span> 깨어 있음 → 잠, 한 점.' },
+      oversleep:  { x: 252, y: 262, w: 104, v: 'oversleep', sub: '시각을 넘김', seg: 'w', say: '<span class="en">Mina overslept on Monday.</span> 일어날 시각을 지나쳐 잠.' },
+      sleep:      { x: 360, y: 262, w: 88, v: 'sleep', sub: '지속만', seg: 'b', say: '<span class="en">Mina slept for eight hours.</span> 이 묶음의 기본 동사.' },
+      nap:        { x: 465, y: 262, w: 92, v: 'nap', sub: '낮에 짧게', seg: 'h', say: '<span class="en">Jin napped after lunch.</span> 짧은 휴식 수면.' },
+      doze:       { x: 575, y: 262, w: 88, v: 'doze', sub: '얕게 잠깐', seg: 'h', say: '<span class="en">Grandpa dozed in the chair.</span> 얕고 불완전한 잠.' },
+      wait:       { x: 600, y: 36, w: 120, v: 'wait', sub: '→ WAIT 묶음', seg: '', out: true, say: '<span class="en">Grandpa waited for his name to be called.</span> 잠이 아니라 <b>깨어서 다음 일을 미룸</b> → SLEEP 묶음 밖, <a href="36-wait.html">36 WAIT</a>.' },
+    },
+    edges: [
+      ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'wait', '깨어서 기다림', 'right', [508, 28], true],
+      ['q2', 'q3', '시작 · 끝', 'left'], ['q2', 'sleep', '말하지 않음'], ['q2', 'q4', '길이 · 깊이', 'right'],
+      ['q3', 'fallasleep', '들어감'], ['q3', 'oversleep', '넘김'],
+      ['q4', 'nap', '낮에 짧게'], ['q4', 'doze', '얕게'],
+    ],
+    segs: [[86, 310, '경계 (시작 · 끝)', 'w'], [316, 406, '기본', 'b'], [416, 624, '길이 · 깊이', 'h']],
+  };
+
+  const SLOTS = {
+    first: ['fall asleep', 'other'],
+    slots: { time: '얼마나 · 언제', where: '어디서', other: '다른 모양' },
+    verbs: {
+      sleep: {
+        time:  { ok: [['Mina', 's'], ['slept', 'v'], ['for eight hours', 'x']], say: '노트 예문. <b>for + 시간</b> — 머문 길이.' },
+        where: { ok: [['I', 's'], ['slept', 'v'], ['on the sofa', 'x']], say: '어디서 잠든 상태로 있었나.' },
+        other: { ok: [['I', 's'], ['went', 'v'], ['to sleep', 'r']], say: '<b>go to sleep</b> — 잠자러 가다. 잠드는 쪽 말.' },
+      },
+      'fall asleep': {
+        time:  { ok: [['Mina', 's'], ['fell', 'v'], ['asleep', 'r'], ['quickly', 'x']], say: '노트 예문. 들어가는 순간이 빨랐다.' },
+        where: { ok: [['She', 's'], ['fell', 'v'], ['asleep', 'r'], ['on the bus', 'x']], say: '어디서 잠으로 넘어갔나.' },
+        other: { ok: [['Mina', 's'], ['fell', 'v'], ['asleep', 'r']], bad: [['Mina', 's'], ['fell', 'v'], ['sleep', 'r']], say: '<b>asleep</b>(잠든 상태)이지 sleep이 아니다. 과거형은 fell.' },
+      },
+      nap: {
+        time:  { ok: [['Jin', 's'], ['napped', 'v'], ['after lunch', 'x']], say: '노트 예문. <b>pp</b>를 겹쳐 적는다.' },
+        where: { ok: [['Jin', 's'], ['napped', 'v'], ['on the couch', 'x']], say: '노트 장면의 거실 소파.' },
+        other: { ok: [['Jin', 's'], ['took', 'v'], ['a nap', 'o']], say: '명사로: <b>take a nap</b> — 회화에서 자주.' },
+      },
+      doze: {
+        time:  { ok: [['Grandpa', 's'], ['dozed', 'v'], ['for a few minutes', 'x']], say: '잠깐 — 짧은 시간이 잘 붙는다.' },
+        where: { ok: [['Grandpa', 's'], ['dozed', 'v'], ['in the chair', 'x']], say: '노트 예문 그대로.' },
+        other: { ok: [['Grandpa', 's'], ['dozed', 'v'], ['off', 'r']], say: '<b>off</b> — 깜빡 잠에 빠짐. 노트의 시제 문장: <span class="en">Grandpa has dozed off.</span>' },
+      },
+      oversleep: {
+        time:  { ok: [['Mina', 's'], ['overslept', 'v'], ['on Monday', 'x']], say: '노트 예문. 일어날 시각이 있는 날.' },
+        where: { ok: [['Mina', 's'], ['overslept', 'v'], ['in her bedroom', 'x']], say: '노트의 시제 문장에서.' },
+        other: { ok: [['I', 's'], ['overslept', 'v'], ['and', 'x'], ['missed the bus', 'o']], say: '늦잠의 결과(일정 문제)가 바로 뒤에 온다.' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>

@@ -171,15 +171,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 47 | [47-meet.html](47-meet.html) | MEET 묶음 — meet · greet · visit · gather · join. "만나다 — meet · see · visit" | HOW 버튼 → 도서관 입구·손 흔들기·미나네 집·원형 탁자·빈 의자 +1 / 질문 흐름 + COME으로 가는 문 | |
 | 48 | [48-learn.html](48-learn.html) | LEARN 묶음 — learn · study · practice · discover · memorize. "study와 learn" | HOW 버튼 → 분수 규칙(✗→✓·두 시간 공부·반복 문제·조각 맞춰 발견·가리고 외우기) / 질문 흐름 + KNOW로 가는 문 | |
 | 49 | [49-play.html](49-play.html) | PLAY 묶음 — play · compete · perform · pretend · rehearse. "play 뒤에 오는 것" | HOW 버튼 → 보드게임·달리기 순위·무대 노래·의사 놀이·D-1 동선 맞추기 / 질문 흐름 + PRACTICE로 가는 문 | |
+| 50 | [50-drink.html](50-drink.html) | DRINK 묶음 — drink · sip · gulp · swallow · slurp. "먹다와 drink" | HOW 버튼 → 컵·핫초코 한 모금·꿀꺽·목으로 넘김·후루룩 / 질문 흐름 + EAT으로 가는 문 | |
+| 51 | [51-sleep.html](51-sleep.html) | SLEEP 묶음 — sleep · fall asleep · nap · doze · oversleep. "몇 시에 잤다?" | HOW 버튼 → 시간 막대(밤새·잠드는 순간·20분 낮잠·깜빡 졸음·7시 넘김) / 질문 흐름 + WAIT으로 가는 문 | |
+| 52 | [52-hear.html](52-hear.html) | HEAR 묶음 — hear · listen · overhear · detect · catch. "see·look과 hear·listen" | HOW 버튼 → 복도 스피커·귀 기울임·교무실 문틈·희미한 삑·닫히는 문 속 역 이름 / 질문 흐름 + SEE로 가는 문 | |
 
-01~49 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~49)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~49와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~52 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~52)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~52와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- 나머지 묶음(30개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: drink · sleep · hear
+- 나머지 묶음(27개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: change · fix · borrow
 
 ## 생성기로 만들기 (08부터)
 
