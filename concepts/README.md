@@ -141,15 +141,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 17 | [17-say.html](17-say.html) | SAY 묶음 — 목소리로 say · whisper · shout · mutter · murmur. "say와 tell — 가장 많이 틀리는 쌍" | HOW 버튼 → 입에서 퍼지는 물결의 크기·모양(말풍선·귓속말·체육관·뭉개진 말·병실) / 질문 흐름 + TELL로 가는 문 / 따옴표 · that 절 · 듣는 사람(✗ said me) |
 | 18 | [18-tell.html](18-tell.html) | TELL 묶음 — tell · inform · explain · warn · remind. "tell · explain — 사람을 어디에 두나" | HOW 버튼 → 미나가 알게 되는 장면(소식·학교 문자·칠판 ①②③·빙판 경고·다시 떠오르는 메모) / 질문 흐름 + ASK로 가는 문 / 사람 + 내용 · of · to + 동사 |
 | 19 | [19-ask.html](19-ask.html) | ASK 묶음 — 규모·깊이로 ask · poll · survey · interview · question. "ask가 그리는 그림"(정보·부탁·허락) | HOW 버튼 → 물음표·투표 막대·문항지와 표본·후속 질문·조명 아래 / 질문 흐름 + TELL로 가는 문 / 간접 의문문 어순 |
+| 20 | [20-come.html](20-come.html) | COME 묶음 — come · arrive · return · approach · enter. "come과 go" | HOW 버튼 → 집·학교 사이 아이의 이동(이리 오렴·정문 도착·되돌아옴·남은 거리·문턱) / 질문 흐름 + GO로 가는 문 / 장소 앞 전치사 ✓·✗ | |
+| 21 | [21-see.html](21-see.html) | SEE 묶음 — see · notice · spot · observe · recognize. "see · look at · watch · observe" | HOW 버튼 → 학생과 새(창밖 빛줄기·흔들리는 잎·잎 속 찾기·10분 관찰 기록·지난주 그 새) / 질문 흐름 + LOOK으로 가는 문 / ✗ saw at | |
+| 22 | [22-know.html](22-know.html) | KNOW 묶음 — know · understand · remember · realize · recognize. "상태와 사건" | HOW 버튼 → 머릿속 카드(이미 켜짐·이어짐·꺼내 옴·새 카드·사진과 대조) / 질문 흐름 + THINK로 가는 문 / 명사·절·다른 모양 | |
 
-01~19 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~19)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~19와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~22 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~22)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~22와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- 나머지 묶음(63개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: come · see · know
+- 나머지 묶음(60개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: think · want · use
 
 ## 생성기로 만들기 (08부터)
 
