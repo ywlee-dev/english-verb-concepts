@@ -150,15 +150,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 26 | [26-find.html](26-find.html) | FIND 묶음 — find · locate · discover · track down · recover. "look for와 find" | HOW 버튼 → 열쇠 찾기(의자 다리 옆·B-12 상자·책장 뒤 구멍·①②③ 단서·틈에서 꺼냄) / 질문 흐름 + LOOK FOR로 가는 문 / tracked it down(✗ tracked down it) | |
 | 27 | [27-feel.html](27-feel.html) | FEEL 묶음 — feel · sense · enjoy · suffer · worry. "feel의 쓰임" | HOW 버튼 → 날씨 속 사람(찬 바람·멀리 비 냄새·나무 그늘·산길 추위·폭풍 속 개집 걱정) / 질문 흐름 + TOUCH로 가는 문 | |
 | 28 | [28-start.html](28-start.html) | START 묶음 — start · begin · launch · activate · ignite. "start와 begin" | HOW 버튼 → 계획 → 진행 중·1단계·발표 무대·경보 ON·불꽃 / 질문 흐름 + STOP으로 가는 문 / 목적어 없이 시작하는 것들 | |
+| 29 | [29-help.html](29-help.html) | HELP 묶음 — help · assist · support · rescue · protect. "help 뒤의 모양" | HOW 버튼 → 상자 같이 들기·실험 기록 보조·연습 응원·물에서 꺼냄·우산 아래 / 질문 흐름 + GIVE로 가는 문 | |
+| 30 | [30-move.html](30-move.html) | MOVE 묶음 — move · drag · slide · roll · carry(하위 묶음에서). "move의 여러 뜻" | HOW 버튼 → 창고 상자 A → B(물음표·끌기·미끄러짐·바퀴·들고 감) / 질문 흐름 + PUSH로 가는 문 | |
+| 31 | [31-stop.html](31-stop.html) | STOP 묶음 — stop · pause · halt · cancel · finish. "stop doing과 stop to do" | HOW 버튼 → 회의 진행 막대(멈춤·⏸·비상 정지·열리지 않음·다 채움) / 질문 흐름 + START로 가는 문 | |
 
-01~28 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~28)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~28와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~31 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~31)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~31와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- 나머지 묶음(54개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: help · move · stop
+- 나머지 묶음(51개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: bring · leave · turn
 
 ## 생성기로 만들기 (08부터)
 

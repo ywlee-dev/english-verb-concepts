@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HELP 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/29-help.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+  /* 표 칸이 많아 휴대폰 폭에서 칸 여백을 줄인다 */
+  @media (max-width: 600px) { th, td { padding: 6px 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="28-start.html">START 묶음</a> · 다음: <a href="30-move.html">MOVE 묶음</a> · 견줘 보기: <a href="14-give.html">GIVE 묶음 (물건을 건넴)</a></p>
+  <h1>HELP 묶음 — 같은 미나, 다른 손 내밀기</h1>
+  <p class="lead">미나에게 <b>혼자 하기 어려운 일</b>이 있다. 누군가 손을 써서 <b>부담·위험이 줄고 목표에 더 가까워진다</b>는 결과는 같고, <b>힘을 보탰는지, 맡은 부분만 도왔는지, 계속 받쳐 줬는지, 위험에서 꺼냈는지, 닿기 전에 막았는지</b>만 바꾸면 help · assist · support · rescue · protect로 갈린다. help는 방식을 말하지 않고 <b>도왔다</b>만 그린다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="help" title="help 소리로 듣기"><span class="en">help</span><span class="ipa">/help/</span><span class="ko">[<b>헬</b>프]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="assist" title="assist 소리로 듣기"><span class="en">assist</span><span class="ipa">/əˈsɪst/</span><span class="ko">[어<b>시</b>스트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="support" title="support 소리로 듣기"><span class="en">support</span><span class="ipa">/səˈpɔːrt/</span><span class="ko">[서<b>포</b>트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="rescue" title="rescue 소리로 듣기"><span class="en">rescue</span><span class="ipa">/ˈres.kjuː/</span><span class="ko">[<b>레</b>스큐]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="protect" title="protect 소리로 듣기"><span class="en">protect</span><span class="ipa">/prəˈtekt/</span><span class="ko">[프러<b>텍</b>트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">돕는 방식에 따라 미나의 부담이 줄어드는 장면이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 미나다. help는 복도에서 진이 큰 상자 반대쪽을 들어 둘이 창고로 감, assist는 실험대에서 미나가 타이머를 재는 동안 진이 기록을 맡음, support는 연습실에서 팀원들이 여러 날 청중이 되어 격려함, rescue는 수영장 깊은 구역에서 안전요원이 미나를 가장자리로 꺼냄, protect는 비 오는 운동장에서 진이 우산을 기울여 미나와 작품이 젖지 않게 막는 장면이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">HELP · 부담을 덜어 줌</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 도왔나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 크기·거리는 그림용이다. 장면은 <a href="../help/_family.md">help/_family.md</a>의 고정 TARGET(Mina)과 각 노트의 장면(창고로 가는 복도 · 과학실 실험대 · 발표 연습실 · 수영장 깊은 구역 · 비 오는 운동장)을 옮겼다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"도와줬다" 하나로 다 될 것 같다. 실제로 help는 거의 어디에나 들어간다. 그런데 <b>정해진 역할의 일부만 맡은 것</b>, <b>여러 날 계속 받쳐 준 것</b>, <b>이미 닥친 위험에서 꺼낸 것</b>, <b>해가 닿기 전에 막은 것</b>은 듣는 사람이 그려야 하는 그림이 다르다. 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>HELP 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "부담을 덜어 줌"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>agent가 다른 사람이나 대상의 부담·위험·어려움을 줄여 목표 달성을 더 가능하게 함</b> = <span class="en">HELP</span>다. 여기에 무엇을 맡는지 · 얼마나 오래인지 · 위험이 언제인지가 붙는다. 노트의 비교표를 식으로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">HELP</span><span class="op">+</span><span>필요한 힘이나 행동을 더함</span><span class="op">=</span><span class="v">HELP</span>
+    <span class="r">HELP</span><span class="op">+</span><span>역할 안에서 구체적인 일부를 지원</span><span class="op">=</span><span class="v">ASSIST</span>
+    <span class="r">HELP</span><span class="op">+</span><span>자원·격려를 지속해서 제공</span><span class="op">=</span><span class="v">SUPPORT</span>
+    <span class="r">HELP</span><span class="op">+</span><span>즉각적 위험에서 꺼냄</span><span class="op">=</span><span class="v">RESCUE</span>
+    <span class="r">HELP</span><span class="op">+</span><span>해로운 영향이 닿지 않게 막음</span><span class="op">=</span><span class="v">PROTECT</span>
+  </div>
+  <p>노트가 짚은 점: <span class="en">help</span>는 넓은 말이라 상자가 <b>창고에 도착했다는 보장은 없다</b>. <span class="en">assist</span>도 실험의 성공까지 말하지 않는다. <span class="en">rescue</span>는 위험이 <b>이미 닥친 뒤</b>, <span class="en">protect</span>는 <b>닿기 전</b>이다. 그리고 한국어 "숙제를 도와줘"를 그대로 옮기면 틀린다 — 3절.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>힘을 보탬</b> → 미나 혼자 들면 앞이 안 보이는 상자. 진이 반대쪽을 들어 무게를 나눈다. <span class="en">Jin helped Mina carry the box.</span></li>
+    <li><b>맡은 부분 보조</b> → 미나가 타이머를 재고, 진은 <b>기록이라는 정해진 부분</b>만 맡는다. 실험 전체를 대신하지 않는다. <span class="en">Jin assisted Mina with the experiment.</span></li>
+    <li><b>계속 받쳐 줌</b> → 발표 날까지 팀원들이 <b>매일</b> 청중이 되어 좋은 점과 고칠 점을 말해 준다. <span class="en">The team supported Mina during practice.</span></li>
+    <li><b>위험에서 꺼냄</b> → 다리에 쥐가 나 가라앉기 시작한 미나를 안전요원이 <b>가장자리로</b> 데려온다. <span class="en">The lifeguard rescued Mina from the water.</span></li>
+    <li><b>닿기 전에 막음</b> → 갑자기 비. 진이 우산을 기울여 빗물이 미나와 종이 작품에 <b>닿지 않게</b> 한다. <span class="en">Jin protected Mina's artwork from the rain.</span></li>
+    <li>어느 장면이든 "미나의 부담·위험을 줄였다"는 맞으니 <span class="en">help</span>도 쓸 수 있다. 그래서 HELP 칩은 늘 켜진다.</li>
+  </ul>
+
+  <h2>3. help 뒤의 모양 — "숙제를 도와줘"는 help my homework가 아니다</h2>
+  <p>한국어는 "<b>숙제를</b> 도와줘", "<b>이사를</b> 도와줘"처럼 일을 목적어로 둔다. 영어 help의 목적어는 대개 <b>사람</b>이고, 일은 뒤에 <b>with</b>나 <b>동사 원형</b>으로 붙인다. 노트의 두 문장(help Mina carry the box · help Mina with the box)이 그 두 모양이다.</p>
+  <table>
+    <tr><th>모양</th><th>문장</th><th>한국어</th></tr>
+    <tr><td>사람 + 동사 원형</td><td><span class="en">Jin helped Mina carry the box.</span></td><td>진이 미나가 상자 나르는 걸 도왔다</td></tr>
+    <tr><td>사람 + to 동사</td><td><span class="en">Jin helped Mina to carry the box.</span></td><td>같은 뜻 — to는 있어도 없어도</td></tr>
+    <tr><td>사람 + with 일</td><td><span class="en">Can you help me with my homework?</span></td><td>숙제 좀 도와줄래?</td></tr>
+    <tr><td>✗ 일을 목적어로</td><td><span class="en">✗ Can you help my homework?</span></td><td>숙제를 사람처럼 돕는 말이 된다</td></tr>
+    <tr><td>가게에서</td><td><span class="en">Can I help you?</span></td><td>도와드릴까요? · 뭐 찾으세요?</td></tr>
+  </table>
+  <p class="note">assist도 같은 길을 간다 — <span class="en">assist Mina with the experiment</span>(사람 + with 일). rescue · protect는 <b>from</b>(위험)을 붙인다(5절).</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>HELP 묶음</b>이다. 부담을 덜어 준 게 아니라 <b>물건이 상대에게 넘어간</b> 것이면 테두리 밖 문으로 GIVE 묶음에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 HELP 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 부담·위험이 줄도록 손을 썼나에서 아니오 · 보기만 했으면 watch, 물건을 건넸으면 묶음 밖 문 give, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 help, 일 · 과정이면 Q3에서 assist와 support, 위험이면 Q4에서 rescue와 protect로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 무엇이 어렵나</th><th>② 어떻게 돕나</th><th>③ 얼마 동안</th><th>자리</th></tr>
+    <tr><td><b>help</b></td><td>무엇이든 (짐 · 일 · 문제)</td><td>힘 · 정보 · 행동을 보탬</td><td>말하지 않음</td><td>결과 (기본)</td></tr>
+    <tr><td><b>assist</b></td><td>역할을 나눌 수 있는 과업</td><td>구체적인 일부를 맡음</td><td>그 과업 동안</td><td>방식 + 결과</td></tr>
+    <tr><td><b>support</b></td><td>계속 이어 가야 하는 사람 · 계획</td><td>자원 · 격려</td><td>시간에 걸쳐</td><td>방식 + 결과</td></tr>
+    <tr><td><b>rescue</b></td><td>이미 닥친 위험</td><td>꺼내서 안전한 곳으로</td><td>그 순간</td><td>방식 + 결과</td></tr>
+    <tr><td><b>protect</b></td><td>닥칠 수 있는 해</td><td>닿기 전에 막음</td><td>위험이 있는 동안</td><td>방식 + 결과</td></tr>
+  </table>
+  <p class="note">길잡이지 칼같은 규칙이 아니다. 노트도 support가 "반드시 여러 날이어야 하는 것은 아니다"라고 적었다. 칸 나눔은 짐작이다(아래 "확인할 것").</p>
+
+  <h2>5. 실제 문장으로 — 사람 뒤에 무엇을 붙이나</h2>
+  <p>다섯 동사 모두 <b>도움을 받는 사람(또는 대상)</b>을 목적어로 받는다. 갈리는 곳은 그 뒤다 — <b>동사 원형</b>을 바로 붙일 수 있는 것은 help뿐이고, rescue · protect는 <b>from</b>이 짝이다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">붙이는 말에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">붙이는 말</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>노트 문장</th><th>+ 동사 원형</th><th>+ 전치사 말</th></tr>
+    <tr><td><b>help</b></td><td><span class="en">Jin helped Mina carry the box.</span></td><td>✓ (이 문장)</td><td><span class="en">helped Mina with the box</span></td></tr>
+    <tr><td><b>assist</b></td><td><span class="en">Jin assisted Mina with the experiment.</span></td><td>✗ <span class="en">assisted Mina record</span></td><td><span class="en">assisted with the experiment</span></td></tr>
+    <tr><td><b>support</b></td><td><span class="en">We supported Mina as she prepared her presentation.</span></td><td>✗ <span class="en">supported Mina practice</span></td><td><span class="en">supported Mina during practice</span></td></tr>
+    <tr><td><b>rescue</b></td><td><span class="en">The lifeguard rescued Mina.</span></td><td>✗ <span class="en">rescued Mina swim</span></td><td><span class="en">rescued Mina from the water</span></td></tr>
+    <tr><td><b>protect</b></td><td><span class="en">Jin protected Mina.</span></td><td>✗ <span class="en">protected Mina stay dry</span></td><td><span class="en">protected Mina from the rain</span></td></tr>
+  </table>
+  <p class="note">경향 한 줄: 위쪽(help · assist)은 <b>with + 일</b>, 아래쪽(rescue · protect)은 <b>from + 위험</b>, 가운데 support는 <b>during · as</b>(기간)와 잘 어울린다. 동사가 좁아질수록 무엇을 붙이는지가 정해진다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>HELP</b> — 상대가 든 상자의 <b>반대쪽</b>을 두 손으로 같이 받친다. "영차!"</li>
+    <li><b>ASSIST</b> — 상대가 손목시계를 보는 동안, 옆에서 <b>펜으로 받아 적는</b> 시늉만 한다.</li>
+    <li><b>SUPPORT</b> — 손바닥을 상대 <b>등 뒤에 받쳐 대고</b> "할 수 있어" — 날마다 한 번씩.</li>
+    <li><b>RESCUE</b> — 아래로 손을 뻗어 상대 손목을 잡고 <b>확 끌어올린다</b>.</li>
+    <li><b>PROTECT</b> — 두 팔을 <b>우산처럼</b> 상대 머리 위에 펼친다.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>3절 표의 <span class="en">help Mina to carry · help me with my homework · Can I help you?</span> 문장과 <span class="en">✗ help my homework</span> 판정은 노트에 없다. 노트에는 <span class="en">help Mina carry the box</span>와 <span class="en">help Mina with the box</span>만 있다.</li>
+      <li>5절의 ✗ 줄(assist · support · rescue · protect + 동사 원형), <span class="en">assisted with the experiment</span>(사람 없이), <span class="en">The lifeguard rescued Mina. · Jin protected Mina.</span>(노트 문장을 줄인 것)은 짐작이다.</li>
+      <li>4절 표의 칸 나눔과 0절 "대신 말하면"의 △·✗ 판정은 짐작이다. 맨 위 그림에서 HELP 칩이 rescue · protect 장면에도 켜지는 것도 노트에 없는 판단이다.</li>
+      <li>노트 <a href="../help/_family.md">help/_family.md</a>의 <b>Shared Result</b> 제목 아래가 비어 있고, 공통 결과 문장은 "상황에서 꺼내기" 뒤에 떨어져 있다. Scenario contrast는 ASSIST를 "포장 작업 일부"로, 비교표 위 문제·assist 노트는 "실험 기록"으로 적어 장면이 다르다. protect 노트 시제와 결과의 <span class="en">on the sudden downpour</span>는 <span class="en">during</span>이 더 자연스러워 보인다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../help/_family.md">help/_family.md</a> — "agent가 다른 사람이나 대상의 부담·위험·어려움을 줄여 목표 달성을 더 가능하게 한다"</li>
+    <li>동사 노트: <a href="../help/help--make-easier.md">help</a> · <a href="../help/assist--help-with-task.md">assist</a> · <a href="../help/support--help-continuously.md">support</a> · <a href="../help/rescue--remove-from-danger.md">rescue</a> · <a href="../help/protect--keep-from-harm.md">protect</a></li>
+    <li>묶음 밖 이웃: <a href="14-give.html">14 GIVE</a>(<a href="../give/_family.md">give/_family.md</a>) — 물건이 상대에게 넘어감. 부담을 덜어 주는 HELP와 RESULT가 다르다.</li>
+    <li>견줘 보기: <a href="16-keep.html">16 KEEP</a> — protect가 막아서 남기는 "무사한 상태"를 그대로 이어 가는 쪽.</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — help는 <b>혼자 어렵던 것이 쉬워진 순간</b> 하나를 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240 (그림용) ──
+  const NAME = (x, y, t) => tx(x, y, 11, t, 'var(--muted)');
+  const canopyY = (x) => { const t = (x - 380) / 180; return (1 - t) * (1 - t) * 140 + 2 * t * (1 - t) * 60 + t * t * 140; };
+  const RAIN = () => { let s = ''; for (let x = 262; x <= 656; x += 22) for (let y = 52; y <= 228; y += 26) { const yy = y + (x % 44 ? 12 : 0); if (x >= 372 && x <= 568 && yy + 10 > canopyY(Math.min(560, Math.max(380, x))) - 4) continue; if (yy > 228) continue; s += '<path d="M' + x + ' ' + yy + ' l-3 10" stroke="var(--water)" stroke-width="2" stroke-linecap="round"/>'; } return s; };
+  const TOP = {
+    first: 'rescue', keep: 'HELP',
+    keepSay: '<b>HELP</b>는 이 장면에도 맞다 — 방식을 빼고 미나의 부담·위험을 줄였다는 결과만 말한다. <span class="en">Someone helped Mina.</span>',
+    chips: ['HELP', 'ASSIST', 'SUPPORT', 'RESCUE', 'PROTECT'], out: [['GIVE (물건을 건넴)', '14-give.html']],
+    hows: {
+      help: { btn: '힘을 보탬', how: '필요한 힘을 보탬', verb: 'HELP', chips: ['HELP'], target: 'TARGET · Mina (큰 상자)',
+        result: '무게를 나눠 — 둘이 함께 창고로',
+        pic: () => FLOOR + '<rect x="590" y="122" width="60" height="118" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><circle cx="600" cy="184" r="3" fill="var(--obj-line)"/>' + NAME(620, 114, '창고') +
+          P(360, 240, 1.3, 'var(--sleeve)') + NAME(360, 148, 'Mina') +
+          '<rect x="378" y="178" width="110" height="40" rx="3" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(433, 203, 11, '미술 상자', 'var(--text)') +
+          step(.2, P(506, 240, 1.3, 'var(--ok)') + NAME(506, 148, 'Jin')) +
+          step(.4, arrow(400, 576, 128, 'var(--accent)', 2.5) + tx(488, 118, 12, '함께 창고로', 'var(--accent)', ' font-weight="600"')),
+        say: '<span class="en">Jin helped Mina carry the box.</span> 같은 목표(상자를 창고로)에 <b>힘을 보태</b> 미나의 부담을 직접 줄였다. 상자가 꼭 도착했다는 뜻까지는 없다.' },
+      assist: { btn: '맡은 부분 보조', how: '맡은 부분을 보조', verb: 'ASSIST', chips: ['HELP', 'ASSIST'], target: 'TARGET · Mina (실험)',
+        result: 'Mina는 시간을 재고, Jin은 기록 — 기록 완성',
+        pic: () => FLOOR + table(350, 200, 250) + P(306, 240, 1.3, 'var(--sleeve)') + NAME(306, 148, 'Mina') + P(632, 240, 1.3, 'var(--ok)') + NAME(632, 148, 'Jin') +
+          '<circle cx="390" cy="182" r="15" fill="var(--card)" stroke="var(--obj-line)" stroke-width="2"/><path d="M390 182 V172 M390 182 L397 186" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/><rect x="386" y="162" width="8" height="5" fill="var(--obj-line)"/>' + tx(390, 150, 11, '시간 재기', 'var(--muted)') +
+          '<rect x="520" y="140" width="72" height="58" rx="3" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M528 156 h56 M528 172 h56 M528 188 h56" stroke="var(--line)"/>' + tx(556, 130, 11, '기록표', 'var(--muted)') +
+          step(.2, tx(556, 168, 10, '1.2초', 'var(--text)')) + step(.35, tx(556, 184, 10, '1.4초', 'var(--text)')) +
+          step(.5, '<rect x="514" y="134" width="84" height="70" rx="4" fill="none" stroke="var(--accent)" stroke-width="2.5"/>' + tx(470, 176, 12, 'Jin 몫', 'var(--accent)', ' font-weight="600"')),
+        say: '<span class="en">Jin assisted Mina with the experiment.</span> 실험의 중심은 미나. 진은 전체를 대신하지 않고 <b>기록이라는 정해진 부분</b>을 맡았다. 실험이 성공했는지는 말하지 않는다.' },
+      support: { btn: '계속 받쳐 줌', how: '계속 받쳐 줌', verb: 'SUPPORT', chips: ['HELP', 'SUPPORT'], target: 'TARGET · Mina (발표 준비)',
+        result: '여러 날 청중 · 격려 — 발표 준비를 끝까지',
+        pic: () => FLOOR + P(290, 240, 1, 'var(--fog)') + P(340, 240, 1, 'var(--ok)') + P(390, 240, 1, 'var(--accent2)') + NAME(340, 168, '팀원들') +
+          P(570, 240, 1.3, 'var(--sleeve)') + NAME(570, 148, 'Mina') + '<rect x="530" y="204" width="20" height="36" fill="var(--wood)"/>' +
+          ['월', '화', '수', '목'].map((d, i) => '<rect x="' + (300 + i * 48) + '" y="56" width="40" height="44" rx="4" fill="var(--bg)" stroke="var(--line)"/>' + tx(320 + i * 48, 70, 11, d, 'var(--muted)') +
+            step(.15 + i * .15, '<path d="M' + (310 + i * 48) + ' 88 l6 6 l12 -12" fill="none" stroke="var(--ok)" stroke-width="2.5" stroke-linecap="round"/>')).join('') +
+          step(.8, '<rect x="402" y="128" width="78" height="26" rx="10" fill="var(--card)" stroke="var(--line)"/>' + tx(441, 146, 12, '좋았어!', 'var(--text)', ' font-weight="600"') + arrow(410, 480, 196, 'var(--accent)', 2) + tx(570, 120, 12, '준비 됨 ✓', 'var(--ok)', ' font-weight="700"')),
+        say: '<span class="en">The team supported Mina during practice.</span> 한 번의 도움이 아니라 <b>연습 내내</b> 청중이 되고 피드백 · 격려를 <b>계속</b> 줬다. 노트: 꼭 여러 날이어야 하는 것은 아니다.' },
+      rescue: { btn: '위험에서 꺼냄', how: '위험에서 꺼냄', verb: 'RESCUE', chips: ['HELP', 'RESCUE'], target: 'TARGET · Mina (깊은 물)',
+        result: '가라앉던 물속에서 — 가장자리로, 안전',
+        pic: () => '<line x1="244" y1="240" x2="388" y2="240" stroke="var(--obj-line)"/>' +
+          P(520, 238, 1.1, 'var(--bad)') + NAME(520, 162, '안전요원') +
+          '<g class="fade" opacity=".3"><circle cx="604" cy="196" r="12" fill="var(--skin)" stroke="var(--obj-line)"/><path d="M590 186 l-8 -14 M618 186 l8 -14" stroke="var(--skin)" stroke-width="5" stroke-linecap="round"/></g>' +
+          '<rect x="392" y="200" width="268" height="40" fill="var(--water)" opacity=".75"/><path d="M388 200 V240" stroke="var(--obj-line)" stroke-width="2"/>' + tx(610, 232, 11, '깊은 구역', 'var(--text)') +
+          step(.25, arrow(590, 380, 132, 'var(--accent)', 2.5) + tx(486, 122, 12, '가장자리로 꺼냄', 'var(--accent)', ' font-weight="600"')) +
+          step(.5, P(320, 240, 1.2, 'var(--sleeve)') + NAME(320, 150, 'Mina') + tick(342, 176)),
+        say: '<span class="en">The lifeguard rescued Mina from the water.</span> 수영을 거든 게 아니라 <b>이미 닥친 위험</b>(가라앉기 시작함)에서 <b>꺼내</b> 안전한 곳에 두었다.' },
+      protect: { btn: '닿기 전에 막음', how: '닿기 전에 막음', verb: 'PROTECT', chips: ['HELP', 'PROTECT'], target: 'TARGET · Mina와 작품',
+        result: '빗물이 우산에 막혀 — 작품이 마른 채',
+        pic: () => FLOOR + RAIN() + P(440, 240, 1.3, 'var(--sleeve)') + NAME(440, 150, 'Mina') + P(510, 240, 1.3, 'var(--ok)') + NAME(510, 150, 'Jin') +
+          '<rect x="396" y="190" width="26" height="30" rx="2" fill="var(--card)" stroke="var(--obj-line)"/><circle cx="405" cy="200" r="4" fill="var(--accent)"/><path d="M400 214 l8 -6 l8 6" fill="none" stroke="var(--ok)" stroke-width="2"/>' +
+          '<path d="M380 140 Q470 60 560 140 Z" fill="var(--accent2)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M470 100 V196" stroke="var(--obj-line)" stroke-width="3"/>' +
+          step(.3, [400, 430, 470, 510, 540].map((x) => '<path d="M' + x + ' ' + (canopyY(x) - 18) + ' l-3 10" stroke="var(--water)" stroke-width="2" stroke-linecap="round"/><circle cx="' + (x - 4) + '" cy="' + (canopyY(x) - 4) + '" r="2" fill="var(--water)"/>').join('')) +
+          step(.5, tx(404, 182, 11, '작품 ✓', 'var(--ok)', ' font-weight="600"')),
+        say: '<span class="en">Jin protected Mina\'s artwork from the rain.</span> 젖은 다음 꺼낸 게 아니라, 우산으로 빗물이 <b>닿기 전에</b> 막았다. 그래서 작품은 마른 채.' },
+    },
+  };
+
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. 대부분 help로 대신할 수는 있다. 무엇이 흐려지는지 보세요.',
+    cards: [
+      { id: 'help', t: ['힘을 보태', '부담을 덜어 줌'], v: 'help', icon: P(-24, 30, .55, 'var(--sleeve)') + P(24, 30, .55, 'var(--ok)') + '<rect x="-17" y="2" width="34" height="18" rx="2" fill="var(--wood)" stroke="var(--obj-line)"/>',
+        instead: 'Jin assisted Mina with the box. △', lost: '정해진 업무의 보조처럼 딱딱하게 들린다. 친구가 한쪽을 들어 준 일상의 도움을 가볍게 말할 낱말이 빈다.', why: '필요한 힘·행동을 보태 부담을 줄임 — 가장 넓은 말.' },
+      { id: 'assist', t: ['맡은 부분만', '보조함'], v: 'assist', icon: '<circle cx="-16" cy="0" r="13" fill="var(--card)" stroke="var(--obj-line)" stroke-width="2"/><path d="M-16 0 V-8 M-16 0 L-10 4" stroke="var(--accent)" stroke-width="2"/><rect x="4" y="-20" width="28" height="38" rx="2" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/><path d="M9 -10 h18 M9 -2 h18 M9 6 h18" stroke="var(--line)"/>',
+        instead: 'Jin helped Mina with the experiment. △', lost: '틀리지 않지만, 미나가 중심이고 진은 기록만 맡았다는 역할 구도가 흐려진다.', why: '주된 수행자 곁에서 구체적인 일부를 맡음.' },
+      { id: 'support', t: ['계속', '받쳐 줌'], v: 'support', icon: [0, 1, 2, 3].map((i) => '<rect x="' + (-40 + i * 21) + '" y="-14" width="18" height="20" rx="3" fill="var(--bg)" stroke="var(--line)"/><path d="M' + (-36 + i * 21) + ' -4 l4 4 l7 -8" fill="none" stroke="var(--ok)" stroke-width="2"/>').join('') + '<path d="M-36 22 H36" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>',
+        instead: 'The team helped Mina again and again. △', lost: '여러 번 거든 일이 늘어설 뿐, 계속 나아가도록 받쳐 주는 그림이 길게 풀린다.', why: '시간에 걸쳐 자원·격려를 제공.' },
+      { id: 'rescue', t: ['위험에서', '꺼냄'], v: 'rescue', icon: '<path d="M-38 12 q10 -8 19 0 t19 0 t19 0 t19 0" fill="none" stroke="var(--water)" stroke-width="3"/><circle cx="0" cy="-6" r="13" fill="none" stroke="var(--bad)" stroke-width="6"/><path d="M14 -18 l14 -12 m-8 0 h8 v8" fill="none" stroke="var(--accent)" stroke-width="2.5"/>',
+        instead: 'The lifeguard helped Mina in the water. △', lost: '수영을 도와준 것처럼도 들린다. 이미 닥친 위험에서 꺼내 안전하게 했다는 그림이 빠진다.', why: '즉각적 위험에서 꺼내 안전하게.' },
+      { id: 'protect', t: ['닿기 전에', '막음'], v: 'protect', icon: '<path d="M-30 4 Q0 -36 30 4 Z" fill="var(--accent2)"/><path d="M0 -12 V24" stroke="var(--obj-line)" stroke-width="2.5"/>' + [-36, -24, 24, 36].map((x) => '<path d="M' + x + ' -26 l-2 8 M' + x + ' 6 l-2 8" stroke="var(--water)" stroke-width="2"/>').join(''),
+        instead: 'Jin helped Mina\'s artwork from the rain. ✗', lost: '"비로부터 거들었다"는 말이 안 된다. 해로운 것이 닿기 전에 막았다는 그림을 못 그린다.', why: '해로운 영향이 닿지 않게 막음.' },
+      { id: 'give', out: true, t: ['물건을', '건네줌'], v: 'give', icon: '<rect x="-30" y="-12" width="26" height="24" rx="2" fill="var(--card)" stroke="var(--accent2)" stroke-width="2"/><path d="M-17 -12 v24 M-30 0 h26" stroke="var(--accent2)" stroke-width="2"/><path d="M4 0 H30 m-8 -6 l8 6 l-8 6" fill="none" stroke="var(--accent2)" stroke-width="2.5"/>',
+        instead: 'Jin helped Mina have an umbrella. △', lost: '돌려 말하면 통하지만, 물건이 상대에게 넘어가는 한 낱말이 HELP 묶음에는 없다.', why: '물건이 상대에게 넘어감 — 이웃 GIVE 묶음.' },
+    ],
+  };
+
+  const SCENES = {
+    station: { btn: '지하철역', place: '지하철역 계단 · 출근길',
+      pic: () => FL + '<path d="M420 150 h40 v-18 h40 v-18 h40 v-18 h40 v-18 h40" fill="none" stroke="' + OL + '" stroke-width="2"/>' +
+        P(250, 150, 1.1, SL) + L(250, 72, '나') + P(340, 150, 1.1, FOG) + L(340, 72, '할머니') + BX(362, 112, 28, 38) + '<path d="M370 112 v-8 h12 v8" fill="none" stroke="' + OL + '" stroke-width="2"/>' +
+        ST(.25, AR(400, 100, 560, 46, AC, 2.5)),
+      lines: [
+        ['나', 'Can I <b>help</b> you with your suitcase?', '가방 들어 드릴까요?', 1],
+        ['할머니', 'Oh, thank you. It\'s so heavy.', '어머, 고마워요. 너무 무거워요.'],
+      ],
+      say: '짐 한쪽을 들어 <b>부담을 덜어 준다</b> — <span class="en">help 사람 with 짐</span>. 가장 흔한 꼴이다.' },
+    store: { btn: '매장', place: '전자제품 매장 · 카운터',
+      pic: () => FL + P(470, 104, 1, OKC) + L(470, 34, '직원') + BX(390, 104, 170, 46) + P(290, 150, 1.1, SL) + L(290, 72, '나') +
+        ST(.2, '<rect x="410" y="84" width="22" height="34" rx="3" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>') +
+        ST(.4, '<rect x="590" y="40" width="70" height="30" rx="4" fill="' + A2 + '"/>' + T(625, 60, 12, '고객 지원', '#fff', ' font-weight="700"')),
+      lines: [
+        ['직원', 'Hi, how can I <b>assist</b> you today?', '안녕하세요, 무엇을 도와드릴까요?', 1],
+        ['나', 'I\'d like to return this phone.', '이 휴대폰 반품하고 싶어요.'],
+      ],
+      say: '매장 · 고객센터의 정중한 말. 손님의 일 가운데 <b>자기 역할만큼</b>을 맡아 돕는다 — <span class="en">assist</span>. 친구 사이라면 <span class="en">help</span>.' },
+    home: { btn: '집', place: '집 · 저녁 식탁',
+      pic: () => FL + P(380, 150, 1.1, A2) + L(380, 72, '엄마') + P(500, 150, 1.1, SL) + L(500, 72, '나') + TB(320, 560, 112) +
+        ST(.25, '<path d="M440 60 c-8 -10 -22 -2 -14 10 l14 14 l14 -14 c8 -12 -6 -20 -14 -10 z" fill="' + AC + '"/>'),
+      lines: [
+        ['나', 'Thank you for always <b>supporting</b> me, Mom.', '엄마, 늘 응원해 줘서 고마워요.', 1],
+        ['엄마', 'Of course. I\'m proud of you.', '당연하지. 네가 자랑스러워.'],
+      ],
+      say: '한 번이 아니라 <b>계속 받쳐 주는</b> 도움 — 응원 · 뒷바라지 · 후원이 다 <span class="en">support</span>.' },
+    news: { btn: '뉴스', place: '저녁 뉴스 · 구조 소식',
+      pic: () => '<rect x="200" y="20" width="300" height="140" rx="6" fill="' + BG + '" stroke="' + OL + '" stroke-width="2"/>' + P(260, 132, 1, '#3b5b8a') +
+        '<path d="M420 132 V60" stroke="var(--wood, #a0784f)" stroke-width="8"/><circle cx="420" cy="56" r="26" fill="' + OKC + '" opacity=".7"/>' +
+        '<path d="M350 132 L404 52 M362 132 L416 52" stroke="' + BAD + '" stroke-width="3"/>' +
+        ST(.25, '<circle cx="438" cy="48" r="6" fill="' + OL + '"/><path d="M432 44 l2 -6 l3 5 M440 43 l3 -5 l2 6" fill="' + OL + '"/>') +
+        '<rect x="200" y="132" width="300" height="28" fill="' + AC + '"/>' + T(350, 151, 12, '소방관, 나무 위 고양이 구조', '#fff', ' font-weight="700"'),
+      lines: [
+        ['앵커', 'Firefighters <b>rescued</b> a cat from a tall tree.', '소방관들이 높은 나무에서 고양이를 구조했습니다.', 1],
+        ['기자', 'The cat is safe now.', '고양이는 이제 무사합니다.'],
+      ],
+      say: '스스로 못 내려오는 <b>곤경에서 꺼내</b> 안전하게 — <span class="en">rescue 무엇 from 어디</span>. 뉴스에 아주 자주 나온다.' },
+    beach: { btn: '해변', place: '해변 · 한낮',
+      pic: () => FL + '<circle cx="620" cy="40" r="18" fill="var(--gold, #d9a21b)"/>' + P(260, 150, 1.1, SL) + L(260, 72, '친구') + P(350, 150, 1.1, FOG) + L(350, 72, '나') +
+        '<rect x="278" y="102" width="14" height="26" rx="4" fill="' + CARD + '" stroke="' + OL + '"/>' +
+        ST(.25, AR(600, 58, 520, 100, A2, 2, true) + '<path d="M360 84 a28 28 0 0 1 0 56" fill="none" stroke="' + OKC + '" stroke-width="3"/>' + T(468, 112, 11, '햇볕 막음', OKC, ' font-weight="600"')),
+      lines: [
+        ['친구', 'Put on sunscreen. It <b>protects</b> your skin.', '선크림 발라. 피부를 지켜 줘.', 1],
+        ['나', 'Good idea. The sun is strong today.', '좋은 생각이야. 오늘 햇볕 세다.'],
+      ],
+      say: '해로운 것(햇볕)이 <b>닿기 전에 막는다</b> — <span class="en">protect</span>. 주어가 사람이 아니라 물건(선크림)이어도 된다.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'rescue',
+    region: { x: 106, y: 66, w: 538, h: 258, label: 'HELP 묶음 · RESULT = 부담·위험이 줄어듦', at: [114, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 260, t: 'Q1. 부담·위험이 줄도록 손을 썼나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 205, y: 180, w: 180, t: 'Q3. 일 · 과정이라면?', sub: '맡은 부분 · 기간' },
+      q4: { x: 520, y: 180, w: 170, t: 'Q4. 위험이라면?', sub: '닥친 뒤 · 닿기 전' },
+    },
+    leaves: {
+      watch:   { x: 60, y: 262, w: 88, v: 'watch', sub: '보기만 함', seg: 't', say: '<span class="en">Jin watched Mina carry the box.</span> 손을 쓰지 않았다 → HELP 묶음 밖.' },
+      assist:  { x: 160, y: 262, w: 88, v: 'assist', sub: '맡은 부분', seg: 'r', say: '<span class="en">Jin assisted Mina with the experiment.</span> 정해진 일부를 보조.' },
+      support: { x: 255, y: 262, w: 88, v: 'support', sub: '계속 받침', seg: 'r', say: '<span class="en">The team supported Mina during practice.</span> 시간에 걸쳐 자원 · 격려.' },
+      help:    { x: 360, y: 262, w: 92, v: 'help', sub: '방식 말 안 함', seg: 'r', say: '<span class="en">Jin helped Mina carry the box.</span> 이 묶음의 기본 동사.' },
+      rescue:  { x: 470, y: 262, w: 94, v: 'rescue', sub: '위험에서 꺼냄', seg: 'r', say: '<span class="en">The lifeguard rescued Mina from the water.</span> 이미 닥친 위험.' },
+      protect: { x: 575, y: 262, w: 88, v: 'protect', sub: '닿기 전 막음', seg: 'r', say: '<span class="en">Jin protected Mina from the rain.</span> 해가 닿지 않게.' },
+      give:    { x: 600, y: 36, w: 120, v: 'give', sub: '→ GIVE 묶음', seg: '', out: true, say: '<span class="en">Jin gave Mina an umbrella.</span> 부담을 덜어 준 게 아니라 <b>물건이 넘어감</b> → HELP 묶음 밖, GIVE 묶음(<a href="14-give.html">14-give.html</a>).' },
+    },
+    edges: [
+      ['q1', 'watch', '아니오 · 보기만', 'left', [150, 28]], ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'give', '물건 건넴', 'right', [502, 28], true],
+      ['q2', 'q3', '일'], ['q2', 'help', '말하지 않음'], ['q2', 'q4', '위험'],
+      ['q3', 'assist', '부분'], ['q3', 'support', '기간'],
+      ['q4', 'rescue', '닥친 뒤'], ['q4', 'protect', '닿기 전'],
+    ],
+    segs: [[16, 104, '손 안 씀', 't'], [109, 640, '결과 — 부담·위험이 줄어듦 (+ 무엇을 · 언제)', 'r']],
+  };
+
+  const SLOTS = {
+    first: ['rescue', 'verb'],
+    slots: { base: '노트 문장', verb: '+ 동사 원형', prep: '+ 전치사 말' },
+    verbs: {
+      help: {
+        base: { ok: [['Jin', 's'], ['helped', 'v'], ['Mina', 'o'], ['carry the box', 'r']], say: '노트 문장. 사람 뒤에 <b>동사 원형</b>이 바로 온다(to를 넣어도 된다).' },
+        verb: { ok: [['Jin', 's'], ['helped', 'v'], ['Mina', 'o'], ['carry the box', 'r']], bad: [['Jin', 's'], ['helped', 'v'], ['Mina', 'o'], ['carrying the box', 'r']], say: 'help + 사람 + <b>동사 원형</b>. -ing 꼴은 붙지 않는다.' },
+        prep: { ok: [['Jin', 's'], ['helped', 'v'], ['Mina', 'o'], ['with the box', 'x']], bad: [['Jin', 's'], ['helped', 'v'], ['the box', 'o']], say: '일은 <b>with</b>로 — 노트 비교표의 <span class="en">help Mina with the box</span>. 일을 목적어로 두면 어긋난다(3절).' },
+      },
+      assist: {
+        base: { ok: [['Jin', 's'], ['assisted', 'v'], ['Mina', 'o'], ['with the experiment', 'x']], say: '노트 문장. 사람 + <b>with + 일</b>.' },
+        verb: { ok: [['Jin', 's'], ['helped', 'v'], ['Mina', 'o'], ['record', 'r']], bad: [['Jin', 's'], ['assisted', 'v'], ['Mina', 'o'], ['record', 'r']], say: '동사 원형을 바로 붙이는 건 <b>help</b>의 모양이다.' },
+        prep: { ok: [['Jin', 's'], ['assisted', 'v'], ['with the experiment', 'x']], say: '사람 없이 <b>assist with + 일</b>로도 말한다.' },
+      },
+      support: {
+        base: { ok: [['We', 's'], ['supported', 'v'], ['Mina', 'o'], ['as she prepared', 'x']], say: '노트 "언제 꺼낼까"의 문장(줄임). 받쳐 준 <b>기간</b>을 as · during으로.' },
+        verb: { ok: [['The team', 's'], ['helped', 'v'], ['Mina', 'o'], ['practice', 'r']], bad: [['The team', 's'], ['supported', 'v'], ['Mina', 'o'], ['practice', 'r']], say: 'support 뒤에는 동사 원형이 오지 않는다.' },
+        prep: { ok: [['The team', 's'], ['supported', 'v'], ['Mina', 'o'], ['during practice', 'x']], say: '노트 문장. 기간 <b>during</b>이 잘 어울린다.' },
+      },
+      rescue: {
+        base: { ok: [['The lifeguard', 's'], ['rescued', 'v'], ['Mina', 'o']], say: '노트 문장을 줄인 것. 위험에 빠진 <b>생명체</b>가 목적어.' },
+        verb: { ok: [['The lifeguard', 's'], ['helped', 'v'], ['Mina', 'o'], ['swim', 'r']], bad: [['The lifeguard', 's'], ['rescued', 'v'], ['Mina', 'o'], ['swim', 'r']], say: '수영을 배우게 거들면 help(노트 Minimal Contrast). rescue는 동사 원형을 받지 않는다.' },
+        prep: { ok: [['The lifeguard', 's'], ['rescued', 'v'], ['Mina', 'o'], ['from the water', 'x']], say: '노트 문장. 꺼낸 위험은 <b>from</b>.' },
+      },
+      protect: {
+        base: { ok: [['Jin', 's'], ['protected', 'v'], ['Mina', 'o']], say: '노트 문장을 줄인 것.' },
+        verb: { ok: [['Jin', 's'], ['helped', 'v'], ['Mina', 'o'], ['stay dry', 'r']], bad: [['Jin', 's'], ['protected', 'v'], ['Mina', 'o'], ['stay dry', 'r']], say: 'protect 뒤에 동사 원형은 오지 않는다. 결과를 말하려면 help.' },
+        prep: { ok: [['Jin', 's'], ['protected', 'v'], ['Mina', 'o'], ['from the rain', 'x']], say: '노트 문장. 막은 위험은 <b>from</b>.' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>
