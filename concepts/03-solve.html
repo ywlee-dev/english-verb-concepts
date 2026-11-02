@@ -68,6 +68,29 @@
     table { font-size: 14px; }
     th, td { padding: 6px; }
   }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
 </style>
 </head>
 <body>
@@ -75,6 +98,14 @@
   <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="02-phrasal-direction.html">구동사의 방향 (up · down · out · in)</a> · 다음: <a href="04-core-question.html">핵심 질문 하나</a> · 이웃 묶음: <a href="05-resolve.html">RESOLVE — 하나로 확정됨</a></p>
   <h1>SOLVE 묶음 — 같은 수학 문제, 다른 HOW</h1>
   <p class="lead">결과(답에 도달)는 같고 <b>어떻게 답에 이르렀나</b>만 바꾸면 동사가 갈린다. 풀이 방식을 골라 보고, 마지막에 TARGET을 <b>사람 사이 다툼</b>으로 바꾸면 RESULT부터 달라져 <b>묶음 밖</b>(RESOLVE)으로 나가는 것을 보세요.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="solve" title="solve 소리로 듣기"><span class="en">solve</span><span class="ipa">/sɑːlv/</span><span class="ko">[살브]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="figure out" title="figure out 소리로 듣기"><span class="en">figure out</span><span class="ipa">/ˈfɪɡ.jɚ aʊt/</span><span class="ko">[<b>피겨</b> 아웃]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="work out" title="work out 소리로 듣기"><span class="en">work out</span><span class="ipa">/wɝːk aʊt/</span><span class="ko">[워크 아웃]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="crack" title="crack 소리로 듣기"><span class="en">crack</span><span class="ipa">/kræk/</span><span class="ko">[크랙]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="resolve" title="resolve 소리로 듣기"><span class="en">resolve</span><span class="star">*</span><span class="ipa">/rɪˈzɑːlv/</span><span class="ko">[리<b>잘</b>브]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+  <p class="pron-note"><span style="color:var(--accent2)">*</span> 표시는 노트에 발음이 없어 사전 표기를 옮겨 둔 것이다. 나머지는 각 노트의 Pronunciation (US) 줄.</p>
 
   <div class="card">
     <div class="fig">
@@ -138,6 +169,22 @@
     <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
     <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
     <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>solve 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
   </div>
 
   <h2>1. 무엇인가 — "답에 도달"에 HOW가 붙는다</h2>
@@ -248,6 +295,7 @@
 
   <div class="check"><b>확인할 것</b>
     <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
       <li>0절 "대신 말하면" 문장(<span class="en">I solved it step by step on paper.</span> 등)이 어떻게 들리는지는 노트에 없는 풀이다. 사전 예문으로 확인할 것.</li>
       <li>RESOLVE는 노트에 경계로만 나온다: <span class="en">resolve the conflict</span>처럼 수학 문제와 TARGET 조건이 달라 SOLVE 묶음에 억지로 묶지 않는다. 이 페이지는 한 걸음 더 나가 <b>RESULT 자체가 다르다</b>고 본다 — SOLVE는 "답을 찾음", RESOLVE는 "미정·충돌 상태가 하나로 확정됨". 그래서 그림에서 RESOLVE를 SOLVE 묶음 밖으로 나가는 문으로 그렸다.</li>
       <li>"RESOLVE(확정됨) 묶음 — resolve · settle · sort out · clear up · work out"은 노트에 없는 짐작이다(<a href="05-resolve.html">05 RESOLVE</a> 페이지). <span class="en">resolve an issue · a dispute · a merge conflict · a promise</span>, <span class="en">resolve to do</span>(결심)도 같은 그림인지 사전으로 확인하고, 발음 /rɪˈzɑːlv/와 함께 <code>settle/</code> 노트 묶음을 따로 만들 것.</li>
@@ -587,6 +635,104 @@
     $('existBtns').appendChild(b);
   });
   drawExist();
+</script>
+<script>
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  (function () {
+    const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+      OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+    const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+    const L = (x, y, t) => T(x, y, 11, t, MU);
+    const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+    // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+    const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+    const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+    const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+    const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+    const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+    const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+      return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+    const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+    const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+      '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+      '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+    // VERB: <b>solve 묶음 동사</b>가
+    // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.
+    const SCENES = {
+      class: { btn: '수학 학원', place: '수학 학원 · 문제 풀이 시간',
+        pic: () => FL + P(250, 150, 1, SL) + TB(210, 310, 112) + BX(380, 24, 200, 84, 'var(--board, #2f4f3f)') +
+          T(480, 56, 15, '5.  3x − 6 = 30', '#fff', ' font-weight="600"') + ST(.3, T(480, 88, 15, 'x = 12', '#ffd76a', ' font-weight="700"')) + P(620, 150, 1.1, OKC),
+        lines: [
+          ['선생님', 'Who <b>solved</b> number 5?', '5번 푼 사람?'],
+          ['학생', 'I did! The answer is 12.', '저요! 답은 12예요.'],
+        ],
+        say: '어떻게 풀었는지는 묻지 않는다. <b>답에 도달했나</b>만 묻는다 — 묶음의 기본 말 <span class="en">solve</span>.' },
+      printer: { btn: '사무실 프린터', place: '사무실 · 프린터 앞',
+        pic: () => FL + P(260, 150, 1.1, FOG) + BX(380, 92, 110, 58) + '<rect x="400" y="80" width="70" height="14" fill="' + CARD + '" stroke="' + OL + '"/>' + Q(435, 66, '?') +
+          P(570, 150, 1.1, SL) + ST(.3, '<circle cx="610" cy="64" r="12" fill="#ffd76a" stroke="' + OL + '"/><path d="M604 76 h12 v6 h-12 z" fill="' + OL + '"/>') + L(610, 40, '아, 그거구나'),
+        lines: [
+          ['동료', 'The printer isn\'t working again.', '프린터 또 안 돼요.'],
+          ['나', 'Let me <b>figure out</b> what\'s wrong.', '뭐가 문제인지 제가 알아볼게요.', 1],
+        ],
+        say: '정답표가 없다. 이리저리 보다가 <b>원리를 깨달아</b> 답이 보이는 그림 — <span class="en">figure out</span>. 전구가 켜지는 순간.' },
+      dinner: { btn: '식당 (더치페이)', place: '식당 · 계산하기 전',
+        pic: () => FL + P(250, 150, 1.1, FOG) + TB(300, 520, 110) + BX(370, 54, 54, 54) + '<path d="M378 68 h38 M378 78 h38 M378 88 h26" stroke="' + MU + '"/>' + T(397, 102, 10, '$96', 'var(--text)', ' font-weight="700"') +
+          ST(.2, T(480, 50, 13, '96 ÷ 3', MU)) + ST(.5, T(480, 72, 13, '= 32', 'var(--text)')) + ST(.8, T(480, 96, 14, '각자 $32', AC, ' font-weight="700"')) + P(580, 150, 1.1, SL),
+        lines: [
+          ['친구', 'So how much do I owe you?', '그래서 내가 얼마 주면 돼?'],
+          ['나', 'Hold on, let me <b>work it out</b>… 32 dollars each.', '잠깐, 계산해 볼게… 한 사람당 32달러.', 1],
+        ],
+        say: '종이·머릿속에서 <b>한 단계씩 계산해서</b> 답에 간다 — <span class="en">work out</span>. 돈·일정 계산에서 아주 자주 쓴다.' },
+      escape: { btn: '방탈출 카페', place: '방탈출 카페 · 마지막 방',
+        pic: () => FL + P(250, 150, 1.1, SL) + P(330, 150, 1.1, FOG) + T(600, 44, 16, '04:59', BAD, ' font-weight="700"') +
+          '<rect x="430" y="80" width="80" height="62" rx="6" fill="' + A2 + '"/>' + '<rect x="440" y="100" width="60" height="22" rx="3" fill="' + CARD + '"/>' + T(470, 116, 13, '4 7 1 9', 'var(--text)', ' font-weight="700"') +
+          '<path d="M450 80 v-14 a20 20 0 0 1 40 0 v14" fill="none" stroke="' + A2 + '" stroke-width="6" opacity=".3"/>' +
+          ST(.3, '<path d="M450 80 v-14 a20 20 0 0 1 40 0 v-10" fill="none" stroke="' + A2 + '" stroke-width="6"/>') + L(470, 162, '어려운 암호가 풀림'),
+        lines: [
+          ['친구', 'We only have five minutes left!', '5분밖에 안 남았어!'],
+          ['나', 'Wait — I think I <b>cracked</b> the code!', '잠깐, 나 암호 푼 것 같아!', 1],
+        ],
+        say: '단단한 껍데기를 <b>깨듯</b> 오래 막혀 있던 어려운 문제를 마침내 푼다 — <span class="en">crack</span>. 암호·사건·난제에 쓴다.' },
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    function drawScene() {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    }
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  })();
+</script>
+<script>
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
 </script>
 </body>
 </html>

@@ -53,6 +53,29 @@
     table { font-size: 14px; }
     th, td { padding: 6px; }
   }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
 </style>
 </head>
 <body>
@@ -60,6 +83,18 @@
   <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="01-break.html">BREAK — 같은 화분, 다른 HOW</a> · 다음: <a href="03-solve.html">SOLVE — 같은 수학 문제, 다른 HOW</a></p>
   <h1>구동사의 방향 — up · down · out · in</h1>
   <p class="lead">구동사 뒤의 작은 말(up, down, out, in)은 방향을 가리킨다. 그런데 <b>정말로 그쪽으로 움직이는 것</b>도 있고, <b>방향을 빌려 쓴 비유</b>도 있다. 방향을 고르고 동사를 눌러 보세요.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="pick up" title="pick up 소리로 듣기"><span class="en">pick up</span><span class="ipa">/pɪk ʌp/</span><span class="ko">[픽 업]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="track down" title="track down 소리로 듣기"><span class="en">track down</span><span class="ipa">/træk daʊn/</span><span class="ko">[트랙<b>다</b>운]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="turn down" title="turn down 소리로 듣기"><span class="en">turn down</span><span class="ipa">/tɝːn daʊn/</span><span class="ko">[턴 <b>다운</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="point out" title="point out 소리로 듣기"><span class="en">point out</span><span class="ipa">/pɔɪnt aʊt/</span><span class="ko">[포인트<b>아웃</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="pour out" title="pour out 소리로 듣기"><span class="en">pour out</span><span class="ipa">/pɔːr aʊt/</span><span class="ko">[포어<b>아웃</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="jot down" title="jot down 소리로 듣기"><span class="en">jot down</span><span class="ipa">/dʒɑt daʊn/</span><span class="ko">[자트<b>다</b>운]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="line up" title="line up 소리로 듣기"><span class="en">line up</span><span class="ipa">/laɪn ʌp/</span><span class="ko">[라인 업]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="plug in" title="plug in 소리로 듣기"><span class="en">plug in</span><span class="ipa">/plʌɡ ɪn/</span><span class="ko">[플러그<b>인</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="fold in" title="fold in 소리로 듣기"><span class="en">fold in</span><span class="ipa">/foʊld ɪn/</span><span class="ko">[포울드<b>인</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="figure out" title="figure out 소리로 듣기"><span class="en">figure out</span><span class="ipa">/ˈfɪɡ.jɚ aʊt/</span><span class="ko">[<b>피겨</b> 아웃]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
 
   <div class="card">
     <div class="fig">
@@ -115,6 +150,22 @@
     <tr><td><span class="en">I figured the answer.</span></td><td>I figured…는 주로 "~라고 짐작했다"로 들린다. 숨은 답을 <b>밖으로 꺼내는</b> 그림이 없다</td><td><span class="en">I figured <b>out</b> the answer.</span></td></tr>
   </table>
   <p>그래서 방향 말은 진짜 방향이든 비유든 <b>동사 혼자 못 그리는 길과 끝</b>을 그려 넣으려고 존재한다. 아래 그림에서 실선(진짜)과 점선(비유)을 볼 때도 "이 방향 말을 떼면 무엇이 비나?"를 같이 물어보세요.</p>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>방향 말</b>이 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
 
   <h2>1. 무엇인가 — 동사 + 방향 = 구동사</h2>
   <p>구동사는 <span class="en">pick</span>, <span class="en">turn</span> 같은 동사 뒤에 <span class="en">up</span>, <span class="en">down</span>, <span class="en">out</span>, <span class="en">in</span> 같은 <b>방향 말</b>을 붙인 것이다. 노트에서는 구동사도 다른 동사처럼 <b>RESULT + HOW</b>로 적는다.</p>
@@ -197,6 +248,7 @@
 
   <div class="check"><b>확인할 것</b>
     <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 역에서 <span class="en">pick me up</span>(차로 태우러 옴)은 노트의 "집어 올림"에서 넓어진 쓰임이라 노트에 없다. 자연스러운지와 진짜·반쯤·비유 표시를 사전으로 확인할 것.</li>
       <li>"line up의 up = 다 갖춰짐", "track down의 down = 끝까지 몰아감", "figure out의 out = 숨은 답이 드러남", "turn down = 제안을 내려놓는 느낌" 같은 방향 풀이는 <b>노트에 없는 일반적인 풀이</b>다. 기억을 돕는 그림일 뿐, 노트가 정한 뜻은 3번 표의 RESULT + HOW다. jot down을 "반쯤"으로 둔 것도 그림을 위해 정한 것이다.</li>
       <li>5절의 "대명사는 가운데" 규칙은 노트에 있다. 명사를 가운데 둔 예문, <span class="en">line up</span>에 목적어를 넣은 "줄 세우다" 쓰임, 절은 늘 뒤라는 말은 노트에 없는 내용이라 사전 예문으로 확인할 것.</li>
       <li>0절의 "방향 말 없이" 문장들(<span class="en">I picked my keys · I plugged the lamp · I figured the answer</span>)이 어떻게 들리는지는 노트에 없는 풀이다. 사전 예문으로 확인할 것.</li>
@@ -475,6 +527,113 @@
   });
   document.querySelectorAll('button[data-slot]').forEach((b) => b.addEventListener('click', () => { slot = b.dataset.slot; drawSlot(); }));
   drawSlot();
+</script>
+<script>
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  (function () {
+    const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+      OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+    const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+    const L = (x, y, t) => T(x, y, 11, t, MU);
+    const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+    // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+    const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+    const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+    const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+    const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+    const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+    const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+      return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+    const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+    const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+      '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+      '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+    // VERB: <b>방향 말</b>이
+    // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. 역에서 <span class="en">pick me up</span>(차로 태우러 옴)은 노트의 "집어 올림"에서 넓어진 쓰임이라 노트에 없다. 자연스러운지와 진짜·반쯤·비유 표시를 사전으로 확인할 것.
+    const SCENES = {
+      airport: { btn: '공항 탑승구', place: '공항 · 탑승구 앞',
+        pic: () => FL + BX(520, 30, 110, 30) + T(575, 50, 13, 'GATE 12', 'var(--text)', ' font-weight="700"') + P(600, 150, 1.1, OKC) +
+          ST(.3, [300, 340, 380, 420, 460].map((x) => P(x, 150, .85, SL)).join('') + AR(300, 88, 470, 88, AC, 2, true)) + L(380, 166, '한 줄로 다 섬 (up = 다 됨)'),
+        lines: [
+          ['직원', 'Group B, please <b>line up</b> here for boarding.', 'B그룹 승객분들은 탑승을 위해 여기 줄 서 주세요.', 1],
+          ['나', 'Is this the line for Group B?', '여기가 B그룹 줄인가요?'],
+        ],
+        say: '<span class="en">up</span>은 위로가 아니라 <b>흩어져 있던 사람들이 줄 하나로 다 맞춰짐</b> — 반쯤 방향(완성). <span class="en">line</span>만으로는 "다 섰다"가 안 그려진다.' },
+      cafe: { btn: '카페', place: '카페 · 창가 자리',
+        pic: () => FL + P(250, 150, 1.1, SL) + TB(300, 440, 108) + '<path d="M340 108 h64 l-6 -32 h-52 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+          BX(590, 104, 26, 32) + '<path d="M598 114 v8 M608 114 v8" stroke="' + OL + '" stroke-width="2"/>' +
+          ST(.3, '<path d="M404 100 C470 100 520 120 572 120" fill="none" stroke="' + OL + '" stroke-width="2"/>' + '<rect x="572" y="113" width="14" height="14" rx="2" fill="' + OL + '"/>' + AR(560, 140, 584, 140, AC, 2.5)) + L(603, 160, '콘센트 안으로'),
+        lines: [
+          ['나', 'Is there anywhere I can <b>plug in</b> my laptop?', '노트북 충전할 데(꽂을 데) 있을까요?', 1],
+          ['직원', 'There\'s an outlet by the window.', '창가 쪽에 콘센트 있어요.'],
+        ],
+        say: '플러그가 <b>정말로 구멍 안으로</b> 들어간다 — 진짜 방향 <span class="en">in</span>. 연결된 결과까지 한 번에 그린다.' },
+      office: { btn: '회사 휴게실', place: '회사 · 휴게실',
+        pic: () => FL + P(250, 150, 1.1, FOG) + P(430, 150, 1.1, SL) +
+          BX(520, 30, 100, 56) + T(570, 52, 12, '서울 지사', 'var(--text)', ' font-weight="600"') + T(570, 72, 11, '이직 제안', MU) +
+          ST(.3, AR(570, 92, 570, 140, AC, 3)) + L(570, 164, '제안을 아래로 = 거절'),
+        lines: [
+          ['동료', 'Did you take the job in Seoul?', '서울 자리 받아들였어?'],
+          ['나', 'No, I <b>turned it down</b>.', '아니, 거절했어.', 1],
+        ],
+        say: '올라온 제안을 <b>아래로 돌려 내려놓는</b> 그림 — 비유 방향 <span class="en">down</span>. "거절했다"를 공손하게 말할 때 자주 쓴다.' },
+      station: { btn: '기차역 (전화)', place: '기차역 앞 · 전화 통화',
+        pic: () => FL + BX(170, 40, 130, 110) + T(235, 62, 12, 'STATION', 'var(--text)', ' font-weight="700"') + P(330, 150, 1, FOG) +
+          ST(.3, CAR(400) + AR(360, 110, 440, 110, AC, 2, true)) + L(500, 166, '차에 태워 데려감'),
+        lines: [
+          ['친구', 'Can you <b>pick me up</b> at the station?', '역으로 나 데리러 와 줄 수 있어?', 1],
+          ['나', 'Sure, I\'ll be there at six.', '그럼, 6시에 갈게.'],
+        ],
+        say: '원래는 손으로 <b>집어 올림</b>(02 위 그림의 열쇠). 사람에게 쓰면 <b>차에 태워 데려감</b> — 반쯤 방향. 회화에서 아주 자주 쓴다.' },
+      meeting: { btn: '회의실', place: '회의실 · 보고 시간',
+        pic: () => FL + BX(250, 24, 170, 84) + '<path d="M270 96 v-20 M300 96 v-34 M330 96 v-28" stroke="' + OL + '" stroke-width="12"/><path d="M360 96 v-50" stroke="' + BAD + '" stroke-width="12"/>' +
+          P(470, 150, 1.1, OKC) + ST(.2, AR(458, 98, 378, 56, AC, 2.5)) + L(335, 124, '틀린 숫자를 짚음') +
+          P(590, 150, 1.1, SL) + ST(.5, BX(612, 84, 30, 36) + '<path d="M617 94 h20 M617 102 h20 M617 110 h12" stroke="' + MU + '"/>') + L(627, 76, '메모'),
+        lines: [
+          ['상사', 'Thanks for <b>pointing out</b> the mistake.', '실수 짚어 줘서 고마워요.'],
+          ['나', 'No problem. I also <b>jotted down</b> a few ideas.', '별말씀을요. 아이디어도 몇 개 적어 뒀어요.', 1],
+        ],
+        say: '<span class="en">point out</span> = 숨어 있던 것을 손가락으로 <b>밖으로 드러냄</b>. <span class="en">jot down</span> = 생각을 <b>종이에 휙 적어 내려놓음</b>. 둘 다 반쯤 방향.' },
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    function drawScene() {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    }
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  })();
+</script>
+<script>
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
 </script>
 </body>
 </html>

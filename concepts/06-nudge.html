@@ -64,6 +64,29 @@
     table { font-size: 14px; }
     th, td { padding: 6px; }
   }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
 </style>
 </head>
 <body>
@@ -71,6 +94,14 @@
   <p class="note"><a href="index.html">← 개념 그림 목록</a> · 출발점: <a href="04-core-question.html">핵심 질문 하나</a> · 견줘 보기: <a href="01-break.html">BREAK — 결과 동사</a></p>
   <h1>NUDGE — 살짝 밀어 조금만 (PUSH 묶음)</h1>
   <p class="lead">nudge는 PUSH 묶음의 한 동사다. 같은 상자를 <b>얼마나 세게, 어디를, 얼마나 빨리</b> 미느냐만 바꾸면 push · nudge · shove · press · thrust로 갈린다. nudge만 <b>작은 힘으로 조금만</b> 바꾼다. 그래서 사람의 선택, 숫자, 알림에도 쓴다(아래 3절).</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="nudge" title="nudge 소리로 듣기"><span class="en">nudge</span><span class="ipa">/nʌdʒ/</span><span class="ko">[<b>너</b>지]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="push" title="push 소리로 듣기"><span class="en">push</span><span class="ipa">/pʊʃ/</span><span class="ko">[<b>푸</b>시]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="shove" title="shove 소리로 듣기"><span class="en">shove</span><span class="ipa">/ʃʌv/</span><span class="ko">[<b>셔</b>브]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="press" title="press 소리로 듣기"><span class="en">press</span><span class="ipa">/pres/</span><span class="ko">[<b>프레</b>스]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="thrust" title="thrust 소리로 듣기"><span class="en">thrust</span><span class="ipa">/θrʌst/</span><span class="ko">[<b>쓰러</b>스트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="tug" title="tug 소리로 듣기"><span class="en">tug</span><span class="ipa">/tʌɡ/</span><span class="ko">[<b>터</b>그]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
 
   <div class="card">
     <div class="fig">
@@ -119,6 +150,22 @@
     <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
     <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
     <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>PUSH 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
   </div>
 
   <h2>1. 무엇인가 — "밀어서 힘을 줌"에 HOW가 붙는다</h2>
@@ -245,6 +292,7 @@
 
   <div class="check"><b>확인할 것</b>
     <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.</li>
       <li>3절의 물건 밖 쓰임(팔꿈치로 쿡, 선택을 기울임, <span class="en">Prices nudged up.</span>, 알림·재촉)은 노트에 없다. 노트는 "주의를 주다"까지만 적었다. 사전 예문으로 확인한 뒤 <a href="../push/nudge--push-gently.md">nudge 노트</a>에 더할 것.</li>
       <li>4절 ①의 예문("밀었는데 안 움직였다")과 thrust를 "결과 쪽에 가깝다"고 둔 것은 짐작이다.</li>
       <li>5절 "사람이 목적어" 칸(<span class="en">nudge me to speak up</span>, <span class="en">press him for an answer</span>, <span class="en">be thrust into the spotlight</span>)과 경향 한 줄은 노트에 없는 풀이다.</li>
@@ -582,6 +630,104 @@
   document.querySelectorAll('button[data-ov]').forEach((b) => b.addEventListener('click', () => { ov = b.dataset.ov; drawSlot(); }));
   document.querySelectorAll('button[data-slot]').forEach((b) => b.addEventListener('click', () => { slot = b.dataset.slot; drawSlot(); }));
   drawSlot();
+</script>
+<script>
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  (function () {
+    const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+      OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+    const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+    const L = (x, y, t) => T(x, y, 11, t, MU);
+    const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+    // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+    const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+    const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+    const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+    const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+    const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+    const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+      return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+    const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+    const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+      '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+      '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+    // VERB: <b>PUSH 묶음 동사</b>가
+    // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+    const SCENES = {
+      meeting: { btn: '회의 중', place: '회의실 · 오후 회의',
+        pic: () => FL + TB(250, 540, 110) + P(300, 150, 1, FOG) + P(380, 150, 1, SL) + T(400, 80, 12, 'z z', MU) +
+          ST(.3, AR(316, 112, 360, 112, AC, 2)) + L(338, 166, '팔꿈치로 살짝') + P(620, 150, 1.1, OKC) + L(620, 72, '부장님'),
+        lines: [
+          ['나', 'Why did you <b>nudge</b> me?', '왜 쿡 찔렀어?', 1],
+          ['동료', 'The boss is looking at you!', '부장님이 너 보고 있어!'],
+        ],
+        say: '세게 민 게 아니라 <b>팔꿈치로 살짝</b> — 몸이 조금만 움직이고 주의가 깬다. 작은 힘, 작은 변화 = <span class="en">nudge</span>.' },
+      elevator: { btn: '엘리베이터', place: '아파트 엘리베이터 안',
+        pic: () => '<rect x="200" y="20" width="440" height="130" fill="none" stroke="' + OL + '" stroke-width="1.5"/>' + P(300, 150, 1.1, SL) + P(420, 150, 1.1, FOG) +
+          BX(520, 40, 54, 92) + [5, 6, 7, 8].map((n, i) => '<circle cx="547" cy="' + (118 - i * 22) + '" r="8" fill="' + BG + '" stroke="' + OL + '"/>' + T(547, 122 - i * 22, 10, n, MU)).join('') +
+          ST(.3, '<circle cx="547" cy="74" r="9" fill="none" stroke="' + AC + '" stroke-width="3"/>' + AR(440, 92, 534, 76, AC, 2)) + L(600, 80, '한 점을 꾹'),
+        lines: [
+          ['나', 'Could you <b>press</b> 7 for me, please?', '7층 좀 눌러 주시겠어요?', 1],
+          ['이웃', 'Sure.', '그럼요.'],
+        ],
+        say: '물건을 옮기는 게 아니라 <b>한 점에 힘을 계속 줌</b> — 버튼·초인종·상처에는 push보다 <span class="en">press</span>가 또렷하다.' },
+      subway: { btn: '출근길 지하철', place: '출근길 지하철 · 문 앞',
+        pic: () => '<rect x="330" y="24" width="64" height="126" fill="' + BG + '" stroke="' + OL + '"/><rect x="394" y="24" width="64" height="126" fill="' + BG + '" stroke="' + OL + '"/>' + FL +
+          P(250, 150, 1.1, FOG) + P(300, 150, 1.1, FOG) + ST(.2, AR(320, 100, 420, 100, BAD, 4)) + ST(.3, '<g transform="rotate(14 470 150)">' + P(470, 150, 1.1, SL) + '</g>') + P(600, 150, 1.1, OKC) + L(440, 166, '거칠게 확'),
+        lines: [
+          ['친구', 'Are you okay? You look upset.', '괜찮아? 기분 안 좋아 보여.'],
+          ['나', 'Someone <b>shoved</b> me when the doors opened.', '문 열릴 때 누가 확 밀쳤어.', 1],
+        ],
+        say: '조심 없이 <b>거칠고 세게</b> 밀어 몸이 휘청 — <span class="en">shove</span>. 기분 나쁜 밀침이라 불평할 때 자주 나온다.' },
+      market: { btn: '마트', place: '마트 · 장보기',
+        pic: () => FL + P(250, 150, 1.1, FOG) + P(370, 150, .8, SL) +
+          '<path d="M400 96 h110 l-12 36 h-86 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/><path d="M392 90 l8 6" stroke="' + OL + '" stroke-width="2"/><circle cx="420" cy="142" r="7" fill="' + OL + '"/><circle cx="490" cy="142" r="7" fill="' + OL + '"/>' +
+          ST(.3, AR(520, 116, 590, 116, AC, 2.5)) + BX(600, 30, 60, 120) + '<path d="M600 70 h60 M600 110 h60" stroke="' + OL + '"/>',
+        lines: [
+          ['아이', 'Can I <b>push</b> the cart?', '카트 내가 밀어도 돼?', 1],
+          ['엄마', 'Okay, but go slowly.', '그래, 대신 천천히.'],
+        ],
+        say: '세기·방식을 따로 말하지 않고 <b>몸에서 멀어지게 힘을 줌</b> — 묶음의 기본 말 <span class="en">push</span>. 카트·문·유모차에 가장 흔하다.' },
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    function drawScene() {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    }
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  })();
+</script>
+<script>
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
 </script>
 </body>
 </html>

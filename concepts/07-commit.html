@@ -64,6 +64,29 @@
     table { font-size: 14px; }
     th, td { padding: 6px; }
   }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent); }
+  .talk .bubble .en b { color: var(--accent); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
 </style>
 </head>
 <body>
@@ -71,6 +94,15 @@
   <p class="note"><a href="index.html">← 개념 그림 목록</a> · 출발점: <a href="04-core-question.html">핵심 질문 하나</a> · 코딩 말 이웃: <a href="05-resolve.html">RESOLVE — 하나로 확정</a></p>
   <h1>COMMIT — 넘겨서 되돌릴 수 없게 묶음</h1>
   <p class="lead">commit은 대상이 제각각이다. 코드, 돈, 나 자신, 죄, 기억. 그래도 그림은 하나다. <b>내 손 안에서 언제든 바꿀 수 있던 것을 선 너머로 넘겨, 쉽게 되돌릴 수 없게 묶어 두는 것</b>이다. 무엇을 넘기는지만 바꿔 보세요.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="commit" title="commit 소리로 듣기"><span class="en">commit</span><span class="star">*</span><span class="ipa">/kəˈmɪt/</span><span class="ko">[커<b>밋</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="commitment" title="commitment 소리로 듣기"><span class="en">commitment</span><span class="star">*</span><span class="ipa">/kəˈmɪt.mənt/</span><span class="ko">[커<b>밋</b>먼트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="decide" title="decide 소리로 듣기"><span class="en">decide</span><span class="ipa">/dɪˈsaɪd/</span><span class="ko">[디<b>사</b>이드]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="promise" title="promise 소리로 듣기"><span class="en">promise</span><span class="ipa">/ˈprɑː.mɪs/</span><span class="ko">[<b>프라</b>미스]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="save" title="save 소리로 듣기"><span class="en">save</span><span class="ipa">/seɪv/</span><span class="ko">[<b>세</b>이브]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="spend" title="spend 소리로 듣기"><span class="en">spend</span><span class="ipa">/spend/</span><span class="ko">[스<b>펜</b>드]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+  <p class="pron-note"><span style="color:var(--accent2)">*</span> 표시는 노트에 발음이 없어 사전 표기를 옮겨 둔 것이다. 나머지는 각 노트의 Pronunciation (US) 줄.</p>
 
   <div class="card">
     <div class="fig">
@@ -114,6 +146,22 @@
     <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
     <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
     <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>commit</b>이 위의 그림(선을 넘겨 묶음) 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">개발팀 사무실, 헬스장 카운터, 카페, 회의실, 뉴스 화면 중 고른 장소가 그려지고, 그 장소에서 무엇이 선을 넘어 묶이는지(또는 아직 안 넘었는지)가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
   </div>
 
   <h2>1. 무엇인가 — 대상은 달라도 그림은 하나</h2>
@@ -239,6 +287,7 @@
       <li><b>commit 노트가 아직 없다.</b> 이 페이지는 노트보다 먼저 만들었다. BASIC("넘겨서 되돌릴 수 없게 묶음")과 다섯 갈래는 모두 짐작이다. 사전 예문으로 확인한 뒤 노트(발음 /kəˈmɪt/, 형태 commit — committed — committed, t 겹침)를 만들 것.</li>
       <li>어원(라틴어 com- "함께" + mittere "보내다" → "넘겨 맡기다")은 확인하지 않았다.</li>
       <li><span class="en">commit to finish</span>(to 뒤 동사 원형)을 ✗로 둔 것은 교과서 기준이다. 실제로는 쓰이기도 하는지 확인할 것.</li>
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 원어민 예문·사전으로 확인할 것(특히 <span class="en">He just won't commit.</span>의 목적어 없는 쓰임).</li>
       <li>0절의 "대신 말하면" 문장과 △·✗ 판정, 4절 표의 ①~③은 짐작이다.</li>
       <li>이웃 PROMISE 묶음 노트(<a href="../promise/promise--commit-to-future-action.md">promise</a>)의 영어 뜻풀이가 "commit to future action"이다. 노트끼리 경계(promise는 말, commit은 묶음)를 맞출 것.</li>
     </ul>
@@ -542,6 +591,109 @@
   }
   document.querySelectorAll('button[data-slot]').forEach((b) => b.addEventListener('click', () => { slot = b.dataset.slot; drawSlot(); }));
   drawSlot();
+</script>
+<script>
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const FLOOR = '<line x1="200" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const place = (t) => tx(16, 26, 13, t, 'var(--muted)', ' font-weight="600"', 'start');
+  const SCENES = {
+    office: { btn: '개발팀 사무실', place: '개발팀 사무실 · 월요일 아침',
+      pic: () => FLOOR + person(290, 150, 1.1, 'var(--fog)') +
+        '<rect x="380" y="108" width="190" height="8" rx="2" fill="var(--obj-line)"/><path d="M390 116 V150 M560 116 V150" stroke="var(--obj-line)" stroke-width="3"/>' +
+        person(420, 150, 1, 'var(--sleeve)') +
+        '<rect x="440" y="48" width="90" height="56" rx="4" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M485 104 v4" stroke="var(--obj-line)" stroke-width="3"/>' +
+        '<path d="M456 86 H508" stroke="var(--obj-line)" stroke-width="1.5"/>' + '<circle cx="456" cy="86" r="5" fill="var(--bg)" stroke="var(--obj-line)"/><circle cx="476" cy="86" r="5" fill="var(--bg)" stroke="var(--obj-line)"/>' +
+        step(.3, '<circle cx="506" cy="86" r="6" fill="var(--accent)" stroke="var(--obj-line)"/>' + LOCK(506, 66)) +
+        '<path d="M588 50 a14 14 0 0 1 24 -10 a16 16 0 0 1 28 4 a12 12 0 0 1 4 24 h-56 a10 10 0 0 1 0 -18 z" fill="var(--bg)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(616, 62, 11, '팀 저장소', 'var(--muted)') +
+        arrow(536, 580, 76, 'var(--muted)', 2, true) + tx(612, 98, 11, '아직 push 전', 'var(--muted)'),
+      lines: [
+        ['팀장', 'Did you push the fix?', '버그 고친 거 올렸어?'],
+        ['나', 'I <b>committed</b> it last night, but I haven\'t pushed it yet.', '어젯밤에 커밋은 했는데, 아직 push는 안 했어요.', 1],
+      ],
+      say: '내 컴퓨터의 기록 사슬에는 <b>넘겨 묶었다</b>(commit). 팀이 보는 저장소로 보내는 건 따로다(push). 개발자 사이에서는 하루에도 몇 번씩 나오는 말.' },
+    gym: { btn: '헬스장 카운터', place: '헬스장 · 등록 카운터',
+      pic: () => FLOOR + person(300, 150, 1.1, 'var(--sleeve)') +
+        '<rect x="324" y="64" width="26" height="24" rx="8" fill="var(--card)" stroke="var(--line)"/>' + tx(337, 82, 14, '?', 'var(--muted)', ' font-weight="700"') +
+        person(420, 116, 1, 'var(--ok)') + '<rect x="370" y="104" width="110" height="46" rx="3" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(425, 132, 11, '등록', 'var(--muted)') +
+        '<g fill="var(--bg)" stroke="var(--obj-line)">' + [0, 1, 2, 3].map((c) => [0, 1, 2].map((r) => '<rect x="' + (530 + c * 26) + '" y="' + (58 + r * 24) + '" width="20" height="18" rx="2"/>').join('')).join('') + '</g>' +
+        tx(568, 46, 12, '12개월 회원권', 'var(--text)', ' font-weight="600"') + step(.3, LOCK(648, 92)) + tx(568, 146, 11, '돈·시간이 1년 묶임', 'var(--muted)'),
+      lines: [
+        ['직원', 'Are you ready to <b>commit</b> to a 12-month membership?', '12개월 회원권으로 하시겠어요?'],
+        ['나', 'I\'m not ready to <b>commit</b> yet. Can I try it for a week first?', '아직 그렇게 묶이긴 좀… 일주일 먼저 다녀 봐도 돼요?', 1],
+      ],
+      say: '12개월 동안 <b>돈과 시간이 이 헬스장에 묶인다</b>. <span class="en">not ready to commit</span> = 아직 선을 넘을 준비가 안 됐다. 계약·구독·등록 앞에서 자주 나온다.' },
+    cafe: { btn: '카페 (연애 상담)', place: '카페 · 친구와 수다',
+      pic: () => FLOOR + person(300, 150, 1.05, 'var(--fog)') + person(470, 150, 1.05, 'var(--sleeve)') +
+        '<rect x="340" y="108" width="100" height="7" rx="2" fill="var(--obj-line)"/><path d="M390 115 V150" stroke="var(--obj-line)" stroke-width="3"/>' +
+        '<rect x="356" y="94" width="14" height="14" rx="2" fill="var(--card)" stroke="var(--obj-line)"/><rect x="410" y="94" width="14" height="14" rx="2" fill="var(--card)" stroke="var(--obj-line)"/>' +
+        '<line x1="610" y1="40" x2="610" y2="150" stroke="var(--accent)" stroke-width="2" stroke-dasharray="6 5"/>' + tx(610, 34, 11, '넘기는 선', 'var(--accent)', ' font-weight="600"') +
+        '<g opacity=".7">' + person(580, 150, 0.9, 'var(--fog)') + '</g>' + tx(560, 72, 11, '그 사람', 'var(--muted)') +
+        step(.3, '<path d="M596 108 h8" stroke="var(--bad)" stroke-width="3" stroke-linecap="round"/>') + tx(640, 166, 11, '선 앞에서 멈춤', 'var(--muted)'),
+      lines: [
+        ['친구', 'You two have been dating for three years. Is he serious?', '너희 3년이나 사귀었잖아. 그 사람 진지해?'],
+        ['나', 'I don\'t know. He just won\'t <b>commit</b>.', '모르겠어. 도무지 확실하게 하려 들질 않아.', 1],
+      ],
+      say: '목적어 없이 <span class="en">commit</span> = <b>관계에 나를 넘겨 묶음</b>. 그 사람은 선 앞에서 멈춰 있다. 연애·결혼 이야기에서 아주 자주 듣는 말.' },
+    meeting: { btn: '회의실 (예산)', place: '회의실 · 예산 회의',
+      pic: () => FLOOR + person(280, 150, 1.1, 'var(--sleeve)') + person(600, 150, 1.1, 'var(--ok)') +
+        '<rect x="330" y="108" width="220" height="8" rx="2" fill="var(--obj-line)"/><path d="M340 116 V150 M540 116 V150" stroke="var(--obj-line)" stroke-width="3"/>' +
+        '<rect x="380" y="28" width="130" height="58" rx="3" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(445, 50, 12, '프로젝트 A 예산', 'var(--muted)') + tx(445, 74, 16, '$50,000', 'var(--text)', ' font-weight="700"') +
+        '<rect x="420" y="94" width="40" height="14" rx="1" fill="var(--card)" stroke="var(--obj-line)"/><path d="M426 104 h18" stroke="var(--muted)" stroke-dasharray="2 2"/>' +
+        tx(440, 136, 11, '계약서 · 서명 전', 'var(--muted)') + step(.3, '<g opacity=".45">' + LOCK(520, 52) + '</g>'),
+      lines: [
+        ['팀장', 'Can we <b>commit</b> $50,000 to this project?', '이 프로젝트에 5만 달러를 배정할 수 있을까요?', 1],
+        ['재무', 'Not until the client signs the contract.', '고객이 계약서에 서명하기 전에는 안 돼요.'],
+      ],
+      say: '아직 <b>쓰는 게 아니라</b> 이 일 몫으로 넘겨 묶는 것. 한번 묶으면 다른 데 못 쓰니까 서명을 기다린다. 자물쇠가 흐린 이유.' },
+    news: { btn: '뉴스', place: '저녁 뉴스 · 사건 보도',
+      pic: () => '<rect x="230" y="20" width="250" height="140" rx="6" fill="var(--bg)" stroke="var(--obj-line)" stroke-width="2"/>' +
+        '<rect x="380" y="52" width="80" height="80" fill="var(--card)" stroke="var(--obj-line)"/>' + tx(420, 70, 11, '경찰서', 'var(--muted)', ' font-weight="600"') +
+        '<path d="M392 84 h56 M392 100 h56 M392 116 h56" stroke="var(--line)" stroke-width="6"/>' +
+        person(300, 132, 1, 'var(--sleeve)') + '<rect x="230" y="132" width="250" height="28" fill="var(--accent)"/>' + tx(355, 151, 12, '강도 사건 · 단독 범행', '#fff', ' font-weight="700"') +
+        '<rect x="540" y="44" width="80" height="100" rx="4" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(580, 64, 12, '기록', 'var(--text)', ' font-weight="600"') +
+        '<path d="M552 78 h56 M552 90 h56 M552 102 h40" stroke="var(--muted)" stroke-width="1.5"/>' +
+        step(.3, '<circle cx="592" cy="122" r="16" fill="none" stroke="var(--bad)" stroke-width="3"/>' + tx(592, 127, 11, '확정', 'var(--bad)', ' font-weight="700"')),
+      lines: [
+        ['기자', 'Police say the man <b>committed</b> the robbery alone.', '경찰은 그 남성이 혼자 강도를 저질렀다고 밝혔습니다.', 1],
+        ['앵커', 'Has he been charged?', '기소됐나요?'],
+      ],
+      say: '저질러서 <b>세상의 기록으로 넘어간 일</b>. 뉴스에서 crime · robbery · murder · fraud 앞에는 늘 commit이 붙는다. 좋은 일에는 안 쓴다.' },
+  };
+  let scene = 'office';
+  function drawScene() {
+    const c = SCENES[scene];
+    $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+    $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+      '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+      '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+    $('ssay').innerHTML = c.say;
+    document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+  }
+  Object.entries(SCENES).forEach(([id, c]) => {
+    const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+    b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+  });
+  drawScene();
+</script>
+<script>
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
 </script>
 </body>
 </html>
