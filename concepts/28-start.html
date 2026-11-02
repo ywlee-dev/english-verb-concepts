@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>START 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/28-start.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="27-feel.html">FEEL 묶음</a> · 반대쪽: <a href="../stop/_family.md">STOP 묶음 (진행을 멈춤)</a> · 견줘 보기: <a href="16-keep.html">KEEP 묶음 (계속 이어 감)</a></p>
+  <h1>START 묶음 — 같은 "시작", 다른 스위치</h1>
+  <p class="lead">아직 <b>진행되지 않던 것이 진행되기 시작한다</b>. 이 결과는 같고, <b>무엇이 시작되는지(일 · 장치 · 물질), 어떻게 시작되는지(첫 단계 · 공개 행사 · 신호 · 불꽃)</b>만 바꾸면 start · begin · launch · activate · ignite로 갈린다. start는 방식을 말하지 않고 <b>시작됐다</b>만 그린다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="start" title="start 소리로 듣기"><span class="en">start</span><span class="ipa">/stɑːrt/</span><span class="ko">[<b>스타</b>트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="begin" title="begin 소리로 듣기"><span class="en">begin</span><span class="ipa">/bɪˈɡɪn/</span><span class="ko">[비<b>긴</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="launch" title="launch 소리로 듣기"><span class="en">launch</span><span class="ipa">/lɔːntʃ/</span><span class="ko">[<b>론</b>치]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="activate" title="activate 소리로 듣기"><span class="en">activate</span><span class="ipa">/ˈæk.tɪ.veɪt/</span><span class="ko">[<b>액</b>티베이트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="ignite" title="ignite 소리로 듣기"><span class="en">ignite</span><span class="ipa">/ɪɡˈnaɪt/</span><span class="ko">[이그<b>나잇</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">시작하는 방식에 따라 진행되기 시작하는 장면이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 시작되는 대상이다. start는 회의실 화이트보드의 프로젝트가 계획에서 진행 중으로, begin은 네 단계 중 첫 단계 조사에 들어감, launch는 강당 무대에서 독서 프로젝트를 발표하고 신청을 엶, activate는 보안 패널에 코드를 넣어 감시 기능이 켜짐, ignite는 실험대의 연료에 불꽃이 닿아 타기 시작하는 장면이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">START · 진행되기 시작</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 시작했나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 크기·거리는 그림용이다. 장면은 <a href="../start/_family.md">start/_family.md</a>의 고정 TARGET(the project · the system · the fuel)과 각 노트의 장면(월요일 아침 회의실 · 첫 워크숍 · 학교 강당 · 과학실 · 과학 실험대)을 옮겼다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"시작했다" 하나로 다 될 것 같다. 실제로 start와 begin은 많은 문장에서 바꿔 쓸 수 있다. 그런데 <b>준비한 것을 사람들 앞에 공개하며 여는 것</b>, <b>대기 중인 장치를 신호로 켜는 것</b>, <b>물질에 불이 붙는 것</b>은 듣는 사람이 그려야 하는 스위치가 다르다. 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>START 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "진행되기 시작함"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>아직 진행되지 않던 활동·과정·시스템이 진행되는 상태로 바뀜</b> = <span class="en">START</span>다. 여기에 대상의 종류와 시작 메커니즘이 붙는다. 노트의 비교표를 식으로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">START</span><span class="op">+</span><span>시작 방식 미지정</span><span class="op">=</span><span class="v">START</span>
+    <span class="r">START</span><span class="op">+</span><span>첫 단계에 들어감에 초점</span><span class="op">=</span><span class="v">BEGIN</span>
+    <span class="r">START</span><span class="op">+</span><span>준비 후 공식적·공개적으로 시작</span><span class="op">=</span><span class="v">LAUNCH</span>
+    <span class="r">START</span><span class="op">+</span><span>신호·스위치로 작동 상태 전환</span><span class="op">=</span><span class="v">ACTIVATE</span>
+    <span class="r">START</span><span class="op">+</span><span>열·불꽃으로 연소 시작</span><span class="op">=</span><span class="v">IGNITE</span>
+  </div>
+  <p>노트가 짚은 점: <span class="en">activate</span>는 기능이 <b>켜진</b> 것이지 경보가 실제로 <b>울렸다</b>는 뜻이 아니다. <span class="en">launch</span>도 준비 기간 전체가 아니라 <b>공개하며 여는 순간</b>이다. 그리고 <span class="en">begin</span>이 언제나 더 특별한 시작을 뜻하는 것은 아니다 — 3절.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>시작함</b> → 계획만 있던 프로젝트에 첫 업무를 나눠 <b>진행 중</b>이 된다. 어떻게 시작했는지는 말하지 않는다. <span class="en">We started the project on Monday.</span></li>
+    <li><b>첫 단계에 들어감</b> → 네 단계 중 1단계 자료 조사에 들어간다. 시선이 <b>첫 부분</b>에 있다. <span class="en">The team began the project with research.</span></li>
+    <li><b>공개하며 엶</b> → 강당에서 발표하고 신청 페이지를 연다. 준비 → <b>공식 운영</b>. <span class="en">The school launched a reading program.</span></li>
+    <li><b>신호로 켬</b> → 보안 코드를 넣자 감시 기능이 <b>작동 상태</b>. 경보는 울리지 않았다. <span class="en">I activated the alarm system before leaving.</span></li>
+    <li><b>불이 붙음</b> → 불꽃이 연료에 닿아 <b>타기 시작</b>한다. 전원을 켠 것과 다르다. <span class="en">A spark ignited the fuel.</span></li>
+    <li>어느 장면이든 "진행되지 않던 것이 진행되기 시작했다"는 맞으니 <span class="en">start</span>도 쓸 수 있다. 그래서 START 칩은 늘 켜진다.</li>
+  </ul>
+
+  <h2>3. start와 begin — 거의 같고, 몇 자리만 다르다</h2>
+  <p>노트는 둘을 "많은 문장에서 바꿔 쓸 수 있다"고 적었다. 그러니 begin을 정답 하나로 외울 필요는 없다. 다른 곳은 <b>기계 · 꼴 · 느낌</b> 정도다.</p>
+  <table>
+    <tr><th>자리</th><th>문장</th><th>한국어</th></tr>
+    <tr><td>둘 다 됨 (활동)</td><td><span class="en">I started / began reading the book today.</span></td><td>오늘 그 책을 읽기 시작했어</td></tr>
+    <tr><td>둘 다 됨 (행사)</td><td><span class="en">The meeting starts / begins at nine.</span></td><td>회의는 9시에 시작해</td></tr>
+    <tr><td>start 쪽 (기계 · 가게)</td><td><span class="en">I can't start the car. · She started a business.</span></td><td>차 시동이 안 걸려 · 그녀는 사업을 시작했어</td></tr>
+    <tr><td>begin 쪽 (첫 부분에 시선)</td><td><span class="en">We began the meeting with the first item.</span></td><td>첫 안건으로 회의를 시작했어</td></tr>
+    <tr><td>꼴</td><td><span class="en">start – started – started · begin – began – begun</span></td><td>begin은 세 꼴이 다 다르다</td></tr>
+  </table>
+  <p class="note">start의 노트 Sense에 "활동·과정·<b>기계</b>"가 들어 있어 시동 거는 말에도 start를 쓴다. <span class="en">begin the car</span>는 어색하다(아래 "확인할 것").</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>START 묶음</b>이다. 진행되던 것을 <b>멈추는</b> 쪽이면 테두리 밖 문으로 STOP 묶음에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 START 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 진행되지 않던 것이 진행되기 시작했나에서 아니오 · 아직 계획만이면 plan, 진행을 멈췄으면 묶음 밖 문 stop, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 start, 일 · 과정이면 Q3에서 begin과 launch, 장치 · 물질이면 Q4에서 activate와 ignite로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 무엇이 시작되나</th><th>② 무엇으로</th><th>③ 무엇에 초점</th><th>자리</th></tr>
+    <tr><td><b>start</b></td><td>활동 · 과정 · 기계 무엇이든</td><td>말하지 않음</td><td>시작됐다는 사실</td><td>결과 (기본)</td></tr>
+    <tr><td><b>begin</b></td><td>순서가 있는 활동 · 과정</td><td>말하지 않음</td><td>첫 단계</td><td>결과 + 시점</td></tr>
+    <tr><td><b>launch</b></td><td>준비된 계획 · 제품 · 서비스</td><td>발표 · 공개</td><td>공식 개시</td><td>방식 + 결과</td></tr>
+    <tr><td><b>activate</b></td><td>대기 중인 장치 · 기능</td><td>코드 · 스위치 · 신호</td><td>작동 상태</td><td>방식 + 결과</td></tr>
+    <tr><td><b>ignite</b></td><td>탈 수 있는 물질</td><td>열 · 불꽃</td><td>연소</td><td>방식 + 결과</td></tr>
+  </table>
+  <p class="note">길잡이지 칼같은 규칙이 아니다. 노트: "대상의 종류와 시작 메커니즘이 HOW를 정한다." 칸 나눔은 짐작이다.</p>
+
+  <h2>5. 실제 문장으로 — 무엇을, 그리고 목적어 없이</h2>
+  <p>다섯 동사 모두 시작시킨 <b>것</b>을 목적어로 받는다. start · begin은 <b>-ing</b>(하던 일)도 받고, 시작되는 것이 <b>주어</b>로 와서 목적어 없이 끝나기도 한다 — 영화가 시작한다, 회의가 시작됐다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">붙이는 말에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">붙이는 말</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>노트 문장</th><th>다른 TARGET</th><th>목적어 없이</th></tr>
+    <tr><td><b>start</b></td><td><span class="en">We started the project on Monday.</span></td><td><span class="en">I started doing the dishes.</span></td><td><span class="en">The movie starts at 7:30.</span></td></tr>
+    <tr><td><b>begin</b></td><td><span class="en">The team began the project with research.</span></td><td><span class="en">I began reading the book.</span> (✗ I begun)</td><td><span class="en">The meeting began at nine.</span></td></tr>
+    <tr><td><b>launch</b></td><td><span class="en">The school launched a reading program.</span></td><td><span class="en">The store launched a new online service.</span></td><td><span class="en">The app launches next month.</span></td></tr>
+    <tr><td><b>activate</b></td><td><span class="en">I activated the alarm system before leaving.</span></td><td><span class="en">I activated location sharing.</span></td><td>울린 건 따로 — <span class="en">The alarm went off.</span></td></tr>
+    <tr><td><b>ignite</b></td><td><span class="en">A spark ignited the fuel.</span></td><td><span class="en">The match ignited the paper.</span></td><td><span class="en">The fuel ignited.</span> — 불이 붙었다</td></tr>
+  </table>
+  <p class="note">경향 한 줄: 위쪽(start · begin)은 사람이 하는 <b>일</b>이, 아래쪽(activate · ignite)은 <b>장치 · 물질</b>이 TARGET이다. 동사가 좁아질수록 무엇을 시작시키는지가 단어 안에 정해진다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>START</b> — 손뼉을 한 번 치고 "<b>자, 하자!</b>" 하며 바로 손을 움직인다.</li>
+    <li><b>BEGIN</b> — 책을 펴서 손가락을 <b>첫 줄</b>에 올려놓는다.</li>
+    <li><b>LAUNCH</b> — 두 팔을 활짝 펴며 앞을 향해 "<b>오늘부터 엽니다!</b>"</li>
+    <li><b>ACTIVATE</b> — 허공의 버튼을 <b>삑 · 삑 · 삑 · 삑</b> 누르고 초록 불을 확인하는 시늉.</li>
+    <li><b>IGNITE</b> — 성냥을 긋는 시늉, 그리고 손끝에서 <b>화르륵</b> 올라가는 불을 손으로 그린다.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>3절의 start the car · start a business · meeting starts/begins 문장, begin the car가 어색하다는 판정, 5절의 "목적어 없이" 칸(The movie starts · The app launches · The alarm went off · The fuel ignited)은 노트에 없다.</li>
+      <li>4절 표의 칸 나눔과 0절 "대신 말하면"의 △·✗ 판정은 짐작이다. 맨 위 그림에서 START 칩이 ignite 장면에도 켜지는 것(start a fire)도 노트에 없는 판단이다.</li>
+      <li>노트 다섯 개 모두 Sense · Example · Target Condition 뒤에 <b>Precondition</b> 줄이 없다(find · feel 묶음 노트에는 있다). begin 노트는 "언제 꺼낼까"(책 읽기)와 Scene Scenario(연구 프로젝트 워크숍)의 장면이 서로 다르다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../start/_family.md">start/_family.md</a> — "대상의 종류와 시작 메커니즘이 HOW를 정한다"</li>
+    <li>동사 노트: <a href="../start/start--cause-to-begin.md">start</a> · <a href="../start/begin--enter-first-stage.md">begin</a> · <a href="../start/launch--start-formally.md">launch</a> · <a href="../start/activate--switch-on-system.md">activate</a> · <a href="../start/ignite--start-burning.md">ignite</a></li>
+    <li>묶음 밖 이웃: <a href="../stop/_family.md">stop/_family.md</a> — 진행 중이던 것을 멈춤. START의 반대 방향.</li>
+    <li>견줘 보기: <a href="16-keep.html">16 KEEP</a> — 시작한 다음, 그 상태를 계속 이어 감.</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — start는 <b>멈춰 있던 것이 움직이기 시작한 순간</b> 하나를 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240 (그림용) ──
+  const FLAME = (x, y, s) => '<g transform="translate(' + x + ' ' + y + ') scale(' + (s || 1) + ')"><path d="M0 0 C-18 -10 -16 -34 -2 -52 C0 -36 14 -34 10 -18 C16 -24 16 -30 14 -36 C26 -20 18 -4 0 0 Z" fill="var(--accent)"/><path d="M0 -2 C-8 -8 -6 -20 0 -28 C2 -18 10 -14 0 -2 Z" fill="var(--gold)"/></g>';
+  const SPARK = (x, y) => '<path d="M' + x + ' ' + (y - 9) + ' L' + (x + 3) + ' ' + (y - 3) + ' L' + (x + 9) + ' ' + y + ' L' + (x + 3) + ' ' + (y + 3) + ' L' + x + ' ' + (y + 9) + ' L' + (x - 3) + ' ' + (y + 3) + ' L' + (x - 9) + ' ' + y + ' L' + (x - 3) + ' ' + (y - 3) + ' Z" fill="var(--gold)"/>';
+  const TOP = {
+    first: 'launch', keep: 'START',
+    keepSay: '<b>START</b>는 이 장면에도 맞다 — 방식을 빼고 진행되지 않던 것이 진행되기 시작했다는 결과만 말한다. <span class="en">It started.</span>',
+    chips: ['START', 'BEGIN', 'LAUNCH', 'ACTIVATE', 'IGNITE'], out: [['STOP (진행을 멈춤)', '../stop/_family.md']],
+    hows: {
+      start: { btn: '시작함', how: '시작 방식 미지정', verb: 'START', chips: ['START'], target: 'TARGET · the project',
+        result: '계획만 있던 일이 — 진행 중으로',
+        pic: () => FLOOR + P(290, 240, 1.3, 'var(--ok)') + tx(290, 146, 11, '팀장', 'var(--muted)') + P(560, 240, .9, 'var(--sleeve)') + P(620, 240, .9, 'var(--fog)') +
+          '<rect x="380" y="56" width="260" height="96" rx="4" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(510, 76, 12, '새 프로젝트', 'var(--text)', ' font-weight="600"') +
+          '<rect x="400" y="94" width="80" height="36" rx="6" fill="var(--bg)" stroke="var(--line)"/>' + tx(440, 117, 12, '계획', 'var(--muted)') +
+          step(.2, arrow(486, 532, 112, 'var(--accent)', 2.5)) +
+          step(.35, '<rect x="538" y="94" width="88" height="36" rx="6" fill="var(--chip-on)" stroke="var(--ok)" stroke-width="2"/>' + tx(582, 117, 12, '▶ 진행 중', 'var(--text)', ' font-weight="700"')) +
+          step(.5, arrow(330, 520, 206, 'var(--accent)', 2) + tx(425, 196, 11, '첫 업무 배정', 'var(--accent)')),
+        say: '<span class="en">We started the project on Monday.</span> 계획에만 머물던 일이 <b>진행 중</b>이 됐다. 첫 단계인지, 공개 행사였는지는 말하지 않는다.' },
+      begin: { btn: '첫 단계에 들어감', how: '첫 단계 진입에 초점', verb: 'BEGIN', chips: ['START', 'BEGIN'], target: 'TARGET · the project (4단계)',
+        result: '1단계 자료 조사부터 — 첫 부분이 진행 중',
+        pic: () => FLOOR + tx(470, 72, 11, '연구 프로젝트 · 네 단계', 'var(--muted)') +
+          [['1 조사', 300], ['2 설계', 390], ['3 제작', 480], ['4 발표', 570]].map(([t, x], i) => '<g' + (i ? ' opacity=".45"' : '') + '><rect x="' + x + '" y="88" width="82" height="40" rx="6" fill="var(--bg)" stroke="var(--line)"/>' + tx(x + 41, 113, 12, t, 'var(--text)') + '</g>').join('') +
+          P(340, 240, 1.2, 'var(--sleeve)') + P(420, 240, 1.1, 'var(--fog)') +
+          step(.2, '<rect x="300" y="88" width="82" height="40" rx="6" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2.5"/>' + tx(341, 113, 12, '1 조사', 'var(--text)', ' font-weight="700"')) +
+          step(.4, '<path d="M341 160 V136 m-6 8 l6 -8 l6 8" fill="none" stroke="var(--accent)" stroke-width="2"/>' + tx(380, 152, 12, '첫 단계', 'var(--accent)', ' font-weight="600"', 'start')),
+        say: '<span class="en">The team began the project with research.</span> 네 단계 중 <b>첫 부분</b>에 들어갔다는 데 시선을 둔다. 여기서 <span class="en">started</span>도 자연스럽다.' },
+      launch: { btn: '공개하며 엶', how: '준비 후 공개 개시', verb: 'LAUNCH', chips: ['START', 'LAUNCH'], target: 'TARGET · the reading project',
+        result: '강당에서 발표 — 신청을 받기 시작',
+        pic: () => FLOOR + '<rect x="400" y="206" width="250" height="34" fill="var(--wood)" opacity=".6"/>' + P(450, 206, 1.1, 'var(--ok)') + '<rect x="468" y="164" width="30" height="42" fill="var(--obj-line)"/>' +
+          P(280, 240, .9, 'var(--fog)') + P(330, 240, .9, 'var(--sleeve)') + tx(305, 176, 11, '전교생', 'var(--muted)') +
+          step(.15, '<rect x="400" y="56" width="240" height="40" rx="4" fill="var(--accent2)"/>' + tx(520, 81, 14, '독서 프로젝트 시작!', '#fff', ' font-weight="700"')) +
+          step(.35, [[410, 110], [436, 120], [600, 112], [628, 124], [520, 108]].map(([x, y], i) => '<rect x="' + x + '" y="' + y + '" width="6" height="10" fill="' + ['var(--accent)', 'var(--ok)', 'var(--gold)', 'var(--sleeve)', 'var(--bad)'][i] + '" transform="rotate(' + (i * 37) + ' ' + x + ' ' + y + ')"/>').join('')) +
+          step(.55, '<rect x="540" y="136" width="96" height="44" rx="6" fill="var(--card)" stroke="var(--ok)" stroke-width="2"/>' + tx(588, 155, 11, '신청 페이지', 'var(--muted)') + tx(588, 172, 12, '열림 ✓', 'var(--ok)', ' font-weight="700"')),
+        say: '<span class="en">The school launched a reading program.</span> 일정 · 신청 방법을 <b>다 준비한 다음</b>, 사람들 앞에서 <b>공식적으로</b> 열었다. 내부 첫 회의였다면 start · begin.' },
+      activate: { btn: '신호로 켬', how: '신호 · 스위치로 켬', verb: 'ACTIVATE', chips: ['START', 'ACTIVATE'], target: 'TARGET · the alarm system',
+        result: '코드 입력 — 감시 기능이 작동 상태 (경보는 안 울림)',
+        pic: () => FLOOR + P(290, 240, 1.3, 'var(--sleeve)') +
+          '<rect x="340" y="110" width="64" height="92" rx="6" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><rect x="348" y="118" width="48" height="16" rx="2" fill="var(--bg)" stroke="var(--line)"/>' +
+          [0, 1, 2].map((r) => [0, 1, 2].map((c) => '<rect x="' + (350 + c * 15) + '" y="' + (142 + r * 15) + '" width="11" height="11" rx="2" fill="var(--bg)" stroke="var(--obj-line)"/>').join('')).join('') +
+          '<circle cx="372" cy="194" r="4" fill="var(--fog)"/>' +
+          '<path d="M580 56 h40 v8 a20 12 0 0 1 -40 0 z" fill="var(--card)" stroke="var(--obj-line)"/>' + tx(600, 92, 11, '센서', 'var(--muted)') +
+          step(.15, tx(372, 130, 11, '* * * *', 'var(--text)', ' font-weight="700"')) +
+          step(.35, '<circle cx="372" cy="194" r="5" fill="var(--ok)"/>' + tx(372, 222, 11, 'ON', 'var(--ok)', ' font-weight="700"')) +
+          step(.5, '<path d="M590 98 L520 236 H660 Z" fill="var(--ok)" opacity=".12" stroke="var(--ok)" stroke-dasharray="4 4"/>' + tx(500, 150, 12, '감시 중', 'var(--ok)', ' font-weight="600"')),
+        say: '<span class="en">I activated the alarm system before leaving.</span> 설치만 돼 있던 기능을 <b>코드로 켰다</b>. 이제 침입을 감지할 수 있는 상태 — 경보가 <b>울렸다</b>는 뜻은 아니다.' },
+      ignite: { btn: '불이 붙음', how: '불꽃으로 연소 시작', verb: 'IGNITE', chips: ['START', 'IGNITE'], target: 'TARGET · the fuel',
+        result: '불꽃이 닿자 — 연료가 타기 시작',
+        pic: () => FLOOR + table(400, 200, 220) + P(300, 240, 1.3, 'var(--sleeve)') + tx(510, 230, 11, '실험대', 'var(--muted)') +
+          '<path d="M480 200 q30 8 60 0 v-8 h-60 z" fill="var(--card)" stroke="var(--obj-line)"/><ellipse cx="510" cy="192" rx="30" ry="5" fill="var(--water)" opacity=".7"/>' + tx(578, 188, 11, '연료', 'var(--muted)', '', 'start') +
+          '<rect x="410" y="168" width="44" height="10" rx="4" fill="var(--obj-line)"/>' +
+          step(.2, SPARK(466, 172) + SPARK(484, 180) + tx(450, 156, 11, '불꽃', 'var(--accent)')) +
+          step(.45, FLAME(510, 190, 1.2)) +
+          step(.65, tx(580, 140, 13, '타기 시작', 'var(--accent)', ' font-weight="700"')),
+        say: '<span class="en">A spark ignited the fuel.</span> 기계 전원을 켠 게 아니라 <b>불꽃의 열로 물질에 불이 붙어</b> 연소가 시작됐다.' },
+    },
+  };
+
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. begin은 빼도 거의 티가 안 난다 — 그것도 보세요.',
+    cards: [
+      { id: 'start', t: ['진행되기', '시작함'], v: 'start', icon: '<circle cx="0" cy="0" r="26" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/><path d="M-8 -13 L14 0 L-8 13 Z" fill="var(--accent)"/>',
+        instead: 'We launched the project on Monday. △', lost: '공개 행사를 한 것처럼 들린다. 그냥 일에 손을 댔다는 담백한 말이 없다.', why: '미진행 → 진행. 방식은 말하지 않는다.' },
+      { id: 'begin', t: ['첫 단계에', '들어감'], v: 'begin', icon: [0, 1, 2, 3].map((i) => '<rect x="' + (-40 + i * 21) + '" y="-10" width="18" height="20" rx="3" fill="' + (i ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + (i ? 'var(--line)' : 'var(--accent)') + '" stroke-width="' + (i ? 1 : 2) + '"/>').join('') + '<path d="M-31 26 V14 m-4 4 l4 -4 l4 4" fill="none" stroke="var(--accent)" stroke-width="2"/>',
+        instead: 'I started reading the book today. ○', lost: '이 자리는 start로도 거의 그대로 된다 — 노트도 begin을 정답 하나로 고정하지 말라고 한다. 빠지는 것은 "첫 부분에 들어간다"는 시선 정도.', why: '첫 단계에 들어감에 초점.' },
+      { id: 'launch', t: ['준비해서', '공개하며 엶'], v: 'launch', icon: '<rect x="-34" y="-20" width="68" height="20" rx="3" fill="var(--accent2)"/>' + [[-28, 10], [-12, 18], [8, 12], [26, 20]].map(([x, y], i) => '<rect x="' + x + '" y="' + y + '" width="5" height="8" fill="' + ['var(--accent)', 'var(--ok)', 'var(--gold)', 'var(--sleeve)'][i] + '" transform="rotate(' + (i * 40) + ' ' + x + ' ' + y + ')"/>').join(''),
+        instead: 'The school started a reading program. △', lost: '시작은 맞지만, 준비해서 사람들 앞에 공식적으로 열었다는 그림이 빠진다 — 내부 첫 회의일 수도 있다.', why: '준비 후 공식적·공개적으로 시작.' },
+      { id: 'activate', t: ['신호로', '작동 전환'], v: 'activate', icon: '<rect x="-22" y="-30" width="44" height="58" rx="5" fill="var(--card)" stroke="var(--obj-line)"/>' + [0, 1, 2].map((r) => [0, 1, 2].map((c) => '<rect x="' + (-15 + c * 11) + '" y="' + (-22 + r * 11) + '" width="8" height="8" rx="1" fill="var(--bg)" stroke="var(--obj-line)"/>').join('')).join('') + '<circle cx="0" cy="18" r="5" fill="var(--ok)"/>',
+        instead: 'I started the alarm system. △', lost: '경보가 울리기 시작한 것처럼도 들린다. 대기 중인 기능을 켜 두었다는 그림이 흐려진다.', why: '신호·스위치로 작동 상태 전환.' },
+      { id: 'ignite', t: ['불꽃으로', '타기 시작'], v: 'ignite', icon: FLAME(0, 22, .9) + SPARK(-26, 6),
+        instead: 'A spark turned on the fuel. ✗', lost: '전원을 켜는 말이라, 물질에 불이 붙어 타기 시작했다는 그림을 못 그린다.', why: '열·불꽃으로 연소 시작.' },
+      { id: 'stop', out: true, t: ['진행을', '멈춤'], v: 'stop', icon: '<circle cx="0" cy="0" r="26" fill="var(--bg)" stroke="var(--accent2)" stroke-width="2"/><rect x="-11" y="-11" width="22" height="22" rx="2" fill="var(--accent2)"/>',
+        instead: 'I made the treadmill not run. △', lost: '돌려 말하면 통하지만, 진행되던 것을 멈추는 한 낱말이 START 묶음에는 없다.', why: '진행 중이던 것을 멈춤 — 반대쪽 이웃 STOP 묶음.' },
+    ],
+  };
+
+  const SCENES = {
+    movie: { btn: '영화관', place: '영화관 앞 · 저녁',
+      pic: () => FL + P(250, 150, 1.1, SL) + L(250, 72, '친구') + P(330, 150, 1.1, FOG) + L(330, 72, '나') +
+        BX(430, 30, 200, 120) + '<rect x="450" y="46" width="160" height="40" rx="3" fill="' + BG + '" stroke="' + OL + '"/>' + T(530, 72, 13, 'CINEMA', 'var(--text)', ' font-weight="700"') +
+        ST(.2, '<circle cx="530" cy="118" r="20" fill="' + CARD + '" stroke="' + OL + '" stroke-width="2"/><path d="M530 118 V104 M530 118 L540 124" stroke="' + AC + '" stroke-width="2.5" stroke-linecap="round"/>'),
+      lines: [
+        ['친구', 'What time does the movie <b>start</b>?', '영화 몇 시에 시작해?', 1],
+        ['나', 'At 7:30. We\'d better hurry.', '7시 반. 서둘러야겠다.'],
+      ],
+      say: '시작되는 영화가 <b>주어</b> — 목적어 없이 <span class="en">start</span>. 일정 · 행사의 시작은 대개 이 꼴이다.' },
+    class: { btn: '교실', place: '영어 수업 · 첫 시간',
+      pic: () => FL + '<rect x="200" y="30" width="180" height="80" rx="3" fill="' + OKC + '" opacity=".75"/>' + T(290, 76, 14, 'p. 12', '#fff', ' font-weight="700"') + P(420, 150, 1.1, A2) + L(420, 72, '선생님') +
+        [520, 580, 640].map((x) => P(x, 150, .85, SL)).join('') + L(580, 92, '학생들') +
+        ST(.2, '<rect x="498" y="118" width="44" height="14" rx="2" fill="' + CARD + '" stroke="' + OL + '"/><path d="M520 118 v14" stroke="' + OL + '"/>'),
+      lines: [
+        ['선생님', 'Okay, let\'s <b>begin</b> with page 12.', '자, 12쪽부터 시작합시다.', 1],
+        ['학생', 'Page 12? Got it.', '12쪽이요? 알겠습니다.'],
+      ],
+      say: '어디서부터 — <b>첫 부분</b>에 시선을 두는 말, <span class="en">begin with</span>. <span class="en">start with</span>도 똑같이 쓴다.' },
+    office: { btn: '회사', place: '회사 · 주간 회의',
+      pic: () => FL + P(250, 150, 1.1, OKC) + L(250, 72, '팀장') + P(340, 150, 1.1, SL) + L(340, 72, '동료') +
+        ST(.2, '<rect x="440" y="24" width="90" height="120" rx="12" fill="' + CARD + '" stroke="' + OL + '" stroke-width="2"/><rect x="460" y="50" width="50" height="50" rx="12" fill="' + AC + '"/>' + T(485, 124, 11, '새 앱', MU)) +
+        ST(.4, '<rect x="550" y="60" width="90" height="34" rx="4" fill="' + A2 + '"/>' + T(595, 82, 12, '다음 달 출시', '#fff', ' font-weight="700"')),
+      lines: [
+        ['팀장', 'We\'re <b>launching</b> the new app next month.', '다음 달에 새 앱을 출시합니다.', 1],
+        ['동료', 'That\'s exciting! Is it free?', '기대되네요! 무료예요?'],
+      ],
+      say: '준비한 제품을 <b>사람들에게 공개하며</b> 내놓는다 — <span class="en">launch</span>. 출시 · 개시 · 런칭.' },
+    bank: { btn: '은행', place: '은행 창구 · 새 카드',
+      pic: () => FL + P(250, 150, 1.1, SL) + L(250, 72, '나') + BX(320, 104, 150, 46) + P(395, 104, 1, OKC) + L(395, 30, '직원') +
+        ST(.2, '<rect x="520" y="60" width="100" height="62" rx="8" fill="' + SL + '" stroke="' + OL + '"/><rect x="532" y="76" width="18" height="14" rx="2" fill="var(--gold, #d9a21b)"/>') +
+        ST(.45, '<circle cx="602" cy="110" r="6" fill="' + OKC + '"/>' + T(570, 52, 11, '사용 등록', OKC, ' font-weight="600"')),
+      lines: [
+        ['직원', 'You need to <b>activate</b> your new card first.', '새 카드는 먼저 사용 등록을 하셔야 해요.', 1],
+        ['나', 'How do I do that?', '어떻게 하면 돼요?'],
+      ],
+      say: '카드는 이미 손에 있다. <b>대기 상태의 기능을 켜서</b> 쓸 수 있게 만든다 — <span class="en">activate</span>.' },
+    news: { btn: '뉴스', place: '저녁 뉴스 · 산불 소식',
+      pic: () => '<rect x="230" y="20" width="250" height="140" rx="6" fill="' + BG + '" stroke="' + OL + '" stroke-width="2"/>' + P(300, 132, 1, '#3b5b8a') +
+        '<path d="M380 128 h90" stroke="' + A2 + '" stroke-width="4"/>' + ST(.2, FLAME(420, 126, .8) + FLAME(450, 126, .6)) +
+        '<rect x="230" y="132" width="250" height="28" fill="' + AC + '"/>' + T(355, 151, 12, '담배꽁초가 마른 풀에 불 붙여', '#fff', ' font-weight="700"'),
+      lines: [
+        ['앵커', 'A cigarette <b>ignited</b> the dry grass.', '담배꽁초가 마른 풀에 불을 붙였습니다.', 1],
+        ['기자', 'That\'s how the fire started.', '그렇게 불이 시작됐습니다.'],
+      ],
+      say: '물질에 <b>불이 붙어 타기 시작</b> — <span class="en">ignite</span>. 뉴스 · 과학의 말. 일상에서는 뒷줄처럼 <span class="en">the fire started</span>도 많이 쓴다.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'launch',
+    region: { x: 106, y: 66, w: 538, h: 258, label: 'START 묶음 · RESULT = 진행되기 시작함', at: [114, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 260, t: 'Q1. 안 하던 것이 진행되기 시작했나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 205, y: 180, w: 180, t: 'Q3. 일 · 과정이라면?', sub: '첫 단계 · 공개' },
+      q4: { x: 520, y: 180, w: 170, t: 'Q4. 장치 · 물질이라면?', sub: '신호 · 불꽃' },
+    },
+    leaves: {
+      plan:     { x: 60, y: 262, w: 88, v: 'plan', sub: '아직 계획만', seg: 't', say: '<span class="en">We planned the project.</span> 아직 진행되지 않았다 → START 묶음 밖.' },
+      begin:    { x: 160, y: 262, w: 88, v: 'begin', sub: '첫 단계', seg: 'r', say: '<span class="en">The team began the project with research.</span> 첫 부분에 들어감.' },
+      launch:   { x: 255, y: 262, w: 88, v: 'launch', sub: '공개 개시', seg: 'r', say: '<span class="en">The school launched a reading program.</span> 준비 후 공식적으로.' },
+      start:    { x: 360, y: 262, w: 92, v: 'start', sub: '방식 말 안 함', seg: 'r', say: '<span class="en">We started the project on Monday.</span> 이 묶음의 기본 동사.' },
+      activate: { x: 470, y: 262, w: 94, v: 'activate', sub: '신호 · 스위치', seg: 'r', say: '<span class="en">I activated the alarm system.</span> 대기 → 작동.' },
+      ignite:   { x: 575, y: 262, w: 88, v: 'ignite', sub: '열 · 불꽃', seg: 'r', say: '<span class="en">A spark ignited the fuel.</span> 연소 시작.' },
+      stop:     { x: 600, y: 36, w: 120, v: 'stop', sub: '→ STOP 묶음', seg: '', out: true, say: '<span class="en">I stopped the treadmill.</span> 진행되던 것을 <b>멈춤</b> → START 묶음 밖, STOP 묶음(<a href="../stop/_family.md">stop/_family.md</a>).' },
+    },
+    edges: [
+      ['q1', 'plan', '아니오 · 계획만', 'left', [150, 28]], ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'stop', '반대 · 멈춤', 'right', [512, 28], true],
+      ['q2', 'q3', '일'], ['q2', 'start', '말하지 않음'], ['q2', 'q4', '장치'],
+      ['q3', 'begin', '첫 단계'], ['q3', 'launch', '공개'],
+      ['q4', 'activate', '신호'], ['q4', 'ignite', '불꽃'],
+    ],
+    segs: [[16, 104, '안 시작함', 't'], [109, 640, '결과 — 진행 상태로 바뀜 (+ 무엇이 · 무엇으로)', 'r']],
+  };
+
+  const SLOTS = {
+    first: ['begin', 'other'],
+    slots: { base: '노트 문장', other: '다른 TARGET', none: '목적어 없이' },
+    verbs: {
+      start: {
+        base:  { ok: [['We', 's'], ['started', 'v'], ['the project', 'o'], ['on Monday', 'x']], say: '노트 문장. 규칙 변화 <b>started</b>.' },
+        other: { ok: [['I', 's'], ['started', 'v'], ['doing the dishes', 'o']], say: '노트의 "한 번 더 떠올리기". 하던 일은 <b>-ing</b>.' },
+        none:  { ok: [['The movie', 's'], ['starts', 'v'], ['at 7:30', 'x']], say: '시작되는 것이 주어 — 목적어 없이 끝난다.' },
+      },
+      begin: {
+        base:  { ok: [['The team', 's'], ['began', 'v'], ['the project', 'o'], ['with research', 'x']], say: '노트 문장. 무엇부터는 <b>with</b>.' },
+        other: { ok: [['I', 's'], ['began', 'v'], ['reading the book', 'o']], bad: [['I', 's'], ['begun', 'v'], ['reading the book', 'o']], say: '과거는 <b>began</b>, have 뒤에서만 <b>begun</b>. begin – began – begun (노트 Forms).' },
+        none:  { ok: [['The meeting', 's'], ['began', 'v'], ['at nine', 'x']], say: '회의가 주어 — 목적어 없이.' },
+      },
+      launch: {
+        base:  { ok: [['The school', 's'], ['launched', 'v'], ['a reading program', 'o']], say: '노트 문장.' },
+        other: { ok: [['The store', 's'], ['launched', 'v'], ['a new online service', 'o']], say: '노트의 "한 번 더 떠올리기". 제품 · 서비스에 자주.' },
+        none:  { ok: [['The app', 's'], ['launches', 'v'], ['next month', 'x']], say: '출시되는 것이 주어로도 온다.' },
+      },
+      activate: {
+        base:  { ok: [['I', 's'], ['activated', 'v'], ['the alarm system', 'o']], say: '노트 문장. 기능을 <b>켰다</b>.' },
+        other: { ok: [['I', 's'], ['activated', 'v'], ['location sharing', 'o']], say: '노트의 "한 번 더 떠올리기". 휴대폰 기능 · 카드에도.' },
+        none:  { ok: [['The alarm', 's'], ['went off', 'v']], say: '경보가 <b>울린</b> 사건은 activate가 아니라 따로 말한다(노트). 흔한 말은 go off.' },
+      },
+      ignite: {
+        base:  { ok: [['A spark', 's'], ['ignited', 'v'], ['the fuel', 'o']], say: '노트 문장. 주어는 불꽃 · 성냥 같은 <b>원인</b>.' },
+        other: { ok: [['The match', 's'], ['ignited', 'v'], ['the paper', 'o']], say: '노트의 "한 번 더 떠올리기".' },
+        none:  { ok: [['The fuel', 's'], ['ignited', 'v']], say: '타는 물질이 주어 — "불이 붙었다".' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FIND 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/26-find.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="25-use.html">USE 묶음</a> · 다음: <a href="27-feel.html">FEEL 묶음</a> · 견줘 보기: <a href="09-look.html">LOOK 묶음 (찾는 과정은 look for)</a></p>
+  <h1>FIND 묶음 — 같은 열쇠, 다른 찾아내기</h1>
+  <p class="lead">교실 보관함 <b>열쇠가 없어졌다</b>. 열쇠가 어디 있는지 <b>몰랐다가 알게 된다</b>는 결과는 같고, <b>정확한 자리를 짚었는지, 처음 보는 것인지, 단서를 따라갔는지, 다시 손에 넣었는지</b>만 바꾸면 find · locate · discover · track down · recover로 갈린다. find는 방식을 말하지 않고 <b>찾아냈다</b>만 그린다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="find" title="find 소리로 듣기"><span class="en">find</span><span class="ipa">/faɪnd/</span><span class="ko">[<b>파</b>인드]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="locate" title="locate 소리로 듣기"><span class="en">locate</span><span class="ipa">/ˈloʊ.keɪt/</span><span class="ko">[<b>로</b>우케이트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="discover" title="discover 소리로 듣기"><span class="en">discover</span><span class="ipa">/dɪˈskʌv.ər/</span><span class="ko">[디<b>스커</b>버]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="track down" title="track down 소리로 듣기"><span class="en">track down</span><span class="ipa">/træk daʊn/</span><span class="ko">[트랙<b>다</b>운]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="recover" title="recover 소리로 듣기"><span class="en">recover</span><span class="ipa">/rɪˈkʌv.ər/</span><span class="ko">[리<b>커</b>버]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">찾아내는 방식에 따라 열쇠를 알아내는 장면이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 미나와 열쇠다. find는 의자 다리 옆의 열쇠를 보게 됨, locate는 분실물 기록과 상자 번호를 대조해 B-12 상자를 짚음, discover는 책장을 옮기자 벽 홈에서 처음 보는 열쇠가 나옴, track down은 친구 · 관리실 · 벤치로 단서를 따라가 찾아냄, recover는 보관장 아래 틈에서 자로 열쇠를 끌어내 손에 쥐는 장면이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">FIND · 찾아서 알아냄</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 찾아냈나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 거리·크기는 그림용이다. 열쇠 장면은 <a href="../find/_family.md">find/_family.md</a>의 고정 TARGET(the key)과 각 노트의 장면(수업이 끝난 교실 · 분실물실 · 책장 뒤 · 학교 건물 · 보관장 아래 틈)을 옮겼다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"찾았다" 하나로 다 될 것 같다. 그런데 <b>기록으로 정확한 칸을 짚은 것</b>, <b>있는 줄도 몰랐던 것을 처음 본 것</b>, <b>여러 단서를 끝까지 쫓은 것</b>, <b>위치만 아는 게 아니라 다시 손에 넣은 것</b>은 듣는 사람이 그려야 하는 그림이 다르다. 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>FIND 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "몰랐다가 알아냄"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>위치·정체·존재를 몰랐던 TARGET을 알아내어 접근할 수 있게 됨</b> = <span class="en">FIND</span>다. 여기에 정확성 · 새로움 · 추적 · 되찾음이 붙는다. 노트의 비교표를 식으로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">FIND</span><span class="op">+</span><span>잃거나 몰랐던 대상을 알아냄 (방식 미지정)</span><span class="op">=</span><span class="v">FIND</span>
+    <span class="r">FIND</span><span class="op">+</span><span>체계적으로 정확한 위치를 확인</span><span class="op">=</span><span class="v">LOCATE</span>
+    <span class="r">FIND</span><span class="op">+</span><span>존재 자체를 처음 알아냄</span><span class="op">=</span><span class="v">DISCOVER</span>
+    <span class="r">FIND</span><span class="op">+</span><span>단서를 이어 끝까지 찾아냄</span><span class="op">=</span><span class="v">TRACK DOWN</span>
+    <span class="r">FIND</span><span class="op">+</span><span>잃었던 대상을 다시 손에 넣음</span><span class="op">=</span><span class="v">RECOVER</span>
+  </div>
+  <p>노트가 짚은 점: <span class="en">find</span>는 <b>성공한 결과</b>를 담지만 열쇠를 <b>집어 들었다는 뜻은 아니다</b>. 틈 속 열쇠를 보기만 했으면 find, 실제로 꺼내 다시 가지면 recover. 그리고 <span class="en">look for the key</span>는 찾는 <b>과정</b>, <span class="en">find the key</span>는 찾은 <b>결과</b>다 — 3절.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>찾음</b> → 책상 아래를 살피다 의자 다리 옆에서 열쇠를 본다. 어떻게 찾았는지는 말하지 않는다. <span class="en">I found the key by the chair.</span></li>
+    <li><b>정확한 자리를 짚음</b> → 분실물 기록의 날짜·장소를 대조해 <b>B-12 상자</b>라고 특정한다. <span class="en">We located the key in box B-12.</span></li>
+    <li><b>처음 알게 됨</b> → 책장을 옮기자 벽의 작은 홈, 그 안에 처음 보는 열쇠. <span class="en">I discovered a hidden key behind the shelf.</span></li>
+    <li><b>단서를 따라감</b> → 친구 → 관리실 → 마지막 사용 장소인 운동장 벤치. <span class="en">I tracked down the missing key.</span></li>
+    <li><b>되찾음</b> → 틈 속 열쇠에 손이 안 닿아 자로 끌어내 손에 쥔다. <span class="en">I recovered the key from under the cabinet.</span></li>
+    <li>어느 장면이든 "열쇠를 몰랐다가 알아냈다"는 맞으니 <span class="en">find</span>도 쓸 수 있다. 그래서 FIND 칩은 늘 켜진다.</li>
+  </ul>
+
+  <h2>3. look for와 find — "찾는 중"과 "찾았다"</h2>
+  <p>한국어 "찾다"는 찾는 <b>과정</b>도, 찾아낸 <b>결과</b>도 다 말한다. 영어는 나눈다 — 과정은 <span class="en">look for</span>, 결과는 <span class="en">find</span>. 노트의 Minimal Contrast 한 줄이 이 묶음에서 가장 자주 쓰이는 구별이다.</p>
+  <table>
+    <tr><th>지금 어디쯤</th><th>문장</th><th>한국어</th></tr>
+    <tr><td>찾는 중 (과정)</td><td><span class="en">I'm looking for my keys.</span></td><td>열쇠 찾고 있어</td></tr>
+    <tr><td>찾았다 (결과)</td><td><span class="en">I found my keys!</span></td><td>열쇠 찾았다!</td></tr>
+    <tr><td>찾아도 안 나옴</td><td><span class="en">I can't find my keys.</span></td><td>열쇠가 안 보여 · 못 찾겠어</td></tr>
+    <tr><td>과정 + 실패</td><td><span class="en">I looked for it everywhere, but I couldn't find it.</span></td><td>다 뒤져 봤는데 못 찾았어</td></tr>
+    <tr><td>정보 · 사실 (out)</td><td><span class="en">I found out the answer.</span></td><td>답을 알아냈어</td></tr>
+  </table>
+  <p class="note">✗ <span class="en">I'm finding my keys.</span>는 "찾는 중"이 되지 않는다(5절). 찾는 중이면 look for. find out은 물건보다 <b>정보·사실</b>을 알아낼 때 쓴다.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>FIND 묶음</b>이다. 아직 <b>찾는 중</b>이면(결과가 없으면) 테두리 밖 문으로 LOOK 묶음의 look for에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 FIND 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 몰랐던 것을 알아냈나에서 아니오면 lose, 아직 찾는 중이면 묶음 밖 문 look for, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 find, 어떻게 찾았나면 Q3에서 locate와 track down, 무엇을 · 그다음은이면 Q4에서 discover와 recover로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 손에 넣었나?</th><th>② 방식이 단어 안에 들어 있나?</th><th>③ 무엇이 HOW를 고르나</th><th>자리</th></tr>
+    <tr><td><b>find</b></td><td>말하지 않음 — 위치를 안 것까지</td><td>아니오 (찾아봤든 우연이든)</td><td>—</td><td>결과 (기본)</td></tr>
+    <tr><td><b>locate</b></td><td>말하지 않음</td><td>예</td><td>정확성 (어느 칸)</td><td>방식 + 결과</td></tr>
+    <tr><td><b>discover</b></td><td>말하지 않음</td><td>예</td><td>새로움 (있는 줄 몰랐음)</td><td>방식 + 결과</td></tr>
+    <tr><td><b>track down</b></td><td>말하지 않음</td><td>예</td><td>추적 (단서 여러 개)</td><td>방식 + 결과</td></tr>
+    <tr><td><b>recover</b></td><td>예 — 다시 손에</td><td>예</td><td>되찾음 (원래 내 것)</td><td>결과가 한 걸음 더</td></tr>
+  </table>
+  <p class="note">길잡이지 칼같은 규칙이 아니다. 노트도 locate는 우연히 발견해도 쓸 수 있다고 적었다. 칸 나눔은 짐작이다(아래 "확인할 것").</p>
+
+  <h2>5. 실제 문장으로 — 무엇을, 어디서</h2>
+  <p>다섯 동사 모두 <b>찾은 것</b>을 목적어로 받고, <b>어디서</b>를 붙이면 그림이 또렷해진다. 두 군데가 한국 학습자가 자주 틀리는 자리다 — find를 "찾는 중"으로 쓰는 것, 그리고 track down의 대명사 자리.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">붙이는 말에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">붙이는 말</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>목적어</th><th>+ 어디서</th><th>자주 쓰는 모양</th></tr>
+    <tr><td><b>find</b></td><td><span class="en">found the key</span></td><td><span class="en">found the key by the chair</span></td><td>✗ <span class="en">I'm finding my keys.</span> → <span class="en">looking for</span></td></tr>
+    <tr><td><b>locate</b></td><td><span class="en">located the key</span></td><td><span class="en">located the key in box B-12</span></td><td><span class="en">be located near…</span> — ~에 위치해 있다</td></tr>
+    <tr><td><b>discover</b></td><td><span class="en">discovered a hidden key</span></td><td><span class="en">… behind the shelf</span></td><td><span class="en">discovered that …</span> — ~라는 걸 알게 됐다</td></tr>
+    <tr><td><b>track down</b></td><td><span class="en">tracked down the key</span></td><td><span class="en">… across the school building</span></td><td><span class="en">tracked it down</span> (✗ tracked down it)</td></tr>
+    <tr><td><b>recover</b></td><td><span class="en">recovered the key</span></td><td><span class="en">… from under the cabinet</span></td><td><span class="en">recover from a cold</span> — 회복하다</td></tr>
+  </table>
+  <p class="note">경향 한 줄: recover만 <b>from</b>(꺼내 온 곳)이 잘 어울린다 — 다시 내 쪽으로 가져오는 그림이라서. 나머지는 열쇠가 <b>있던 자리</b>(by · in · behind)를 붙인다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>FIND</b> — 주머니를 뒤지다 손을 멈추고 "<b>아, 여기 있다!</b>"</li>
+    <li><b>LOCATE</b> — 손가락으로 표를 줄줄이 짚어 내려가다 <b>한 칸을 딱</b> 누른다.</li>
+    <li><b>DISCOVER</b> — 책을 들어 올리고 그 밑을 보며 눈을 크게 뜬다. "<b>이게 뭐지?</b>"</li>
+    <li><b>TRACK DOWN</b> — 손가락으로 책상 위 점 1 → 2 → 3을 <b>차례로 이어</b> 따라간다.</li>
+    <li><b>RECOVER</b> — 의자 밑에 펜을 넣어 지우개를 <b>끌어내 손에 쥔다</b>.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>3절 표의 <span class="en">can't find · find out</span> 문장과 5절 "자주 쓰는 모양"(be located · discover that · tracked it down · recover from a cold)은 노트에 없다. look for ↔ find 구별만 노트(find의 Minimal Contrast)에 있다.</li>
+      <li>4절 표의 칸 나눔과 0절 "대신 말하면"의 △·✗ 판정은 짐작이다.</li>
+      <li>노트 <a href="../find/_family.md">find/_family.md</a>의 <b>Shared Result</b> 제목 아래가 비어 있고, 공통 결과 문장은 "상황에서 꺼내기" 뒤에 떨어져 있다. Scenario contrast는 locate를 "교실 지도"로, 비교표·노트 장면은 "B-12 상자 · 분실물 기록"으로 적어 서로 다르다.</li>
+      <li>노트 <a href="../find/track-down--find-by-following-clues.md">track down</a>의 시제와 결과가 "It is back in her hand now"라 recover의 그림(다시 손에 넣음)과 겹친다. locate 노트의 시제와 결과 "located the key on the lost-and-found records"는 Example("on the classroom map")과 장소가 다르다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../find/_family.md">find/_family.md</a> — "위치·정체·존재를 몰랐던 TARGET을 알아내어 접근 가능한 상태로 만든다"</li>
+    <li>동사 노트: <a href="../find/find--become-aware-of-location.md">find</a> · <a href="../find/locate--find-exact-position.md">locate</a> · <a href="../find/discover--find-for-first-time.md">discover</a> · <a href="../find/track-down--find-by-following-clues.md">track down</a> · <a href="../find/recover--get-lost-thing-back.md">recover</a></li>
+    <li>묶음 밖 이웃: <a href="09-look.html">09 LOOK</a>(<a href="../look/_family.md">look/_family.md</a>) — 눈을 돌려 살핌. 찾는 <b>과정</b>(look for)은 이쪽, 찾은 <b>결과</b>는 FIND.</li>
+    <li>견줘 보기: <a href="02-phrasal-direction.html">02 구동사의 방향</a> — track down의 down(끝까지 몰아감).</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — find는 <b>몰랐다가 알게 된 순간</b> 하나를 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 미나 x = 300 (그림용) ──
+  const KEY = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><circle cx="' + x + '" cy="' + y + '" r="6" fill="none" stroke="var(--gold)" stroke-width="3"/><path d="M' + (x + 6) + ' ' + y + ' h16 v5 M' + (x + 16) + ' ' + y + ' v4" fill="none" stroke="var(--gold)" stroke-width="3"/></g>';
+  const MINA = (x) => P(x || 300, 240, 1.3, 'var(--sleeve)');
+  const CHAIR = '<path d="M505 136 V240 M557 198 V240" stroke="var(--wood)" stroke-width="5"/><rect x="500" y="190" width="62" height="8" rx="2" fill="var(--wood)"/>';
+  const TOP = {
+    first: 'trackdown', keep: 'FIND',
+    keepSay: '<b>FIND</b>는 이 장면에도 맞다 — 방식을 빼고 열쇠를 몰랐다가 알아냈다는 결과만 말한다. <span class="en">I found the key.</span>',
+    chips: ['FIND', 'LOCATE', 'DISCOVER', 'TRACK DOWN', 'RECOVER'], out: [['LOOK FOR (찾는 중)', '09-look.html']],
+    hows: {
+      find: { btn: '찾음', how: '방식 미지정', verb: 'FIND', chips: ['FIND'], target: 'TARGET · the key (보관함 열쇠)',
+        result: '의자 다리 옆에서 — 어디 있는지 알게 됨',
+        pic: () => FLOOR + CHAIR + MINA() + KEY(574, 233) +
+          step(.2, '<path d="M314 172 L566 228" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4"/>') +
+          step(.4, tx(300, 150, 22, '!', 'var(--accent)', ' font-weight="700"') + '<circle cx="585" cy="232" r="22" fill="none" stroke="var(--accent)" stroke-width="2"/>'),
+        say: '<span class="en">I found the key by the chair.</span> 책상 아래를 살피다 <b>의자 다리 옆에서</b> 봤다. 찾아봤든 우연히 봤든 — <b>모름 → 앎</b>이 핵심. 집어 들었는지는 말하지 않는다.' },
+      locate: { btn: '정확한 자리를 짚음', how: '정확한 위치를 특정', verb: 'LOCATE', chips: ['FIND', 'LOCATE'], target: 'TARGET · the key → box B-12',
+        result: '기록을 대조해 — B-12 상자라고 특정',
+        pic: () => FLOOR + MINA(290) + '<rect x="318" y="150" width="62" height="72" rx="3" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' +
+          tx(349, 166, 10, '분실물 기록', 'var(--muted)') + '<path d="M326 178 h46 M326 192 h46" stroke="var(--muted)"/>' +
+          ['A', 'B'].map((r, i) => [10, 11, 12].map((c, j) => '<rect x="' + (424 + j * 72) + '" y="' + (128 + i * 56) + '" width="66" height="50" rx="3" fill="var(--card)" stroke="var(--obj-line)"/>' + tx(457 + j * 72, 158 + i * 56, 12, r + '-' + c, 'var(--muted)')).join('')).join('') +
+          tx(568, 116, 11, '분실물실 보관 상자', 'var(--muted)') +
+          step(.25, '<rect x="324" y="200" width="50" height="16" rx="3" fill="var(--chip-on)" stroke="var(--accent)"/>' + tx(349, 212, 11, 'B-12', 'var(--accent)', ' font-weight="700"')) +
+          step(.45, '<rect x="568" y="184" width="66" height="50" rx="3" fill="var(--chip-on)" stroke="var(--ok)" stroke-width="3"/>' + tx(601, 214, 12, 'B-12', 'var(--text)', ' font-weight="700"') + KEY(586, 226) + tick(612, 140)),
+        say: '<span class="en">We located the key in box B-12.</span> 기록표의 날짜·장소를 대조해 <b>정확히 어느 칸</b>인지 특정했다. 열쇠를 아직 꺼내지는 않았다.' },
+      discover: { btn: '처음 알게 됨', how: '존재 자체를 처음 앎', verb: 'DISCOVER', chips: ['FIND', 'DISCOVER'], target: 'TARGET · a hidden key',
+        result: '책장을 옮기자 — 있는 줄도 몰랐던 열쇠',
+        pic: () => FLOOR + '<rect x="400" y="60" width="250" height="180" fill="var(--card)" stroke="var(--line)"/>' + MINA(300) +
+          '<g class="fade" opacity=".25"><rect x="440" y="80" width="80" height="160" fill="var(--wood)"/></g>' +
+          '<rect x="560" y="80" width="80" height="160" fill="var(--wood)"/><path d="M560 120 h80 M560 160 h80 M560 200 h80" stroke="var(--obj-line)"/>' +
+          step(.15, '<path d="M500 72 H552 m-7 -5 l7 5 l-7 5" fill="none" stroke="var(--muted)" stroke-width="2"/>') +
+          step(.3, '<rect x="452" y="150" width="56" height="36" rx="3" fill="var(--obj-line)" opacity=".7"/>') +
+          step(.45, KEY(470, 168) + tx(480, 136, 18, '?!', 'var(--accent)', ' font-weight="700"')),
+        say: '<span class="en">I discovered a hidden key behind the shelf.</span> 잃어버린 열쇠를 되찾은 게 아니라 <b>있는 줄도 몰랐던 것</b>의 존재를 처음 알았다. 세계 최초가 아니어도 <b>내가 처음</b>이면 discover.' },
+      trackdown: { btn: '단서를 따라감', how: '단서를 이어 끝까지', verb: 'TRACK DOWN', chips: ['FIND', 'TRACK DOWN'], target: 'TARGET · the missing key',
+        result: '친구 → 관리실 → 운동장 벤치 — 끝내 찾아냄',
+        pic: () => FLOOR + P(276, 240, 1.1, 'var(--sleeve)') + P(380, 240, .9, 'var(--fog)') + tx(380, 178, 11, '친구', 'var(--muted)') +
+          '<rect x="452" y="180" width="64" height="60" rx="3" fill="var(--card)" stroke="var(--obj-line)"/>' + tx(484, 214, 11, '관리실', 'var(--muted)') +
+          '<rect x="570" y="214" width="76" height="7" rx="2" fill="var(--wood)"/><path d="M578 221 V240 M638 221 V240" stroke="var(--wood)" stroke-width="4"/>' + tx(608, 198, 11, '운동장 벤치', 'var(--muted)') +
+          step(.15, '<path d="M290 160 Q330 120 370 160" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 4"/>' + tx(330, 126, 12, '①', 'var(--accent)', ' font-weight="700"')) +
+          step(.35, '<path d="M394 160 Q440 110 480 170" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 4"/>' + tx(437, 120, 12, '②', 'var(--accent)', ' font-weight="700"')) +
+          step(.55, '<path d="M500 170 Q545 120 590 184" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 4"/>' + tx(545, 130, 12, '③', 'var(--accent)', ' font-weight="700"')) +
+          step(.7, KEY(596, 208) + tick(620, 168)),
+        say: '<span class="en">I tracked down the missing key.</span> 열쇠가 미술 상자와 함께 옮겨 다녔다. 친구 → 관리실 → 마지막 사용 장소, <b>단서를 차례로 이어</b> 끝내 찾아냈다. 한눈에 보고 찾았다면 그냥 find.' },
+      recover: { btn: '되찾음', how: '잃었던 것을 되찾음', verb: 'RECOVER', chips: ['FIND', 'RECOVER'], target: 'TARGET · the key ← under the cabinet',
+        result: '틈에서 자로 끌어내 — 다시 손에 쥠',
+        pic: () => FLOOR + MINA(300) + '<rect x="440" y="110" width="200" height="116" rx="3" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M540 110 V226" stroke="var(--obj-line)"/>' +
+          '<path d="M448 226 V240 M632 226 V240" stroke="var(--obj-line)" stroke-width="4"/>' + tx(540, 100, 11, '보관장 아래 좁은 틈', 'var(--muted)') +
+          KEY(520, 234, .3) +
+          step(.2, '<rect x="350" y="231" width="170" height="5" rx="1" fill="var(--wood)"/>') +
+          step(.4, '<path d="M430 212 H372 m7 -5 l-7 5 l7 5" fill="none" stroke="var(--accent)" stroke-width="2"/>') +
+          step(.6, KEY(330, 196) + tick(350, 160)),
+        say: '<span class="en">I recovered the key from under the cabinet.</span> 위치는 이미 알았다(find). 손이 닿지 않던 열쇠를 <b>끌어내 다시 손에 쥐었다</b> — 잃었던 것을 되찾음.' },
+    },
+  };
+
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. recover를 먼저 빼 보세요.',
+    cards: [
+      { id: 'find', t: ['몰랐다가', '알아냄'], v: 'find', icon: KEY(-10, 12) + tx(0, -10, 22, '!', 'var(--accent)', ' font-weight="700"'),
+        instead: 'I located my phone! It was in my bag. △', lost: '말은 되지만 보고서처럼 딱딱하다. 일상의 "찾았다!"를 가볍게 말할 낱말이 없다.', why: '몰랐다가 알아냄. 방식은 말하지 않는다.' },
+      { id: 'locate', t: ['정확히', '어느 칸'], v: 'locate', icon: [0, 1].map((i) => [0, 1, 2].map((j) => '<rect x="' + (-33 + j * 23) + '" y="' + (-22 + i * 23) + '" width="20" height="20" rx="2" fill="' + (i === 1 && j === 2 ? 'var(--chip-on)' : 'var(--card)') + '" stroke="' + (i === 1 && j === 2 ? 'var(--ok)' : 'var(--obj-line)') + '" stroke-width="' + (i === 1 && j === 2 ? 2.5 : 1) + '"/>').join('')).join(''),
+        instead: 'We found the key in one of the boxes. △', lost: '기록을 대조해 정확히 B-12라고 짚었다는 그림이 빠진다.', why: '체계적으로 정확한 위치를 확인.' },
+      { id: 'discover', t: ['있는 줄도', '몰랐던 것'], v: 'discover', icon: '<rect x="-24" y="-14" width="48" height="32" rx="3" fill="var(--obj-line)" opacity=".7"/>' + KEY(-10, 2) + tx(22, -20, 15, '?!', 'var(--accent)', ' font-weight="700"'),
+        instead: 'I found a key I had never seen before. △', lost: '말은 되지만 길어진다. 존재 자체를 처음 알았다는 새로움을 한 낱말로 못 그린다.', why: '존재 자체를 처음 알아냄.' },
+      { id: 'trackdown', t: ['단서를', '끝까지'], v: 'track down', icon: '<path d="M-34 14 Q-22 -6 -10 14 M-2 14 Q10 -6 22 14" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="3 3"/>' + [-34, -10, 14].map((x) => '<circle cx="' + x + '" cy="14" r="3" fill="var(--muted)"/>').join('') + KEY(24, 12),
+        instead: 'I found the missing key. △', lost: '찾은 것은 맞지만 여러 사람에게 묻고 경로를 끝까지 쫓았다는 과정이 빠진다.', why: '단서를 이어 끝까지 찾아냄.' },
+      { id: 'recover', t: ['다시', '손에 넣음'], v: 'recover', icon: '<path d="M-36 20 H30" stroke="var(--obj-line)" stroke-width="3"/><path d="M-30 20 V-10 H30 V20" fill="none" stroke="var(--obj-line)"/>' + KEY(-12, 30) + '<path d="M-14 -20 q-26 4 -24 30" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="M-42 4 l4 7 l5 -6" fill="none" stroke="var(--accent)" stroke-width="2"/>',
+        instead: 'I found the key under the cabinet. △', lost: '위치를 알았을 뿐, 꺼내서 다시 손에 넣었다는 그림이 없다 — find는 집어 들었다는 뜻이 아니다.', why: '잃었던 대상을 다시 손에 넣음.' },
+      { id: 'look', out: true, t: ['아직', '찾는 중'], v: 'look for', icon: '<circle cx="-6" cy="-6" r="16" fill="none" stroke="var(--accent2)" stroke-width="3"/><path d="M6 6 L24 24" stroke="var(--accent2)" stroke-width="5" stroke-linecap="round"/>' + tx(-6, 0, 16, '?', 'var(--muted)', ' font-weight="700"'),
+        instead: 'I\'m finding my keys. ✗', lost: 'find는 찾아낸 결과라, 아직 못 찾고 뒤지는 중인 과정을 그리지 못한다.', why: '찾는 과정 — 이웃 LOOK 묶음의 look for.' },
+    ],
+  };
+
+  const SCENES = {
+    home: { btn: '집 (휴대폰)', place: '집 거실 · 나가기 직전',
+      pic: () => FL + P(250, 150, 1.1, SL) + L(250, 72, '나') + P(360, 150, 1.1, FOG) + L(360, 72, '엄마') +
+        '<rect x="470" y="84" width="160" height="30" rx="8" fill="' + CARD + '" stroke="' + OL + '"/><rect x="460" y="110" width="180" height="30" rx="8" fill="' + CARD + '" stroke="' + OL + '"/><path d="M470 140 V150 M630 140 V150" stroke="' + OL + '" stroke-width="3"/>' + L(550, 74, '소파') +
+        T(250, 46, 18, '?', AC, ' font-weight="700"') + ST(.3, '<rect x="590" y="104" width="22" height="10" rx="2" fill="' + OL + '" opacity=".5"/>'),
+      lines: [
+        ['나', 'I can\'t <b>find</b> my phone anywhere!', '휴대폰이 아무 데도 없어!', 1],
+        ['엄마', 'Did you check under the sofa cushions?', '소파 쿠션 밑은 봤어?'],
+      ],
+      say: '찾아봤는데 <b>아직 못 찾은</b> 상태 — <span class="en">can\'t find</span>. 뒤지는 <b>중</b>이면 <span class="en">I\'m looking for my phone.</span>' },
+    airport: { btn: '공항 수하물', place: '공항 · 수하물 분실 창구',
+      pic: () => FL + P(250, 150, 1.1, SL) + L(250, 72, '나') + BX(320, 104, 150, 46) + P(395, 104, 1, OKC) + L(395, 30, '직원') +
+        ST(.2, '<rect x="510" y="30" width="130" height="90" rx="6" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' + T(575, 54, 11, '가방 조회', MU) + T(575, 80, 13, 'Terminal 2', 'var(--text)', ' font-weight="700"') + T(575, 104, 12, '벨트 5번', OKC, ' font-weight="600"')),
+      lines: [
+        ['직원', 'We\'ve <b>located</b> your bag. It\'s at Terminal 2.', '고객님 가방 위치를 찾았습니다. 2터미널에 있어요.', 1],
+        ['나', 'Oh, thank goodness!', '아, 다행이다!'],
+      ],
+      say: '기록을 조회해 <b>정확히 어디</b>인지 짚었다 — <span class="en">locate</span>. 아직 가방이 손에 온 것은 아니다. 안내·업무 말투에 자주 나온다.' },
+    cafe: { btn: '새로 안 카페', place: '회사 근처 · 점심시간',
+      pic: () => FL + P(260, 150, 1.1, SL) + L(260, 72, '나') + P(350, 150, 1.1, FOG) + L(350, 72, '친구') +
+        BX(450, 60, 180, 90) + '<path d="M440 60 L540 30 L640 60 Z" fill="' + A2 + '" opacity=".7"/>' + '<rect x="520" y="104" width="40" height="46" fill="' + BG + '" stroke="' + OL + '"/>' +
+        ST(.2, '<rect x="466" y="74" width="44" height="20" rx="6" fill="' + AC + '"/>' + T(488, 88, 11, 'NEW', '#fff', ' font-weight="700"') + T(600, 90, 12, 'café', MU)),
+      lines: [
+        ['나', 'I <b>discovered</b> a great little café near my office.', '회사 근처에 괜찮은 작은 카페를 알게 됐어.', 1],
+        ['친구', 'Really? Take me there sometime!', '정말? 언제 나도 데려가 줘!'],
+      ],
+      say: '원래 있던 카페지만 <b>내가 처음 알게 된</b> 곳 — <span class="en">discover</span>. 노트: 세계 최초가 아니어도, 내가 처음 알게 된 일에도 쓴다.' },
+    office: { btn: '사무실 (파일)', place: '사무실 · 마감 직전',
+      pic: () => FL + P(250, 150, 1.1, FOG) + L(250, 72, '동료') + P(340, 150, 1.1, SL) + L(340, 72, '나') +
+        [[420, '메일'], [500, '공유 폴더'], [590, '창고']].map(([x, t], i) => ST(.15 + i * .2, BX(x - 26, 100, 52, 40) + L(x, 92, t) + (i < 2 ? AR(x + 30, 120, x + 52 + (i ? 4 : 0), 120, AC, 2, true) : ''))).join('') +
+        ST(.75, '<rect x="578" y="108" width="24" height="26" rx="2" fill="' + A2 + '"/>' + T(590, 60, 16, '✓', OKC, ' font-weight="700"')),
+      lines: [
+        ['동료', 'Did you get the contract file?', '계약서 파일 받았어?'],
+        ['나', 'Yes, I finally <b>tracked</b> it <b>down</b>.', '응, 결국 찾아냈어.', 1],
+      ],
+      say: '메일 → 공유 폴더 → 창고, <b>여러 곳을 차례로 쫓아</b> 끝내 찾아냄 — <span class="en">track down</span>. it이 track과 down <b>사이</b>에 들어가는 것도 보자(5절).' },
+    police: { btn: '경찰서', place: '경찰서 · 도난 신고 일주일 뒤',
+      pic: () => FL + P(250, 150, 1.1, SL) + L(250, 72, '나') + P(350, 150, 1.1, '#3b5b8a') + L(350, 72, '경찰') +
+        ST(.2, '<circle cx="480" cy="132" r="17" fill="none" stroke="' + OL + '" stroke-width="3"/><circle cx="560" cy="132" r="17" fill="none" stroke="' + OL + '" stroke-width="3"/><path d="M480 132 L505 104 L545 104 L560 132 M505 104 L520 132 L545 104 M500 96 h12 M545 104 l-4 -10 h10" fill="none" stroke="' + AC + '" stroke-width="3"/>') +
+        ST(.45, T(600, 90, 18, '✓', OKC, ' font-weight="700"')),
+      lines: [
+        ['경찰', 'We <b>recovered</b> your stolen bike.', '도난당한 자전거를 되찾았습니다.', 1],
+        ['나', 'Really? Where was it?', '정말요? 어디 있었어요?'],
+      ],
+      say: '어디 있는지 안 것에서 끝나지 않고 <b>다시 내 손에 돌아옴</b> — <span class="en">recover</span>. 노트: 잃었거나 <b>빼앗긴</b> 것을 다시 소유하게 됨.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'trackdown',
+    region: { x: 106, y: 66, w: 538, h: 258, label: 'FIND 묶음 · RESULT = 몰랐다가 알아냄', at: [114, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 260, t: 'Q1. 몰랐던 것을 알아냈나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 205, y: 180, w: 180, t: 'Q3. 어떻게 찾았나?', sub: '기록 · 단서' },
+      q4: { x: 520, y: 180, w: 170, t: 'Q4. 무엇을 · 그다음?', sub: '처음 앎 · 손에 넣음' },
+    },
+    leaves: {
+      lose:      { x: 60, y: 262, w: 88, v: 'lose', sub: '잃어버림', seg: 't', say: '<span class="en">I lost my key.</span> 알아낸 게 아니라 반대로 어디 있는지 모르게 됐다 → 이 묶음의 출발점.' },
+      locate:    { x: 160, y: 262, w: 88, v: 'locate', sub: '정확한 칸', seg: 'r', say: '<span class="en">We located the key in box B-12.</span> 기록으로 정확히 짚음.' },
+      trackdown: { x: 257, y: 262, w: 98, v: 'track down', sub: '단서를 이어', seg: 'r', say: '<span class="en">I tracked down the missing key.</span> 여러 단서를 끝까지 쫓음.' },
+      find:      { x: 360, y: 262, w: 92, v: 'find', sub: '방식 말 안 함', seg: 'r', say: '<span class="en">I found the key by the chair.</span> 이 묶음의 기본 동사.' },
+      discover:  { x: 470, y: 262, w: 92, v: 'discover', sub: '처음 앎', seg: 'r', say: '<span class="en">I discovered a hidden key.</span> 존재 자체를 처음 알아냄.' },
+      recover:   { x: 575, y: 262, w: 88, v: 'recover', sub: '다시 손에', seg: 'r', say: '<span class="en">I recovered the key from under the cabinet.</span> 잃었던 것을 다시 손에 넣음.' },
+      look:      { x: 600, y: 36, w: 120, v: 'look for', sub: '→ LOOK 묶음', seg: '', out: true, say: '<span class="en">I\'m looking for my key.</span> 아직 <b>찾는 중</b> — 결과가 없다 → FIND 묶음 밖, <a href="09-look.html">09 LOOK</a>.' },
+    },
+    edges: [
+      ['q1', 'lose', '아니오 · 잃어버림', 'left', [150, 28]], ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'look', '아직 찾는 중', 'right', [508, 28], true],
+      ['q2', 'q3', '방식'], ['q2', 'find', '말하지 않음'], ['q2', 'q4', '대상 · 결과'],
+      ['q3', 'locate', '기록으로 정확히'], ['q3', 'trackdown', '단서를 이어'],
+      ['q4', 'discover', '처음 봄'], ['q4', 'recover', '되찾음'],
+    ],
+    segs: [[16, 104, '못 찾음', 't'], [109, 640, '결과 — 알아냄 (+ 어떻게 · 무엇을)', 'r']],
+  };
+
+  const SLOTS = {
+    first: ['find', 'more'],
+    slots: { obj: '목적어', where: '+ 어디서', more: '자주 쓰는 모양' },
+    verbs: {
+      find: {
+        obj:   { ok: [['I', 's'], ['found', 'v'], ['my keys', 'o']], say: '과거형은 <b>found</b>(불규칙).' },
+        where: { ok: [['I', 's'], ['found', 'v'], ['the key', 'o'], ['by the chair', 'r']], say: '노트 문장. 있던 자리를 붙인다.' },
+        more:  { ok: [["I'm", 's'], ['looking for', 'v'], ['my keys', 'o']], bad: [["I'm", 's'], ['finding', 'v'], ['my keys', 'o']], say: '"찾는 중"은 <b>look for</b>. find는 찾아낸 <b>결과</b>라 "찾고 있어"가 되지 않는다.' },
+      },
+      locate: {
+        obj:   { ok: [['We', 's'], ['located', 'v'], ['the key', 'o']], say: '정확한 위치를 확인했다.' },
+        where: { ok: [['We', 's'], ['located', 'v'], ['the key', 'o'], ['in box B-12', 'r']], say: '노트 문장. 칸·좌표처럼 <b>정확한 자리</b>가 잘 어울린다.' },
+        more:  { ok: [['The hotel', 's'], ['is located', 'v'], ['near the station', 'r']], say: '<b>be located</b> = ~에 위치해 있다. 안내문에서 자주.' },
+      },
+      discover: {
+        obj:   { ok: [['Mina', 's'], ['discovered', 'v'], ['a hidden key', 'o']], say: '노트 Example.' },
+        where: { ok: [['I', 's'], ['discovered', 'v'], ['a hidden key', 'o'], ['behind the shelf', 'r']], say: '노트 문장.' },
+        more:  { ok: [['I', 's'], ['discovered', 'v'], ['that the door was open', 'x']], say: '물건 대신 <b>사실</b>을 처음 알게 됐을 때 — that + 문장.' },
+      },
+      trackdown: {
+        obj:   { ok: [['I', 's'], ['tracked down', 'v'], ['the missing key', 'o']], say: '노트 문장. 구동사라 down에 강세.' },
+        where: { ok: [['Mina', 's'], ['tracked down', 'v'], ['the key', 'o'], ['across the school', 'r']], say: '여러 곳을 거쳤다는 말이 잘 붙는다.' },
+        more:  { ok: [['I', 's'], ['tracked', 'v'], ['it', 'o'], ['down', 'r']], bad: [['I', 's'], ['tracked down', 'v'], ['it', 'o']], say: '목적어가 <b>it · him</b> 같은 대명사면 track과 down <b>사이</b>에 넣는다.' },
+      },
+      recover: {
+        obj:   { ok: [['Mina', 's'], ['recovered', 'v'], ['the key', 'o']], say: '다시 손에 넣었다.' },
+        where: { ok: [['I', 's'], ['recovered', 'v'], ['the key', 'o'], ['from under the cabinet', 'r']], say: '노트 문장. 꺼내 온 곳은 <b>from</b>.' },
+        more:  { ok: [['He', 's'], ['recovered', 'v'], ['from a cold', 'r']], say: '목적어 없이 from + 병이면 <b>회복하다</b> — 잃었던 건강을 되찾는 그림.' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>
