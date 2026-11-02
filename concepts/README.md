@@ -165,15 +165,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 41 | [41-buy.html](41-buy.html) | BUY 묶음 — buy · order · preorder · buy back(네 동사). "buy · order · pay · get" | HOW 버튼 → 박물관 표(매표소·온라인 주문·출간 전 예약·옛 자전거 되삼) / 질문 흐름 + SELL로 가는 문 | |
 | 42 | [42-sell.html](42-sell.html) | SELL 묶음 — sell · resell · retail · wholesale(네 동사). "같은 거래, 누가 주어인가" | HOW 버튼 → 자전거(진 → 미나·되팔기·동네 가게·공장 트럭) / 질문 흐름 + BUY로 가는 문 | |
 | 43 | [43-send.html](43-send.html) | SEND 묶음 — send · mail · email · text · forward. "보냈다고 받은 건 아니다" | HOW 버튼 → 미나 → 진(메시지·우체통·첨부 메일·버스 정류장 문자·받은 걸 다시) / 질문 흐름 + BRING으로 가는 문 | |
+| 44 | [44-eat.html](44-eat.html) | EAT 묶음 — eat · bite · chew · nibble · devour. "어디까지 가나" | HOW 버튼 → 사과와 입 크게 보기(속까지·한 입·씹고 또·조금씩·샌드위치 순식간에) / 질문 흐름 + DRINK로 가는 문 | |
+| 45 | [45-write.html](45-write.html) | WRITE 묶음 — write · jot down · draft · type · compose. "write와 짝이 되는 말" | HOW 버튼 → 종이·화면 크게 보기(쪽지·p. 42·초안 빨간 표시·키보드·카드 ①②③) / 질문 흐름 + SAY로 가는 문 | |
+| 46 | [46-read.html](46-read.html) | READ 묶음 — read · skim · scan · reread · read aloud. "skim과 scan" | HOW 버튼 → 고래 기사(줄마다·제목만 지그재그·돋보기로 날짜·같은 문단 다시·소리 내어) / 질문 흐름 + LOOK AT으로 가는 문 | |
 
-01~43 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~43)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~43와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~46 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~46)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~46와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- 나머지 묶음(39개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: eat · write · read
+- 나머지 묶음(36개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: meet · learn · play
 
 ## 생성기로 만들기 (08부터)
 
