@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OPEN 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/38-open.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+  /* 표 칸이 많아 휴대폰 폭에서 칸 여백을 줄인다 */
+  @media (max-width: 600px) { th, td { padding: 6px 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="37-show.html">SHOW 묶음</a> · 다음: <a href="39-close.html">CLOSE 묶음</a> · 반대쪽: <a href="39-close.html">CLOSE 묶음 (드나듦을 막음)</a> · 견줘 보기: <a href="37-show.html">SHOW 묶음 (reveal — 가림을 걷어 보임)</a></p>
+  <h1>OPEN 묶음 — 같은 상자, 다른 장벽</h1>
+  <p class="lead">닫힌 상자 하나. 안에 <b>닿을 수 있게</b> 만든다는 결과는 같고, <b>무엇이 가로막는지</b> — 그냥 닫혀 있나, 자물쇠가 걸렸나, 천이 덮었나, 포장지가 감쌌나, 접혀 있나 — 에 따라 open · unlock · uncover · unwrap · unfold로 갈린다. 다만 un- 동사들은 <b>뚜껑까지 열렸다는 보장이 없다</b>(3절).</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="open" title="open 소리로 듣기"><span class="en">open</span><span class="ipa">/ˈoʊ.pən/</span><span class="ko">[<b>오우</b>픈]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="unlock" title="unlock 소리로 듣기"><span class="en">unlock</span><span class="ipa">/ʌnˈlɑːk/</span><span class="ko">[언<b>락</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="uncover" title="uncover 소리로 듣기"><span class="en">uncover</span><span class="ipa">/ʌnˈkʌv.ɚ/</span><span class="ko">[언<b>커</b>버]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="unwrap" title="unwrap 소리로 듣기"><span class="en">unwrap</span><span class="ipa">/ʌnˈræp/</span><span class="ko">[언<b>랩</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="unfold" title="unfold 소리로 듣기"><span class="en">unfold</span><span class="ipa">/ʌnˈfoʊld/</span><span class="ko">[언<b>포울드</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">장벽의 종류에 따라 상자와 미나의 모습이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 미나와 나무 상자다. open은 뚜껑이 올라가 안의 색연필에 손이 닿음, unlock은 열쇠로 자물쇠만 풀리고 뚜껑은 닫힌 채, uncover는 상자에 씌운 천을 들어 올려 상자가 드러남, unwrap은 상자를 감싼 포장지를 벗겨 바닥에 조각이 떨어짐, unfold는 탁자 위 접힌 지도를 펼쳐 길 전체가 보이는 장면이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">OPEN · 안에 닿게 됨</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">무엇이 막았나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 크기는 그림용이다. 상자 장면은 <a href="../open/_family.md">open/_family.md</a>의 비교표 TARGET(the box · unfold만 the map)과 각 노트의 Scene Scenario(교실 미술 재료대 · 과학실 보관장 · 소품실 · 생일 선물 탁자 · 야외 쉼터 탁자)를 옮겼다. <b>OPEN 칩은 open 장면에서만 켜진다</b> — 노트의 "분류 경계"가 unlock · uncover · unwrap · unfold는 open the box 전체를 함축하지 않는다고 하기 때문이다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"열다" 하나로 다 될 것 같다. 그런데 <b>자물쇠만 풀고 문은 아직</b>, <b>상자 위에 씌운 천을 걷기만</b>, <b>포장지를 벗겼지만 뚜껑은 그대로</b>, <b>접힌 지도를 펼침</b>은 한국어로도 "열다"가 어색하거나 다른 그림이 된다. 반대로 <b>막는</b> 쪽은? 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>OPEN 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "안에 닿게 됨"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>막힘 · 덮임 · 접힘 같은 장벽을 바꾸어 TARGET의 내부 · 내용 · 기능에 접근할 수 있게 함</b> = <span class="en">OPEN</span>이다. 여기에 잠금 · 덮개 · 포장 · 접힘이라는 <b>장벽의 종류</b>가 붙는다. 노트의 식을 그대로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">OPEN</span><span class="op">+</span><span>장벽 제거 방식 미지정</span><span class="op">=</span><span class="v">OPEN</span>
+    <span class="r">OPEN</span><span class="op">+</span><span>잠금 해제</span><span class="op">=</span><span class="v">UNLOCK</span>
+    <span class="r">OPEN</span><span class="op">+</span><span>덮개 제거</span><span class="op">=</span><span class="v">UNCOVER</span>
+    <span class="r">OPEN</span><span class="op">+</span><span>포장 제거</span><span class="op">=</span><span class="v">UNWRAP</span>
+    <span class="r">OPEN</span><span class="op">+</span><span>접힌 부분을 펼침</span><span class="op">=</span><span class="v">UNFOLD</span>
+  </div>
+  <p>노트가 짚은 점: 이 식은 <b>학습용 비교</b>다. <span class="en">unlock the box</span>는 잠금만 풀고 뚜껑은 닫힌 채일 수 있고, <span class="en">uncover · unwrap the box</span>는 상자의 바깥을 드러낼 뿐 내부 접근까지 보장하지 않는다. 다섯 동사 모두 규칙 변화 — <span class="en">unwrap → unwrapped</span>만 p를 겹친다.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>엶</b> → 색연필이 닫힌 상자 안에 있다. 미나가 뚜껑을 들어 올려 <b>안에 손을 넣는다</b>. 장벽의 종류는 말하지 않는다. <span class="en">She opened the box.</span></li>
+    <li><b>잠금 풂</b> → 뚜껑이 자물쇠로 고정돼 있다. 열쇠를 돌려 걸쇠를 푼다. <b>뚜껑은 아직 닫혀 있다</b> — 이제 열 수 있을 뿐. <span class="en">She unlocked the box with a key.</span></li>
+    <li><b>덮개 치움</b> → 상자 위에 먼지 방지 천이 씌워져 있다. 천을 들어 옆으로 치우니 <b>상자가 드러난다</b>. 상자 자체의 뚜껑은 건드리지 않았다. <span class="en">She uncovered the box.</span></li>
+    <li><b>포장 벗김</b> → 선물 상자가 포장지와 리본에 둘러싸여 있다. 리본을 풀고 <b>여러 면에서 포장지를 벗긴다</b>. 상자 뚜껑은 따로다. <span class="en">She unwrapped the box.</span></li>
+    <li><b>펼침</b> → 종이 지도가 작게 접혀 있어 전체 길이 안 보인다. 접힌 면을 바깥으로 펴서 <b>길 전체를 본다</b>. 이 장면만 TARGET이 지도. <span class="en">She unfolded the map.</span></li>
+    <li>OPEN 칩은 첫 장면에서만 켜진다. 나머지 장면에서 OPEN을 누르면 그림은 그대로 두고 왜 open이 다 맞지는 않는지 설명이 붙는다.</li>
+  </ul>
+
+  <h2>3. 풀었다고 열린 건 아니다 — 어디까지 됐나</h2>
+  <p>한국어는 "자물쇠를 열다 · 선물을 열다 · 지도를 펴다"처럼 넘나들지만, 노트의 "분류 경계"는 이 동사들이 <span class="en">open the box</span> 전체를 함축하지 않는다고 못 박는다. 동사 하나가 <b>어디까지</b> 말해 주는지 표로 보자.</p>
+  <table>
+    <tr><th>동사</th><th>없앤 장벽</th><th>그 뒤 상태</th><th>안에 손이 닿나</th></tr>
+    <tr><td><b>open</b></td><td>— (말 안 함)</td><td>문 · 뚜껑이 열림</td><td>예</td></tr>
+    <tr><td><b>unlock</b></td><td>잠금장치</td><td>열 수 있게 됨, 문은 닫힘</td><td>아직 — 이제 open</td></tr>
+    <tr><td><b>uncover</b></td><td>위에 씌운 덮개</td><td>대상 바깥이 보임</td><td>보장 안 함</td></tr>
+    <tr><td><b>unwrap</b></td><td>감싼 포장재</td><td>안의 상자가 드러남</td><td>뚜껑은 따로</td></tr>
+    <tr><td><b>unfold</b></td><td>접힘</td><td>넓게 펼쳐져 가려진 면이 보임</td><td>— (안이 없는 대상)</td></tr>
+  </table>
+  <p>그래서 둘 다 했으면 둘 다 말한다: <span class="en">I unlocked the front door and opened it.</span> · <span class="en">I unwrapped the gift and opened the box.</span> 노트의 unlock 선택 기준: "잠금만 풀고 문은 그대로 두었다면 unlock이 정확하다."</p>
+  <p class="note">un-은 여기서 "되돌림"이다 — lock ↔ unlock, cover ↔ uncover, wrap ↔ unwrap, fold ↔ unfold. 반대쪽 짝은 <a href="39-close.html">39 CLOSE</a> 3절.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>OPEN 묶음</b>이다. 반대로 열린 것을 <b>막으면</b> 테두리 밖 문으로 CLOSE 묶음에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 OPEN 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 막힌 것이 풀리나에서 반대로 막으면 묶음 밖 문 close, 예면 Q2 무엇이 막았나로 간다. 말하지 않으면 open, 대상 자체면 Q3에서 unlock과 unfold, 바깥 층이면 Q4에서 uncover와 unwrap으로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 무엇이 막았나</th><th>② 장벽은 어디에</th><th>③ 내부까지?</th></tr>
+    <tr><td><b>open</b></td><td>— (말 안 함)</td><td>대상의 문 · 뚜껑</td><td>예</td></tr>
+    <tr><td><b>unlock</b></td><td>잠금장치</td><td>대상에 달린 장치</td><td>아니오 — 열 수 있게까지</td></tr>
+    <tr><td><b>unfold</b></td><td>접힘</td><td>대상 자체의 모양</td><td>— 가려진 면</td></tr>
+    <tr><td><b>uncover</b></td><td>덮개 · 천 · 층</td><td>대상 위 (따로)</td><td>보장 안 함</td></tr>
+    <tr><td><b>unwrap</b></td><td>종이 · 비닐 포장</td><td>대상 둘레 (따로)</td><td>보장 안 함</td></tr>
+  </table>
+  <p class="note">칸 내용은 각 노트의 Target Condition · 선택 기준과 묶음의 "분류 경계"를 옮겼다. 흐름 그림의 질문 순서와 "대상 자체 · 바깥 층" 나눔은 그림을 위해 정했다.</p>
+
+  <h2>5. 실제 문장으로 — 노트 예문, 한 번 더, 다른 모양</h2>
+  <p>다섯 동사 모두 <b>여는 대상</b>을 바로 목적어로 받는다. 노트의 "내가 할 말"과 "한 번 더 떠올리기"를 낱말 상자로 나눠 보고, 노트 밖의 자주 쓰는 모양을 하나씩 붙였다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">고른 동사와 문장 종류에 따라 낱말 상자가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄이 있으면 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">문장</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>노트 예문</th><th>한 번 더 (노트)</th><th>다른 모양</th></tr>
+    <tr><td><b>open</b></td><td><span class="en">I opened the cupboard.</span></td><td><span class="en">I opened my bag.</span></td><td><span class="en">The store opens at ten.</span> — 목적어 없이</td></tr>
+    <tr><td><b>unlock</b></td><td><span class="en">I unlocked the front door.</span></td><td><span class="en">I unlocked the drawer.</span></td><td><span class="en">I unlocked my phone.</span> — 화면 잠금</td></tr>
+    <tr><td><b>uncover</b></td><td><span class="en">I uncovered the sofa.</span></td><td><span class="en">I uncovered the bike.</span></td><td><span class="en">They uncovered the truth.</span> — 밝혀내다</td></tr>
+    <tr><td><b>unwrap</b></td><td><span class="en">I unwrapped the gift.</span></td><td><span class="en">I unwrapped the sandwich.</span></td><td><span class="en">Don't unwrap it yet!</span></td></tr>
+    <tr><td><b>unfold</b></td><td><span class="en">I unfolded the map.</span></td><td><span class="en">I unfolded the camping chair.</span></td><td><span class="en">The story unfolded slowly.</span> — 펼쳐지다</td></tr>
+  </table>
+  <p class="note">경향 한 줄: open만 목적어 없이 "가게가 문을 연다"로 흔히 쓰고, un- 동사들은 대개 <b>무엇을</b> 풀었는지 목적어가 붙는다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>OPEN</b> — 필통 뚜껑을 <b>올리고</b> 안에 손가락을 넣는다.</li>
+    <li><b>UNLOCK</b> — 허공의 열쇠구멍에 열쇠를 꽂고 <b>딸깍 돌린다</b>. 문은 아직 밀지 않는다.</li>
+    <li><b>UNCOVER</b> — 책 위에 올려 둔 손수건을 <b>집어 들어</b> 옆으로 치운다.</li>
+    <li><b>UNWRAP</b> — 사탕 껍질을 <b>양쪽으로 비틀어</b> 벗긴다.</li>
+    <li><b>UNFOLD</b> — 반으로 두 번 접은 종이를 <b>한 칸씩 편다</b>.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>맨 위 그림에서 OPEN 칩을 open 장면에만 켠 것은 묶음의 "분류 경계"를 따른 판단이다. 일상에서는 <span class="en">open the gift · open a map</span>도 흔히 쓰므로, unwrap · unfold 장면에 OPEN을 켤지 다시 정할 것.</li>
+      <li>3절 표의 "그 뒤 상태 · 안에 손이 닿나" 칸과 <span class="en">I unwrapped the gift and opened the box.</span>는 노트를 바탕으로 정리한 것이고, 표 모양과 문장 자체는 노트에 없다.</li>
+      <li>5절 "다른 모양" 칸(The store opens at ten · unlocked my phone · uncovered the truth · Don't unwrap it yet · The story unfolded)과 경향 한 줄, ✗ 판정(<span class="en">is unlock</span> · <span class="en">unwrap it open</span>)은 노트에 없다. 0절 "대신 말하면"의 △·✗ 판정도 짐작이다.</li>
+      <li>4절 표의 칸 나눔과 흐름 그림의 "대상 자체 · 바깥 층" 갈래는 그림을 위해 정한 것이다.</li>
+      <li>노트끼리 장면이 다르다: 묶음의 상황 장면과 각 노트의 "언제 꺼낼까"는 찬장 · 현관문 · 소파 · 생일 선물 · 지도인데, Scene Scenario는 교실 미술 재료대 · 과학실 보관장 · 소품실 · 생일 탁자 · 야외 쉼터다. Scenario contrast는 "찬장의 내용"으로 시작해 지도로 끝나 TARGET이 하나로 모이지 않는다. 비교표의 unfold만 the map이다.</li>
+      <li>open · unlock · uncover · unwrap · unfold 노트 모두 Precondition 줄이 없다(pay 묶음 노트에는 있다).</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../open/_family.md">open/_family.md</a> — "장벽의 종류가 HOW를 선택한다"</li>
+    <li>동사 노트: <a href="../open/open--make-accessible.md">open</a> · <a href="../open/unlock--release-lock.md">unlock</a> · <a href="../open/uncover--remove-cover.md">uncover</a> · <a href="../open/unwrap--remove-wrapping.md">unwrap</a> · <a href="../open/unfold--spread-folds.md">unfold</a></li>
+    <li>묶음 밖 이웃: <a href="39-close.html">39 CLOSE</a>(<a href="../close/_family.md">close/_family.md</a>) — 열린 것을 막음. lock ↔ unlock, cover ↔ uncover가 짝이다.</li>
+    <li>견줘 보기: <a href="37-show.html">37 SHOW</a>의 reveal — 천을 걷는 그림이 uncover와 같지만, reveal은 <b>남이 처음 보게</b> 되는 쪽에 초점이 있다.</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — open은 <b>안에 닿게 된 상태</b> 하나를 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 미나 x = 330, 상자 x 394~536 (그림용) ──
+  const BOXB = '<rect x="400" y="182" width="130" height="58" rx="3" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="1.5"/>';
+  const LIDC = '<rect x="394" y="170" width="142" height="13" rx="3" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="1.5"/>';
+  const LIDO = '<g transform="rotate(55 536 176)">' + LIDC + '</g>';
+  const PENCILS = [415, 432, 449, 466, 483].map((x, i) => '<path d="M' + x + ' 196 L' + (x + 2) + ' 152" stroke="' + ['var(--accent)', 'var(--ok)', 'var(--link)', 'var(--accent2)', 'var(--sleeve)'][i] + '" stroke-width="6" stroke-linecap="round"/>').join('');
+  const HASP = '<rect x="459" y="176" width="12" height="22" rx="2" fill="var(--card)" stroke="var(--obj-line)"/>';
+  // 풀린 자물쇠: 고리가 위로 빠져 한쪽만 걸림
+  const PADO = (x, y) => '<path d="M' + (x + 5) + ' ' + (y - 4) + ' v-14 a5 5 0 0 0 -10 0 v4" fill="none" stroke="var(--accent2)" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="var(--accent2)"/>';
+  const KEYI = (x, y) => '<circle cx="' + x + '" cy="' + y + '" r="5" fill="none" stroke="var(--gold)" stroke-width="2.5"/><path d="M' + (x + 5) + ' ' + y + ' h10 m-3 0 v4 m-3 -4 v3" stroke="var(--gold)" stroke-width="2.5" fill="none"/>';
+  const ARM = (x1, y1, x2, y2) => '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + '" stroke="var(--sleeve)" stroke-width="9" stroke-linecap="round"/><circle cx="' + x2 + '" cy="' + y2 + '" r="7" fill="var(--skin)" stroke="var(--obj-line)"/>';
+  const NAME = (x, t) => tx(x, 150, 12, t, 'var(--muted)');
+  const MINA = P(330, 240, 1.3, 'var(--sleeve)') + NAME(330, '미나');
+  const OK2 = (a, b) => tx(610, 150, 12, a, 'var(--ok)', ' font-weight="600"') + (b ? tx(610, 168, 11, b, 'var(--muted)') : '');
+  const TOP = {
+    first: 'unlock', keep: 'OPEN',
+    keepSay: '<b>OPEN</b>은 이 장면을 다 말하지 못한다 — 노트의 "분류 경계": 잠금만 풀거나, 바깥 덮개·포장만 벗기거나, 접힌 면만 편 것은 <span class="en">open the box</span> 전체가 아니다. 그래서 이 장면에서는 OPEN 칩이 꺼져 있다.',
+    chips: ['OPEN', 'UNLOCK', 'UNCOVER', 'UNWRAP', 'UNFOLD'], out: [['CLOSE (드나듦을 막음)', '39-close.html']],
+    hows: {
+      open: { btn: '엶', how: '방식 미지정', verb: 'OPEN', chips: ['OPEN'], target: 'TARGET · the box',
+        result: '뚜껑이 올라가 — 안의 색연필에 손이 닿음',
+        pic: () => FLOOR + MINA + '<g class="fade" opacity=".2">' + LIDC + '</g>' + step(.2, LIDO + PENCILS) + BOXB +
+          step(.45, ARM(342, 200, 432, 166) + OK2('안에 손이 닿음')),
+        say: '<span class="en">She opened the box.</span> 뚜껑을 들어 올려 <b>안의 색연필에 손이 닿는다</b>. 무엇이 막고 있었는지는 말하지 않는다 — 장벽보다 접근 가능해진 결과가 중요하다.' },
+      unlock: { btn: '잠금 풂', how: '잠금장치를 풂', verb: 'UNLOCK', chips: ['UNLOCK'], target: 'TARGET · the box',
+        result: '자물쇠만 풀림 — 뚜껑은 아직 닫힌 채',
+        pic: () => FLOOR + MINA + BOXB + LIDC + HASP + '<g class="fade" opacity=".15">' + LOCK(465, 210) + '</g>' +
+          step(.2, ARM(342, 200, 436, 214) + KEYI(444, 214)) +
+          step(.45, PADO(465, 214) + tx(610, 130, 12, '딸깍 — 잠금 풀림', 'var(--accent)', ' font-weight="600"') + tx(610, 150, 11, '뚜껑은 아직 닫힘', 'var(--muted)')),
+        say: '<span class="en">She unlocked the box with a key.</span> 열쇠를 돌려 걸쇠를 풀었다. <b>뚜껑은 아직 닫혀 있다</b> — 이제 열 수 있는 상태일 뿐. 실제로 열면 그때 open.' },
+      uncover: { btn: '덮개 치움', how: '위 덮개를 치움', verb: 'UNCOVER', chips: ['UNCOVER'], target: 'TARGET · the box',
+        result: '씌운 천을 걷어 — 상자가 드러남',
+        pic: () => FLOOR + MINA + BOXB + LIDC +
+          '<g class="fade" opacity=".2"><path d="M388 164 Q465 150 542 164 L548 240 H382 z" fill="var(--accent2)" stroke="var(--obj-line)"/></g>' +
+          step(.2, '<path d="M388 116 q40 -14 90 -4 q40 8 70 -6 l-8 30 q-40 12 -76 2 q-40 -10 -76 4 z" fill="var(--accent2)" stroke="var(--obj-line)"/>' + ARM(342, 200, 392, 126)) +
+          step(.45, OK2('상자가 드러남', '뚜껑은 그대로')),
+        say: '<span class="en">She uncovered the box.</span> 상자 <b>위에 씌운 먼지 방지 천</b>을 들어 치웠다. 상자 자체의 뚜껑을 연 것이 아니다 — 대상 위의 별도 덮개를 없애면 uncover.' },
+      unwrap: { btn: '포장 벗김', how: '감싼 포장을 벗김', verb: 'UNWRAP', chips: ['UNWRAP'], target: 'TARGET · the box',
+        result: '포장지를 벗겨 — 선물 상자가 드러남',
+        pic: () => FLOOR + MINA + BOXB + LIDC +
+          '<g class="fade" opacity=".2"><rect x="392" y="166" width="146" height="74" rx="3" fill="var(--accent)" stroke="var(--obj-line)"/><path d="M465 166 V240 M392 203 H538" stroke="var(--gold)" stroke-width="6"/></g>' +
+          step(.2, ARM(342, 200, 410, 196) + '<path d="M414 186 l26 -8 l6 22 l-24 10 z" fill="var(--accent)" stroke="var(--obj-line)"/>') +
+          step(.45, '<path d="M560 238 l14 -14 l12 10 l-6 6 z M592 238 l8 -16 l16 6 l-4 10 z M626 238 q6 -14 18 -8 q-4 6 -2 8 z" fill="var(--accent)" stroke="var(--obj-line)"/>' +
+            '<path d="M548 236 q10 -16 20 -4 q8 10 18 -2" fill="none" stroke="var(--gold)" stroke-width="3"/>' + OK2('포장지를 벗김', '뚜껑은 그대로')),
+        say: '<span class="en">She unwrapped the box.</span> 리본을 풀고 <b>둘러싼 포장지를 여러 면에서</b> 벗겼다. 선물 상자가 드러났지만 뚜껑은 아직 닫혀 있을 수 있다.' },
+      unfold: { btn: '펼침', how: '접힌 면을 폄', verb: 'UNFOLD', chips: ['UNFOLD'], target: 'TARGET · the map',
+        result: '접힌 지도를 펼쳐 — 길 전체가 보임',
+        pic: () => FLOOR + table(400, 200, 210) + MINA +
+          '<g class="fade" opacity=".25"><rect x="566" y="182" width="34" height="18" rx="2" fill="var(--card)" stroke="var(--obj-line)"/><path d="M566 188 h34 M566 194 h34" stroke="var(--obj-line)"/></g>' +
+          step(.2, '<rect x="410" y="104" width="150" height="86" rx="2" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' +
+            '<path d="M460 104 V190 M510 104 V190 M410 147 H560" stroke="var(--line)" stroke-dasharray="4 3"/>' +
+            '<ellipse cx="528" cy="124" rx="16" ry="10" fill="var(--water)"/>' +
+            '<path d="M424 178 Q470 150 490 132 T548 168" fill="none" stroke="var(--accent)" stroke-width="3" stroke-dasharray="5 3"/>') +
+          step(.45, ARM(342, 200, 410, 150) + tx(615, 96, 12, '길 전체가 보임', 'var(--ok)', ' font-weight="600"')),
+        say: '<span class="en">She unfolded the map.</span> 치울 덮개가 있는 게 아니라 <b>지도 자체의 접힌 면</b>을 바깥으로 폈다. 가려졌던 길이 한눈에 보인다. 상자를 연 사건과는 다르다.' },
+    },
+  };
+
+  // 0절 아이콘 ((0, 0) 중심)
+  const MBOX = (lid) => '<rect x="-26" y="-6" width="52" height="30" rx="2" fill="var(--wood)" stroke="var(--obj-line)"/>' + (lid || '<rect x="-29" y="-13" width="58" height="8" rx="2" fill="var(--wood)" stroke="var(--obj-line)"/>');
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. unlock을 먼저 빼 보세요.',
+    cards: [
+      { id: 'open', t: ['안에', '손이 닿게'], v: 'open',
+        icon: MBOX('<rect x="-29" y="-13" width="58" height="8" rx="2" fill="var(--wood)" stroke="var(--obj-line)" transform="rotate(30 29 -9)"/>') + '<path d="M-14 -2 v-16 M-4 -2 v-18 M6 -2 v-16" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>',
+        instead: 'I unlocked the cupboard. △', lost: '잠금만 풀었다는 말이 되어, 문을 열어 안의 접시에 손이 닿은 그림이 빠진다.', why: '장벽의 종류를 말하지 않고 안에 닿게 함.' },
+      { id: 'unlock', t: ['잠금만', '풂'], v: 'unlock', icon: MBOX() + PADO(0, 14),
+        instead: 'I opened the front door. △', lost: '문이 실제로 열렸다는 말이 된다. 잠금만 풀고 문은 아직 닫힌 단계가 빠진다.', why: '잠금장치를 해제 — 열 수 있게까지.' },
+      { id: 'uncover', t: ['씌운 천을', '걷음'], v: 'uncover', icon: MBOX() + '<path d="M-32 -22 q16 -10 32 -2 q16 8 32 -4 l-4 10 q-16 6 -28 0 q-16 -6 -32 4 z" fill="var(--accent2)" stroke="var(--obj-line)"/>',
+        instead: 'I opened the sofa. ✗', lost: '소파에는 열 문이 없다. 위에 씌운 천을 치운 그림을 말할 낱말이 빈다.', why: '대상 위의 별도 덮개를 치움.' },
+      { id: 'unwrap', t: ['포장지를', '벗김'], v: 'unwrap', icon: MBOX() + '<path d="M14 -6 l18 -10 l6 16 l-16 12 z" fill="var(--accent)" stroke="var(--obj-line)"/>',
+        instead: 'I opened the gift. △', lost: '포장만 벗겼는지 상자 뚜껑까지 열었는지 흐려진다.', why: '둘러싼 포장재를 벗김.' },
+      { id: 'unfold', t: ['접힌 면을', '펼침'], v: 'unfold', icon: '<rect x="-34" y="-22" width="68" height="44" rx="2" fill="var(--card)" stroke="var(--obj-line)"/><path d="M-11 -22 V22 M11 -22 V22" stroke="var(--line)" stroke-dasharray="3 3"/><path d="M-28 14 Q-6 -4 6 -10 T28 6" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="4 3"/>',
+        instead: 'I opened the map. △', lost: '뜻은 통하지만, 겹친 면을 하나씩 펴서 넓어지는 그림이 약하다.', why: '접힌 부분을 펴서 가려진 면을 드러냄.' },
+      { id: 'close', out: true, t: ['반대로', '막음'], v: 'close', icon: MBOX() + AR(0, -36, 0, -18, 'var(--accent2)', 2),
+        instead: 'I unopened the box. ✗', lost: '여는 말에 un-을 붙여도 닫는 말이 되지 않는다. 막는 쪽은 낱말이 따로 있다.', why: '열린 것을 막음 — 반대쪽 CLOSE 묶음(39).' },
+    ],
+  };
+
+  const SCENES = {
+    bakery: { btn: '빵집', place: '동네 빵집 · 문 앞',
+      pic: () => FL + '<rect x="380" y="40" width="200" height="110" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/><rect x="455" y="84" width="50" height="66" fill="' + BG + '" stroke="' + OL + '"/>' +
+        P(300, 150, 1.1, SL) + P(620, 150, 1.1, FOG) +
+        ST(.2, '<rect x="440" y="52" width="80" height="24" rx="4" fill="' + OKC + '"/>' + T(480, 69, 13, 'OPEN 8:00', '#fff', ' font-weight="700"')),
+      lines: [
+        ['나', 'What time do you <b>open</b> tomorrow?', '내일 몇 시에 문 열어요?', 1],
+        ['직원', 'We <b>open</b> at eight.', '8시에 열어요.'],
+      ],
+      say: '가게가 문을 열어 <b>손님이 들어올 수 있게</b> 됨 — 목적어 없는 <span class="en">open</span>. 안에 닿게 되는 결과는 상자와 같다.' },
+    door: { btn: '현관', place: '집 현관 · 늦은 밤',
+      pic: () => FL + '<rect x="430" y="30" width="80" height="120" rx="2" fill="var(--wood, #c49a6c)" stroke="' + OL + '" stroke-width="1.5"/><circle cx="496" cy="96" r="5" fill="' + OL + '"/>' +
+        P(370, 150, 1.1, FOG) + P(620, 150, 1.1, SL) +
+        ST(.2, '<path d="M386 112 L484 102" stroke="' + SL + '" stroke-width="6" stroke-linecap="round"/><circle cx="488" cy="102" r="4" fill="none" stroke="var(--gold, #c9a227)" stroke-width="2"/>' + Q(560, 70, '?')),
+      lines: [
+        ['룸메이트', "I can't <b>unlock</b> the door. Is this the right key?", '문이 안 열려. 이 열쇠 맞아?'],
+        ['나', 'No, try the silver one.', '아니, 은색 걸로 해 봐.', 1],
+      ],
+      say: '한국어는 "문이 안 열려"지만 막힌 건 <b>자물쇠</b>다 — <span class="en">unlock</span>. 풀고 나서 손잡이를 돌려 밀면 그때 open.' },
+    party: { btn: '생일 파티', place: '생일 파티 · 선물 탁자',
+      pic: () => FL + TB(380, 560, 110) + '<rect x="440" y="74" width="60" height="36" rx="2" fill="' + AC + '" stroke="' + OL + '"/><path d="M470 74 V110 M440 92 H500" stroke="var(--gold, #c9a227)" stroke-width="4"/>' +
+        P(300, 150, 1.1, SL) + P(620, 150, 1.1, OKC) +
+        ST(.25, '<path d="M512 64 l12 -10 l8 10 l-10 6 z M528 80 l14 -4 l2 10 l-12 2 z" fill="' + AC + '" stroke="' + OL + '"/>'),
+      lines: [
+        ['친구', 'Go ahead, <b>unwrap</b> it!', '어서 풀어 봐!'],
+        ['나', 'Wow, what is it?', '우와, 뭐야?', 1],
+      ],
+      say: '"선물을 풀다 · 뜯다" — <b>감싼 포장지를 벗기는</b> 그림이 <span class="en">unwrap</span>. 상자를 여는 건 그다음 일이다.' },
+    newhome: { btn: '이삿집', place: '이사 온 집 · 거실',
+      pic: () => FL + '<path d="M410 150 v-36 q0 -14 14 -14 h122 q14 0 14 14 v36 z" fill="' + FOG + '" stroke="' + OL + '"/>' +
+        P(300, 150, 1.1, OKC) + P(630, 150, 1.1, SL) +
+        '<g class="fade" opacity=".2"><path d="M404 98 H566 V150 H404 z" fill="' + A2 + '"/></g>' +
+        ST(.2, '<path d="M330 60 q40 -14 80 -2 q30 8 50 -4 l-6 24 q-30 10 -60 0 q-34 -10 -64 6 z" fill="' + A2 + '" stroke="' + OL + '"/>') + L(485, 90, '소파'),
+      lines: [
+        ['엄마', 'Can you help me <b>uncover</b> the furniture?', '가구에 씌운 천 좀 같이 걷자.'],
+        ['나', 'Sure. Wow, so much dust!', '응. 와, 먼지 엄청나네!', 1],
+      ],
+      say: '가구 <b>위에 씌운 천</b>을 걷어 드러냄 — <span class="en">uncover</span>. 노트의 "소파에 씌운 천"과 같은 그림.' },
+    trail: { btn: '등산로', place: '등산로 · 갈림길',
+      pic: () => FL + '<path d="M420 150 V50" stroke="var(--wood, #c49a6c)" stroke-width="5"/><path d="M420 56 h44 l8 8 l-8 8 h-44 z M420 80 h-40 l-8 8 l8 8 h40 z" fill="var(--wood, #c49a6c)" stroke="' + OL + '"/>' +
+        P(330, 150, 1.1, SL) + P(620, 150, 1.1, OKC) +
+        ST(.2, '<rect x="486" y="60" width="96" height="54" rx="2" fill="' + CARD + '" stroke="' + OL + '"/><path d="M518 60 V114 M550 60 V114" stroke="var(--line)" stroke-dasharray="3 3"/><path d="M494 104 Q530 80 574 70" fill="none" stroke="' + AC + '" stroke-width="2.5" stroke-dasharray="4 3"/>'),
+      lines: [
+        ['친구', "Let's <b>unfold</b> the map and check the route.", '지도 펴서 길 확인하자.'],
+        ['나', 'Good idea. We are here.', '좋아. 우리 여기 있네.', 1],
+      ],
+      say: '접힌 지도를 <b>펴서</b> 가려진 길까지 봄 — <span class="en">unfold</span>. 노트 장면(야외 쉼터 탁자)과 같은 그림.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'unlock',
+    region: { x: 84, y: 66, w: 544, h: 258, label: 'OPEN 묶음 · RESULT = 안에 닿게 됨', at: [92, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 260, t: 'Q1. 막힌 것이 풀리나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇이 막았나?' },
+      q3: { x: 195, y: 180, w: 180, t: 'Q3. 대상 자체가', sub: '잠겼다 · 접혔다' },
+      q4: { x: 520, y: 180, w: 180, t: 'Q4. 바깥 층이', sub: '덮었다 · 감쌌다' },
+    },
+    leaves: {
+      unlock:  { x: 140, y: 262, w: 96, v: 'unlock', sub: '잠금 풂', seg: 'w', say: '<span class="en">She unlocked the box with a key.</span> 잠금만 — 뚜껑은 아직.' },
+      unfold:  { x: 252, y: 262, w: 96, v: 'unfold', sub: '접힘 폄', seg: 'w', say: '<span class="en">She unfolded the map.</span> 대상 자체의 접힌 면을 폄.' },
+      open:    { x: 360, y: 262, w: 88, v: 'open', sub: '방식 말 안 함', seg: 'b', say: '<span class="en">She opened the box.</span> 이 묶음의 기본 동사.' },
+      uncover: { x: 465, y: 262, w: 96, v: 'uncover', sub: '덮개 치움', seg: 'h', say: '<span class="en">She uncovered the box.</span> 위에 씌운 천을 치움.' },
+      unwrap:  { x: 575, y: 262, w: 92, v: 'unwrap', sub: '포장 벗김', seg: 'h', say: '<span class="en">She unwrapped the box.</span> 둘레를 감싼 포장을 벗김.' },
+      close:   { x: 600, y: 36, w: 120, v: 'close', sub: '→ CLOSE 묶음', seg: '', out: true, say: '<span class="en">She closed the box.</span> 반대로 <b>막음</b> → OPEN 묶음 밖, <a href="39-close.html">39 CLOSE</a>.' },
+    },
+    edges: [
+      ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'close', '반대로 막음', 'right', [512, 28], true],
+      ['q2', 'q3', '대상 자체', 'left'], ['q2', 'open', '말하지 않음'], ['q2', 'q4', '바깥 층', 'right'],
+      ['q3', 'unlock', '잠김'], ['q3', 'unfold', '접힘'],
+      ['q4', 'uncover', '덮개'], ['q4', 'unwrap', '포장'],
+    ],
+    segs: [[90, 310, '대상 자체 (잠금 · 접힘)', 'w'], [316, 406, '기본', 'b'], [416, 624, '바깥 층 (덮개 · 포장)', 'h']],
+  };
+
+  const SLOTS = {
+    first: ['unlock', 'note'],
+    slots: { note: '노트 예문', more: '한 번 더', other: '다른 모양' },
+    verbs: {
+      open: {
+        note:  { ok: [['I', 's'], ['opened', 'v'], ['the cupboard', 'o']], say: '노트의 "내가 할 말". 무엇을 열었는지가 바로 붙는다.' },
+        more:  { ok: [['I', 's'], ['opened', 'v'], ['my bag', 'o']], say: '지퍼를 열어 지갑에 손이 닿게 — 노트의 "한 번 더 떠올리기".' },
+        other: { ok: [['The store', 's'], ['opens', 'v'], ['at ten', 'x']], say: '목적어 없이 <b>가게가 문을 연다</b>. 손님이 들어올 수 있게 되는 그림.' },
+      },
+      unlock: {
+        note:  { ok: [['I', 's'], ['unlocked', 'v'], ['the front door', 'o']], say: '노트의 "내가 할 말". 잠금만 풀었다 — 문은 아직 닫혀 있다.' },
+        more:  { ok: [['I', 's'], ['unlocked', 'v'], ['the drawer', 'o']], say: '비밀번호 서랍의 잠금만 해제 — 노트의 "한 번 더".' },
+        other: { ok: [['The door', 's'], ['is', 'x'], ['unlocked', 'v']], bad: [['The door', 's'], ['is', 'x'], ['unlock', 'v']], say: '상태는 <b>be unlocked</b>(잠겨 있지 않다). -ed를 빼면 틀린다.' },
+      },
+      uncover: {
+        note:  { ok: [['I', 's'], ['uncovered', 'v'], ['the sofa', 'o']], say: '노트의 "내가 할 말". 소파를 연 게 아니라 위의 천을 걷었다.' },
+        more:  { ok: [['I', 's'], ['uncovered', 'v'], ['the bike', 'o']], say: '방수포를 걷어 자전거를 드러냄 — 노트의 "한 번 더".' },
+        other: { ok: [['They', 's'], ['uncovered', 'v'], ['the truth', 'o']], say: '덮개가 아니라 <b>숨은 사실</b>을 걷어냄 = 밝혀내다.' },
+      },
+      unwrap: {
+        note:  { ok: [['I', 's'], ['unwrapped', 'v'], ['the gift', 'o']], say: '노트의 "내가 할 말". p를 겹쳐 unwra<b>pp</b>ed.' },
+        more:  { ok: [['I', 's'], ['unwrapped', 'v'], ['the sandwich', 'o']], say: '포일에 싼 샌드위치 — 노트의 "한 번 더". 상자가 아니어도 감싼 층이면 unwrap.' },
+        other: { ok: [["Don't", 'x'], ['unwrap', 'v'], ['it', 'o'], ['yet', 'x']], bad: [["Don't", 'x'], ['unwrap', 'v'], ['it', 'o'], ['open', 'r']], say: '생일 전이라 아직 풀지 말라는 말. 뒤에 open을 붙이지 않는다 — unwrap 자체가 벗기는 동작.' },
+      },
+      unfold: {
+        note:  { ok: [['I', 's'], ['unfolded', 'v'], ['the map', 'o']], say: '노트의 "내가 할 말". 지도 자체의 접힌 면을 폄.' },
+        more:  { ok: [['I', 's'], ['unfolded', 'v'], ['the camping chair', 'o']], say: '접힌 캠핑 의자를 펼침 — 노트의 "한 번 더".' },
+        other: { ok: [['The story', 's'], ['unfolded', 'v'], ['slowly', 'x']], say: '목적어 없이 이야기·사건이 <b>펼쳐지다</b>. 접힌 것이 하나씩 펴지는 그림.' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>

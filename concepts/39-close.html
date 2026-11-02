@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLOSE 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/39-close.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+  /* 표 칸이 많아 휴대폰 폭에서 칸 여백을 줄인다 */
+  @media (max-width: 600px) { th, td { padding: 6px 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="38-open.html">OPEN 묶음</a> · 다음: <a href="40-pay.html">PAY 묶음</a> · 반대쪽: <a href="38-open.html">OPEN 묶음 (안에 닿게 됨)</a> · 견줘 보기: <a href="31-stop.html">STOP 묶음 (더 이어지지 않음)</a> · <a href="16-keep.html">KEEP 묶음 (그대로 둠)</a></p>
+  <h1>CLOSE 묶음 — 같은 상자, 다른 막기</h1>
+  <p class="lead">38 OPEN과 같은 나무 상자. 이번에는 안으로 <b>드나들지 못하게</b> 막는다. 이 결과는 같고, <b>그냥 닫는지, 끝까지 맞물리게 닫는지, 틈까지 막는지, 열쇠 없이는 못 열게 하는지, 다른 것을 위에 씌우는지</b>만 바꾸면 close · shut · seal · lock · cover로 갈린다. lock과 cover는 OPEN 묶음의 unlock · uncover와 짝이다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="close" title="close 소리로 듣기"><span class="en">close</span><span class="ipa">/kloʊz/</span><span class="ko">[<b>클로</b>우즈]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="shut" title="shut 소리로 듣기"><span class="en">shut</span><span class="ipa">/ʃʌt/</span><span class="ko">[<b>셧</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="seal" title="seal 소리로 듣기"><span class="en">seal</span><span class="ipa">/siːl/</span><span class="ko">[<b>씰</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="lock" title="lock 소리로 듣기"><span class="en">lock</span><span class="ipa">/lɑːk/</span><span class="ko">[<b>락</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="cover" title="cover 소리로 듣기"><span class="en">cover</span><span class="ipa">/ˈkʌv.ər/</span><span class="ko">[<b>커</b>버]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">막는 방식에 따라 상자와 미나의 모습이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 미나와 나무 상자다. close는 열린 뚜껑을 내려 안이 가려짐, shut은 흔들리는 캠핑카 안에서 뚜껑을 끝까지 눌러 딸깍 맞물림, seal은 이음새마다 테이프를 붙여 빗물이 못 들어감, lock은 이미 닫힌 상자에 열쇠로 자물쇠를 채움, cover는 닫힌 상자 위에 천을 씌워 먼지가 표면에 닿지 않는 장면이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">CLOSE · 드나듦을 막음</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 막나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 크기는 그림용이다. 상자 장면은 <a href="../close/_family.md">close/_family.md</a>의 비교표 TARGET(the box)과 Scenario contrast(뚜껑을 닫음 · 단단히 · 습기 · 다른 사람이 못 열게 · 먼지), 각 노트의 Scene Scenario(교실 · 캠핑 차량 · 비 오는 날 포장대 · 교무실 · 창고)를 옮겼다. <b>CLOSE 칩은 lock · cover 장면에서 꺼진다</b> — 두 장면은 상자가 이미 닫혀 있어, 닫는 동작을 새로 한 것이 아니다(lock 노트: "lock 자체가 문을 닫는 동작까지 뜻하지는 않는다").</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"닫다" 하나로 다 될 것 같다. 그런데 <b>틈 없이 물까지 막음</b>, <b>닫힌 문을 열쇠 없이는 못 열게</b>, <b>닫을 데가 없는 과일 위에 천을 씌움</b>은 "닫다"로는 다른 그림이 되거나 말이 안 된다. 반대로 <b>여는</b> 쪽은? 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>CLOSE 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "드나듦을 막음"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>열려 있거나 노출된 통로 · 용기 · 내용에 대한 접근이나 통과를 막음</b> = <span class="en">CLOSE</span>다. 여기에 닫힘의 완전함 · 틈 막기 · 잠금 · 덮개가 붙는다. 노트의 비교표와 각 노트의 식을 옮겼다.</p>
+  <div class="formula">
+    <span class="r">CLOSE</span><span class="op">+</span><span>닫는 방식 미지정</span><span class="op">=</span><span class="v">CLOSE</span>
+    <span class="r">CLOSE</span><span class="op">+</span><span>끝 위치까지 확실히</span><span class="op">=</span><span class="v">SHUT</span>
+    <span class="r">CLOSE</span><span class="op">+</span><span>틈을 막아 물질 통과 방지</span><span class="op">=</span><span class="v">SEAL</span>
+    <span class="r">CLOSE</span><span class="op">+</span><span>잠금장치로 허가 없는 개방 방지</span><span class="op">=</span><span class="v">LOCK</span>
+    <span class="r">CLOSE</span><span class="op">+</span><span>별도 물체를 위에 놓아 노출 차단</span><span class="op">=</span><span class="v">COVER</span>
+  </div>
+  <p>노트가 짚은 점: <span class="en">shut</span>은 세게 꽝 닫는다는 뜻이 아니고, 완전한 닫힘은 장면과 <span class="en">all the way</span>가 분명히 해 준다 — <span class="en">close the door</span>도 자연스럽다. 형태는 <span class="en">shut — shut — shut</span>(불규칙, 변화 없음), 나머지는 규칙 변화.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>닫음</b> → 미술 수업이 끝났다. 열린 재료 상자의 뚜껑을 내려 <b>안을 가린다</b>. 방식은 말하지 않는다. <span class="en">She closed the box.</span></li>
+    <li><b>끝까지 닫음</b> → 달리는 캠핑카가 흔들려 뚜껑이 들썩인다. 뚜껑을 <b>끝까지 내려 딸깍</b> 맞물리게 한다. 세게 내리칠 필요는 없다. <span class="en">She shut the box firmly.</span></li>
+    <li><b>밀폐함</b> → 비 오는 날 종이 제품을 부친다. 뚜껑만 접으면 이음새로 물이 샌다. <b>모든 이음새에 테이프</b>. <span class="en">She sealed the box with tape.</span></li>
+    <li><b>잠금</b> → 시험지 상자는 닫혀 있지만 누구나 열 수 있다. 열쇠를 돌려 걸쇠를 고정 — <b>열쇠 없이는 못 연다</b>. <span class="en">She locked the box.</span></li>
+    <li><b>덮음</b> → 상자는 닫혀 있지만 창고에 먼지가 많다. 큰 천을 <b>상자 위에 씌운다</b>. 상자의 구조를 닫은 게 아니다. <span class="en">She covered the box with a cloth.</span></li>
+    <li>shut · seal 장면에서는 CLOSE 칩도 함께 켜진다 — 둘 다 "닫았다"를 포함한다. lock · cover 장면에서는 꺼진다.</li>
+  </ul>
+
+  <h2>3. 짝으로 — 막는 쪽과 여는 쪽</h2>
+  <p>이 묶음의 동사는 대부분 <a href="38-open.html">38 OPEN</a>에 짝이 있다. 막는 쪽에 <b>un-</b>을 붙이면 되돌리는 쪽이 되는 것도 있고, 아예 다른 낱말인 것도 있다.</p>
+  <table>
+    <tr><th>막는 쪽</th><th>여는 쪽</th><th>짝이 되는 그림</th></tr>
+    <tr><td><b>close</b></td><td><span class="en">open</span></td><td>문 · 뚜껑을 움직여 막음 ↔ 엶</td></tr>
+    <tr><td><b>shut</b></td><td><span class="en">open</span></td><td>끝까지 맞물림 ↔ 엶 (unshut은 없음)</td></tr>
+    <tr><td><b>seal</b></td><td><span class="en">open</span> · <span class="en">unseal</span></td><td>틈을 막음 ↔ 봉한 것을 뜯어 엶</td></tr>
+    <tr><td><b>lock</b></td><td><span class="en">unlock</span></td><td>잠금장치를 걺 ↔ 풂</td></tr>
+    <tr><td><b>cover</b></td><td><span class="en">uncover</span></td><td>위에 씌움 ↔ 걷음</td></tr>
+    <tr><td>(wrap · fold)</td><td><span class="en">unwrap · unfold</span></td><td>OPEN 묶음에만 있음 — 감싸기 · 접기는 이 묶음 밖</td></tr>
+  </table>
+  <p><b>발음 함정</b>(노트): 동사 <span class="en">close</span>는 /kloʊz/ — 끝이 <b>/z/</b>. 철자가 같은 형용사 <span class="en">close</span>(가까운)는 /kloʊs/ — 끝이 <b>/s/</b>. <span class="en">Close the door.</span>(/z/) · <span class="en">The store is close.</span>(/s/)</p>
+  <p class="note">lock과 close는 짝이 아니라 순서다 — 먼저 close, 그다음 lock. 열 때는 거꾸로 unlock, 그다음 open.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>CLOSE 묶음</b>이다. 반대로 막힌 것을 <b>열면</b> 테두리 밖 문으로 OPEN 묶음에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 CLOSE 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 드나듦을 막나에서 반대로 열면 묶음 밖 문 open, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 close, 닫는 동작이면 Q3에서 shut과 seal, 더하는 것이면 Q4에서 lock과 cover로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 처음 상태</th><th>② 무엇으로 막나</th><th>③ 막는 것</th></tr>
+    <tr><td><b>close</b></td><td>열려 있음</td><td>움직이는 부분</td><td>통로 · 내부 접근</td></tr>
+    <tr><td><b>shut</b></td><td>덜 닫힘 · 들썩임</td><td>끝 위치까지 맞닿게</td><td>다시 열림 · 틈</td></tr>
+    <tr><td><b>seal</b></td><td>이음새에 틈</td><td>테이프 등으로 틈을</td><td>물 · 공기 · 냄새</td></tr>
+    <tr><td><b>lock</b></td><td>닫혔지만 누구나 엶</td><td>잠금장치</td><td>허가 없는 개방</td></tr>
+    <tr><td><b>cover</b></td><td>표면이 드러남</td><td>다른 물체를 위에</td><td>보임 · 접촉 · 먼지</td></tr>
+  </table>
+  <p class="note">칸 내용은 각 노트의 Target Condition · Scene Scenario를 옮겼다. 흐름 그림의 질문 순서와 "닫는 동작 · 더하는 것" 나눔은 그림을 위해 정했다.</p>
+
+  <h2>5. 실제 문장으로 — 노트 예문, 한 번 더, 다른 모양</h2>
+  <p>다섯 동사 모두 <b>막는 대상</b>을 바로 목적어로 받는다. seal · cover는 <b>with + 무엇으로</b>가 잘 붙고, shut은 <b>all the way</b>로 "끝까지"를 분명히 한다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">고른 동사와 문장 종류에 따라 낱말 상자가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄이 있으면 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">문장</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>노트 예문</th><th>한 번 더 (노트)</th><th>다른 모양</th></tr>
+    <tr><td><b>close</b></td><td><span class="en">I closed the fridge door.</span></td><td><span class="en">I closed my laptop.</span></td><td><span class="en">The store closes at nine.</span> — 목적어 없이</td></tr>
+    <tr><td><b>shut</b></td><td><span class="en">Please shut the car door all the way.</span></td><td><span class="en">I shut the window all the way.</span></td><td>과거도 <span class="en">shut</span> — ✗ shutted</td></tr>
+    <tr><td><b>seal</b></td><td><span class="en">I sealed the box with tape.</span></td><td><span class="en">I sealed the bag.</span></td><td><span class="en">They sealed the deal.</span> — 확정하다</td></tr>
+    <tr><td><b>lock</b></td><td><span class="en">I locked the front door.</span></td><td><span class="en">I locked the car door.</span></td><td><span class="en">I locked myself out.</span> — 잠긴 채 밖에</td></tr>
+    <tr><td><b>cover</b></td><td><span class="en">I covered the fruit with a cloth.</span></td><td><span class="en">I covered the bike with a tarp.</span></td><td><span class="en">Snow covered the road.</span></td></tr>
+  </table>
+  <p class="note">경향 한 줄: close만 목적어 없이 "가게가 문을 닫는다"로 흔히 쓰고(38의 open과 같다), 나머지는 대개 무엇을 막았는지 목적어가 붙는다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>CLOSE</b> — 펼친 책을 <b>덮는다</b>. 그냥 닫는다.</li>
+    <li><b>SHUT</b> — 필통 뚜껑을 끝까지 눌러 <b>딸깍</b> 소리를 낸다. 세게 칠 필요는 없다.</li>
+    <li><b>SEAL</b> — 봉투 입구를 손가락으로 <b>끝에서 끝까지</b> 꾹 눌러 붙인다.</li>
+    <li><b>LOCK</b> — 닫힌 문 앞에서 허공의 열쇠를 <b>돌리고</b> 손잡이를 당겨 안 열리는지 확인한다.</li>
+    <li><b>COVER</b> — 컵 위에 손바닥을 <b>얹어</b> 덮는다.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>맨 위 그림에서 lock · cover 장면만 CLOSE 칩을 끈 것은 노트(lock 선택 기준 · cover Scene Scenario)를 바탕으로 한 판단이다. 묶음 식 "CLOSE + 별도 물체를 위에 놓아 노출 차단 = COVER"와는 결이 다르다.</li>
+      <li>3절 짝 표(unshut은 없음 · unseal · wrap/fold)와 "close 다음 lock" 순서 문장은 노트에 없다. 노트에 있는 것은 close /z/ · 형용사 close /s/ 발음 구별뿐이다.</li>
+      <li>5절 "다른 모양" 칸(The store closes at nine · ✗ shutted · sealed the deal · locked myself out · Snow covered the road)과 경향 한 줄은 노트에 없다. shutted ✗는 노트의 Forms(shut — shut — shut)를 근거로 했다. 0절 "대신 말하면"의 △·✗ 판정(특히 <span class="en">unclosed</span> ✗)도 짐작이다.</li>
+      <li>4절 표의 칸 나눔과 흐름 그림의 갈래는 그림을 위해 정한 것이다.</li>
+      <li>노트끼리 장면이 다르다: 묶음의 상황 장면과 "언제 꺼낼까"는 냉장고 문 · 자동차 문 · 택배 상자 · 약상자/현관문 · 책/과일인데, Scene Scenario는 교실 · 캠핑 차량 · 포장대 · 교무실 · 창고의 box다. lock은 묶음 장면이 약상자, 노트는 현관문이다. cover 노트의 "언제 꺼낼까" TARGET은 그릇 속 과일, 묶음 장면은 책이다.</li>
+      <li>shut 노트는 "완전한 닫힘은 shut 한 단어만의 필수 의미라기보다 장면과 all the way가 분명히 해 준다"고 하는데, 묶음 비교표와 식(CLOSE + 끝 위치까지 확실히 = SHUT)은 그것을 shut의 HOW로 적는다. 둘 중 무엇을 기준으로 할지 정할 것. 다섯 노트 모두 Precondition 줄이 없다.</li>
+      <li>발음 표기가 노트끼리 다르다: cover 노트는 /ˈkʌv.ər/, 짝인 open 묶음의 uncover 노트는 /ʌnˈkʌv.ɚ/(r 색 모음 기호). 한쪽으로 맞출 것.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../close/_family.md">close/_family.md</a> — "열려 있거나 노출된 통로·용기·내용에 대한 접근이나 통과를 막는다"</li>
+    <li>동사 노트: <a href="../close/close--block-opening.md">close</a> · <a href="../close/shut--close-completely.md">shut</a> · <a href="../close/seal--close-tightly.md">seal</a> · <a href="../close/lock--secure-closed.md">lock</a> · <a href="../close/cover--place-over.md">cover</a></li>
+    <li>묶음 밖 이웃: <a href="38-open.html">38 OPEN</a>(<a href="../open/_family.md">open/_family.md</a>) — 막힌 것을 열어 안에 닿게 함. 같은 상자 그림이라 나란히 보면 좋다.</li>
+    <li>견줘 보기: <a href="31-stop.html">31 STOP</a> — 가게가 "문을 닫는다(close)"와 활동이 "멈춘다(stop)"의 차이. <a href="16-keep.html">16 KEEP</a> — 막은 상태를 계속 두기(<span class="en">keep the door closed</span>).</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — close는 <b>드나듦이 막힌 상태</b> 하나를 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 미나 x = 330, 상자 x 394~536 (38 OPEN과 같은 상자) ──
+  const BOXB = '<rect x="400" y="182" width="130" height="58" rx="3" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="1.5"/>';
+  const LIDC = '<rect x="394" y="170" width="142" height="13" rx="3" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="1.5"/>';
+  const LIDA = (deg) => '<g transform="rotate(' + deg + ' 536 176)">' + LIDC + '</g>';
+  const HASP = '<rect x="459" y="176" width="12" height="22" rx="2" fill="var(--card)" stroke="var(--obj-line)"/>';
+  const PADO = (x, y) => '<path d="M' + (x + 5) + ' ' + (y - 4) + ' v-14 a5 5 0 0 0 -10 0 v4" fill="none" stroke="var(--accent2)" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="var(--accent2)"/>';
+  const KEYI = (x, y) => '<circle cx="' + x + '" cy="' + y + '" r="5" fill="none" stroke="var(--gold)" stroke-width="2.5"/><path d="M' + (x + 5) + ' ' + y + ' h10 m-3 0 v4 m-3 -4 v3" stroke="var(--gold)" stroke-width="2.5" fill="none"/>';
+  const ARM = (x1, y1, x2, y2) => '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + '" stroke="var(--sleeve)" stroke-width="9" stroke-linecap="round"/><circle cx="' + x2 + '" cy="' + y2 + '" r="7" fill="var(--skin)" stroke="var(--obj-line)"/>';
+  const NAME = (x, t) => tx(x, 150, 12, t, 'var(--muted)');
+  const MINA = P(330, 240, 1.3, 'var(--sleeve)') + NAME(330, '미나');
+  const OK2 = (a, b) => tx(610, 150, 12, a, 'var(--ok)', ' font-weight="600"') + (b ? tx(610, 168, 11, b, 'var(--muted)') : '');
+  const CLOTH = '<path d="M388 164 Q465 150 542 164 L548 240 q-20 -6 -40 0 q-20 6 -40 0 q-20 -6 -40 0 q-20 6 -40 0 z" fill="var(--accent2)" stroke="var(--obj-line)"/>';
+  const TOP = {
+    first: 'seal', keep: 'CLOSE',
+    keepSay: '<b>CLOSE</b>는 이 장면에서 새로 한 일이 아니다 — 상자는 처음부터 닫혀 있었다. 노트: <span class="en">lock</span>은 닫는 동작까지 뜻하지 않고, <span class="en">cover</span>는 상자의 구조를 닫는 게 아니라 위에 다른 것을 놓는다. 그래서 이 장면에서는 CLOSE 칩이 꺼져 있다.',
+    chips: ['CLOSE', 'SHUT', 'SEAL', 'LOCK', 'COVER'], out: [['OPEN (안에 닿게 됨)', '38-open.html']],
+    hows: {
+      close: { btn: '닫음', how: '방식 미지정', verb: 'CLOSE', chips: ['CLOSE'], target: 'TARGET · the box',
+        result: '열린 뚜껑을 내려 — 안이 가려짐',
+        pic: () => FLOOR + MINA + BOXB + '<g class="fade" opacity=".2">' + LIDA(55) + '</g>' +
+          step(.2, LIDC + ARM(342, 200, 440, 168)) + step(.45, AR(420, 112, 420, 156, 'var(--accent)', 2) + OK2('안이 가려짐')),
+        say: '<span class="en">She closed the box.</span> 열린 뚜껑을 내려 가장자리를 맞추고 <b>안을 가린다</b>. 잠금이나 밀폐는 말하지 않는다 — 열린 상태가 닫힌 상태로 바뀐 결과만.' },
+      shut: { btn: '끝까지 닫음', how: '끝까지 맞닿게', verb: 'SHUT', chips: ['CLOSE', 'SHUT'], target: 'TARGET · the box',
+        result: '끝까지 딸깍 — 흔들려도 다시 안 열림',
+        pic: () => FLOOR + MINA + BOXB + '<g class="fade" opacity=".2">' + LIDA(12) + '</g>' +
+          '<path d="M384 196 l-6 6 l6 6 l-6 6 l6 6 M548 196 l6 6 l-6 6 l6 6 l-6 6" fill="none" stroke="var(--muted)" stroke-width="2"/>' + tx(610, 100, 11, '달리는 캠핑카 안', 'var(--muted)') +
+          step(.2, LIDC + ARM(342, 200, 470, 166)) + step(.45, tx(500, 140, 15, '딸깍', 'var(--accent)', ' font-weight="700"') + OK2('끝까지 맞물림', '세게 칠 필요 없음')),
+        say: '<span class="en">She shut the box firmly.</span> 흔들림에 들썩이던 뚜껑을 <b>끝 위치까지</b> 내려 딸깍 맞물린다. 꽝 내리치는 게 아니다. 노트: 이 장면에 close도 맞고, "완전히"는 장면과 firmly · all the way가 분명히 한다.' },
+      seal: { btn: '밀폐함', how: '틈을 막아 밀폐', verb: 'SEAL', chips: ['CLOSE', 'SEAL'], target: 'TARGET · the box',
+        result: '이음새마다 테이프 — 빗물이 못 들어감',
+        pic: () => FLOOR + MINA + BOXB + LIDC +
+          [[414, 92], [446, 104], [478, 90], [510, 102]].map(([x, y]) => '<path d="M' + x + ' ' + y + ' l-4 12" stroke="var(--water)" stroke-width="3" stroke-linecap="round"/>').join('') +
+          step(.2, '<rect x="392" y="177" width="146" height="10" fill="var(--accent2)" opacity=".85"/><rect x="460" y="164" width="10" height="44" fill="var(--accent2)" opacity=".85"/>' + ARM(342, 200, 398, 182)) +
+          step(.45, '<path d="M430 150 l-6 -6 M436 150 l6 -6 M494 150 l-6 -6 M500 150 l6 -6" stroke="var(--water)" stroke-width="2"/>' + OK2('물이 못 들어감', '틈이 없음')),
+        say: '<span class="en">She sealed the box with tape.</span> 뚜껑만 닫으면 이음새로 빗물이 스민다. <b>모든 이음새에 테이프</b>를 붙여 물이 드나들 틈을 없앴다. 닫힘보다 <b>틈 없는 차단</b>이 핵심.' },
+      lock: { btn: '잠금', how: '잠금장치를 검', verb: 'LOCK', chips: ['LOCK'], target: 'TARGET · the box',
+        result: '자물쇠를 채워 — 열쇠 없이는 못 엶',
+        pic: () => FLOOR + MINA + BOXB + LIDC + HASP + '<g class="fade" opacity=".15">' + PADO(465, 214) + '</g>' +
+          step(.2, ARM(342, 200, 436, 214) + KEYI(444, 214)) +
+          step(.45, LOCK(465, 210) + tx(610, 130, 12, '딸깍 — 잠김', 'var(--accent)', ' font-weight="600"') + tx(610, 150, 11, '열쇠 없이는 못 엶', 'var(--muted)')),
+        say: '<span class="en">She locked the box.</span> 상자는 <b>이미 닫혀 있었다</b> — 누구나 뚜껑을 열 수 있었을 뿐. 열쇠를 돌려 걸쇠를 고정하니 <b>열 수 있는 사람이 제한</b>된다.' },
+      cover: { btn: '덮음', how: '다른 것을 위에', verb: 'COVER', chips: ['COVER'], target: 'TARGET · the box',
+        result: '천을 씌워 — 표면에 먼지가 안 닿음',
+        pic: () => FLOOR + MINA + BOXB + LIDC +
+          step(.2, CLOTH + ARM(342, 200, 392, 170)) +
+          step(.45, [[420, 120], [452, 132], [486, 116], [516, 128]].map(([x, y]) => '<circle cx="' + x + '" cy="' + y + '" r="2.5" fill="var(--muted)"/>').join('') +
+            '<path d="M418 140 v8 M450 140 v8 M484 140 v8 M514 140 v8" stroke="var(--muted)" stroke-dasharray="2 3"/>' + OK2('먼지가 천 위에', '상자 표면은 깨끗')),
+        say: '<span class="en">She covered the box with a cloth.</span> 상자 자체는 닫혀 있다. 그 <b>위에 큰 천을 씌워</b> 먼지가 표면에 직접 닿지 않게 했다. 입구를 맞물려 닫는 게 아니라 다른 것을 얹으면 cover.' },
+    },
+  };
+
+  // 0절 아이콘 ((0, 0) 중심)
+  const MBOX = (lid) => '<rect x="-26" y="-6" width="52" height="30" rx="2" fill="var(--wood)" stroke="var(--obj-line)"/>' + (lid || '<rect x="-29" y="-13" width="58" height="8" rx="2" fill="var(--wood)" stroke="var(--obj-line)"/>');
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. cover를 먼저 빼 보세요.',
+    cards: [
+      { id: 'close', t: ['열린 것을', '닫음'], v: 'close', icon: MBOX() + AR(0, -38, 0, -18, 'var(--accent)', 2),
+        instead: 'I locked the fridge door. △', lost: '잠금장치를 걸었다는 말이 된다. 평소처럼 문을 닫은 그림이 빠진다.', why: '방식을 말하지 않고 열린 것을 막음.' },
+      { id: 'shut', t: ['끝까지', '맞닿게'], v: 'shut', icon: MBOX() + tx(0, -22, 12, '딸깍', 'var(--accent)', ' font-weight="700"'),
+        instead: 'Please close the car door. △', lost: '닫으라는 말은 되지만 끝까지 맞닿게라는 초점이 약하다. 노트는 close + all the way도 자연스럽다고 한다.', why: '움직이는 부분을 끝 위치까지 맞닿게.' },
+      { id: 'seal', t: ['틈까지', '막음'], v: 'seal', icon: MBOX() + '<rect x="-30" y="-9" width="60" height="6" fill="var(--accent2)"/>' + '<path d="M-12 -36 l-3 8 M0 -32 l-3 8 M12 -36 l-3 8" stroke="var(--water)" stroke-width="2.5" stroke-linecap="round"/>',
+        instead: 'I closed the box with tape. △', lost: '닫았다는 말이 되어, 이음새를 막아 물이 못 들어가게 한 그림이 빠진다.', why: '틈을 막아 물 · 공기의 통과를 차단.' },
+      { id: 'lock', t: ['열쇠 없이는', '못 열게'], v: 'lock', icon: MBOX() + LOCK(0, 12),
+        instead: 'I closed the front door. △', lost: '문은 닫혔지만 누구나 열 수 있다. 열 수 있는 사람을 제한한 그림이 빠진다.', why: '잠금장치로 허가 없는 개방을 막음.' },
+      { id: 'cover', t: ['위에', '씌움'], v: 'cover', icon: '<circle cx="-12" cy="10" r="9" fill="var(--accent)"/><circle cx="8" cy="12" r="8" fill="var(--ok)"/><path d="M-30 20 q0 -40 30 -40 q30 0 30 40 z" fill="var(--accent2)" opacity=".85" stroke="var(--obj-line)"/>',
+        instead: 'I closed the fruit. ✗', lost: '과일에는 닫을 문이 없다. 위에 천을 얹어 가린 그림을 말할 낱말이 빈다.', why: '다른 물체를 위에 놓아 노출을 막음.' },
+      { id: 'open', out: true, t: ['반대로', '엶'], v: 'open', icon: MBOX('<rect x="-29" y="-13" width="58" height="8" rx="2" fill="var(--wood)" stroke="var(--obj-line)" transform="rotate(30 29 -9)"/>'),
+        instead: 'I unclosed the box. ✗', lost: 'unclose라는 말은 쓰지 않는다. 여는 쪽은 낱말이 따로 있다.', why: '막힌 것을 열어 안에 닿게 함 — 반대쪽 OPEN 묶음(38).' },
+    ],
+  };
+
+  const SCENES = {
+    mart: { btn: '동네 마트', place: '동네 마트 · 밤 9시 반',
+      pic: () => FL + '<rect x="380" y="40" width="200" height="110" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/><rect x="455" y="84" width="50" height="66" fill="' + BG + '" stroke="' + OL + '"/>' +
+        P(300, 150, 1.1, SL) + P(620, 150, 1.1, FOG) +
+        ST(.2, '<rect x="432" y="52" width="96" height="24" rx="4" fill="' + BAD + '"/>' + T(480, 69, 13, 'CLOSE 10:00', '#fff', ' font-weight="700"')),
+      lines: [
+        ['나', 'What time do you <b>close</b>?', '몇 시에 문 닫아요?', 1],
+        ['직원', 'We <b>close</b> at ten.', '10시에 닫아요.'],
+      ],
+      say: '가게가 문을 닫아 <b>손님이 더 못 들어오게</b> 됨 — 목적어 없는 <span class="en">close</span>. 38 OPEN의 빵집과 짝.' },
+    classroom: { btn: '교실', place: '교실 · 겨울 아침',
+      pic: () => FL + '<rect x="420" y="30" width="120" height="80" fill="' + BG + '" stroke="' + OL + '" stroke-width="2"/><path d="M480 30 V110" stroke="' + OL + '" stroke-width="2"/>' +
+        '<g class="fade" opacity=".25"><rect x="482" y="26" width="56" height="80" fill="var(--water, #9cc6e8)" transform="rotate(-8 482 26)"/></g>' +
+        ST(.2, '<rect x="482" y="32" width="56" height="76" fill="var(--water, #9cc6e8)" opacity=".7"/>' + AR(570, 70, 544, 70, AC, 2)) +
+        P(310, 150, 1.1, FOG) + P(630, 150, 1.1, SL),
+      lines: [
+        ['선생님', "It's cold. Can you <b>shut</b> the window?", '춥다. 창문 좀 닫아 줄래?'],
+        ['나', 'Sure. All the way?', '네. 끝까지요?', 1],
+      ],
+      say: '조금 열린 창을 <b>끝까지</b> 닫음 — <span class="en">shut</span>. 노트의 "잠자기 전 창문"과 같은 그림. <span class="en">close</span>도 된다.' },
+    kitchen: { btn: '부엌', place: '부엌 · 과자 봉지',
+      pic: () => FL + TB(380, 560, 110) + '<path d="M440 110 v-40 l8 -8 h44 l8 8 v40 z" fill="' + AC + '" stroke="' + OL + '"/>' +
+        ST(.2, '<rect x="436" y="58" width="68" height="8" rx="2" fill="' + A2 + '" stroke="' + OL + '"/>') +
+        P(300, 150, 1.1, OKC) + P(630, 150, 1.1, SL),
+      lines: [
+        ['엄마', '<b>Seal</b> the bag, or the chips will go stale.', '봉지 꼭 막아. 안 그러면 과자 눅눅해져.'],
+        ['나', "Okay. Where's the clip?", '응. 집게 어디 있어?', 1],
+      ],
+      say: '봉지 입구의 <b>틈을 막아</b> 공기가 못 들어가게 — <span class="en">seal</span>. 노트의 "봉지 입구를 열접착"과 같은 그림.' },
+    front: { btn: '현관', place: '집 현관 · 외출 직전',
+      pic: () => FL + '<rect x="430" y="30" width="80" height="120" rx="2" fill="var(--wood, #c49a6c)" stroke="' + OL + '" stroke-width="1.5"/><circle cx="496" cy="96" r="5" fill="' + OL + '"/>' +
+        ST(.2, LOCK(496, 76)) + P(330, 150, 1.1, FOG) + P(620, 150, 1.1, SL),
+      lines: [
+        ['동생', 'Did you <b>lock</b> the door?', '문 잠갔어?'],
+        ['나', 'Yes, I checked twice.', '응, 두 번 확인했어.', 1],
+      ],
+      say: '닫힌 문을 <b>열쇠 없이는 못 열게</b> — <span class="en">lock</span>. 닫았는지(close)가 아니라 잠갔는지를 묻는다.' },
+    clinic: { btn: '병원 대기실', place: '병원 · 대기실',
+      pic: () => FL + '<rect x="380" y="112" width="200" height="12" rx="3" fill="' + FOG + '"/><path d="M390 124 V150 M570 124 V150" stroke="' + OL + '" stroke-width="3"/>' +
+        P(420, 150, 1.1, SL) + P(620, 150, 1.1, OKC) +
+        ST(.2, '<path d="M430 122 L434 106" stroke="' + SL + '" stroke-width="6" stroke-linecap="round"/><circle cx="434" cy="101" r="5" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/>' + L(500, 60, '콜록')),
+      lines: [
+        ['간호사', 'Please <b>cover</b> your mouth when you cough.', '기침할 때는 입을 가려 주세요.'],
+        ['나', 'Oh, sorry.', '아, 죄송해요.', 1],
+      ],
+      say: '입을 닫는 게 아니라 <b>손을 위에 얹어</b> 가림 — <span class="en">cover</span>. 다른 것을 위에 놓아 노출을 막는 그림.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'seal',
+    region: { x: 84, y: 66, w: 544, h: 258, label: 'CLOSE 묶음 · RESULT = 드나듦이 막힘', at: [92, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 260, t: 'Q1. 드나듦을 막나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 195, y: 180, w: 180, t: 'Q3. 어떻게 닫나?', sub: '끝까지 · 틈까지' },
+      q4: { x: 520, y: 180, w: 180, t: 'Q4. 무엇을 더하나?', sub: '잠금장치 · 덮개' },
+    },
+    leaves: {
+      shut:  { x: 140, y: 262, w: 96, v: 'shut', sub: '끝까지', seg: 'w', say: '<span class="en">She shut the box firmly.</span> 끝 위치까지 맞닿게.' },
+      seal:  { x: 252, y: 262, w: 96, v: 'seal', sub: '틈까지 막음', seg: 'w', say: '<span class="en">She sealed the box with tape.</span> 틈을 막아 물 · 공기 차단.' },
+      close: { x: 360, y: 262, w: 88, v: 'close', sub: '방식 말 안 함', seg: 'b', say: '<span class="en">She closed the box.</span> 이 묶음의 기본 동사.' },
+      lock:  { x: 465, y: 262, w: 96, v: 'lock', sub: '잠금장치', seg: 'h', say: '<span class="en">She locked the box.</span> 닫힌 것을 열쇠 없이는 못 열게.' },
+      cover: { x: 575, y: 262, w: 92, v: 'cover', sub: '위에 씌움', seg: 'h', say: '<span class="en">She covered the box with a cloth.</span> 다른 것을 위에 얹어 노출 차단.' },
+      open:  { x: 600, y: 36, w: 120, v: 'open', sub: '→ OPEN 묶음', seg: '', out: true, say: '<span class="en">She opened the box.</span> 반대로 <b>엶</b> → CLOSE 묶음 밖, <a href="38-open.html">38 OPEN</a>.' },
+    },
+    edges: [
+      ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'open', '반대로 엶', 'right', [512, 28], true],
+      ['q2', 'q3', '닫는 동작', 'left'], ['q2', 'close', '말하지 않음'], ['q2', 'q4', '더하는 것', 'right'],
+      ['q3', 'shut', '끝까지'], ['q3', 'seal', '틈까지'],
+      ['q4', 'lock', '잠금'], ['q4', 'cover', '덮개'],
+    ],
+    segs: [[90, 310, '닫는 동작 (끝까지 · 틈)', 'w'], [316, 406, '기본', 'b'], [416, 624, '더하는 것 (잠금 · 덮개)', 'h']],
+  };
+
+  const SLOTS = {
+    first: ['shut', 'other'],
+    slots: { note: '노트 예문', more: '한 번 더', other: '다른 모양' },
+    verbs: {
+      close: {
+        note:  { ok: [['I', 's'], ['closed', 'v'], ['the fridge door', 'o']], say: '노트의 "내가 할 말". 평소처럼 문을 닫았다는 사실만.' },
+        more:  { ok: [['I', 's'], ['closed', 'v'], ['my laptop', 'o']], say: '열린 노트북을 접음 — 노트의 "한 번 더 떠올리기".' },
+        other: { ok: [['The store', 's'], ['closes', 'v'], ['at nine', 'x']], say: '목적어 없이 <b>가게가 문을 닫는다</b>. 38의 <span class="en">opens at ten</span>과 짝.' },
+      },
+      shut: {
+        note:  { ok: [['Please', 'x'], ['shut', 'v'], ['the car door', 'o'], ['all the way', 'r']], say: '노트의 "내가 할 말". <b>all the way</b>가 "끝까지"를 분명히 한다.' },
+        more:  { ok: [['I', 's'], ['shut', 'v'], ['the window', 'o'], ['all the way', 'r']], say: '조금 열린 창문을 끝까지 — 노트의 "한 번 더".' },
+        other: { ok: [['I', 's'], ['shut', 'v'], ['the window', 'o'], ['yesterday', 'x']], bad: [['I', 's'], ['shutted', 'v'], ['the window', 'o']], say: '과거도 <b>shut</b> — shut · shut · shut (노트 Forms). -ed를 붙이지 않는다.' },
+      },
+      seal: {
+        note:  { ok: [['I', 's'], ['sealed', 'v'], ['the box', 'o'], ['with tape', 'x']], say: '노트의 "내가 할 말". <b>with</b> + 무엇으로 틈을 막았는지.' },
+        more:  { ok: [['I', 's'], ['sealed', 'v'], ['the bag', 'o']], say: '봉지 입구를 열접착 — 노트의 "한 번 더".' },
+        other: { ok: [['They', 's'], ['sealed', 'v'], ['the deal', 'o']], say: '빈틈없이 마무리 = 거래를 <b>확정하다</b>. 틈을 막는 그림이 일로 옮겨 감.' },
+      },
+      lock: {
+        note:  { ok: [['I', 's'], ['locked', 'v'], ['the front door', 'o']], say: '노트의 "내가 할 말". 닫은 게 아니라 잠갔다.' },
+        more:  { ok: [['I', 's'], ['locked', 'v'], ['the car door', 'o']], say: '자동차 문에 잠금장치 — 노트의 "한 번 더".' },
+        other: { ok: [['I', 's'], ['locked', 'v'], ['myself', 'o'], ['out', 'r']], say: '문을 잠근 채 <b>나는 밖에</b> — 열쇠를 안에 두고 나왔을 때.' },
+      },
+      cover: {
+        note:  { ok: [['I', 's'], ['covered', 'v'], ['the fruit', 'o'], ['with a clean cloth', 'x']], say: '노트의 "내가 할 말". <b>with</b> + 위에 놓은 것.' },
+        more:  { ok: [['I', 's'], ['covered', 'v'], ['the bike', 'o'], ['with a tarp', 'x']], say: '방수포를 씌움 — 노트의 "한 번 더". 38의 <span class="en">uncovered the bike</span>와 짝.' },
+        other: { ok: [['Snow', 's'], ['covered', 'v'], ['the road', 'o']], say: '사람이 아니어도 된다 — 눈이 길 <b>위를 덮음</b>.' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>
