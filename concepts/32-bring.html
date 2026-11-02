@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BRING 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/32-bring.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+@media (max-width: 600px) { th, td { padding: 6px 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="31-stop.html">STOP 묶음</a> · 다음: <a href="33-leave.html">LEAVE 묶음</a> · 견줘 보기: <a href="20-come.html">COME — 기준점 쪽으로</a> · <a href="12-take.html">TAKE 묶음</a></p>
+  <h1>BRING 묶음 — 같은 소포, 다른 길</h1>
+  <p class="lead">창고에 있는 소포가 <b>사무실 쪽으로 온다</b>. 물건이 기준이 되는 곳으로 옮겨진다는 것은 같고, <b>그냥 가져오는지, 먼저 가지러 갔다 오는지, 받을 사람 손에 넘겨 끝내는지, 운송망에 맡겨 보내는지</b>만 바꾸면 bring · fetch · deliver · ship으로 갈린다. 20 COME에 <b>물건</b>을 얹은 묶음이다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="bring" title="bring 소리로 듣기"><span class="en">bring</span><span class="ipa">/brɪŋ/</span><span class="ko">[브링]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="fetch" title="fetch 소리로 듣기"><span class="en">fetch</span><span class="ipa">/fetʃ/</span><span class="ko">[페치]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="deliver" title="deliver 소리로 듣기"><span class="en">deliver</span><span class="ipa">/dɪˈlɪv.ɚ/</span><span class="ko">[디<b>리버</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="ship" title="ship 소리로 듣기"><span class="en">ship</span><span class="ipa">/ʃɪp/</span><span class="ko">[쉽]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">옮기는 방식에 따라 소포가 움직이는 장면이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 창고와 사무실, 그리고 소포다. bring은 소포를 들고 동료가 기다리는 사무실 쪽으로 가는 화살표, fetch는 사무실에서 창고로 갔다가 들고 돌아오는 두 곡선, deliver는 302호 현관에서 기사가 고객에게 소포를 건네는 장면, ship은 물류센터에서 택배 트럭이 부산 쪽으로 떠나는 점선이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">BRING · 기준점 쪽으로</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 옮겼나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 거리·위치는 그림용이다. 소포 장면은 <a href="../bring/_family.md">bring/_family.md</a>의 고정 예(the package)와 각 노트 장면(창고와 사무실·지하 창고·고객의 아파트 현관·물류센터)을 옮겼다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"가져오다"도 길이 다르다 — 그냥 이쪽으로 왔는지, 먼저 가지러 다녀왔는지, 받을 사람에게 넘겨 끝냈는지, 내 손을 떠나 운송망에 실렸는지. 듣는 사람이 그려야 하는 것은 물건이 지나간 <b>길</b>이다. 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>BRING 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "기준점 쪽으로 오게 함"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC은 <b>agent가 TARGET을 기준 사람이나 목적지 쪽으로 오게 만듦</b> = <span class="en">BRING</span>이다. 여기에 출발 전 이동·수령 완료·운송 체계가 붙는다. 노트의 식을 그대로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">TARGET 이동</span><span class="op">+</span><span>기준 장소 쪽으로 동반</span><span class="op">=</span><span class="v">BRING</span>
+    <span class="r">BRING</span><span class="op">+</span><span>가지러 갔다가 돌아옴</span><span class="op">=</span><span class="v">FETCH</span>
+    <span class="r">BRING</span><span class="op">+</span><span>지정 수령인에게 완료</span><span class="op">=</span><span class="v">DELIVER</span>
+    <span class="r">BRING</span><span class="op">+</span><span>조직화된 운송 수단</span><span class="op">=</span><span class="v">SHIP</span>
+  </div>
+  <p>노트가 짚은 점: ship은 비교를 위해 여기 둔 것이고, 엄밀한 위 사건은 BRING보다 <b>SEND</b>에 가깝다. 보내는 사람이 함께 가지도 않고, 도착까지 말하지도 않는다. 반대로 deliver는 받는 사람에게 <b>닿은 결과</b>까지 품는다.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>가져옴</b> → 소포를 들고 동료가 기다리는 사무실 <b>쪽으로</b>. 방향이 중심이다. <span class="en">Please bring the package to the office.</span></li>
+    <li><b>가지러 갔다 옴</b> → 사무실에서 지하 창고로 <b>먼저 가서</b> 찾아 들고 돌아온다. 왕복. <span class="en">She fetched the package from storage.</span></li>
+    <li><b>수령인에게 전달</b> → 주소(302호)를 확인하고 고객 손에 넘긴다. <b>전달 완료</b>가 중심이다. <span class="en">The driver delivered the package to the customer.</span></li>
+    <li><b>택배로 보냄</b> → 물류센터에서 트럭에 실려 부산 쪽으로. 아직 <b>운송 중</b>이다. <span class="en">The company shipped the package to Busan.</span></li>
+    <li>fetch · deliver 장면은 "소포가 기준점(사무실 · 고객) 쪽으로 왔다"가 맞으니 <span class="en">bring</span>도 쓸 수 있다. ship 장면은 소포가 <b>떠나는</b> 쪽이라 BRING 칩이 꺼진다.</li>
+  </ul>
+
+  <h2>3. bring과 take — 가져오다, 가져가다</h2>
+  <p>bring은 COME처럼 <b>기준점 쪽</b>, take는 GO처럼 <b>기준점에서 멀어지는</b> 쪽이다(take의 "가져가다" 뜻. 12 TAKE 묶음은 "손에 넣음" 쪽을 다룬다). 기준점이 <b>듣는 사람이 있는 곳</b>이면 한국어로 "가져갈게"여도 영어는 bring — COME 쪽 "지금 가요 = I'm coming"과 같은 함정이다.</p>
+  <table>
+    <tr><th>장면</th><th>문장</th><th>한국어</th></tr>
+    <tr><td>친구 집 파티 (기준점 = 친구 집)</td><td><span class="en">Should I bring anything?</span></td><td>뭐 좀 가져갈까?</td></tr>
+    <tr><td>식당 (기준점 = 우리 자리)</td><td><span class="en">Could you bring us some water?</span></td><td>물 좀 갖다주세요</td></tr>
+    <tr><td>선생님이 (기준점 = 교실)</td><td><span class="en">Bring your textbook tomorrow.</span></td><td>내일 교과서 가져와</td></tr>
+    <tr><td>나가는 가족에게 (여기서 멀어짐)</td><td><span class="en">Take an umbrella with you.</span></td><td>우산 가져가</td></tr>
+    <tr><td>남은 음식 (여기서 집으로)</td><td><span class="en">Can I take this home?</span></td><td>이거 가져가도 돼요?</td></tr>
+  </table>
+  <p class="note">한 줄로: bring = 물건을 데리고 <b>come</b>, take = 물건을 데리고 <b>go</b>. 첫 줄처럼 "가져갈까?"가 bring이 되는 경우가 가장 자주 틀린다.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>BRING 묶음</b>이다. 물건이 기준점에서 <b>멀어지는</b> 쪽이면 테두리 밖 문으로 take에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 BRING 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 물건이 기준점 쪽으로 옮겨졌나에서 아니오면 그 자리에 둔 leave, 반대로 멀어지면 묶음 밖 문 take, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 bring, 가는 길이면 Q3에서 fetch, 끝이나 수단이면 Q4에서 ship과 deliver로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 가지러 감?</th><th>② 수령 완료?</th><th>③ 직접 들고?</th><th>자리</th></tr>
+    <tr><td><b>bring</b></td><td>말하지 않음</td><td>말하지 않음</td><td>예 — 함께 이동</td><td>동작 (기본)</td></tr>
+    <tr><td><b>fetch</b></td><td>예 — 왕복</td><td>아니오 — 기준점으로 돌아옴</td><td>예</td><td>동작 · 경로</td></tr>
+    <tr><td><b>deliver</b></td><td>말하지 않음</td><td>예</td><td>말하지 않음</td><td>결과</td></tr>
+    <tr><td><b>ship</b></td><td>아니오</td><td>아니오 — 도착 보장 안 함</td><td>아니오 — 운송망</td><td>동작 (발송)</td></tr>
+  </table>
+  <p class="note">길잡이지 칼같은 규칙이 아니다. ②의 deliver · ship 판정과 ③의 ship은 노트("수령인에게 도달한 결과까지 포함" · "도착까지 뜻하지는 않는다" · "발송자의 동반 이동을 뜻하지 않는다") 그대로이고, 나머지 칸과 자리는 짐작이다.</p>
+
+  <h2>5. 실제 문장으로 — 사람 · 장소를 어떻게 붙이나</h2>
+  <p>bring · fetch는 <b>사람 + 물건</b> 순서를 쓸 수 있다(<span class="en">bring me the package</span>). deliver는 이 모양이 어색해서 받는 쪽을 <b>to</b>로 붙인다. 과거형도 하나씩 다르다 — <span class="en">brought</span>(불규칙), <span class="en">shipped</span>(p를 겹침).</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">붙이는 방법에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">붙이는 것</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>사람 + 물건</th><th>to · from 장소</th><th>과거형</th></tr>
+    <tr><td><b>bring</b></td><td><span class="en">Bring me the package.</span></td><td><span class="en">bring the package to the office</span></td><td><span class="en">brought</span> (✗ bringed)</td></tr>
+    <tr><td><b>fetch</b></td><td><span class="en">fetch me some water</span></td><td><span class="en">fetched the package from storage</span></td><td><span class="en">fetched</span></td></tr>
+    <tr><td><b>deliver</b></td><td>✗ <span class="en">delivered the customer the package</span></td><td><span class="en">delivered the package to the customer</span></td><td><span class="en">was delivered</span> — 수동이 흔함</td></tr>
+    <tr><td><b>ship</b></td><td><span class="en">They shipped me a new one.</span></td><td><span class="en">shipped the package to Busan</span></td><td><span class="en">shipped</span> (✗ shiped)</td></tr>
+  </table>
+  <p class="note">경향 한 줄: <b>받는 사람</b>이 단어 뜻 안에 있는 deliver는 그 사람을 <b>to</b>로 따로 세우고, 가져오는 방향만 말하는 bring · fetch는 사람을 바로 앞에 둘 수 있다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>BRING</b> — 책상 위 펜을 들고 앞사람 <b>쪽으로</b> 두 걸음. "<b>I brought it.</b>"</li>
+    <li><b>FETCH</b> — 방 저쪽까지 <b>먼저 걸어가서</b> 펜을 집고, 원래 자리로 <b>돌아온다</b>.</li>
+    <li><b>DELIVER</b> — 펜에 이름표를 붙였다 치고, 그 사람을 <b>찾아</b> 손에 쥐여 준다. "배송 완료."</li>
+    <li><b>SHIP</b> — 펜을 상자에 넣어 <b>문 밖에 내놓고</b> 손을 뗀다. 도착은 내 손을 떠났다.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것. 특히 미국 회화에서 fetch는 <span class="en">go get</span>보다 드물게 들릴 수 있다.</li>
+      <li>3절 bring · take 표는 노트에 없는 풀이다. 미국 회화에서는 bring · take 경계가 느슨하게 쓰이기도 하니 사전으로 확인할 것.</li>
+      <li>5절 표의 ✗ 판정(delivered the customer the package · bringed · shiped)과 <span class="en">fetch me some water</span> · <span class="en">shipped me a new one</span>은 노트에 없다. bringed가 아니라는 것만 노트에 있다.</li>
+      <li>4절 표의 ① · 자리 칸, 0절 "대신 말하면"의 △·✗ 판정은 짐작이다.</li>
+      <li>맨 위 그림에서 deliver에 BRING 칩을 켠 것은 노트 식(BRING + 지정 수령인에게 완료)을 따른 것이다. ship은 노트가 SEND에 가깝다고 해서 껐다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../bring/_family.md">bring/_family.md</a> — "출발 전 이동 · 수령 완료 · 운송 시스템이 HOW를 결정한다"</li>
+    <li>동사 노트: <a href="../bring/bring--cause-to-come.md">bring</a> · <a href="../bring/fetch--go-get-and-bring.md">fetch</a> · <a href="../bring/deliver--bring-to-recipient.md">deliver</a> · <a href="../bring/ship--send-by-transport.md">ship</a></li>
+    <li>묶음 밖 이웃: take — 기준점에서 멀어지게 가져감(손에 넣는 take는 <a href="12-take.html">12 TAKE</a>). ship의 진짜 위 사건은 <a href="../send/_family.md">send/_family.md</a>.</li>
+    <li>견줘 보기: <a href="20-come.html">20 COME</a> — 물건 없이 사람만 기준점 쪽으로. <a href="08-go.html">08 GO</a> — 멀어지는 이동. <a href="14-give.html">14 GIVE</a> — 상대 것이 되게 넘김(deliver와 가깝다).</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 창고 x 248–332, 사무실 x 536–660 (그림용) ──
+  const PKG = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><rect x="' + x + '" y="' + y + '" width="28" height="22" rx="2" fill="var(--wood)" stroke="var(--obj-line)"/><path d="M' + (x + 14) + ' ' + y + ' v22" stroke="var(--accent2)" stroke-width="3"/></g>';
+  const STORE = '<rect x="248" y="130" width="84" height="110" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M252 170 H328 M252 205 H328" stroke="var(--wood)" stroke-width="4"/>' + tx(290, 146, 11, '창고', 'var(--muted)', ' font-weight="600"');
+  const OFFICE = '<rect x="536" y="120" width="124" height="120" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(598, 112, 11, '사무실 · 동료', 'var(--muted)', ' font-weight="600"') + table(546, 200, 66) + P(632, 240, 1, 'var(--ok)');
+  const ME = (x) => P(x, 240, 1.3, 'var(--sleeve)') + tx(x, 146, 11, '나', 'var(--muted)');
+  const TOP = {
+    first: 'fetch', keep: 'BRING',
+    keepSay: '<b>BRING</b>은 fetch · deliver 장면에도 맞다 — 경로나 완료를 빼고 소포가 기준점 쪽으로 왔다는 것만 말한다. ship 장면은 소포가 <b>떠나는</b> 쪽이라 맞지 않는다.',
+    chips: ['BRING', 'FETCH', 'DELIVER', 'SHIP'], out: [['TAKE (저쪽으로 가져감)', '12-take.html'], ['SEND (보냄)', '../send/_family.md']],
+    hows: {
+      bring: { btn: '가져옴', how: '기준점 쪽으로 동반', verb: 'BRING', chips: ['BRING'], target: 'TARGET · the package → the office',
+        result: '동료가 기다리는 쪽으로 — 방향이 중심',
+        pic: () => FLOOR + STORE + OFFICE + PKG(276, 148, .25) + '<path d="M336 236 H396" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 5"/>' + ME(420) + PKG(424, 190) +
+          step(.2, arrow(450, 526, 214, 'var(--accent)', 3)) + step(.35, tx(488, 182, 12, '이쪽으로', 'var(--accent)', ' font-weight="600"') + tx(632, 168, 14, '★', 'var(--ok)')),
+        say: '<span class="en">Please bring the package to the office.</span> 동료들이 있는 사무실이 <b>기준점</b>이고, 소포가 나와 함께 그쪽으로 온다. 가는 길이나 도착 확인보다 <b>방향</b>이 중요하다.' },
+      fetch: { btn: '가지러 갔다 옴', how: '가지러 갔다가 돌아옴', verb: 'FETCH', chips: ['BRING', 'FETCH'], target: 'TARGET · the package → the office',
+        result: '사무실 → 창고 → 다시 사무실 (왕복)',
+        pic: () => FLOOR + STORE + OFFICE + PKG(276, 148, .25) + ME(480) + PKG(484, 190) +
+          step(.15, '<path d="M462 160 Q400 40 300 118" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="5 5"/>' + tx(392, 74, 11, '① 가지러 감', 'var(--muted)')) +
+          step(.4, '<path d="M336 186 Q400 150 450 198" fill="none" stroke="var(--accent)" stroke-width="3"/>' + AR(438, 187, 450, 198, 'var(--accent)', 3) + tx(392, 222, 12, '② 들고 돌아옴', 'var(--accent)', ' font-weight="600"')),
+        say: '<span class="en">She fetched the package from storage.</span> 소포가 지하 창고에 있어 <b>먼저 그곳까지 간다</b>. 가기 → 찾기 → 가져오기의 왕복이 한 낱말에 들어 있다.' },
+      deliver: { btn: '수령인에게 전달', how: '지정 수령인에게 완료', verb: 'DELIVER', chips: ['BRING', 'DELIVER'], target: 'TARGET · the package → the customer',
+        result: '주소 확인 → 고객 손에 → 전달 완료',
+        pic: () => FLOOR + '<rect x="540" y="96" width="120" height="144" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><rect x="566" y="140" width="56" height="100" fill="var(--bg)" stroke="var(--obj-line)"/>' +
+          '<rect x="574" y="112" width="40" height="18" rx="3" fill="var(--bg)" stroke="var(--obj-line)"/>' + tx(594, 125, 11, '302호', 'var(--text)', ' font-weight="600"') +
+          P(594, 240, 1.3, 'var(--fog)') + tx(594, 154, 11, '고객', 'var(--muted)') + P(470, 240, 1.3, 'var(--sleeve)') + tx(470, 146, 11, '기사', 'var(--muted)') +
+          '<path d="M250 236 H440" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 5"/>' + tx(340, 226, 11, '주소를 찾아', 'var(--muted)') +
+          '<rect x="300" y="110" width="120" height="44" rx="4" fill="var(--bg)" stroke="var(--line)"/>' + tx(360, 127, 11, '송장', 'var(--muted)') + tx(360, 146, 12, '받는 분: 302호', 'var(--text)', ' font-weight="600"') +
+          '<rect x="484" y="194" width="38" height="9" rx="4" fill="var(--sleeve)"/><rect x="546" y="198" width="34" height="9" rx="4" fill="var(--fog)"/>' + step(.2, PKG(516, 182)) +
+          step(.4, tick(494, 140) + tx(500, 128, 12, '전달 완료', 'var(--accent)', ' font-weight="700"')),
+        say: '<span class="en">The driver delivered the package to the customer.</span> 주소와 받는 사람이 <b>정해져 있고</b>, 그 사람에게 넘겨 <b>수령 상태</b>가 됐다. 문 앞에 두는 것도 문맥에 따라 배송 완료다.' },
+      ship: { btn: '택배로 보냄', how: '운송망으로 발송', verb: 'SHIP', chips: ['SHIP'], target: 'TARGET · the package → Busan',
+        result: '운송망에 실림 — 도착은 아직',
+        pic: () => FLOOR + '<rect x="248" y="120" width="110" height="120" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(303, 138, 11, '물류센터', 'var(--muted)', ' font-weight="600"') +
+          PKG(266, 218) + PKG(298, 218) + PKG(282, 196) +
+          '<rect x="390" y="160" width="110" height="64" rx="3" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(445, 198, 12, '택배', 'var(--text)', ' font-weight="600"') +
+          '<path d="M500 184 h26 l14 18 v22 h-40 z" fill="var(--sleeve)" stroke="var(--obj-line)"/><circle cx="415" cy="230" r="10" fill="var(--obj-line)"/><circle cx="515" cy="230" r="10" fill="var(--obj-line)"/>' +
+          step(.15, arrow(362, 384, 200, 'var(--muted)', 2)) +
+          step(.35, arrow(550, 644, 210, 'var(--accent)', 3, true) + tx(596, 192, 12, '부산까지 운송 중', 'var(--accent)', ' font-weight="600"') + tx(596, 232, 11, '도착은 아직', 'var(--muted)')),
+        say: '<span class="en">The company shipped the package to Busan.</span> 직접 들고 가지 않고 <b>택배망에 맡겨</b> 먼 곳으로 보냈다. 발송은 도착을 보장하지 않는다 — 지금은 운송 중. 노트는 이것이 엄밀히는 SEND 쪽이라고 적었다.' },
+    },
+  };
+
+  const pk = (x, y) => '<rect x="' + x + '" y="' + y + '" width="14" height="11" rx="1" fill="var(--wood)" stroke="var(--obj-line)"/>';
+  const man = (x, c) => '<circle cx="' + x + '" cy="-12" r="6" fill="var(--skin)" stroke="var(--obj-line)"/><rect x="' + (x - 6) + '" y="-5" width="12" height="18" rx="5" fill="' + c + '"/>';
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. fetch를 먼저 빼 보세요.',
+    cards: [
+      { id: 'bring', t: ['이쪽으로', '가지고 옴'], v: 'bring', icon: man(-30, 'var(--sleeve)') + pk(-24, -2) + arrow(-8, 18, 2, 'var(--accent)', 2) + tx(30, 8, 16, '★', 'var(--ok)'),
+        instead: 'Come here with the package. △', lost: '사람이 오는 그림만 남는다. 물건을 데리고 기준점 쪽으로 오게 한다는 것이 한 낱말에 없다.', why: '물건을 기준점 쪽으로 함께 옴.' },
+      { id: 'fetch', t: ['가지러 가서', '가져옴'], v: 'fetch', icon: man(-30, 'var(--sleeve)') + pk(22, -8) + '<path d="M-20 -14 Q2 -40 24 -12" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="3 3"/><path d="M26 8 Q2 32 -18 12" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="M-10 9 l-8 3 l5 7" fill="none" stroke="var(--accent)" stroke-width="2"/>',
+        instead: 'I\'ll bring the package from storage. △', lost: '가져온다는 결과는 있지만, 먼저 창고까지 가야 한다는 왕복 경로가 빠진다.', why: '가지러 가는 길 + 가져오는 길.' },
+      { id: 'deliver', t: ['받을 사람에게', '전달 완료'], v: 'deliver', icon: man(-28, 'var(--sleeve)') + pk(-12, -4) + '<rect x="12" y="-24" width="24" height="46" fill="var(--bg)" stroke="var(--obj-line)"/>' + man(24, 'var(--fog)') + tick(-8, -36),
+        instead: 'The driver brought the package to the customer. △', lost: '가져다준 것은 맞지만, 정해진 주소 · 수령인에게 넘겨 배송을 끝냈다는 완료가 약하다.', why: '지정 수령인에게 전달 완료.' },
+      { id: 'ship', t: ['운송망으로', '발송'], v: 'ship', icon: '<rect x="-38" y="-16" width="40" height="26" rx="2" fill="var(--card)" stroke="var(--obj-line)"/><path d="M2 -6 h10 l6 8 v8 h-16 z" fill="var(--sleeve)" stroke="var(--obj-line)"/><circle cx="-28" cy="14" r="5" fill="var(--obj-line)"/><circle cx="8" cy="14" r="5" fill="var(--obj-line)"/>' + arrow(22, 40, -2, 'var(--accent)', 2, true),
+        instead: 'We brought the package to Busan. ✗', lost: '우리가 직접 들고 부산까지 간 그림이 된다. 택배망에 맡겨 보낸 그림이 아니다.', why: '운송 서비스 · 체계를 통해 보냄.' },
+      { id: 'take', out: true, t: ['저쪽으로', '가져감'], v: 'take', icon: tx(-32, 8, 16, '★', 'var(--ok)') + man(-8, 'var(--sleeve)') + pk(-2, -2) + arrow(12, 40, 2, 'var(--accent2)', 2),
+        instead: 'Bring these letters to the post office. △', lost: '여기에서 우체국으로 멀어지는데 bring을 쓰면, 듣는 사람이 우체국에 있는 것처럼 들린다.', why: '기준점에서 멀어지게 가져감 — 묶음 밖 take.' },
+    ],
+  };
+
+  const SCENES = {
+    party: { btn: '집들이 전화', place: '전화 · 친구 집들이 전날',
+      pic: () => FL + P(260, 150, 1.1, SL) + '<rect x="270" y="88" width="8" height="16" rx="2" fill="' + OL + '"/>' + L(260, 72, '나') +
+        '<path d="M490 150 V82 H650 V150" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/><path d="M480 82 L570 52 L660 82 z" fill="var(--wood)"/>' + L(570, 40, '기준점 · 친구네 집') + P(570, 150, 1.05, FOG) +
+        ST(.2, AR(300, 118, 470, 118, AC, 2.5) + '<rect x="372" y="122" width="18" height="14" rx="2" fill="var(--wood)" stroke="' + OL + '"/>') + ST(.35, T(385, 106, 12, '친구 집 쪽으로', AC, ' font-weight="600"')),
+      lines: [
+        ['나', 'Should I <b>bring</b> anything?', '뭐 좀 가져갈까?', 1],
+        ['친구', 'Just <b>bring</b> yourself!', '몸만 와!'],
+      ],
+      say: '친구 집이 <b>기준점</b> — 그쪽으로 물건을 가지고 가니까 한국어 "가져갈까?"가 영어로는 <span class="en">bring</span>.' },
+    restaurant: { btn: '식당', place: '식당 · 주문한 뒤',
+      pic: () => FL + TB(300, 460, 110) + P(270, 150, 1.05, SL) + L(270, 72, '나') + P(490, 150, 1.05, FOG) + P(610, 150, 1.1, OKC) + L(642, 100, '직원') +
+        '<rect x="560" y="102" width="34" height="5" rx="2" fill="' + OL + '"/><rect x="566" y="88" width="8" height="14" fill="' + BG + '" stroke="' + OL + '"/><rect x="580" y="88" width="8" height="14" fill="' + BG + '" stroke="' + OL + '"/>' +
+        ST(.2, AR(590, 64, 400, 92, AC, 2.5)) + ST(.35, T(500, 58, 12, '우리 자리 쪽으로', AC, ' font-weight="600"')),
+      lines: [
+        ['나', 'Excuse me, could you <b>bring</b> us some water?', '저기요, 물 좀 갖다주시겠어요?', 1],
+        ['직원', 'Sure, I\'ll be right back.', '네, 바로 갖다드릴게요.'],
+      ],
+      say: '우리 자리가 <b>기준점</b> — 직원이 물을 <b>이쪽으로</b> 가져온다. 식당에서 가장 자주 쓰는 bring.' },
+    office: { btn: '회의 직전', place: '사무실 · 회의 직전',
+      pic: () => FL + P(250, 150, 1.1, OKC) + L(250, 72, '팀장') + P(330, 150, 1.1, SL) + L(330, 72, '나') +
+        BX(540, 60, 120, 90) + T(600, 80, 12, '창고', MU, ' font-weight="600"') + '<rect x="586" y="118" width="30" height="20" rx="3" fill="' + A2 + '" stroke="' + OL + '"/>' +
+        ST(.2, AR(360, 100, 530, 100, MU, 2, true) + T(445, 90, 11, '① 가지러 가서', MU)) + ST(.4, AR(530, 124, 360, 124, AC, 2.5) + T(445, 142, 11, '② 가져옴', AC, ' font-weight="600"')),
+      lines: [
+        ['팀장', 'Could you <b>fetch</b> the projector from the storage room?', '창고에서 프로젝터 좀 가져다줄래요?', 1],
+        ['나', 'Sure, I\'ll go get it.', '네, 가서 가져올게요.'],
+      ],
+      say: '먼저 창고까지 <b>가서</b> 들고 <b>돌아온다</b> — <span class="en">fetch</span>. 대답의 <span class="en">go get</span>도 같은 왕복 그림이다.' },
+    door: { btn: '아파트 현관', place: '아파트 현관 · 택배 기사',
+      pic: () => FL + BX(520, 40, 90, 110, BG) + T(565, 56, 12, '302호', 'var(--text)', ' font-weight="700"') + P(565, 150, 1.1, FOG) + L(636, 100, '주민') +
+        P(400, 150, 1.1, SL) + L(400, 72, '기사') + '<rect x="412" y="104" width="30" height="7" rx="3" fill="' + SL + '"/>' +
+        ST(.2, '<rect x="446" y="92" width="34" height="26" rx="2" fill="var(--wood)" stroke="' + OL + '"/>') + ST(.4, tick(460, 72) + T(470, 54, 11, '전달 완료', AC, ' font-weight="600"')),
+      lines: [
+        ['기사', 'I have a package to <b>deliver</b> for unit 302.', '302호 택배 왔습니다.', 1],
+        ['주민', 'That\'s me. Thank you!', '저예요. 감사합니다!'],
+      ],
+      say: '주소 · 받는 사람이 정해져 있고, 손에 넘기면 <b>배송 완료</b> — <span class="en">deliver</span>. 음식 배달도 같은 말이다(<span class="en">food delivery</span>).' },
+    shop: { btn: '쇼핑몰 문의', place: '온라인 쇼핑 · 고객센터 채팅',
+      pic: () => FL + P(250, 150, 1.1, SL) + L(250, 72, '나') + '<rect x="260" y="92" width="12" height="20" rx="2" fill="' + OL + '"/>' +
+        '<path d="M360 54 H630" stroke="var(--line)" stroke-width="3"/>' +
+        [['주문', 360, 1], ['발송', 450, 1], ['배송 중', 540, 0], ['도착', 630, 0]].map(([t, x, on]) => '<circle cx="' + x + '" cy="54" r="8" fill="' + (on ? AC : BG) + '" stroke="' + (on ? AC : OL) + '" stroke-width="1.5"/>' + T(x, 80, 11, t, on ? AC : MU, on ? ' font-weight="600"' : '')).join('') +
+        '<rect x="400" y="104" width="76" height="34" rx="2" fill="' + CARD + '" stroke="' + OL + '"/><path d="M476 116 h18 l10 12 v10 h-28 z" fill="' + SL + '" stroke="' + OL + '"/><circle cx="416" cy="142" r="7" fill="' + OL + '"/><circle cx="490" cy="142" r="7" fill="' + OL + '"/>' +
+        ST(.3, AR(512, 124, 620, 124, AC, 2.5, true)),
+      lines: [
+        ['나', 'When will my order <b>ship</b>?', '제 주문 언제 발송돼요?', 1],
+        ['상담원', 'It <b>shipped</b> this morning. It should arrive on Friday.', '오늘 아침에 발송됐어요. 금요일에 도착할 거예요.'],
+      ],
+      say: '<span class="en">ship</span>은 운송망에 <b>실어 보냄</b>까지다. 도착은 따로 <span class="en">arrive</span>로 말한다 — 발송 ≠ 도착.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'fetch',
+    region: { x: 106, y: 66, w: 538, h: 258, label: 'BRING 묶음 · BASIC = 기준점 쪽으로', at: [114, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 260, t: 'Q1. 물건이 기준점 쪽으로 왔나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 200, y: 180, w: 160, t: 'Q3. 가는 길?', sub: '먼저 가지러 감' },
+      q4: { x: 530, y: 180, w: 190, t: 'Q4. 끝 · 수단?', sub: '수령 완료냐 운송망이냐' },
+    },
+    leaves: {
+      leave:   { x: 60, y: 262, w: 88, v: 'leave', sub: '그 자리에 둠', seg: 't', say: '<span class="en">I left the package in storage.</span> 옮기지 않았다 → BRING 묶음 밖(사물을 두고 오는 leave는 <a href="33-leave.html">33 LEAVE</a> 3절).' },
+      fetch:   { x: 200, y: 262, w: 100, v: 'fetch', sub: '갔다가 가져옴', seg: 'm', say: '<span class="en">She fetched the package from storage.</span> 가지러 가는 길까지.' },
+      bring:   { x: 340, y: 262, w: 92, v: 'bring', sub: '방향만', seg: 'm', say: '<span class="en">Please bring the package to the office.</span> 이 묶음의 기본 동사.' },
+      ship:    { x: 468, y: 262, w: 100, v: 'ship', sub: '운송망 · 발송', seg: 'm', say: '<span class="en">The company shipped the package to Busan.</span> 보냈을 뿐, 도착은 아직.' },
+      deliver: { x: 590, y: 262, w: 100, v: 'deliver', sub: '수령인에게 완료', seg: 'r', say: '<span class="en">The driver delivered the package to the customer.</span> 받는 사람 손에 닿은 결과.' },
+      take:    { x: 600, y: 36, w: 120, v: 'take', sub: '→ 멀어지게', seg: '', out: true, say: '<span class="en">Take an umbrella with you.</span> 물건이 기준점에서 <b>멀어진다</b> → BRING 묶음 밖. 손에 넣는 take는 <a href="12-take.html">12 TAKE</a>.' },
+    },
+    edges: [
+      ['q1', 'leave', '아니오 · 그대로', 'left', [150, 28]], ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'take', '반대로 멀어짐', 'right', [512, 28], true],
+      ['q2', 'q3', '가는 길'], ['q2', 'bring', '말하지 않음'], ['q2', 'q4', '끝 · 수단'],
+      ['q3', 'fetch', '왕복'],
+      ['q4', 'ship', '운송망'], ['q4', 'deliver', '수령 완료'],
+    ],
+    segs: [[16, 104, '안 옮김', 't'], [109, 524, '옮기는 동작 — 길 · 방향 · 발송', 'm'], [529, 640, '받는 쪽 결과', 'r']],
+  };
+
+  const SLOTS = {
+    first: ['deliver', 'who'],
+    slots: { who: '사람 + 물건', place: 'to · from 장소', past: '과거형' },
+    verbs: {
+      bring: {
+        who:   { ok: [['Bring', 'v'], ['me', 'o'], ['the package', 'o']], say: '받는 사람을 바로 앞에. "나한테 가져와".' },
+        place: { ok: [['Please', 'x'], ['bring', 'v'], ['the package', 'o'], ['to the office', 'r']], say: '노트 예문. 기준점은 <b>to</b>로.' },
+        past:  { ok: [['She', 's'], ['brought', 'v'], ['the package', 'o']], bad: [['She', 's'], ['bringed', 'v'], ['the package', 'o']], say: '<b>brought</b> /brɑːt/ — 노트가 짚은 불규칙 변화. bringed가 아니다.' },
+      },
+      fetch: {
+        who:   { ok: [['Can you', 's'], ['fetch', 'v'], ['me', 'o'], ['some water?', 'o']], say: '사람 + 물건 모양도 쓴다.' },
+        place: { ok: [['She', 's'], ['fetched', 'v'], ['the package', 'o'], ['from storage', 'r']], say: '노트 예문. 가지러 간 곳은 <b>from</b>.' },
+        past:  { ok: [['I', 's'], ['fetched', 'v'], ['it', 'o']], say: '규칙 변화.' },
+      },
+      deliver: {
+        who:   { ok: [['He', 's'], ['delivered', 'v'], ['the package', 'o'], ['to the customer', 'r']], bad: [['He', 's'], ['delivered', 'v'], ['the customer', 'o'], ['the package', 'o']], say: 'deliver는 <b>사람 + 물건</b> 모양이 어색하다. 받는 사람은 <b>to</b>로.' },
+        place: { ok: [['We', 's'], ['deliver', 'v'], ['to your door', 'r']], say: '받는 곳만 붙여도 된다 — 광고 문구에 흔하다.' },
+        past:  { ok: [['The package', 's'], ['was delivered', 'v'], ['yesterday', 'x']], say: '물건을 주어로 한 <b>수동</b>이 흔하다 — 배송 알림 말투.' },
+      },
+      ship: {
+        who:   { ok: [['They', 's'], ['shipped', 'v'], ['me', 'o'], ['a new one', 'o']], say: '교환품을 보내 줬다 — 사람 + 물건.' },
+        place: { ok: [['The company', 's'], ['shipped', 'v'], ['the package', 'o'], ['to Busan', 'r']], say: '노트 예문. 목적지는 <b>to</b>.' },
+        past:  { ok: [['It', 's'], ['shipped', 'v'], ['this morning', 'x']], bad: [['It', 's'], ['shiped', 'v'], ['this morning', 'x']], say: '<b>p를 겹친다</b> — shipped. 물건이 주어면 "발송됐다".' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>
