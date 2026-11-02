@@ -168,15 +168,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 44 | [44-eat.html](44-eat.html) | EAT 묶음 — eat · bite · chew · nibble · devour. "어디까지 가나" | HOW 버튼 → 사과와 입 크게 보기(속까지·한 입·씹고 또·조금씩·샌드위치 순식간에) / 질문 흐름 + DRINK로 가는 문 | |
 | 45 | [45-write.html](45-write.html) | WRITE 묶음 — write · jot down · draft · type · compose. "write와 짝이 되는 말" | HOW 버튼 → 종이·화면 크게 보기(쪽지·p. 42·초안 빨간 표시·키보드·카드 ①②③) / 질문 흐름 + SAY로 가는 문 | |
 | 46 | [46-read.html](46-read.html) | READ 묶음 — read · skim · scan · reread · read aloud. "skim과 scan" | HOW 버튼 → 고래 기사(줄마다·제목만 지그재그·돋보기로 날짜·같은 문단 다시·소리 내어) / 질문 흐름 + LOOK AT으로 가는 문 | |
+| 47 | [47-meet.html](47-meet.html) | MEET 묶음 — meet · greet · visit · gather · join. "만나다 — meet · see · visit" | HOW 버튼 → 도서관 입구·손 흔들기·미나네 집·원형 탁자·빈 의자 +1 / 질문 흐름 + COME으로 가는 문 | |
+| 48 | [48-learn.html](48-learn.html) | LEARN 묶음 — learn · study · practice · discover · memorize. "study와 learn" | HOW 버튼 → 분수 규칙(✗→✓·두 시간 공부·반복 문제·조각 맞춰 발견·가리고 외우기) / 질문 흐름 + KNOW로 가는 문 | |
+| 49 | [49-play.html](49-play.html) | PLAY 묶음 — play · compete · perform · pretend · rehearse. "play 뒤에 오는 것" | HOW 버튼 → 보드게임·달리기 순위·무대 노래·의사 놀이·D-1 동선 맞추기 / 질문 흐름 + PRACTICE로 가는 문 | |
 
-01~46 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~46)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~46와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~49 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~49)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~49와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- 나머지 묶음(36개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: meet · learn · play
+- 나머지 묶음(30개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: drink · sleep · hear
 
 ## 생성기로 만들기 (08부터)
 

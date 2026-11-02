@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PLAY 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/49-play.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+  /* 표 칸이 많아 휴대폰 폭에서 칸 여백을 줄인다 */
+  @media (max-width: 600px) { th, td { padding: 6px 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="48-learn.html">LEARN 묶음</a> · 다음: <a href="50-drink.html">DRINK 묶음</a> · 견줘 보기: <a href="48-learn.html">LEARN 묶음 (practice — 기술 반복)</a> · <a href="37-show.html">SHOW 묶음 (보여 줌)</a></p>
+  <h1>PLAY 묶음 — 같은 학교 축제, 다른 놀이와 무대</h1>
+  <p class="lead">학교 축제 날, 아이들이 <b>놀이와 무대</b>에 참여한다. 즐거움·규칙·표현을 위해 어떤 활동에 들어간다는 점은 같고, <b>그냥 함께 노는지, 승패를 두고 겨루는지, 관객 앞에 보여 주는지, 사실이 아닌 역할처럼 행동하는지, 공연 전에 미리 맞춰 보는지</b>만 바꾸면 play · compete · perform · pretend · rehearse로 갈린다. 묶음 노트의 말대로 이 동사들이 <b>언제나 play의 한 가지는 아니다</b> — 그래서 맨 위 그림에서 PLAY 칩이 꺼지는 장면이 있다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="play" title="play 소리로 듣기"><span class="en">play</span><span class="ipa">/pleɪ/</span><span class="ko">[플<b>레</b>이]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="compete" title="compete 소리로 듣기"><span class="en">compete</span><span class="ipa">/kəmˈpiːt/</span><span class="ko">[컴<b>피</b>트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="perform" title="perform 소리로 듣기"><span class="en">perform</span><span class="ipa">/pərˈfɔːrm/</span><span class="ko">[퍼<b>폼</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="pretend" title="pretend 소리로 듣기"><span class="en">pretend</span><span class="ipa">/prɪˈtend/</span><span class="ko">[프리<b>텐</b>드]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="rehearse" title="rehearse 소리로 듣기"><span class="en">rehearse</span><span class="ipa">/rɪˈhɜːrs/</span><span class="ko">[리<b>허</b>스]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">참여하는 방식에 따라 축제의 장면이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 학교 축제의 한 장면이다. play는 비 오는 날 교실 탁자에서 아이들이 보드게임 말을 옮김, compete는 두 팀이 같은 코스를 달려 결승선에서 1위와 2위가 정해짐, perform은 조명 아래 무대에서 미나가 노래하고 관객이 들음, pretend는 장난감 청진기를 든 아이가 나는 의사 하며 인형을 진찰함, rehearse는 공연 전날 빈 객석 앞 무대에서 배우들이 바닥 표시까지 입장 동선을 맞추는 장면이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">PLAY · 활동에 참여</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 참여하나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 사람 수·순위는 그림용이다. 장면은 <a href="../play/_family.md">play/_family.md</a>의 Scenario contrast(게임에 참여 · 승자를 가리려 겨룸 · 노래를 관객에게 · 의사 역할 놀이 · 공연 전 무대 동선)와 각 노트 장면(비 오는 날 교실 · 운동회 경기장 · 축제 무대 · 역할놀이 코너 · 축제 전날 무대)을 옮겼다. compete · perform · rehearse 장면에서는 PLAY 칩을 켜지 않았다 — 아래 2절.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"놀다 · 하다" 하나로 다 될 것 같다. 그런데 <b>이기려고 상대와 겨루는</b>, <b>관객 앞에서 준비한 걸 보여 주는</b>, <b>정말은 아닌데 그런 것처럼</b>, <b>내일 공연을 오늘 미리 처음부터 끝까지</b>를 말하고 싶을 때는? 그리고 공연도 놀이도 아니고 <b>기술 하나만 반복</b>하면? 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>PLAY 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "활동에 참여"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>agent가 즐거움·규칙·표현을 위해 놀이 또는 수행 활동에 참여함</b> = <span class="en">PLAY</span>다. 여기에 겨룸 · 관객 앞 제시 · 가상 역할 · 공연 전 미리 실행이 붙는다. 노트의 식을 그대로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">참여자</span><span class="op">+</span><span>규칙 · 상상 · 표현 활동</span><span class="op">=</span><span class="v">PLAY</span>
+    <span class="r">PLAY</span><span class="op">+</span><span>같은 기준 아래 승패를 두고 겨룸</span><span class="op">=</span><span class="v">COMPETE</span>
+    <span class="r">PLAY</span><span class="op">+</span><span>관객 앞에서 준비한 표현을 제시</span><span class="op">=</span><span class="v">PERFORM</span>
+    <span class="r">PLAY</span><span class="op">+</span><span>사실이 아닌 역할을 사실처럼 행동</span><span class="op">=</span><span class="v">PRETEND</span>
+    <span class="r">PLAY/PERFORM</span><span class="op">+</span><span>실제 공연 전 전체 흐름을 미리 실행</span><span class="op">=</span><span class="v">REHEARSE</span>
+  </div>
+  <p>노트가 짚은 점: play만으로 <b>한 판을 끝냈는지는 알 수 없고</b>, compete는 <b>이겼다는 뜻이 아니다</b>. perform은 <span class="en">perform a task</span>처럼 일을 수행한다는 뜻도 있고, pretend는 놀이 밖에서 <b>모르는 척 · 괜찮은 척</b>에도 쓴다. <span class="en">rehearse the play</span>의 play는 명사 "연극"이다.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>놂</b> → 비가 와서 밖에 못 나간다. 아이들이 교실에서 보드와 말을 펼치고 <b>차례대로</b> 움직인다. <span class="en">The children played a board game.</span></li>
+    <li><b>겨룸</b> → 운동회. 두 팀이 같은 코스를 달리고 <b>먼저 도착한 팀이 이긴다</b>. 기록으로 순위가 정해진다. <span class="en">The two teams competed in the race.</span></li>
+    <li><b>공연함</b> → 축제 무대. 미나가 연습한 노래를 친구와 가족들 <b>앞에서</b> 처음부터 끝까지 부른다. <span class="en">Mina performed a song on stage.</span></li>
+    <li><b>흉내 냄</b> → 역할놀이 코너. 한 아이가 장난감 청진기를 들고 <b>의사인 것처럼</b> 인형을 진찰한다. <span class="en">The children pretended to be doctors.</span></li>
+    <li><b>미리 맞춤</b> → 축제 전날 무대. 대사는 외웠지만 입장 시점과 위치가 안 맞는다. 입장부터 인사까지 <b>순서대로</b> 실행해 본다. <span class="en">The class rehearsed the play.</span></li>
+    <li>PLAY 칩은 play와 pretend 장면에서만 켜진다. 병원 놀이는 <span class="en">play doctor</span>라고도 하니 play가 맞지만, 달리기 경주 · 노래 공연 · 리허설은 play로 바꿔 말하기 어렵다(묶음 노트: "모두 언제나 play의 하위 사건인 것은 아니다").</li>
+  </ul>
+
+  <h2>3. play 뒤에 무엇이 오나 — 운동 · 악기 · 놀다</h2>
+  <p>한국어는 축구를 "하고", 피아노를 "치고", 친구와 "논다". 영어는 셋 다 play일 수 있지만 <b>붙는 모양</b>이 다르고, 어른이 친구와 시간을 보내는 "놀다"는 보통 play가 아니다. 노트의 play TARGET은 "게임 · 악기 · 역할"이다.</p>
+  <table>
+    <tr><th>무엇을</th><th>영어</th><th>한국어</th></tr>
+    <tr><td>운동 · 경기</td><td><span class="en">play soccer</span> (the 없음)</td><td>축구를 하다</td></tr>
+    <tr><td>게임</td><td><span class="en">play a board game</span></td><td>보드게임을 하다</td></tr>
+    <tr><td>악기</td><td><span class="en">play the piano</span> (보통 the)</td><td>피아노를 치다</td></tr>
+    <tr><td>역할 놀이</td><td><span class="en">play doctor</span> · <span class="en">pretend to be a doctor</span></td><td>병원 놀이를 하다 · 의사인 척하다</td></tr>
+    <tr><td>아이들이 놂</td><td><span class="en">The kids are playing outside.</span></td><td>아이들이 밖에서 논다</td></tr>
+    <tr><td>어른이 친구와 놂</td><td><span class="en">I hung out with my friends.</span></td><td>친구들이랑 놀았어</td></tr>
+  </table>
+  <p class="note">어른이 <span class="en">I played with my friends.</span>라고 하면 무엇을 하며 놀았는지(게임 · 운동)가 궁금해지거나 어린아이 말처럼 들리기 쉽다. 시간을 함께 보냈다는 뜻이면 <span class="en">hang out</span>.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>PLAY 묶음</b>이다. 놀이도 공연도 아니고 <b>기술 하나를 반복</b>하는 것이면 테두리 밖 문으로 LEARN 묶음의 practice에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 PLAY 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 놀이나 공연 활동에 참여하나에서 아니오, 연습만이면 묶음 밖 문 practice, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 play, 누구와 어떻게면 Q3에서 compete와 pretend, 관객은이면 Q4에서 perform과 rehearse로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 상대 · 관객</th><th>② 무엇을 걸고</th><th>③ 무엇이 HOW를 고르나</th></tr>
+    <tr><td><b>play</b></td><td>함께하는 사람</td><td>즐거움 · 규칙</td><td>— (방식 미지정)</td></tr>
+    <tr><td><b>compete</b></td><td>상대 (사람 · 팀)</td><td>승패 · 순위</td><td>같은 기준으로 겨룸</td></tr>
+    <tr><td><b>perform</b></td><td>관객이 지금 앞에</td><td>준비한 표현</td><td>관객 앞 제시</td></tr>
+    <tr><td><b>pretend</b></td><td>함께 노는 사람</td><td>상상 속 역할</td><td>사실인 것처럼</td></tr>
+    <tr><td><b>rehearse</b></td><td>관객은 아직 (공연 전)</td><td>예정된 공연</td><td>전체 흐름을 미리</td></tr>
+  </table>
+  <p class="note">칸 내용은 각 노트의 Precondition · Target Condition · 식을 옮겼다. 흐름 그림의 질문 순서와 Q3 · Q4 묶음은 그림을 위해 정했다.</p>
+
+  <h2>5. 실제 문장으로 — 무엇을, 무엇을 덧붙이나</h2>
+  <p>play · perform · rehearse는 하는 것을 <b>바로</b> 받는다. compete는 목적어를 바로 받지 않고 <b>in · against · for</b>로 잇는다. pretend는 <b>to + 동사</b>나 <b>that + 문장</b>이 붙는다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">붙이는 방법에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">붙이는 것</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>무엇을</th><th>덧붙임</th><th>다른 모양</th></tr>
+    <tr><td><b>play</b></td><td><span class="en">played a board game</span></td><td><span class="en">play soccer</span> (✗ the soccer)</td><td><span class="en">plays the piano</span></td></tr>
+    <tr><td><b>compete</b></td><td><span class="en">competed in the race</span> (✗ competed the race)</td><td><span class="en">competed against Class 3</span></td><td><span class="en">competed for first place</span></td></tr>
+    <tr><td><b>perform</b></td><td><span class="en">performed a song on stage</span></td><td><span class="en">performed for the audience</span></td><td><span class="en">performed the task</span> — 수행하다</td></tr>
+    <tr><td><b>pretend</b></td><td><span class="en">pretended to be doctors</span> (✗ pretended doctors)</td><td><span class="en">pretended that he was fine</span></td><td><span class="en">Let's play doctor.</span></td></tr>
+    <tr><td><b>rehearse</b></td><td><span class="en">rehearsed the play</span></td><td><span class="en">rehearsed the play after school</span></td><td><span class="en">practiced my serve</span> (✗ rehearsed)</td></tr>
+  </table>
+  <p class="note">경향 한 줄: 무엇을 "하는지"가 분명한 것(play · perform · rehearse)은 바로 잇고, 겨루는 compete와 흉내 내는 pretend는 <b>전치사 · to · that</b>을 사이에 둔다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>PLAY</b> — 주사위를 굴리는 손짓을 하고 말을 <b>톡톡 두 칸</b> 옮긴다.</li>
+    <li><b>COMPETE</b> — 옆 사람과 눈을 마주치고 "준비, 땅!" 하며 <b>먼저</b> 손을 든다.</li>
+    <li><b>PERFORM</b> — 의자에서 일어나 앞을 보고 <b>인사한 뒤</b> 한 소절 부른다.</li>
+    <li><b>PRETEND</b> — 펜을 청진기처럼 귀에 대고 "어디 아파요?" — <b>의사인 척</b>.</li>
+    <li><b>REHEARSE</b> — 문에서 걸어 들어와 바닥의 한 점에 <b>멈추고</b>, 다시 문으로 가서 한 번 더.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>3절 표(play soccer · play the piano의 관사, play doctor, The kids are playing outside, hang out)와 그 설명은 노트에 없다. 노트에 있는 것은 play의 TARGET("게임 · 악기 · 역할")과 "집에서 피아노를 play"까지다.</li>
+      <li>5절의 ✗ 판정(the soccer · competed the race · pretended doctors · rehearsed my serve)과 덧붙임 · 다른 모양(competed against / for · performed for the audience · pretended that … · Let's play doctor · practiced my serve)은 노트에 없다. performed the task는 perform 노트의 <span class="en">perform a task</span>에서 왔다.</li>
+      <li>0절 "대신 말하면"의 △·✗ 판정(did a board game ✗ 등)은 짐작이다.</li>
+      <li>PLAY 칩을 compete · perform · rehearse 장면에서 끈 것은 판단이다. 묶음 노트는 "모두 언제나 play의 하위 사건인 것은 아니다"라고 하지만, 각 노트의 식은 <span class="en">PLAY + … = COMPETE / PERFORM / PRETEND</span>, <span class="en">PLAY/PERFORM + … = REHEARSE</span>라서 모두 play의 한 가지로 놓는다. 식과 묶음 노트 중 어느 쪽에 맞출지 정할 것.</li>
+      <li>묶음 노트 <span class="en">play/_family.md</span>의 "Shared Result" 제목 아래가 비어 있고, 결과 문장("agent가 즐거움·규칙·표현을 위해 … 참여한다")은 "상황에서 꺼내기" 뒤에 떨어져 있다. 자리를 옮길 것.</li>
+      <li>play 노트의 식은 <span class="en">참여자 + 규칙/상상/표현 활동 = PLAY</span>로 다른 노트의 <span class="en">PLAY + … =</span> 모양과 다르고, rehearse 노트는 기준을 <span class="en">PLAY/PERFORM</span> 둘로 둔다. 1절 표는 그대로 옮겼다.</li>
+      <li>rehearse 노트의 "시제와 결과"(<span class="en">Their entrances and timing are matched now.</span>)는 같은 노트의 "반드시 완벽하게 성공했다는 뜻은 아니다"보다 결과를 세게 말한다.</li>
+      <li>compete 노트의 장면은 달리기 경주(운동회)인데 묶음 표의 예는 <span class="en">compete in the game</span>, 노트 Example은 <span class="en">competed in the game</span>, 한 문장은 <span class="en">competed in the race</span>로 섞여 있다. 맨 위 그림은 경주를 따랐다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../play/_family.md">play/_family.md</a> — "최근에 즐긴 활동과 누군가 앞에서 보여 준 활동을 각각 하나씩 말해 보자"</li>
+    <li>동사 노트: <a href="../play/play--join-fun-activity.md">play</a> · <a href="../play/compete--play-to-win.md">compete</a> · <a href="../play/perform--play-for-audience.md">perform</a> · <a href="../play/pretend--act-as-if.md">pretend</a> · <a href="../play/rehearse--practice-for-performance.md">rehearse</a></li>
+    <li>묶음 밖 이웃: <a href="48-learn.html">48 LEARN</a>의 practice — 공연 없이 개별 기술을 반복함(rehearse 노트의 Minimal Contrast).</li>
+    <li>견줘 보기: <a href="37-show.html">37 SHOW</a> — 관객에게 보이게 함(perform과 가깝고, 과정을 해 보이면 demonstrate). 놀이 모둠에 들어가는 join은 <a href="47-meet.html">47 MEET</a>.</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — play는 <b>활동에 참여한 것</b> 하나를 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 오른쪽 칸 x 244~664 (좌표는 그림용) ──
+  const KID = (x, t) => tx(x, 150, 12, t, 'var(--muted)');
+  // 무대: 윗면 y = 170, x1~x2
+  const STAGE = (x1, x2) => '<rect x="' + x1 + '" y="170" width="' + (x2 - x1) + '" height="16" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="1.5"/>' +
+    '<path d="M' + (x1 + 6) + ' 186 V240 M' + (x2 - 6) + ' 186 V240" stroke="var(--obj-line)" stroke-width="4"/>';
+  const SEAT = (x) => '<path d="M' + (x - 10) + ' 214 V240 M' + (x - 10) + ' 226 H' + (x + 10) + ' V240" fill="none" stroke="var(--obj-line)" stroke-width="3"/>';
+  const TOP = {
+    first: 'pretend', keep: 'PLAY',
+    keepSay: '<b>PLAY</b>는 놀이 · 경기 · 연주에 참여했다는 말이다 — 이 장면이 놀이라면 play도 맞다. PLAY 칩이 꺼진 장면(경주 · 노래 공연 · 리허설)은 play로 바꿔 말하기 어렵다(묶음 노트). <span class="en">The children played a board game.</span>',
+    chips: ['PLAY', 'COMPETE', 'PERFORM', 'PRETEND', 'REHEARSE'], out: [['PRACTICE (기술 반복)', '48-learn.html']],
+    hows: {
+      play: { btn: '놂', how: '즐겁게 참여', verb: 'PLAY', chips: ['PLAY'], target: 'TARGET · a board game',
+        result: '보드게임 한 판 — 차례로 말을 옮김',
+        pic: () => FLOOR + '<rect x="262" y="56" width="80" height="64" fill="var(--water)" opacity=".5" stroke="var(--obj-line)"/><path d="M280 66 l-6 14 M304 70 l-6 14 M326 64 l-6 14 M290 92 l-6 14 M318 96 l-6 14" stroke="var(--link)" stroke-width="1.5"/>' +
+          tx(302, 138, 11, '비 오는 날', 'var(--muted)') +
+          table(410, 200, 200) + '<rect x="450" y="184" width="120" height="16" fill="var(--card)" stroke="var(--obj-line)"/>' +
+          [462, 486, 510, 534, 558].map((x, i) => '<rect x="' + (x - 10) + '" y="186" width="20" height="12" fill="' + (i % 2 ? 'var(--chip-on)' : 'var(--card)') + '"/>').join('') +
+          P(380, 240, 1.2, 'var(--sleeve)') + P(640, 240, 1.2, 'var(--fog)') + KID(380, '미나') + KID(640, '진') +
+          step(.2, '<rect x="586" y="168" width="20" height="20" rx="4" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><circle cx="591" cy="173" r="2" fill="var(--obj-line)"/><circle cx="601" cy="183" r="2" fill="var(--obj-line)"/>') +
+          step(.45, '<circle cx="486" cy="180" r="5" fill="var(--accent)"/>' + '<path d="M466 176 q10 -14 20 -2" fill="none" stroke="var(--accent)" stroke-width="2"/>' + tx(470, 150, 12, '내 차례!', 'var(--accent)', ' font-weight="700"')),
+        say: '<span class="en">The children played a board game.</span> 이기는 것만이 아니라 <b>규칙 있는 즐거운 활동에 참여</b>한 사건 전체. 한 판을 끝냈는지는 play만으로 알 수 없다(노트).' },
+      compete: { btn: '겨룸', how: '승패를 두고 겨룸', verb: 'COMPETE', chips: ['COMPETE'], target: 'TARGET · the race',
+        result: '같은 코스, 먼저 도착 — 순위가 정해짐',
+        pic: () => FLOOR + tx(300, 70, 12, '운동회', 'var(--muted)', ' font-weight="600"') +
+          '<path d="M250 212 H640" stroke="var(--line)" stroke-width="1.5"/><path d="M262 186 V240" stroke="var(--muted)" stroke-width="2"/>' + tx(262, 178, 10, '출발', 'var(--muted)') +
+          [0, 1, 2, 3, 4, 5, 6].map((i) => '<rect x="600" y="' + (184 + i * 8) + '" width="8" height="8" fill="' + (i % 2 ? 'var(--card)' : 'var(--obj-line)') + '"/><rect x="608" y="' + (184 + i * 8) + '" width="8" height="8" fill="' + (i % 2 ? 'var(--obj-line)' : 'var(--card)') + '"/>').join('') +
+          step(.15, P(570, 212, 1.0, 'var(--sleeve)') + P(500, 240, 1.0, 'var(--accent2)') +
+            '<path d="M548 180 h-24 M548 192 h-30 M484 214 h-24 M484 226 h-30" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"/>') +
+          step(.5, '<circle cx="570" cy="132" r="13" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>' + tx(570, 137, 12, '1', 'var(--accent)', ' font-weight="700"') +
+            '<circle cx="500" cy="160" r="13" fill="var(--bg)" stroke="var(--line)"/>' + tx(500, 165, 12, '2', 'var(--muted)', ' font-weight="700"')),
+        say: '<span class="en">The two teams competed in the race.</span> 재미로 달린 게 아니라 <b>같은 기준(같은 코스) 아래 결과를 비교</b>해 승자를 정한다. 이겼다는 뜻은 아니다(노트). 경주는 play하지 않으니 PLAY 칩은 꺼 두었다.' },
+      perform: { btn: '공연함', how: '관객 앞에 보여 줌', verb: 'PERFORM', chips: ['PERFORM'], target: 'TARGET · a song → the audience',
+        result: '무대에서 노래 — 관객이 듣는다',
+        pic: () => FLOOR + '<path d="M500 44 L430 170 H570 Z" fill="var(--accent2)" opacity=".15"/><rect x="490" y="38" width="20" height="10" rx="3" fill="var(--obj-line)"/>' +
+          STAGE(370, 640) + P(500, 170, 1.2, 'var(--sleeve)') + tx(444, 120, 12, '미나', 'var(--muted)') +
+          [400, 450, 550, 600].map((x, i) => P(x, 240, 0.8, ['var(--fog)', 'var(--ok)', 'var(--fog)', 'var(--accent2)'][i])).join('') + tx(290, 214, 11, '관객', 'var(--muted)') +
+          step(.25, tx(540, 100, 16, '♪', 'var(--accent)') + tx(560, 84, 16, '♫', 'var(--accent)') + tx(584, 100, 16, '♪', 'var(--accent)')) +
+          step(.55, AR(320, 206, 380, 206, 'var(--muted)', 1.5, true)),
+        say: '<span class="en">Mina performed a song on stage.</span> 혼자 즐기는 노래가 아니라 <b>관객 앞에서 준비한 표현을 처음부터 끝까지</b> 제시한다. 노래를 불렀으니 play(연주)와도 다르다 — PLAY 칩은 꺼 두었다.' },
+      pretend: { btn: '흉내 냄', how: '사실인 것처럼', verb: 'PRETEND', chips: ['PLAY', 'PRETEND'], target: 'TARGET · to be a doctor',
+        result: '장난감 청진기로 — 의사인 것처럼',
+        pic: () => FLOOR + '<rect x="470" y="212" width="100" height="14" rx="3" fill="var(--card)" stroke="var(--obj-line)"/><path d="M476 226 V240 M564 226 V240" stroke="var(--obj-line)" stroke-width="3"/>' +
+          '<circle cx="548" cy="204" r="9" fill="var(--skin)" stroke="var(--obj-line)"/><rect x="490" y="200" width="50" height="12" rx="5" fill="var(--accent2)" opacity=".7"/>' + tx(520, 196, 10, '인형', 'var(--muted)') +
+          P(420, 240, 1.2, 'var(--ok)') + KID(420, '의사 역할') + P(630, 240, 1.0, 'var(--fog)') + tx(630, 166, 11, '보호자 역할', 'var(--muted)') +
+          step(.2, '<path d="M414 184 q-2 22 14 26 L494 206" fill="none" stroke="var(--obj-line)" stroke-width="2.5"/><circle cx="496" cy="206" r="5" fill="var(--obj-line)"/>') +
+          step(.45, '<ellipse cx="330" cy="86" rx="62" ry="24" fill="var(--card)" stroke="var(--line)"/><circle cx="372" cy="118" r="6" fill="var(--card)" stroke="var(--line)"/><circle cx="388" cy="132" r="4" fill="var(--card)" stroke="var(--line)"/>' +
+            tx(330, 91, 13, '나는 의사!', 'var(--accent)', ' font-weight="700"')),
+        say: '<span class="en">The children pretended to be doctors.</span> 정말 의사가 된 게 아니라 <b>그렇다고 가정하고</b> 말투 · 몸짓으로 역할을 행동한다. 아이들은 놀이라는 걸 안다(노트). 병원 놀이는 <span class="en">play doctor</span>라고도 하니 PLAY 칩도 켜진다.' },
+      rehearse: { btn: '미리 맞춤', how: '공연 전 미리 맞춤', verb: 'REHEARSE', chips: ['REHEARSE'], target: 'TARGET · the play (내일 공연)',
+        result: '빈 객석, 내일 공연 — 입장·동선을 맞춤',
+        pic: () => FLOOR + STAGE(380, 650) + [420, 470, 520, 570, 620].map(SEAT).join('') +
+          '<rect x="262" y="52" width="76" height="40" rx="4" fill="var(--card)" stroke="var(--obj-line)"/>' + tx(300, 70, 11, '축제 전날', 'var(--muted)') + tx(300, 86, 11, '공연 D-1', 'var(--accent)', ' font-weight="700"') +
+          P(310, 240, 1.1, 'var(--ok)') + '<rect x="326" y="190" width="14" height="18" fill="var(--card)" stroke="var(--obj-line)"/>' + tx(310, 162, 11, '선생님', 'var(--muted)') +
+          step(.2, tx(470, 184, 14, '✕', 'var(--accent)', ' font-weight="700"') + tx(590, 184, 14, '✕', 'var(--accent)', ' font-weight="700"')) +
+          step(.4, P(470, 170, 1.0, 'var(--sleeve)') + P(590, 170, 1.0, 'var(--fog)') + '<path d="M392 150 Q430 120 458 140" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 4"/>' + AR(450, 136, 458, 140, 'var(--accent)', 2) + tx(410, 112, 11, '입장', 'var(--accent)', ' font-weight="600"')) +
+          step(.7, tick(620, 92)),
+        say: '<span class="en">The class rehearsed the play.</span> 일반 연습이 아니라 <b>예정된 공연을 같은 순서 · 같은 무대에서 미리</b> 실행해 본다. 완벽하게 성공했다는 뜻은 아니다(노트). 여기서 play는 명사 "연극"이다.' },
+    },
+  };
+
+  // 0절 아이콘 ((0, 0) 중심)
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. pretend를 먼저 빼 보세요.',
+    cards: [
+      { id: 'play', t: ['함께', '즐겁게 참여'], v: 'play', icon: '<rect x="-34" y="-6" width="52" height="30" rx="3" fill="var(--card)" stroke="var(--obj-line)"/>' + [-26, -14, -2, 10].map((x, i) => '<rect x="' + x + '" y="2" width="10" height="10" fill="' + (i % 2 ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="var(--line)"/>').join('') +
+          '<rect x="20" y="-30" width="20" height="20" rx="4" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><circle cx="25" cy="-25" r="2" fill="var(--obj-line)"/><circle cx="35" cy="-15" r="2" fill="var(--obj-line)"/><circle cx="-16" cy="-14" r="5" fill="var(--accent)"/>',
+        instead: 'We did a board game. ✗', lost: 'do는 일 · 과제 쪽이라, 규칙 있는 놀이에 함께 참여한 그림이 빠진다.', why: '놀이 · 경기 · 연주 활동에 참여.' },
+      { id: 'compete', t: ['이기려고', '겨룸'], v: 'compete', icon: '<rect x="-30" y="-30" width="22" height="58" fill="var(--chip-on)" stroke="var(--accent)"/><rect x="-6" y="-14" width="22" height="42" fill="var(--bg)" stroke="var(--line)"/><rect x="18" y="0" width="22" height="28" fill="var(--bg)" stroke="var(--line)"/>' +
+          tx(-19, -12, 14, '1', 'var(--accent)', ' font-weight="700"') + tx(5, 4, 13, '2', 'var(--muted)', ' font-weight="700"') + tx(29, 18, 13, '3', 'var(--muted)', ' font-weight="700"'),
+        instead: 'The two teams played the race. ✗', lost: '경주는 play하지 않는다. 같은 기준 아래 승패 · 순위를 두고 겨룬 그림이 빠진다.', why: '승패나 순위를 두고 겨룸.' },
+      { id: 'perform', t: ['관객 앞에', '보여 줌'], v: 'perform', icon: '<path d="M0 -38 L-22 6 H22 Z" fill="var(--accent2)" opacity=".2"/><rect x="-36" y="6" width="72" height="8" fill="var(--wood)" stroke="var(--obj-line)"/>' +
+          '<circle cx="0" cy="-12" r="6" fill="var(--skin)" stroke="var(--obj-line)"/><rect x="-6" y="-6" width="12" height="12" rx="4" fill="var(--sleeve)"/>' + [-24, -8, 8, 24].map((x) => '<circle cx="' + x + '" cy="30" r="5" fill="var(--fog)"/>').join(''),
+        instead: 'Mina played a song on stage. △', lost: '악기로 연주한 말에 가깝다. 관객 앞에서 준비한 노래를 선보인 그림이 약하다(노트: 집에서 play, 무대에서 perform).', why: '관객 앞에서 준비한 표현을 제시.' },
+      { id: 'pretend', t: ['정말은 아닌데', '그런 것처럼'], v: 'pretend', icon: '<circle cx="-12" cy="-10" r="10" fill="var(--skin)" stroke="var(--obj-line)"/><rect x="-24" y="2" width="24" height="26" rx="8" fill="var(--card)" stroke="var(--obj-line)"/>' +
+          '<path d="M-18 4 q0 14 10 14 L14 14" fill="none" stroke="var(--obj-line)" stroke-width="2"/><circle cx="16" cy="14" r="4" fill="var(--obj-line)"/>' + '<ellipse cx="22" cy="-26" rx="18" ry="11" fill="var(--card)" stroke="var(--line)"/>' + tx(22, -22, 11, '의사', 'var(--accent)', ' font-weight="700"'),
+        instead: 'The children were doctors. ✗', lost: '정말 의사였다는 말이 된다. 사실이 아닌 줄 알면서 그런 것처럼 행동한 그림이 빠진다.', why: '사실이 아닌 역할을 사실처럼 행동.' },
+      { id: 'rehearse', t: ['공연 전에', '미리 전부'], v: 'rehearse', icon: '<rect x="-36" y="6" width="72" height="8" fill="var(--wood)" stroke="var(--obj-line)"/>' + tx(-16, 2, 13, '✕', 'var(--accent)', ' font-weight="700"') + tx(16, 2, 13, '✕', 'var(--accent)', ' font-weight="700"') +
+          '<rect x="-20" y="-36" width="40" height="22" rx="3" fill="var(--card)" stroke="var(--obj-line)"/>' + tx(0, -21, 11, 'D-1', 'var(--accent)', ' font-weight="700"') + [-24, -8, 8, 24].map((x) => '<path d="M' + (x - 5) + ' 22 V34 M' + (x - 5) + ' 28 H' + (x + 5) + ' V34" fill="none" stroke="var(--obj-line)" stroke-width="2"/>').join(''),
+        instead: 'We practiced the play. △', lost: '연습한 건 맞지만, 예정된 공연 전체를 같은 순서 · 무대에서 미리 실행한 그림이 약하다(노트).', why: '실제 공연 전에 전체 흐름을 미리 실행.' },
+      { id: 'practice', out: true, t: ['공연 없이', '기술만 반복'], v: 'practice', icon: '<path d="M-14 -20 a24 24 0 1 1 -10 26" fill="none" stroke="var(--accent2)" stroke-width="3"/>' + AR(-26, -2, -24, 6, 'var(--accent2)', 3) + tx(4, 8, 16, '×3', 'var(--text)', ' font-weight="700"'),
+        instead: 'I rehearsed my serve. ✗', lost: '예정된 공연이 없으니 rehearse가 아니다. 서브 같은 기술 하나를 반복한 그림을 그릴 말이 없다.', why: '기술을 반복해 향상 — 이웃 LEARN 묶음(48).' },
+    ],
+  };
+
+  const SCENES = {
+    park: { btn: '운동장', place: '학교 운동장 · 방과 후',
+      pic: () => FL + '<path d="M600 150 V60 h50 V150" fill="none" stroke="' + OL + '" stroke-width="3"/><path d="M600 70 h50 M600 90 h50 M600 110 h50" stroke="var(--line)"/>' +
+        P(330, 150, 1.1, SL) + P(480, 150, 1.1, OKC) + ST(.2, '<circle cx="410" cy="140" r="9" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' + AR(424, 136, 452, 128, AC, 2, true)),
+      lines: [
+        ['친구', 'Do you want to <b>play</b> soccer after school?', '방과 후에 축구 할래?'],
+        ['나', "Sure! I'll bring my ball.", '좋아! 내 공 가져갈게.', 1],
+      ],
+      say: '친구들과 즐겁게 경기에 참여 — <span class="en">play</span>. 운동 이름 앞에 the 없이 <b>play soccer</b>.' },
+    marathon: { btn: '마라톤', place: '회사 · 월요일 아침',
+      pic: () => FL + TB(300, 460, 110) + P(250, 150, 1.1, SL) + P(530, 150, 1.1, FOG) +
+        ST(.2, BX(560, 30, 90, 40) + T(605, 48, 11, 'CITY RUN', MU, ' font-weight="700"') + T(605, 63, 11, '10 km', AC, ' font-weight="700"')),
+      lines: [
+        ['동료', 'Are you <b>competing</b> in the marathon this weekend?', '이번 주말 마라톤 나가요?'],
+        ['나', "Yes! It's my first race.", '네! 첫 대회예요.', 1],
+      ],
+      say: '기록 · 순위가 매겨지는 대회에 나감 — <span class="en">compete in</span>. 이길지는 아직 모른다.' },
+    street: { btn: '거리 공연', place: '거리 · 금요일 저녁',
+      pic: () => FL + P(460, 150, 1.1, A2) + P(510, 150, 1.1, OKC) + '<path d="M522 110 l22 -16" stroke="' + OL + '" stroke-width="4"/>' +
+        P(290, 150, 1.0, SL) + P(340, 150, 1.0, FOG) + P(630, 150, 1.0, FOG) +
+        ST(.2, T(470, 48, 16, '♪', AC) + T(500, 40, 16, '♫', AC) + T(530, 48, 16, '♪', AC)),
+      lines: [
+        ['친구', 'That band <b>performs</b> here every Friday.', '저 밴드 금요일마다 여기서 공연해.'],
+        ['나', "They're really good!", '진짜 잘한다!', 1],
+      ],
+      say: '지나가는 사람들(관객) <b>앞에서</b> 음악을 선보임 — <span class="en">perform</span>.' },
+    living: { btn: '거실', place: '집 · 거실 놀이',
+      pic: () => FL + '<rect x="230" y="138" width="440" height="12" fill="' + AC + '" opacity=".25"/>' + BX(470, 96, 140, 40) + '<path d="M470 136 v14 M610 136 v14" stroke="' + OL + '" stroke-width="4"/>' +
+        P(540, 96, 0.9, OKC) + P(330, 150, 1.1, SL) + ST(.3, T(400, 60, 13, '용암이다!', AC, ' font-weight="700"') + AR(370, 120, 460, 100, AC, 2, true)),
+      lines: [
+        ['아이', "Let's <b>pretend</b> the floor is lava!", '바닥이 용암인 척하자!'],
+        ['나', 'Okay! Jump on the sofa!', '좋아! 소파로 뛰어!', 1],
+      ],
+      say: '바닥이 정말 용암은 아니지만 <b>그런 것처럼</b> 행동 — <span class="en">pretend</span> + 문장.' },
+    office: { btn: '회의실', place: '회의실 · 발표 전날',
+      pic: () => FL + BX(420, 30, 160, 80, 'var(--obj, #dfe8f3)') + T(500, 64, 12, 'Q3 Report', MU, ' font-weight="700"') + T(500, 84, 11, '1 / 12', MU) +
+        P(370, 150, 1.1, SL) + P(630, 150, 1.0, FOG) + ST(.3, '<circle cx="630" cy="40" r="14" fill="' + CARD + '" stroke="' + OL + '"/><path d="M630 40 V30 M630 40 H638" stroke="' + AC + '" stroke-width="2"/>') + L(630, 72, '10분'),
+      lines: [
+        ['팀장', "Let's <b>rehearse</b> the presentation once more.", '발표 한 번 더 맞춰 봅시다.'],
+        ['나', "Good idea. I'll time it.", '좋아요. 제가 시간 잴게요.', 1],
+      ],
+      say: '내일 할 발표를 <b>같은 순서 · 시간으로 미리</b> — <span class="en">rehearse</span>. 공연뿐 아니라 발표에도 쓴다(노트 TARGET).' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'pretend',
+    region: { x: 84, y: 66, w: 544, h: 258, label: 'PLAY 묶음 · RESULT = 활동에 참여', at: [92, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 260, t: 'Q1. 놀이 · 공연 활동인가?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 195, y: 180, w: 180, t: 'Q3. 누구와 · 어떻게?', sub: '상대와 겨룸 · 역할 흉내' },
+      q4: { x: 520, y: 180, w: 180, t: 'Q4. 관객은?', sub: '지금 앞에 · 공연 전' },
+    },
+    leaves: {
+      compete:  { x: 140, y: 262, w: 96, v: 'compete', sub: '승패를 겨룸', seg: 'w', say: '<span class="en">The two teams competed in the race.</span> 같은 기준으로 겨룸.' },
+      pretend:  { x: 252, y: 262, w: 112, v: 'pretend', sub: '그런 것처럼', seg: 'w', say: '<span class="en">The children pretended to be doctors.</span> 사실이 아닌 역할을.' },
+      play:     { x: 360, y: 262, w: 88, v: 'play', sub: '방식 말 안 함', seg: 'b', say: '<span class="en">The children played a board game.</span> 이 묶음의 기본 동사.' },
+      perform:  { x: 465, y: 262, w: 92, v: 'perform', sub: '관객 앞에', seg: 'h', say: '<span class="en">Mina performed a song on stage.</span> 준비한 표현을 지금 관객에게.' },
+      rehearse: { x: 575, y: 262, w: 88, v: 'rehearse', sub: '공연 전 미리', seg: 'h', say: '<span class="en">The class rehearsed the play.</span> 관객 없이 전체 흐름을 미리.' },
+      practice: { x: 600, y: 36, w: 120, v: 'practice', sub: '→ LEARN 묶음', seg: '', out: true, say: '<span class="en">I practiced my serve.</span> 놀이도 공연도 아닌 <b>기술 하나의 반복</b> → PLAY 묶음 밖, <a href="48-learn.html">48 LEARN</a>.' },
+    },
+    edges: [
+      ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'practice', '연습만', 'right', [512, 28], true],
+      ['q2', 'q3', '누구와 · 어떻게', 'left'], ['q2', 'play', '말하지 않음'], ['q2', 'q4', '관객', 'right'],
+      ['q3', 'compete', '상대와 겨룸'], ['q3', 'pretend', '역할 흉내'],
+      ['q4', 'perform', '지금 앞에'], ['q4', 'rehearse', '공연 전'],
+    ],
+    segs: [[90, 310, '참여 방식 (겨룸 · 흉내)', 'w'], [316, 406, '기본', 'b'], [416, 624, '관객 (공연 · 미리)', 'h']],
+  };
+
+  const SLOTS = {
+    first: ['compete', 'obj'],
+    slots: { obj: '무엇을', add: '덧붙임', other: '다른 모양' },
+    verbs: {
+      play: {
+        obj:   { ok: [['The children', 's'], ['played', 'v'], ['a board game', 'o']], say: '노트 예문.' },
+        add:   { ok: [["Let's", 'x'], ['play', 'v'], ['soccer', 'o']], bad: [["Let's", 'x'], ['play', 'v'], ['the soccer', 'o']], say: '운동 · 경기 이름 앞에는 <b>the 없이</b>.' },
+        other: { ok: [['She', 's'], ['plays', 'v'], ['the piano', 'o']], say: '악기는 보통 <b>the</b>와 함께 — 피아노를 치다.' },
+      },
+      compete: {
+        obj:   { ok: [['The two teams', 's'], ['competed', 'v'], ['in the race', 'r']], bad: [['The two teams', 's'], ['competed', 'v'], ['the race', 'o']], say: '경기는 <b>in</b>으로 — compete는 목적어를 바로 받지 않는다.' },
+        add:   { ok: [['We', 's'], ['competed', 'v'], ['against Class 3', 'r']], say: '상대는 <b>against</b>.' },
+        other: { ok: [['They', 's'], ['competed', 'v'], ['for first place', 'r']], say: '걸린 것(1등 · 자리)은 <b>for</b>.' },
+      },
+      perform: {
+        obj:   { ok: [['Mina', 's'], ['performed', 'v'], ['a song', 'o'], ['on stage', 'r']], say: '노트 예문.' },
+        add:   { ok: [['The band', 's'], ['performed', 'v'], ['for the audience', 'r']], say: '누구에게 보여 줬는지는 <b>for</b>.' },
+        other: { ok: [['He', 's'], ['performed', 'v'], ['the task', 'o']], say: '관객 없이 일을 <b>수행하다</b> — 노트의 <span class="en">perform a task</span>.' },
+      },
+      pretend: {
+        obj:   { ok: [['The children', 's'], ['pretended', 'v'], ['to be doctors', 'r']], bad: [['The children', 's'], ['pretended', 'v'], ['doctors', 'o']], say: '역할은 <b>to be</b> + 역할.' },
+        add:   { ok: [['He', 's'], ['pretended', 'v'], ['that', 'x'], ['he was fine', 'o']], say: '<b>that</b> + 문장 — 놀이 밖의 "괜찮은 척"(노트).' },
+        other: { ok: [["Let's", 'x'], ['play', 'v'], ['doctor', 'o']], say: '<b>play</b> + 역할 = 그 역할 놀이를 하다.' },
+      },
+      rehearse: {
+        obj:   { ok: [['The class', 's'], ['rehearsed', 'v'], ['the play', 'o']], say: '노트 예문. 여기 play는 명사 "연극".' },
+        add:   { ok: [['We', 's'], ['rehearsed', 'v'], ['the play', 'o'], ['after school', 'x']], say: '노트의 한 문장.' },
+        other: { ok: [['I', 's'], ['practiced', 'v'], ['my serve', 'o']], bad: [['I', 's'], ['rehearsed', 'v'], ['my serve', 'o']], say: '공연이 아닌 기술 하나의 반복은 <b>practice</b>(노트).' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>
