@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GET 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/11-get.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="10-escape.html">ESCAPE 묶음</a> · 다음: <a href="12-take.html">TAKE 묶음</a> · 견줘 보기: <a href="01-break.html">BREAK — 결과 동사</a></p>
+  <h1>GET 묶음 — 같은 책, 다른 경로</h1>
+  <p class="lead">없던 책이 <b>내 것이 된다</b>. 이 결과는 같고, 책이 <b>어디서 어떻게</b> 왔는지만 바꾸면 get · receive · obtain · earn · collect로 갈린다. get은 경로를 말하지 않고 <b>들어왔다는 결과</b>만 그린다 — 그래서 영어에서 가장 바쁜 동사다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="get" title="get 소리로 듣기"><span class="en">get</span><span class="ipa">/ɡɛt/</span><span class="ko">[<b>겟</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="receive" title="receive 소리로 듣기"><span class="en">receive</span><span class="ipa">/rɪˈsiːv/</span><span class="ko">[리<b>시</b>브]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="obtain" title="obtain 소리로 듣기"><span class="en">obtain</span><span class="ipa">/əbˈteɪn/</span><span class="ko">[업<b>테</b>인]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="earn" title="earn 소리로 듣기"><span class="en">earn</span><span class="ipa">/ɜːrn/</span><span class="ko">[<b>언</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="collect" title="collect 소리로 듣기"><span class="en">collect</span><span class="ipa">/kəˈlekt/</span><span class="ko">[컬<b>렉</b>트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">책이 들어온 경로에 따라 내 영역으로 책이 들어오는 장면이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 미나와 그 둘레의 점선 원(내 것이 되는 영역)이다. get은 출처가 물음표인 화살표, receive는 선생님이 건네는 화살표, obtain은 신청·확인·승인 세 단계, earn은 대회 1등의 대가, collect는 여러 교실에서 모여드는 화살표다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">GET · 내 것이 됨</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 생겼나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 단계 수·위치는 그림용이다. 미나와 책 장면은 <a href="../get/_family.md">get/_family.md</a>와 각 노트의 학교 장면을 옮겼다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"받았다·얻었다·생겼다·탔다·걸렸다·알아들었다" — 한국어는 다 다른 말인데 영어 회화에서는 대부분 <b>get</b>이다. 경로를 굳이 말할 필요가 없을 때, 그냥 <b>내 쪽으로 들어왔다</b>는 그림 하나로 다 덮는다. 경로가 중요해지면 그때 다른 동사를 꺼낸다. 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>GET 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — 결과 하나에 경로(HOW)가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>agent에게 없던 TARGET이 소유·접근·경험 범위 안으로 들어옴</b> = <span class="en">GET</span>이다. 01 BREAK · 10 ESCAPE처럼 <b>결과가 기본</b>이고, 여기에 경로가 붙는다. 노트의 비교표를 식으로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">GET</span><span class="op">+</span><span>획득 방식 미지정</span><span class="op">=</span><span class="v">GET</span>
+    <span class="r">GET</span><span class="op">+</span><span>다른 사람이 보낸 것을 받음</span><span class="op">=</span><span class="v">RECEIVE</span>
+    <span class="r">GET</span><span class="op">+</span><span>절차·노력 끝에 확보</span><span class="op">=</span><span class="v">OBTAIN</span>
+    <span class="r">GET</span><span class="op">+</span><span>일·성과의 대가로</span><span class="op">=</span><span class="v">EARN</span>
+    <span class="r">GET</span><span class="op">+</span><span>여러 곳의 대상을 모아</span><span class="op">=</span><span class="v">COLLECT</span>
+  </div>
+  <p>노트가 짚은 경계: <b>GET은 들어온 결과</b>, 이웃 <b>TAKE는 내가 손을 뻗어 가져오는 행동</b>이다. 선물을 받았으면 get(✓) take(✗), 탁자 위 열쇠를 집었으면 take(✓)도 get(✓)도 된다.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>그냥 생김</b> → 책이 미나의 원 안에 있다. 어디서 왔는지는 물음표. <span class="en">Mina got a book for the project.</span></li>
+    <li><b>건네받음</b> → 선생님 손에서 미나 쪽으로. 보낸 사람 → 받는 사람 방향이 보인다. <span class="en">Mina received a book from the teacher.</span></li>
+    <li><b>절차를 거쳐</b> → 신청 · 확인 · 승인. 들어온 것은 책이 아니라 <b>허가</b>여도 된다. <span class="en">Mina obtained permission to use the library.</span></li>
+    <li><b>대가로</b> → 독서 대회 1등의 보상. <span class="en">Mina earned a prize book.</span></li>
+    <li><b>모아서</b> → 여러 교실에서 한 상자로. 하나가 아니라 <b>여럿</b>. <span class="en">Mina collected books from the classrooms.</span></li>
+    <li>어느 장면이든 "책이 미나 것이 됐다"는 맞으니 <span class="en">get</span>도 쓸 수 있다. 그래서 GET 칩은 늘 켜진다.</li>
+  </ul>
+
+  <h2>3. get이 그리는 그림 — "들어옴" 하나로 다 덮는다</h2>
+  <p>get의 그림은 <b>무언가가 내 영역 안으로 들어옴</b>이다. 들어오는 것이 물건만이 아니라서 쓰임이 넓다. 한국어로는 전부 다른 말이지만 그림은 같다.</p>
+  <table>
+    <tr><th>들어오는 것</th><th>문장</th><th>한국어</th></tr>
+    <tr><td>물건</td><td><span class="en">I got a new phone.</span></td><td>새 폰 생겼어 (샀든 받았든)</td></tr>
+    <tr><td>소식 · 연락</td><td><span class="en">Did you get my message?</span></td><td>내 메시지 받았어?</td></tr>
+    <tr><td>병</td><td><span class="en">I got a cold.</span></td><td>감기 걸렸어</td></tr>
+    <tr><td>뜻</td><td><span class="en">I don't get it.</span></td><td>무슨 말인지 모르겠어</td></tr>
+    <tr><td>나 자신이 어떤 상태·장소 안으로</td><td><span class="en">I got tired. · I got home at 9.</span></td><td>피곤해졌어 · 9시에 집에 왔어</td></tr>
+  </table>
+  <p>마지막 줄에서 그림이 뒤집힌다 — 무언가가 내 안으로 들어오는 대신 <b>내가 어떤 상태·장소 안으로 들어간다</b>. get + 형용사(~해지다), get + 장소(도착하다)가 이 그림이다.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>GET 묶음</b>이다. 들어온 게 아니라 <b>내가 손을 뻗어 가져온</b> 행동을 말하고 싶으면 테두리 밖 문으로 TAKE 묶음에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 GET 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 없던 것이 내 것이 됐나에서 아니오면 lose, 내가 손을 뻗은 행동이면 묶음 밖 문 take, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 get, 어디서 왔나면 Q3에서 receive와 collect, 무엇을 치렀나면 Q4에서 obtain과 earn으로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① "~했는데 내 것이 안 됐다"가 말이 되나?</th><th>② 경로가 단어 안에 들어 있나?</th><th>③ 격식</th><th>자리</th></tr>
+    <tr><td><b>get</b></td><td>아니오</td><td>아니오</td><td>일상</td><td>결과만 (기본)</td></tr>
+    <tr><td><b>receive</b></td><td>아니오</td><td>예 — 누가 보냄</td><td>조금 격식 (메일·문서)</td><td>경로 + 결과</td></tr>
+    <tr><td><b>obtain</b></td><td>아니오</td><td>예 — 절차·노력</td><td>격식 (허가·자료)</td><td>경로 + 결과</td></tr>
+    <tr><td><b>earn</b></td><td>아니오</td><td>예 — 일·성과의 대가</td><td>일상</td><td>경로 + 결과</td></tr>
+    <tr><td><b>collect</b></td><td>아니오 — 다만 "모으는 중"은 됨</td><td>예 — 여러 곳에서</td><td>일상</td><td>경로 + 결과</td></tr>
+  </table>
+  <p class="note">길잡이지 칼같은 규칙이 아니다. 판정과 격식 칸은 짐작이다(아래 "확인할 것").</p>
+
+  <h2>5. 실제 문장으로 — 뒤에 무엇이 붙나</h2>
+  <p>다섯 다 들어온 것을 <b>목적어</b>로 받는다. 어디서 왔는지는 <b>from</b>으로 붙인다. 동사마다 자주 붙는 모양이 하나씩 있다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">뒤에 붙는 말에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">뒤에 붙는 것</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>목적어</th><th>from + 출처</th><th>자주 붙는 모양</th></tr>
+    <tr><td><b>get</b></td><td><span class="en">get a new phone</span></td><td><span class="en">got it from my sister</span></td><td><span class="en">get tired · get home</span> — ~해지다 · 도착하다</td></tr>
+    <tr><td><b>receive</b></td><td><span class="en">receive your email</span></td><td><span class="en">received a letter from the bank</span></td><td><span class="en">receive an award</span> — 상을 받다</td></tr>
+    <tr><td><b>obtain</b></td><td><span class="en">obtain a permit</span></td><td><span class="en">obtain data from the survey</span></td><td>격식 — ✗ <span class="en">obtain a cold</span></td></tr>
+    <tr><td><b>earn</b></td><td><span class="en">earn money</span></td><td><span class="en">earn money from a part-time job</span></td><td>✗ 부모님께 받은 용돈은 earn이 아니라 get</td></tr>
+    <tr><td><b>collect</b></td><td><span class="en">collect stamps</span></td><td><span class="en">collect books from the classrooms</span></td><td><span class="en">collect data</span> — 데이터를 수집하다</td></tr>
+  </table>
+  <p class="note">경향 한 줄: 회화에서는 get이 거의 다 맡고, <b>경로를 꼭 밝혀야 할 때</b>(누가 보냈나 · 무엇을 치렀나 · 몇 곳에서) 나머지를 꺼낸다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>GET</b> — 빈 손바닥을 펴고 있다가 <b>무언가 놓인 듯</b> 오므린다. 어디서 왔는지는 안 본다.</li>
+    <li><b>RECEIVE</b> — 두 손을 모아 내밀고, 상대가 <b>건네주는 것</b>을 받는다.</li>
+    <li><b>OBTAIN</b> — 손가락으로 1 · 2 · 3 단계를 짚은 뒤에야 손을 오므린다.</li>
+    <li><b>EARN</b> — 이마의 땀을 닦는 시늉 뒤에 손을 오므린다.</li>
+    <li><b>COLLECT</b> — 왼쪽 · 가운데 · 오른쪽에서 하나씩 집어 <b>한 손에 모은다</b>.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>3절의 get 쓰임 표(병·뜻·상태·장소)는 노트에 없는 풀이다. 사전으로 확인한 뒤 <a href="../get/get--come-to-have.md">get 노트</a>에 더할 것.</li>
+      <li>4절의 판정과 격식 칸, 5절 "자주 붙는 모양"은 짐작이다.</li>
+      <li>0절 "대신 말하면"의 △·✗ 판정은 짐작이다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../get/_family.md">get/_family.md</a> — "GET은 획득 결과, TAKE는 직접 가져오는 행동"</li>
+    <li>동사 노트: <a href="../get/get--come-to-have.md">get</a> · <a href="../get/receive--get-from-sender.md">receive</a> · <a href="../get/obtain--get-through-process.md">obtain</a> · <a href="../get/earn--get-as-reward.md">earn</a> · <a href="../get/collect--get-together.md">collect</a></li>
+    <li>묶음 밖 이웃: <a href="12-take.html">12 TAKE 묶음</a>(<a href="../take/_family.md">take/_family.md</a>) — 내가 손을 뻗어 가져옴. 반대 방향은 <a href="../give/_family.md">give 묶음</a>.</li>
+    <li>견줘 보기: <a href="01-break.html">01 BREAK</a> · <a href="10-escape.html">10 ESCAPE</a> — 같은 결과 묶음.</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — get은 <b>원 안으로 들어오는 화살표</b> 하나를 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 미나 x = 590, 내 영역 원 (590, 176) r 66 (그림용) ──
+  const BOOK = (x, y, c) => '<rect x="' + x + '" y="' + y + '" width="22" height="28" rx="2" fill="' + (c || 'var(--accent2)') + '" stroke="var(--obj-line)"/><path d="M' + (x + 4) + ' ' + y + ' v28" stroke="var(--obj-line)"/>';
+  const MINE = FLOOR + '<ellipse cx="590" cy="176" rx="66" ry="66" fill="var(--ok)" opacity=".08" stroke="var(--ok)" stroke-width="1.5" stroke-dasharray="5 4"/>' + tx(590, 100, 11, '미나의 것', 'var(--ok)', ' font-weight="600"') + P(600, 240, 1.2, 'var(--sleeve)');
+  const IN = step(.5, BOOK(552, 196) + tick(546, 182));
+  const TOP = {
+    first: 'receive', keep: 'GET',
+    keepSay: '<b>GET</b>은 이 장면에도 맞다 — 경로를 빼고 책이 미나 것이 됐다는 결과만 말한다. <span class="en">Mina got a book.</span>',
+    chips: ['GET', 'RECEIVE', 'OBTAIN', 'EARN', 'COLLECT'], out: [['TAKE (손을 뻗어 가져옴)', '../take/_family.md']],
+    hows: {
+      get: { btn: '그냥 생김 (경로 모름)', how: '획득 방식 미지정', verb: 'GET', chips: ['GET'], target: 'TARGET · a book (책)',
+        result: '책이 미나의 것으로 — 어디서 왔는지는 모름',
+        pic: () => MINE + step(.2, tx(320, 180, 26, '?', 'var(--muted)', ' font-weight="700"') + arrow(340, 520, 176, 'var(--muted)', 2, true)) + IN,
+        say: '<span class="en">Mina got a book for the project.</span> 샀는지, 빌렸는지, 받았는지 말하지 않는다. <b>내 것이 됐다</b>는 결과 하나. 회화에서 가장 자주 쓰는 이유.' },
+      receive: { btn: '건네받음', how: '보낸 사람이 있음', verb: 'RECEIVE', chips: ['GET', 'RECEIVE'], target: 'TARGET · a book (책)',
+        result: '선생님 → 미나 — 보낸 사람이 있는 받음',
+        pic: () => MINE + P(300, 240, 1.25, 'var(--ok)') + tx(300, 140, 11, '선생님', 'var(--muted)') + step(.2, BOOK(330, 176) + arrow(360, 520, 190, 'var(--accent)', 3)) + IN,
+        say: '<span class="en">Mina received a book from the teacher.</span> <b>누가 보냈다</b>는 방향이 들어 있다. 메일·편지·상처럼 보내는 쪽이 분명할 때. get보다 조금 격식.' },
+      obtain: { btn: '절차를 거쳐', how: '절차 · 노력 끝에', verb: 'OBTAIN', chips: ['GET', 'OBTAIN'], target: 'TARGET · permission (도서관 사용 허가)',
+        result: '신청 → 확인 → 승인 — 절차 끝에 허가를 손에',
+        pic: () => MINE + ['신청', '확인', '승인'].map((t, i) => step(.15 + i * .15, '<rect x="' + (262 + i * 80) + '" y="150" width="60" height="40" rx="6" fill="var(--bg)" stroke="' + (i === 2 ? 'var(--accent)' : 'var(--line)') + '"/>' + tx(292 + i * 80, 175, 13, t, 'var(--text)', ' font-weight="600"') + (i < 2 ? arrow(324 + i * 80, 340 + i * 80, 170, 'var(--muted)', 2) : ''))).join('') +
+          step(.5, '<rect x="546" y="192" width="30" height="36" rx="2" fill="var(--card)" stroke="var(--obj-line)"/><circle cx="566" cy="218" r="7" fill="none" stroke="var(--bad)" stroke-width="2"/>' + arrow(484, 540, 196, 'var(--accent)', 3)),
+        say: '<span class="en">Mina obtained permission to use the library.</span> <b>절차를 밟아</b> 확보했다. 허가·자료·정보·비자처럼 서류 냄새가 나는 말에 붙는다. 회화보다 글에서.' },
+      earn: { btn: '대가로', how: '일 · 성과의 대가', verb: 'EARN', chips: ['GET', 'EARN'], target: 'TARGET · a prize book (상품 책)',
+        result: '독서 대회 1등 — 해낸 것의 대가로',
+        pic: () => MINE + '<rect x="270" y="196" width="50" height="44" fill="var(--bg)" stroke="var(--obj-line)"/><rect x="320" y="176" width="50" height="64" fill="var(--bg)" stroke="var(--accent)" stroke-width="2"/><rect x="370" y="210" width="50" height="30" fill="var(--bg)" stroke="var(--obj-line)"/>' +
+          tx(345, 214, 18, '1', 'var(--accent)', ' font-weight="700"') + tx(295, 226, 14, '2', 'var(--muted)') + tx(395, 232, 13, '3', 'var(--muted)') + tx(345, 160, 12, '독서 대회', 'var(--muted)') +
+          step(.2, '<path d="M440 150 q8 -8 0 -16" fill="none" stroke="var(--water)" stroke-width="3"/>' + tx(470, 148, 11, '노력', 'var(--muted)') + arrow(430, 520, 190, 'var(--accent)', 3)) + IN,
+        say: '<span class="en">Mina earned a prize book.</span> 거저 생긴 게 아니라 <b>해낸 것의 대가</b>. 돈을 벌다(<span class="en">earn money</span>), 존경을 얻다(<span class="en">earn respect</span>)도 같은 그림.' },
+      collect: { btn: '모아서', how: '여러 곳에서 모음', verb: 'COLLECT', chips: ['GET', 'COLLECT'], target: 'TARGET · books (여러 권)',
+        result: '여러 교실에서 한 상자로 — 하나씩 모여 쌓임',
+        pic: () => MINE + [[270, 70, '1반'], [270, 150, '2반'], [270, 220, '3반']].map(([x, y, t]) => '<rect x="' + x + '" y="' + (y - 24) + '" width="54" height="34" rx="4" fill="var(--bg)" stroke="var(--line)"/>' + tx(x + 27, y - 2, 11, t, 'var(--muted)')).join('') +
+          step(.2, '<path d="M330 64 L520 176 M330 144 L520 182 M330 214 L520 190" stroke="var(--accent)" stroke-width="2" fill="none"/>') +
+          step(.5, BOOK(536, 210, 'var(--accent2)') + BOOK(540, 184, 'var(--ok)') + BOOK(536, 158, 'var(--sleeve)')),
+        say: '<span class="en">Mina collected books from the classrooms.</span> 한 권이 아니라 <b>여러 곳에서 여럿을</b> 한데 모은다. 우표·데이터·쓰레기·서명 모으기도 collect.' },
+    },
+  };
+
+  const book = (x, y, c) => '<rect x="' + x + '" y="' + y + '" width="16" height="22" rx="2" fill="' + (c || 'var(--accent2)') + '" stroke="var(--obj-line)"/>';
+  const ring = '<circle cx="14" cy="4" r="22" fill="var(--ok)" opacity=".1" stroke="var(--ok)" stroke-dasharray="4 3"/>';
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. get을 먼저 빼 보세요.',
+    cards: [
+      { id: 'get', t: ['어떻게든', '내 것이 됨'], v: 'get', icon: ring + book(6, -7) + tx(-30, 10, 18, '?', 'var(--muted)', ' font-weight="700"'),
+        instead: 'I obtained a cold. ✗', lost: '감기에 걸림 · 메시지가 옴 · 뜻을 알아들음 — 생활 속 "들어옴"을 한 낱말로 덮을 말이 없다. 다른 동사는 모두 경로를 따진다.', why: '경로 없이 내 쪽으로 들어옴. 가장 바쁜 동사.' },
+      { id: 'receive', t: ['보낸 사람이', '있음'], v: 'receive', icon: ring + '<circle cx="-30" cy="-8" r="6" fill="var(--skin)" stroke="var(--obj-line)"/>' + arrow(-24, 0, 4, 'var(--accent)', 2) + book(6, -7),
+        instead: 'I got a letter from the bank. △', lost: '흔히 그렇게 말하지만, 공식 문서에서 "보낸 쪽 → 받는 쪽"을 또렷이 하는 격식이 빠진다.', why: '보낸 사람이 있는 받음.' },
+      { id: 'obtain', t: ['절차를', '거쳐'], v: 'obtain', icon: '<path d="M-36 10 h14 v-10 h14 v-10 h14" fill="none" stroke="var(--muted)" stroke-width="2"/>' + ring + book(6, -7),
+        instead: 'You need to get a permit. △', lost: '말은 되지만 서류를 내고 승인받는 절차의 무게가 안 보인다.', why: '절차·노력 끝에 확보. 격식.' },
+      { id: 'earn', t: ['일한', '대가로'], v: 'earn', icon: '<path d="M-30 -14 q8 -8 0 -16" fill="none" stroke="var(--water)" stroke-width="3"/>' + ring + '<circle cx="14" cy="4" r="9" fill="var(--gold)" stroke="var(--obj-line)"/>',
+        instead: 'I get 3 million won a month. △', lost: '부모님께 받는 것처럼 들릴 수 있다. 일해서 벌었다는 그림이 빠진다.', why: '일·성과의 대가로.' },
+      { id: 'collect', t: ['여러 곳에서', '모음'], v: 'collect', icon: '<path d="M-38 -20 L4 0 M-38 4 L4 4 M-38 26 L4 8" stroke="var(--accent)" stroke-width="2"/>' + ring + book(2, -12, 'var(--ok)') + book(12, -4),
+        instead: 'I got stamps since I was ten. △', lost: '여기저기서 하나씩 모아 쌓아 온 그림이 없다.', why: '여러 출처의 대상을 모아 확보.' },
+      { id: 'take', out: true, t: ['내가 손을', '뻗어 가져옴'], v: 'take', icon: book(14, -7) + '<path d="M-38 6 H6" stroke="var(--sleeve)" stroke-width="8" stroke-linecap="round"/><circle cx="8" cy="6" r="7" fill="var(--skin)" stroke="var(--obj-line)"/>',
+        instead: 'Get an umbrella with you. ✗', lost: 'get은 들어오는 결과라 "들고 가라"는 내 행동을 못 그린다.', why: '내가 손을 뻗어 가져옴 — 이웃 TAKE 묶음.' },
+    ],
+  };
+
+  const SCENES = {
+    mall: { btn: '친구 만남', place: '거리 · 친구를 만났을 때',
+      pic: () => FL + P(270, 150, 1.1, FOG) + P(400, 150, 1.1, A2) + ST(.2, AR(290, 90, 380, 104, AC, 2, true)) + L(335, 80, '그 재킷') +
+        BX(520, 50, 110, 70) + T(575, 76, 12, 'ONLINE', 'var(--text)', ' font-weight="700"') + T(575, 98, 12, 'SALE 40%', BAD, ' font-weight="700"'),
+      lines: [
+        ['친구', 'Where did you <b>get</b> that jacket?', '그 재킷 어디서 났어?'],
+        ['나', 'I <b>got</b> it online. It was on sale.', '인터넷에서 샀어. 세일하더라.', 1],
+      ],
+      say: '샀는데도 buy 대신 <b>get</b>. 어디서든 <b>내 것이 됐다</b>는 그림만 있으면 된다. "어디서 났어?"가 딱 이 말.' },
+    office: { btn: '회사 메일', place: '사무실 · 오전',
+      pic: () => FL + P(250, 150, 1.1, OKC) + TB(400, 600, 110) + P(470, 150, 1, SL) + BX(500, 64, 80, 46) +
+        ST(.2, '<rect x="300" y="40" width="40" height="26" rx="2" fill="' + CARD + '" stroke="' + OL + '"/><path d="M300 40 l20 14 l20 -14" fill="none" stroke="' + OL + '"/>' + AR(344, 54, 500, 80, AC, 2, true)) + L(320, 34, '메일'),
+      lines: [
+        ['팀장', 'Did you <b>receive</b> my email?', '내 메일 받았어요?', 1],
+        ['나', 'Yes, I\'ll reply this afternoon.', '네, 오후에 답장 드릴게요.'],
+      ],
+      say: '보낸 사람(팀장)이 분명하고 회사 말이라 <b>receive</b>. 친구 사이면 <span class="en">Did you get my message?</span>가 더 흔하다.' },
+    city: { btn: '구청 민원실', place: '구청 · 민원 창구',
+      pic: () => FL + BX(380, 100, 170, 50) + P(465, 98, 1, OKC) + L(465, 120, '민원 창구') + P(260, 150, 1.1, SL) +
+        ST(.2, ['신청서', '서류', '승인'].map((t, i) => '<rect x="' + (300 + i * 80) + '" y="8" width="60" height="24" rx="4" fill="' + BG + '" stroke="' + (i === 2 ? AC : 'var(--line)') + '"/>' + T(330 + i * 80, 25, 11, t, 'var(--text)')).join('')),
+      lines: [
+        ['직원', 'You need to <b>obtain</b> a permit first.', '먼저 허가증을 받으셔야 해요.', 1],
+        ['나', 'Where can I apply for one?', '어디서 신청하면 되나요?'],
+      ],
+      say: '서류를 내고 승인을 받는 <b>절차</b>가 깔려 있다 — <span class="en">obtain</span>. 관공서·계약서 말투.' },
+    cafe: { btn: '알바 이야기', place: '카페 · 친구와',
+      pic: () => FL + P(250, 150, 1.05, FOG) + TB(280, 400, 110) + P(430, 150, 1.05, SL) +
+        ST(.2, '<rect x="500" y="60" width="120" height="70" rx="6" fill="' + CARD + '" stroke="' + OL + '"/>' + T(560, 88, 12, '카페 알바', 'var(--text)', ' font-weight="600"') + T(560, 112, 13, '시급 10,000원', AC, ' font-weight="700"')),
+      lines: [
+        ['친구', 'How much do you <b>earn</b> at the café?', '카페에서 얼마 벌어?', 1],
+        ['나', 'About 10,000 won an hour.', '시급 만 원쯤.'],
+      ],
+      say: '일한 <b>대가로</b> 들어오는 돈 — <span class="en">earn</span>. 용돈처럼 그냥 받은 돈이면 get.' },
+    home: { btn: '집 (취미)', place: '집 거실 · 앨범 구경',
+      pic: () => FL + P(250, 150, 1.1, FOG) + P(330, 150, 1.1, SL) + TB(380, 600, 110) +
+        ST(.2, [0, 1, 2].map((i) => '<rect x="' + (410 + i * 60) + '" y="' + (76 - i * 4) + '" width="48" height="34" rx="2" fill="' + CARD + '" stroke="' + OL + '"/>' + [0, 1, 2].map((k) => '<rect x="' + (416 + i * 60 + k * 14) + '" y="' + (84 - i * 4) + '" width="10" height="12" fill="' + [AC, OKC, SL][k] + '"/>').join('')).join('')) + L(490, 60, '우표 앨범'),
+      lines: [
+        ['친구', 'What\'s in all these albums?', '이 앨범들엔 다 뭐가 들어 있어?'],
+        ['나', 'Stamps. I\'ve <b>collected</b> them since I was ten.', '우표. 열 살 때부터 모았어.', 1],
+      ],
+      say: '여기저기서 하나씩 <b>모아 쌓아 온</b> 것 — <span class="en">collect</span>. 취미 수집에 딱 맞는 말.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'receive',
+    region: { x: 106, y: 66, w: 538, h: 258, label: 'GET 묶음 · RESULT = 내 것이 됨', at: [114, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 240, t: 'Q1. 없던 것이 내 것이 됐나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 205, y: 180, w: 170, t: 'Q3. 어디서 왔나?', sub: '보낸 사람 · 여러 곳' },
+      q4: { x: 520, y: 180, w: 170, t: 'Q4. 무엇을 치렀나?', sub: '절차 · 일' },
+    },
+    leaves: {
+      lose:    { x: 60, y: 262, w: 88, v: 'lose', sub: '없어짐', seg: 't', say: '<span class="en">I lost my book.</span> 들어온 게 아니라 나갔다 → GET 묶음 밖.' },
+      receive: { x: 160, y: 262, w: 92, v: 'receive', sub: '누가 보냄', seg: 'r', say: '<span class="en">I received your email.</span> 보낸 사람이 있다.' },
+      collect: { x: 258, y: 262, w: 92, v: 'collect', sub: '여러 곳에서', seg: 'r', say: '<span class="en">I collect stamps.</span> 여럿을 모아.' },
+      get:     { x: 360, y: 262, w: 92, v: 'get', sub: '경로 말 안 함', seg: 'r', say: '<span class="en">I got a new phone.</span> 이 묶음의 기본 동사.' },
+      obtain:  { x: 470, y: 262, w: 92, v: 'obtain', sub: '절차 끝에', seg: 'r', say: '<span class="en">I obtained a permit.</span> 절차를 거쳐. 격식.' },
+      earn:    { x: 575, y: 262, w: 88, v: 'earn', sub: '일의 대가', seg: 'r', say: '<span class="en">I earn 10,000 won an hour.</span> 일한 대가로.' },
+      take:    { x: 600, y: 36, w: 120, v: 'take', sub: '→ TAKE 묶음', seg: '', out: true, say: '<span class="en">I took my umbrella.</span> 들어온 결과가 아니라 <b>내가 손을 뻗은 행동</b> → GET 묶음 밖, TAKE 묶음(<a href="12-take.html">12 TAKE</a>).' },
+    },
+    edges: [
+      ['q1', 'lose', '아니오 · 없어짐', 'left', [150, 28]], ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'take', '내가 가져옴', 'right', [490, 28], true],
+      ['q2', 'q3', '어디서'], ['q2', 'get', '말하지 않음'], ['q2', 'q4', '무엇을 치렀나'],
+      ['q3', 'receive', '보낸 사람'], ['q3', 'collect', '여러 곳'],
+      ['q4', 'obtain', '절차'], ['q4', 'earn', '일 · 성과'],
+    ],
+    segs: [[16, 104, '안 생김', 't'], [109, 640, '결과 — 내 것이 됨 (+ 어떤 경로로)', 'r']],
+  };
+
+  const SLOTS = {
+    first: ['get', 'special'],
+    slots: { obj: '목적어', from: 'from + 출처', special: '자주 붙는 모양' },
+    verbs: {
+      get: {
+        obj:     { ok: [['I', 's'], ['got', 'v'], ['a new phone', 'o']], say: '샀든 받았든 "생겼다".' },
+        from:    { ok: [['I', 's'], ['got', 'v'], ['it', 'o'], ['from my sister', 'r']], say: '어디서 왔는지는 from.' },
+        special: { ok: [['I', 's'], ['got', 'v'], ['tired', 'x']], say: '목적어 대신 <b>형용사</b>가 오면 "~해지다" — 내가 그 상태 안으로 들어간다. <span class="en">get home</span>(도착)도 같은 그림.' },
+      },
+      receive: {
+        obj:     { ok: [['I', 's'], ['received', 'v'], ['your email', 'o']], say: '보낸 사람이 분명한 것.' },
+        from:    { ok: [['I', 's'], ['received', 'v'], ['a letter', 'o'], ['from the bank', 'r']], say: '보낸 쪽을 from으로.' },
+        special: { ok: [['She', 's'], ['received', 'v'], ['an award', 'o']], say: '상·훈장·학위 — 공식적으로 주어지는 것.' },
+      },
+      obtain: {
+        obj:     { ok: [['You', 's'], ['must obtain', 'v'], ['a permit', 'o']], say: '허가·비자·자료.' },
+        from:    { ok: [['We', 's'], ['obtained', 'v'], ['data', 'o'], ['from the survey', 'r']], say: '어디서 확보했나.' },
+        special: { ok: [['I', 's'], ['got', 'v'], ['a cold', 'o']], bad: [['I', 's'], ['obtained', 'v'], ['a cold', 'o']], say: '절차가 없는 일상의 "생김"에는 obtain을 쓰지 않는다. 감기는 <b>get</b>.' },
+      },
+      earn: {
+        obj:     { ok: [['She', 's'], ['earns', 'v'], ['good money', 'o']], say: '돈 · 존경 · 신뢰 · 휴식.' },
+        from:    { ok: [['I', 's'], ['earn', 'v'], ['money', 'o'], ['from a part-time job', 'r']], say: '일한 곳을 from으로.' },
+        special: { ok: [['I', 's'], ['get', 'v'], ['money', 'o'], ['from my parents', 'r']], bad: [['I', 's'], ['earn', 'v'], ['money', 'o'], ['from my parents', 'r']], say: '부모님께 받는 용돈은 <b>일의 대가가 아니라서</b> earn이 아니라 get.' },
+      },
+      collect: {
+        obj:     { ok: [['I', 's'], ['collect', 'v'], ['stamps', 'o']], say: '여럿을 모으는 것.' },
+        from:    { ok: [['Mina', 's'], ['collected', 'v'], ['books', 'o'], ['from the classrooms', 'r']], say: '노트 예문 그대로.' },
+        special: { ok: [['We', 's'], ['collected', 'v'], ['data', 'o']], say: '연구·조사의 "데이터 수집".' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>

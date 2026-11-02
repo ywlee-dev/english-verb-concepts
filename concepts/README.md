@@ -132,15 +132,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 08 | [08-go.html](08-go.html) | GO 묶음 — 걷기·뛰기·급함·낮은 자세로 go · walk · run · rush · crawl. go 전용 "여기서 멀어짐"(go vs come). **생성기로 만든 첫 페이지** | HOW 버튼 → 처음 자리에서 문까지 발자국·시계·탁자 아래 / 질문 흐름 + COME으로 가는 문 / to + 장소 · home · 목적어가 바로(walk the dog) |
 | 09 | [09-look.html](09-look.html) | LOOK 묶음 — 시간·감정·보이는 정도로 look · stare · gaze · glance · peer. "stare와 gaze — 둘 다 오래 보는데" | HOW 버튼 → 눈에서 그림까지 눈길(점선·고정·부채꼴·스침·어둠) / 질문 흐름 + SEE로 가는 문 / at + 대상 · 목적어 ✗ · 다른 말 |
 | 10 | [10-escape.html](10-escape.html) | ESCAPE 묶음 — 결과 묶음. escape · break out of · slip out of · sneak out of. "slip out과 sneak out — 기회냐 작정이냐" | HOW 버튼 → 감시 방(부서진 문·문틈·밤 순찰) / 질문 흐름 + LEAVE로 가는 문 / out of · 목적어 · 장소 없이(다른 뜻) |
+| 11 | [11-get.html](11-get.html) | GET 묶음 — 결과 묶음. 경로로 get · receive · obtain · earn · collect. "get이 그리는 그림 — 들어옴 하나로 다 덮는다"(물건·소식·병·뜻·상태) | HOW 버튼 → 미나의 점선 원 안으로 책이 들어오는 경로(물음표·건넴·세 단계·시상대·여러 반) / 질문 흐름 + TAKE로 가는 문 / 목적어 · from · 자주 붙는 모양 |
+| 12 | [12-take.html](12-take.html) | TAKE 묶음 — 손을 뻗는 동작. take · grab · seize · snatch · pick up. "take가 그리는 그림"(탈것·시간·선택) | HOW 버튼 → 손과 휴대폰(가져감·떨어지는 것 붙잡기·압수 딱지·남의 손에서·위로) / 질문 흐름 + GIVE로 가는 문 / pick it up 대명사 자리 |
+| 13 | [13-make.html](13-make.html) | MAKE 묶음 — 결과 묶음. make · create · produce · prepare · form. "make가 그리는 그림"(커피·친구·실수·돈·make me laugh) | HOW 버튼 → 탁자 위 모형(물음표·전구와 스케치·3D 프린터 셋·점검표·점토) / 질문 흐름 + CHANGE로 가는 문 / prepare for vs prepare the exam |
 
-01~10 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~10)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~10과 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~13 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~13)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~13과 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- 나머지 묶음(72개) — 아래 "생성기로 만들기" 방식으로 몇 개씩 차례로
+- 나머지 묶음(69개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: give · put · keep
 
 ## 생성기로 만들기 (08부터)
 
