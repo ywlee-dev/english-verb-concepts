@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ALLOW 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/59-allow.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+@media (max-width: 600px) { th, td { padding: 6px 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="58-agree.html">AGREE 묶음</a> · 다음: <a href="60-refuse.html">REFUSE 묶음</a> · 반대쪽: <a href="60-refuse.html">REFUSE 묶음 (요청을 받아들이지 않음)</a> · 견줘 보기: <a href="58-agree.html">AGREE 묶음 (제안에 찬성)</a></p>
+  <h1>ALLOW 묶음 — 같은 조퇴, 다른 허락</h1>
+  <p class="lead">미나가 병원 예약 때문에 수업을 <b>일찍 나가도 되는 상태</b>가 된다. 이 결과는 같고, <b>방식을 말하지 않는지, 규칙에 따랐는지, 담당 권한으로 공식 승인했는지, 일상적으로 막지 않았는지</b>만 바꾸면 allow · permit · authorize · let으로 갈린다. 네 동사 모두 <b>허락</b>을 그릴 뿐, 미나가 <b>실제로 나갔는지</b>는 말하지 않는다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="allow" title="allow 소리로 듣기"><span class="en">allow</span><span class="ipa">/əˈlaʊ/</span><span class="ko">[어<b>라우</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="permit" title="permit 소리로 듣기"><span class="en">permit</span><span class="ipa">/pɚˈmɪt/</span><span class="ko">[퍼<b>밋</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="authorize" title="authorize 소리로 듣기"><span class="en">authorize</span><span class="ipa">/ˈɑː.θɚ.aɪz/</span><span class="ko">[<b>아</b>써라이즈]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="let" title="let 소리로 듣기"><span class="en">let</span><span class="ipa">/let/</span><span class="ko">[렛]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">허락하는 방식에 따라 교실 문 앞 장면이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 교사와 미나, 교실 문이다. allow는 미나가 병원 예약을 말하고 교사가 가도 된다고 해 문 앞 자물쇠가 열림, permit은 교사가 조기 퇴실 규정에서 병원 예약 항목을 확인하고 출결부에 적음, authorize는 교무실에서 보호자 서명이 된 신청서의 승인란에 교사가 서명하고 도장을 찍음, let은 교사가 고개를 끄덕이며 가 보라고 하고 미나가 가방을 챙기는 장면이다. 네 장면 모두 미나는 아직 교실 안에 있다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">ALLOW · 해도 되는 상태</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 허락했나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 사람·문 크기는 그림용이다. 장면은 <a href="../allow/_family.md">allow/_family.md</a>의 비교표 TARGET(미나의 조기 퇴실)과 각 노트의 Scene Scenario(교실 문 앞 · 출결 기록부 앞 · 교무실 승인대)를 옮겼다. 어느 장면이든 "나가도 되는 상태가 됐다"는 맞으니 ALLOW 칩이 같이 켜진다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"허락하다" 하나로 다 될 것 같다. 그런데 <b>규정이 그렇게 정해 둬서</b>, <b>담당자가 서명해 기록에 남겨서</b>, <b>그냥 "가 봐" 하고 막지 않아서</b>를 말하고 싶을 때는? 그리고 허락이 아니라 <b>요청을 받아들이지 않았다</b>면? 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>ALLOW 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "해도 되는 상태"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>권한이 있는 사람이 다른 사람의 행동에 대한 금지나 제약을 풀어, 해도 되는 상태로 만듦</b> = <span class="en">ALLOW</span>다. 여기에 규칙 · 공식 권한 · 일상 말투가 붙는다. 노트의 비교표를 식으로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">ALLOW</span><span class="op">+</span><span>떠날 수 있도록 허락 (방식은 열어 둠)</span><span class="op">=</span><span class="v">ALLOW</span>
+    <span class="r">ALLOW</span><span class="op">+</span><span>규칙상 허용; 격식 있음</span><span class="op">=</span><span class="v">PERMIT</span>
+    <span class="r">ALLOW</span><span class="op">+</span><span>권한에 근거해 공식 승인</span><span class="op">=</span><span class="v">AUTHORIZE</span>
+    <span class="r">ALLOW</span><span class="op">+</span><span>일상적으로 막지 않고 허락</span><span class="op">=</span><span class="v">LET</span>
+  </div>
+  <p>노트가 짚은 점: ALLOW는 <span class="en">leave</span>의 발생이 아니라 <b>떠날 권한</b>을 만든다(<span class="en">Mina left early</span>는 퇴실 사건). <span class="en">authorize</span>는 공식 절차가 없는 가벼운 상황에서는 과장될 수 있다. 그리고 <span class="en">let Mina leave</span>에는 <b>to를 넣지 않는다</b> — 3절.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>허락함</b> → 미나가 병원 예약이 있다고 말한다. 교사가 사유를 듣고 가도 된다고 한다. 어떤 근거·절차인지는 말하지 않는다. <span class="en">The teacher allowed Mina to leave early.</span></li>
+    <li><b>규칙대로 허용</b> → 학교 조기 퇴실 규정은 병원 예약을 사유로 인정한다. 교사가 보호자 확인서를 보고 <b>규정의 예외 조건</b>을 확인해 출결부에 적는다. <span class="en">The teacher permitted Mina to leave early under the school rule.</span></li>
+    <li><b>공식 승인</b> → 교무실. 보호자 서명이 된 신청서를 승인 권한이 있는 교사가 확인하고 <b>승인란에 서명</b>한다. 학교 기록에 남는다. <span class="en">The teacher authorized Mina to leave early after checking the form.</span></li>
+    <li><b>가게 해 줌</b> → 교실 문 앞에서 미나가 조용히 묻는다. 교사가 고개를 끄덕이며 "가 봐." <b>막지 않는</b> 짧은 허락. <span class="en">The teacher let Mina leave early.</span></li>
+    <li>네 장면 모두 미나는 <b>아직 교실 안</b>이다. 문까지 이어진 점선은 "나갈 수 있음"이지 "나갔음"이 아니다. 어느 장면이든 <span class="en">allow</span>로 말할 수 있어 ALLOW 칩이 같이 켜진다.</li>
+  </ul>
+
+  <h2>3. let + 동사원형, allow + to — 가장 흔한 실수</h2>
+  <p>같은 허락인데 뒤 모양이 다르다. <b>allow · permit · authorize</b>는 <b>사람 + to 동사</b>, <b>let</b>은 <b>사람 + 동사원형</b>(to 없음)이다. let은 make · have처럼 동사원형을 바로 받는 동사라서, 같은 모양의 <b>make</b>와 견주면 뜻이 또렷해진다.</p>
+  <table>
+    <tr><th>모양</th><th>문장</th><th>한국어</th></tr>
+    <tr><td>allow + 사람 + to (노트)</td><td><span class="en">The teacher allowed Mina to leave early.</span></td><td>미나가 일찍 나가도록 허락했다</td></tr>
+    <tr><td>let + 사람 + 원형 (노트)</td><td><span class="en">The teacher let Mina leave early.</span></td><td>미나를 일찍 가게 해 줬다</td></tr>
+    <tr><td>✗ let + to (노트)</td><td><span class="en">✗ The teacher let Mina to leave early.</span></td><td>let 뒤에는 to 없음</td></tr>
+    <tr><td>make + 사람 + 원형</td><td><span class="en">The teacher made Mina leave early.</span></td><td>나가게 <b>시켰다</b> — 허락이 아니라 강제</td></tr>
+    <tr><td>Let me ~</td><td><span class="en">Let me help you. · Let me know.</span></td><td>내가 도와줄게 · 알려 줘</td></tr>
+    <tr><td>be allowed to</td><td><span class="en">I'm not allowed to use my phone in class.</span></td><td>수업 중엔 폰을 쓰면 안 돼</td></tr>
+  </table>
+  <p class="note">"허락받았다 · 안 된다"를 말할 때는 수동 <span class="en">be allowed to</span>가 가장 흔하다. let은 수동으로 잘 안 쓰므로 <span class="en">✗ Mina was let leave</span> 대신 <span class="en">Mina was allowed to leave</span>(5절). 형태: <span class="en">let — let — let</span>, <span class="en">permit — permitted</span>(노트).</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>ALLOW 묶음</b>이다. 해도 되는 상태를 만든 게 아니라 <b>요청을 받아들이지 않았다</b>면 테두리 밖 문으로 REFUSE 묶음에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 ALLOW 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 해도 되는 상태가 됐나에서 아니오, 요청을 받아들이지 않았으면 묶음 밖 문 refuse, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 allow, 근거를 말하면 Q3에서 규칙이면 permit, 공식 권한이면 authorize, 일상 말투면 let으로 간다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 무엇에 근거</th><th>② 말투</th><th>③ 뒤 모양</th></tr>
+    <tr><td><b>allow</b></td><td>말하지 않음</td><td>중립</td><td>사람 + to 동사</td></tr>
+    <tr><td><b>permit</b></td><td>규칙 · 조건</td><td>격식</td><td>사람 + to 동사</td></tr>
+    <tr><td><b>authorize</b></td><td>담당 권한 · 승인 절차</td><td>공식 · 문서</td><td>사람 + to 동사</td></tr>
+    <tr><td><b>let</b></td><td>말하지 않음 (막지 않음)</td><td>일상</td><td>사람 + 동사원형</td></tr>
+  </table>
+  <p class="note">①②는 노트의 비교표 HOW / register를, ③은 각 노트의 Compatibility를 옮겼다. 흐름 그림의 질문 순서는 그림을 위해 정했다.</p>
+
+  <h2>5. 실제 문장으로 — 사람 + 동사, 명사만, 수동</h2>
+  <p>네 동사 모두 <b>누가 무엇을 해도 되는지</b>를 받는다. 갈리는 곳은 셋 — 뒤에 <b>to</b>가 오느냐, <b>사람 없이 명사</b>(사진 · 폰 · 지급)만 받느냐, <b>수동</b>으로 쓰느냐.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">붙이는 말에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">붙이는 말</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>사람 + 동사</th><th>명사만</th><th>수동</th></tr>
+    <tr><td><b>allow</b></td><td><span class="en">allowed Mina to leave</span></td><td><span class="en">doesn't allow photos</span></td><td><span class="en">was allowed to leave</span></td></tr>
+    <tr><td><b>permit</b></td><td><span class="en">permitted Mina to leave</span></td><td><span class="en">permits phones at lunch</span></td><td><span class="en">are not permitted</span></td></tr>
+    <tr><td><b>authorize</b></td><td><span class="en">authorized Mina to leave</span></td><td><span class="en">authorized the payment</span></td><td><span class="en">are authorized to enter</span></td></tr>
+    <tr><td><b>let</b></td><td><span class="en">let Mina leave</span></td><td>✗ — 사람 + 원형만</td><td>✗ → <span class="en">was allowed to</span></td></tr>
+  </table>
+  <p class="note">경향 한 줄: 공식적일수록(permit · authorize) 표지판 · 규정 · 서류에서 <b>수동</b>으로 자주 보이고, 가장 일상적인 let은 <b>사람 + 동사원형</b> 한 모양만 쓴다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>ALLOW</b> — 팔짱을 낀 채 막고 있다가 <b>팔을 풀며</b> 길을 비켜 준다.</li>
+    <li><b>PERMIT</b> — 허공의 규정집을 손가락으로 훑다가 한 줄에서 멈추고 "<b>여기 있네, 돼.</b>"</li>
+    <li><b>AUTHORIZE</b> — 서류에 <b>서명</b>하고 도장을 <b>쾅</b> 찍는다.</li>
+    <li><b>LET</b> — 고개를 끄덕이며 손바닥으로 문 쪽을 가리킨다. "가 봐."</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>3절의 <span class="en">made Mina leave</span>(강제) 대비, <span class="en">Let me help you · Let me know</span>, <span class="en">I'm not allowed to use my phone</span>은 노트에 없다. 노트에는 <span class="en">let Mina leave</span> / <span class="en">✗ let Mina to leave</span>만 있다.</li>
+      <li>5절의 "명사만" 칸(<span class="en">doesn't allow photos · permits phones · authorized the payment</span>)과 수동 칸, <span class="en">✗ was let leave</span> 판정은 짐작이다. authorize의 a payment는 노트 Targets에서 가져왔다.</li>
+      <li>4절 표의 칸 판정과 0절 "대신 말하면"의 △·✗ 판정은 짐작이다. 묶음 밖 이웃을 REFUSE로 둔 것도 노트에 없는 판단이다(노트의 refuse TARGET에 request가 있어 "요청을 받아들이지 않음"으로 이었다). ALLOW 묶음에는 반대쪽인 forbid · ban 같은 금지 동사 묶음이 아직 없다.</li>
+      <li>authorize 노트의 장면은 <b>교사</b>가 학생 조퇴를 authorize한다. 노트 스스로 "가벼운 상황에서는 과장될 수 있다"고 적었듯, 학교 장면에서는 <span class="en">approved Mina's request</span> 쪽이 더 흔한지 사전으로 볼 것.</li>
+      <li>allow 노트의 Compatibility는 "allow / let 모두 자연스럽다"이고 permit · authorize 노트는 같은 칸에서 allow와 견준다 — let 노트만 "let의 다른 의미는 여기서 다루지 않는다"고 적었다. <span class="en">Let me ~</span>(제안), <span class="en">let the water out</span> 같은 다른 쓰임을 한 줄 덧붙일지 볼 것.</li>
+      <li>permit 노트는 "명사는 첫 음절 강세"라고만 적고 명사 발음 기호는 없다(/ˈpɝː.mɪt/). 발음 줄은 동사 /pɚˈmɪt/이다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../allow/_family.md">allow/_family.md</a> — "허가가 어떤 관계에서 나오는가?"</li>
+    <li>동사 노트: <a href="../allow/allow--grant-permission.md">allow</a> · <a href="../allow/permit--allow-under-rule.md">permit</a> · <a href="../allow/authorize--grant-official-approval.md">authorize</a> · <a href="../allow/let--allow-in-everyday-speech.md">let</a></li>
+    <li>묶음 밖 이웃: <a href="60-refuse.html">60 REFUSE</a>(<a href="../refuse/_family.md">refuse/_family.md</a>) — 제안·요청을 받아들이지 않음. <span class="en">The teacher refused Mina's request.</span></li>
+    <li>견줘 보기: <a href="58-agree.html">58 AGREE</a> — 제안에 찬성함. AGREE는 <b>제안</b>에 대한 입장이고, ALLOW는 <b>남의 행동</b>을 해도 되게 만든다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 교사 x ≈ 290, 교실 문 x 600~644 (그림용) ──
+  const AL_DOOR = (open) => '<rect x="600" y="120" width="44" height="120" rx="2" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="1.5"/><circle cx="636" cy="182" r="3" fill="var(--obj-line)"/>' +
+    tx(622, 112, 11, '교실 문', 'var(--muted)') +
+    (open ? step(.55, '<g transform="translate(622 150)"><path d="M-6 -4 v-8 a6 6 0 0 1 12 0" fill="none" stroke="var(--ok)" stroke-width="2.5" transform="rotate(-25 6 -4)"/><rect x="-9" y="-4" width="18" height="14" rx="2" fill="var(--ok)"/></g>') : '');
+  const AL_PATH = (x) => step(.7, '<path d="M' + x + ' 232 H592" stroke="var(--ok)" stroke-width="2" stroke-dasharray="5 4"/><path d="M584 226 l8 6 l-8 6" fill="none" stroke="var(--ok)" stroke-width="2"/>');
+  const AL_BUB = (x, y, w, t, c) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="26" rx="10" fill="var(--card)" stroke="' + (c || 'var(--line)') + '"/>' + tx(x + w / 2, y + 18, 12, t, 'var(--text)', ' font-weight="600"');
+  const AL_TEACH = (x) => P(x || 290, 240, 1.3, 'var(--ok)') + tx(x || 290, 150, 11, '교사', 'var(--muted)');
+  const AL_MINA = (x, s) => P(x, 240, s || 1.05, 'var(--accent2)') + tx(x, 240 - 70 * (s || 1.05), 11, '미나', 'var(--muted)');
+  const TOP = {
+    first: 'let', keep: 'ALLOW',
+    keepSay: '<b>ALLOW</b>는 이 장면에도 맞다 — 규칙·권한·말투를 빼고 미나가 나가도 되는 상태가 됐다는 결과만 말한다. <span class="en">The teacher allowed Mina to leave early.</span>',
+    chips: ['ALLOW', 'PERMIT', 'AUTHORIZE', 'LET'], out: [['REFUSE (받아들이지 않음)', '60-refuse.html']],
+    hows: {
+      allow: { btn: '허락함', how: '허락 · 방식은 열어 둠', verb: 'ALLOW', chips: ['ALLOW'], target: 'TARGET · Mina\'s early departure',
+        result: '나가도 되는 상태 — 실제 퇴실은 별개',
+        pic: () => FLOOR + AL_TEACH() + AL_MINA(500) + AL_DOOR(true) +
+          step(.15, AL_BUB(400, 92, 120, '병원 예약이 있어요', 'var(--accent2)')) +
+          step(.35, AL_BUB(250, 92, 110, '그래, 가도 돼', 'var(--ok)')) + AL_PATH(520) +
+          step(.7, tx(556, 222, 11, '나갈 수 있음', 'var(--ok)', ' font-weight="600"')),
+        say: '<span class="en">The teacher allowed Mina to leave early.</span> 교사가 사유를 듣고 <b>나가도 되는 관계</b>를 만들었다. 규칙인지 서류인지는 말하지 않는다. 미나는 아직 교실 안 — 실제로 떠났는지는 별개다(노트).' },
+      permit: { btn: '규칙대로 허용', how: '규칙에 따라 허용', verb: 'PERMIT', chips: ['ALLOW', 'PERMIT'], target: 'TARGET · Mina\'s early departure',
+        result: '규정의 예외 조건 확인 — 퇴실 허용',
+        pic: () => FLOOR + AL_TEACH() + AL_MINA(560, 1) + AL_DOOR(true) +
+          '<rect x="330" y="96" width="150" height="86" rx="4" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><rect x="330" y="96" width="150" height="20" rx="4" fill="var(--accent2)"/>' + tx(405, 111, 11, '조기 퇴실 규정', '#fff', ' font-weight="700"') +
+          tx(342, 136, 11, '· 병원 예약', 'var(--text)', '', 'start') + tx(342, 156, 11, '· 보호자 확인서', 'var(--text)', '', 'start') + tx(342, 174, 11, '· 그 밖 — 불가', 'var(--muted)', '', 'start') +
+          step(.25, tick(444, 128) + tick(444, 148)) +
+          step(.45, '<rect x="380" y="200" width="70" height="40" rx="2" fill="var(--bg)" stroke="var(--obj-line)"/>' + tx(415, 216, 10, '출결부', 'var(--muted)') + tx(415, 232, 10, '미나 · 조퇴', 'var(--accent)', ' font-weight="600"')) +
+          AL_PATH(578),
+        say: '<span class="en">The teacher permitted Mina to leave early under the school rule.</span> 개인적 호의가 아니라 <b>정해진 규칙</b>이 병원 예약을 허용 사유로 인정한다. 격식 있는 말투다(노트).' },
+      authorize: { btn: '공식 승인', how: '권한으로 공식 승인', verb: 'AUTHORIZE', chips: ['ALLOW', 'AUTHORIZE'], target: 'TARGET · Mina\'s early departure',
+        result: '승인란에 서명 — 학교 기록상 허가',
+        pic: () => FLOOR + AL_TEACH() + P(610, 240, 1, 'var(--accent2)') + tx(610, 170, 11, '미나', 'var(--muted)') + table(330, 200, 220) + tx(440, 56, 11, '교무실 · 승인대', 'var(--muted)') +
+          '<rect x="380" y="70" width="110" height="126" rx="3" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(435, 90, 11, '조기 퇴실 신청서', 'var(--text)', ' font-weight="700"') +
+          tx(390, 114, 10, '사유: 병원 예약', 'var(--text)', '', 'start') + tx(390, 134, 10, '보호자 서명 ✓', 'var(--text)', '', 'start') +
+          '<rect x="390" y="148" width="90" height="38" rx="2" fill="none" stroke="var(--line)" stroke-dasharray="4 3"/>' + tx(396, 160, 9, '승인', 'var(--muted)', '', 'start') +
+          step(.3, '<path d="M398 178 q8 -14 14 -2 q6 12 12 -4 q6 -12 12 2 q4 8 10 -2" fill="none" stroke="var(--text)" stroke-width="1.8"/>') +
+          step(.5, '<circle cx="466" cy="170" r="12" fill="none" stroke="var(--bad)" stroke-width="2"/>' + tx(466, 174, 9, '승인', 'var(--bad)', ' font-weight="700"')) +
+          step(.65, AR(500, 150, 590, 196, 'var(--ok)', 1.5, true) + tx(560, 140, 11, '허가서', 'var(--ok)', ' font-weight="600"')),
+        say: '<span class="en">The teacher authorized Mina to leave early after checking the form.</span> 구두 허락보다 <b>승인 권한과 기록</b>이 중심이다. 서류를 확인하고 승인란에 서명했다. 공식 절차가 없는 가벼운 장면에 쓰면 과장될 수 있다(노트).' },
+      let: { btn: '가게 해 줌', how: '막지 않고 일상 허락', verb: 'LET', chips: ['ALLOW', 'LET'], target: 'TARGET · Mina\'s early departure',
+        result: '"가 봐" — 막지 않음, 미나는 갈 수 있음',
+        pic: () => FLOOR + AL_TEACH() + AL_MINA(500) + AL_DOOR(false) +
+          step(.15, AL_BUB(408, 96, 104, '저 병원이…', 'var(--accent2)')) +
+          step(.35, '<path d="M266 166 q-6 9 0 18 M314 166 q6 9 0 18" fill="none" stroke="var(--muted)" stroke-width="1.5"/>' + tx(240, 178, 10, '끄덕', 'var(--muted)', '', 'start') + AL_BUB(250, 96, 80, '가 봐', 'var(--ok)')) +
+          step(.5, '<rect x="516" y="196" width="26" height="22" rx="4" fill="var(--sleeve)" stroke="var(--obj-line)"/><path d="M522 196 q7 -10 14 0" fill="none" stroke="var(--obj-line)" stroke-width="2"/>' + tx(529, 186, 10, '가방', 'var(--muted)')) +
+          AL_PATH(548),
+        say: '<span class="en">The teacher let Mina leave early.</span> 공식 절차가 아니라 고개를 끄덕이며 "가 봐" — <b>막지 않는</b> 짧은 허락이다. 뒤에 <b>to 없이</b> <span class="en">leave</span>. <span class="en">✗ let Mina to leave</span>(노트).' },
+    },
+  };
+
+  // 0절 아이콘 ((0, 0) 중심)
+  const AL_LOCK = (c) => '<path d="M-10 -6 v-12 a10 10 0 0 1 20 0" fill="none" stroke="' + c + '" stroke-width="4" transform="rotate(-25 10 -6)"/><rect x="-16" y="-6" width="32" height="26" rx="4" fill="' + c + '"/>';
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. let을 먼저 빼 보세요.',
+    cards: [
+      { id: 'allow', t: ['해도 되는', '상태로'], v: 'allow', icon: AL_LOCK('var(--accent)'),
+        instead: 'Mina could leave early. △', lost: '할 수 있게 됐다는 건 남지만, 누가 금지를 풀어 줬다는 허락 관계가 빠진다.', why: '금지·제약을 풀어 해도 되는 상태로 만듦.' },
+      { id: 'permit', t: ['규칙에', '따라'], v: 'permit', icon: '<rect x="-24" y="-28" width="48" height="56" rx="3" fill="var(--card)" stroke="var(--obj-line)"/><rect x="-24" y="-28" width="48" height="12" rx="3" fill="var(--accent2)"/><path d="M-16 -4 h22 M-16 6 h22 M-16 16 h22" stroke="var(--line)" stroke-width="2"/>' + tick(6, -8),
+        instead: 'The teacher allowed it. △', lost: '틀리지 않지만, 규정의 예외 조건에 맞아서 허용했다는 근거와 격식이 빠진다.', why: '규칙·조건에 따라 허용.' },
+      { id: 'authorize', t: ['권한으로', '공식 승인'], v: 'authorize', icon: '<rect x="-22" y="-30" width="44" height="58" rx="3" fill="var(--card)" stroke="var(--obj-line)"/><path d="M-14 -16 h28 M-14 -6 h28" stroke="var(--line)" stroke-width="2"/><circle cx="8" cy="14" r="11" fill="none" stroke="var(--bad)" stroke-width="2.5"/><path d="M-16 16 q5 -8 9 0" fill="none" stroke="var(--text)" stroke-width="1.5"/>',
+        instead: 'The teacher said OK. △', lost: '말로 한 허락처럼 들린다. 승인 권한으로 서명해 기록에 남겼다는 무게가 빠진다.', why: '권한에 근거해 공식 승인.' },
+      { id: 'let', t: ['막지 않고', '"가 봐"'], v: 'let', icon: '<rect x="-4" y="-30" width="30" height="58" rx="2" fill="var(--wood)" stroke="var(--obj-line)"/><path d="M-4 -30 L-22 -24 V22 L-4 28" fill="var(--bg)" stroke="var(--obj-line)"/>' + '<path d="M-34 0 H-10 m-6 -5 l6 5 l-6 5" fill="none" stroke="var(--ok)" stroke-width="2.5"/>',
+        instead: 'The teacher permitted me to go. △', lost: '친구에게 하는 말로는 너무 딱딱하다. 일상에서 "가게 해 줬다"고 짧게 말할 말이 빈다.', why: '일상적으로 막지 않고 허락.' },
+      { id: 'refuse', out: true, t: ['요청을', '안 받아들임'], v: 'refuse', icon: '<rect x="-24" y="-22" width="48" height="40" rx="8" fill="var(--card)" stroke="var(--obj-line)"/><path d="M-10 26 l6 -8 h6" fill="var(--card)" stroke="var(--obj-line)"/><path d="M-11 -13 L11 9 M11 -13 L-11 9" stroke="var(--bad)" stroke-width="3"/>',
+        instead: 'The teacher didn\'t allow it. △', lost: '부정으로 돌려 말하면 통하지만, 요청을 받아들이지 않았다는 반응 자체를 그리는 한 낱말은 ALLOW 묶음에 없다.', why: '제안·요청을 받아들이지 않음 — 이웃 REFUSE 묶음(60).' },
+    ],
+  };
+
+  const SCENES = {
+    museum: { btn: '미술관', place: '미술관 · 전시실',
+      pic: () => FL + '<rect x="440" y="30" width="110" height="80" rx="2" fill="' + CARD + '" stroke="' + OL + '" stroke-width="3"/><path d="M452 98 l24 -34 l18 22 l12 -12 l32 24 z" fill="' + SL + '" opacity=".6"/>' +
+        P(260, 150, 1.1, SL) + L(260, 72, '나') + P(620, 150, 1.1, OKC) + L(620, 72, '직원') +
+        '<rect x="282" y="94" width="18" height="12" rx="2" fill="' + OL + '"/>' +
+        ST(.25, '<g transform="translate(360 60)"><circle r="18" fill="' + CARD + '" stroke="' + BAD + '" stroke-width="3"/><rect x="-9" y="-6" width="18" height="12" rx="2" fill="' + OL + '"/><path d="M-12 12 L12 -12" stroke="' + BAD + '" stroke-width="3"/></g>'),
+      lines: [
+        ['나', 'Excuse me, can I take pictures here?', '실례지만 여기서 사진 찍어도 돼요?', 1],
+        ['직원', 'Sorry, photos aren\'t <b>allowed</b> in this room.', '죄송하지만 이 방은 사진이 안 돼요.'],
+      ],
+      say: '안내 · 규칙을 말할 때 가장 흔한 모양 — <span class="en">be (not) allowed</span>. 누가 허락하는지는 말하지 않는다.' },
+    home: { btn: '집', place: '집 · 저녁',
+      pic: () => FL + P(270, 150, 1, SL) + L(270, 80, '나') + P(400, 150, 1.15, A2) + L(400, 68, '엄마') +
+        '<rect x="500" y="40" width="130" height="80" rx="4" fill="' + BG + '" stroke="' + OL + '" stroke-width="2"/>' + T(565, 86, 13, '11:00', MU, ' font-weight="700"') +
+        ST(.3, '<path d="M560 142 H620" stroke="' + OKC + '" stroke-width="2" stroke-dasharray="5 4"/>' + T(590, 134, 11, '조금 더', OKC)),
+      lines: [
+        ['나', 'Mom, will you <b>let</b> me stay up a little later tonight?', '엄마, 오늘 밤 조금만 더 늦게 자도 돼요?', 1],
+        ['엄마', 'Just tonight. It\'s Friday.', '오늘만이야. 금요일이니까.'],
+      ],
+      say: '가족 사이의 일상 허락 — <span class="en">let me + 동사원형</span>. <span class="en">✗ let me to stay</span>는 틀린다.' },
+    parking: { btn: '주차장', place: '아파트 주차장',
+      pic: () => FL + CAR(360) + P(260, 150, 1.1, SL) + L(260, 72, '나') + P(630, 150, 1.1, FOG) + L(630, 72, '경비원') +
+        '<path d="M600 150 V40" stroke="' + OL + '" stroke-width="3"/>' + ST(.25, '<rect x="560" y="22" width="80" height="34" rx="4" fill="' + SL + '"/>' + T(600, 44, 12, '입주민 전용', '#fff', ' font-weight="700"')),
+      lines: [
+        ['나', 'Can I park here for a minute?', '여기 잠깐 주차해도 될까요?', 1],
+        ['경비원', 'Sorry, parking is only <b>permitted</b> for residents.', '죄송해요, 주차는 입주민만 허용돼요.'],
+      ],
+      say: '<b>규정</b>이 정한 허용 — <span class="en">permit</span>. 표지판 · 안내문의 격식 있는 말이다.' },
+    office: { btn: '회사', place: '회사 · 사무실',
+      pic: () => FL + TB(360, 560, 108) + P(280, 150, 1.1, SL) + L(280, 72, '나') + P(620, 150, 1.1, OKC) + L(620, 72, '동료') +
+        '<rect x="420" y="70" width="70" height="38" rx="3" fill="' + BG + '" stroke="' + OL + '" stroke-width="2"/>' +
+        ST(.25, LOCK(455, 90)) + ST(.4, T(455, 56, 11, '권한 필요', A2, ' font-weight="600"')),
+      lines: [
+        ['나', 'Can you send me the salary file?', '급여 파일 좀 보내 줄래요?', 1],
+        ['동료', 'Sorry, I\'m not <b>authorized</b> to share it.', '미안해요, 저는 그걸 공유할 권한이 없어요.'],
+      ],
+      say: '<b>권한</b>이 있어야 하는 일 — <span class="en">be (not) authorized to</span>. 회사 · 은행 · 보안에서 자주 듣는다.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'let',
+    region: { x: 84, y: 66, w: 544, h: 258, label: 'ALLOW 묶음 · 해도 되는 상태', at: [92, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 260, t: 'Q1. 해도 되는 상태가 됐나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 205, y: 180, w: 180, t: 'Q3. 무엇에 근거?', sub: '규칙 · 권한' },
+    },
+    leaves: {
+      permit:    { x: 150, y: 262, w: 92, v: 'permit', sub: '규칙 · 격식', seg: 'w', say: '<span class="en">The teacher permitted Mina to leave early.</span> 규정에 따른 허가.' },
+      authorize: { x: 262, y: 262, w: 106, v: 'authorize', sub: '공식 승인', seg: 'w', say: '<span class="en">The teacher authorized Mina to leave early.</span> 권한 · 서류 · 기록.' },
+      allow:     { x: 383, y: 262, w: 88, v: 'allow', sub: '방식 말 안 함', seg: 'b', say: '<span class="en">The teacher allowed Mina to leave early.</span> 이 묶음의 기본 동사.' },
+      let:       { x: 535, y: 262, w: 88, v: 'let', sub: '일상 말투', seg: 'h', say: '<span class="en">The teacher let Mina leave early.</span> to 없이 동사원형.' },
+      refuse:    { x: 600, y: 36, w: 120, v: 'refuse', sub: '→ REFUSE 묶음', seg: '', out: true, say: '<span class="en">The teacher refused Mina\'s request.</span> 요청을 <b>받아들이지 않음</b> → ALLOW 묶음 밖, <a href="60-refuse.html">60 REFUSE</a>.' },
+    },
+    edges: [
+      ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'refuse', '아니오', 'right', [505, 28], true],
+      ['q2', 'q3', '근거', 'left'], ['q2', 'allow', '말하지 않음'], ['q2', 'let', '일상 말투', 'right'],
+      ['q3', 'permit', '규칙'], ['q3', 'authorize', '공식 권한'],
+    ],
+    segs: [[90, 320, '근거 (규칙 · 권한)', 'w'], [326, 440, '기본', 'b'], [446, 624, '말투 (일상)', 'h']],
+  };
+
+  const SLOTS = {
+    first: ['let', 'to'],
+    slots: { to: '사람 + 동사', noun: '명사만', pass: '수동' },
+    verbs: {
+      allow: {
+        to:   { ok: [['The teacher', 's'], ['allowed', 'v'], ['Mina', 'o'], ['to leave early', 'r']], say: '노트 예문. 허락받은 행동은 <b>to + 동사</b>.' },
+        noun: { ok: [['The museum', 's'], ['doesn\'t allow', 'v'], ['photos', 'o']], say: '사람 없이 <b>무엇이 허용되는지</b>만 말할 수도 있다.' },
+        pass: { ok: [['Mina', 's'], ['was allowed', 'v'], ['to leave early', 'r']], say: '허락받은 사람이 주어 — 가장 흔한 모양.' },
+      },
+      permit: {
+        to:   { ok: [['The teacher', 's'], ['permitted', 'v'], ['Mina', 'o'], ['to leave early', 'r']], bad: [['The teacher', 's'], ['permited', 'v'], ['Mina', 'o'], ['to leave early', 'r']], say: '노트 예문. 과거형은 t를 겹쳐 <b>permitted</b>.' },
+        noun: { ok: [['The school', 's'], ['permits', 'v'], ['phones', 'o'], ['at lunch', 'x']], say: '규정이 주어로 와서 무엇을 허용하는지.' },
+        pass: { ok: [['Phones', 's'], ['are not permitted', 'v'], ['in class', 'x']], say: '표지판 · 안내문의 모양.' },
+      },
+      authorize: {
+        to:   { ok: [['The teacher', 's'], ['authorized', 'v'], ['Mina', 'o'], ['to leave early', 'r']], say: '노트 예문. 승인 권한 · 서류가 있을 때.' },
+        noun: { ok: [['The manager', 's'], ['authorized', 'v'], ['the payment', 'o']], say: '지급 · 접근 같은 <b>일</b>을 승인한다(노트 Targets).' },
+        pass: { ok: [['Only staff', 's'], ['are authorized', 'v'], ['to enter', 'r']], say: '권한이 있는 사람만 — 회사 · 보안 문구.' },
+      },
+      let: {
+        to:   { ok: [['The teacher', 's'], ['let', 'v'], ['Mina', 'o'], ['leave early', 'r']], bad: [['The teacher', 's'], ['let', 'v'], ['Mina', 'o'], ['to leave early', 'r']], say: 'let 뒤에는 <b>to 없이</b> 동사원형(노트). 과거형도 let.' },
+        noun: { ok: [['My mom', 's'], ['let', 'v'], ['me', 'o'], ['have a party', 'r']], bad: [['My mom', 's'], ['let', 'v'], ['the party', 'o']], say: 'let은 <b>사람 + 동사원형</b> 한 모양이다. 명사만으로는 안 된다.' },
+        pass: { ok: [['Mina', 's'], ['was allowed', 'v'], ['to leave', 'r']], bad: [['Mina', 's'], ['was let', 'v'], ['leave', 'r']], say: 'let은 수동으로 잘 안 쓴다 → <b>was allowed to</b>로 바꾼다.' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>
