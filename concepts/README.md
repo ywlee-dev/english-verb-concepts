@@ -156,15 +156,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 32 | [32-bring.html](32-bring.html) | BRING 묶음 — bring · fetch · deliver · ship(네 동사). "bring과 take — 가져오다·가져가다" | HOW 버튼 → 창고·사무실 소포(이쪽으로·갔다 돌아옴·302호 전달·택배 운송 중) / 질문 흐름 + TAKE로 가는 문 | |
 | 33 | [33-leave.html](33-leave.html) | LEAVE 묶음 — leave · exit · walk out of · file out of(네 동사). "leave와 go" | HOW 버튼 → 교실과 복도(빈 교실·옆문 EXIT·걸어 나감·한 줄로) / 질문 흐름 + ESCAPE로 가는 문 | |
 | 34 | [34-turn.html](34-turn.html) | TURN 묶음 — turn · rotate · spin · flip · twist. "돌리다 하나, 다섯 동사" | HOW 버튼 → 카드(화살표 방향·90° 회전·빙글빙글·앞뒤 뒤집기·양끝 비틀기) / 질문 흐름 + MOVE로 가는 문 | |
+| 35 | [35-hold.html](35-hold.html) | HOLD 묶음 — hold · grip · grasp · clutch · squeeze. "hold가 덮는 것" | HOW 버튼 → 버스 손잡이(잡고 있음·젖은 손잡이·확 붙잡음·겁나서 바짝·비상 손잡이 누름) / 질문 흐름 + PUT으로 가는 문 | |
+| 36 | [36-wait.html](36-wait.html) | WAIT 묶음 — wait · await · queue · line up(네 동사). "wait for와 await" | HOW 버튼 → 정류장 버스(20분째·공지문·번호 줄·한 줄로!) / 질문 흐름 + STOP으로 가는 문 | |
+| 37 | [37-show.html](37-show.html) | SHOW 묶음 — show · display · point out · demonstrate · reveal. "show · tell · see" | HOW 버튼 → 지도(내밀기·게시판·한 길 짚기·매듭 세 단계·천을 걷음) / 질문 흐름 + TELL로 가는 문 | |
 
-01~34 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~34)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~34와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~37 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~37)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~37와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- 나머지 묶음(48개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: hold · wait · show
+- 나머지 묶음(45개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: open · close · pay
 
 ## 생성기로 만들기 (08부터)
 

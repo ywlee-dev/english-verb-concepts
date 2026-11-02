@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HOLD 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/35-hold.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+  /* 표에 긴 칸이 많아 휴대폰 폭에서 칸 여백을 줄인다 */
+  @media (max-width: 600px) { th, td { padding: 6px 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="34-turn.html">TURN 묶음</a> · 다음: <a href="36-wait.html">WAIT 묶음</a> · 견줘 보기: <a href="15-put.html">PUT 묶음 (손에서 내려놓음)</a> · <a href="12-take.html">TAKE 묶음 (집어 듦)</a></p>
+  <h1>HOLD 묶음 — 같은 손잡이, 다른 쥠</h1>
+  <p class="lead">버스 <b>손잡이를 놓치지 않고</b> 있다. 이 결과는 같고, <b>힘을 얼마나 어느 쪽으로 주는지, 언제 왜 잡는지</b>만 바꾸면 hold · grip · grasp · clutch · squeeze로 갈린다. hold는 방식을 말하지 않고 <b>잡은 채 유지한다</b>만 그린다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="hold" title="hold 소리로 듣기"><span class="en">hold</span><span class="ipa">/hoʊld/</span><span class="ko">[호울드]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="grip" title="grip 소리로 듣기"><span class="en">grip</span><span class="ipa">/ɡrɪp/</span><span class="ko">[그립]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="grasp" title="grasp 소리로 듣기"><span class="en">grasp</span><span class="ipa">/ɡræsp/</span><span class="ko">[그래스프]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="clutch" title="clutch 소리로 듣기"><span class="en">clutch</span><span class="ipa">/klʌtʃ/</span><span class="ko">[클러치]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="squeeze" title="squeeze 소리로 듣기"><span class="en">squeeze</span><span class="ipa">/skwiːz/</span><span class="ko">[스퀴즈]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">잡는 방식에 따라 버스 손잡이를 쥔 손의 모습이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 버스 안 손잡이와 사람이다. hold는 한 손으로 손잡이를 잡고 서 있음, grip은 젖은 손잡이를 손가락에 힘을 주어 꽉 쥠, grasp는 버스가 출발하는 순간 손을 뻗어 붙잡음, clutch는 겁이 난 아이가 두 손으로 바짝 움켜쥠, squeeze는 비상 손잡이를 안쪽으로 눌러 잠금이 풀리는 장면이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">HOLD · 놓치지 않게</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 잡았나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 힘의 크기·자세는 그림용이다. 버스 손잡이 장면은 <a href="../hold/_family.md">hold/_family.md</a>의 고정 TARGET(the handle)을 옮겼다. clutch 노트는 케이블카, squeeze 노트는 지하철 비상문이 장면이지만, 여기서는 묶음 표대로 버스 안에 모았다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"잡다 · 쥐다 · 붙잡다 · 움켜쥐다 · 꽉 쥐다" — 한국어도 여럿이다. 영어도 hold 하나로 많은 것을 말하지만, <b>미끄러지지 않게 힘을 준</b>, <b>뻗어서 확보한 순간</b>, <b>겁이 나서 바짝</b>, <b>눌러서 작동시킨</b>을 말하고 싶을 때는? 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>HOLD 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "놓치지 않게 유지"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>TARGET을 놓치지 않도록 지지하거나 통제된 상태로 유지함</b> = <span class="en">HOLD</span>다. 여기에 마찰 · 확보 순간 · 감정 · 압축 목적이 붙는다. 노트의 식을 그대로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">HOLD</span><span class="op">+</span><span>지지·통제 방식 미지정</span><span class="op">=</span><span class="v">HOLD</span>
+    <span class="r">HOLD</span><span class="op">+</span><span>강한 마찰 압력</span><span class="op">=</span><span class="v">GRIP</span>
+    <span class="r">HOLD</span><span class="op">+</span><span>손으로 확실히 확보</span><span class="op">=</span><span class="v">GRASP</span>
+    <span class="r">HOLD</span><span class="op">+</span><span>감정·긴급성으로 바짝 잡음</span><span class="op">=</span><span class="v">CLUTCH</span>
+    <span class="r">HOLD</span><span class="op">+</span><span>안쪽으로 압축</span><span class="op">=</span><span class="v">SQUEEZE</span>
+  </div>
+  <p>노트가 짚은 경계: <b>squeeze는 압박 자체가 핵심</b>이라 모든 쓰임이 계속 잡고 있는 hold를 포함하지는 않는다(레몬을 짜다). 여기서는 손잡이를 잡은 채 안쪽으로 누르는 장면으로 한정했다. 과거형은 <span class="en">held</span> — <span class="en">holded</span>가 아니다.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>잡고 있음</b> → 움직이는 버스에서 손잡이와 접촉을 유지해 균형을 잡는다. 얼마나 세게인지는 말하지 않는다. <span class="en">Hold the handle while the bus is moving.</span></li>
+    <li><b>힘주어 꽉</b> → 손잡이가 젖어 미끄럽고 급커브. 손가락을 감고 세게 눌러 <b>마찰</b>을 만든다. <span class="en">She gripped the handle tightly.</span></li>
+    <li><b>뻗어서 확보</b> → 버스가 갑자기 출발해 균형을 잃는 <b>순간</b>, 손을 뻗어 손잡이를 손안에 넣는다. <span class="en">She grasped the handle just in time.</span></li>
+    <li><b>겁나서 바짝</b> → 차체가 흔들리자 겁이 난 아이가 두 손으로 <b>바짝</b> 움켜쥐고 몸 가까이 당긴다. <span class="en">The child clutched the handle.</span></li>
+    <li><b>안쪽으로 누름</b> → 비상 손잡이는 잡기만 해서는 안 풀린다. 손가락과 손바닥을 가까워지게 <b>눌러</b> 잠금을 푼다. <span class="en">Squeeze the handle to open the door.</span></li>
+    <li>squeeze를 뺀 네 장면은 "손잡이를 놓치지 않고 있다"가 맞으니 <span class="en">hold</span>도 쓸 수 있다. 그래서 HOLD 칩이 같이 켜진다.</li>
+  </ul>
+
+  <h2>3. hold가 그리는 그림 — "놓지 않고 그대로"</h2>
+  <p>hold는 손에만 쓰지 않는다. <b>무언가를 놓치지 않게 그대로 붙들어 두면</b> 다 hold다. 순서로 보면 12 TAKE의 pick up(집어 듦) → <b>hold(쥔 채 유지)</b> → 15 PUT(내려놓음)의 가운데 칸이다.</p>
+  <table>
+    <tr><th>붙드는 것</th><th>문장</th><th>한국어</th></tr>
+    <tr><td>손 · 팔</td><td><span class="en">Can you hold my bag? · She held the baby.</span></td><td>가방 좀 들어 줄래? · 아기를 안고 있었다</td></tr>
+    <tr><td>문 · 자리</td><td><span class="en">Hold the door, please!</span></td><td>문 좀 잡아 주세요!</td></tr>
+    <tr><td>전화 · 순서</td><td><span class="en">Please hold. · Hold on a second.</span></td><td>끊지 말고 기다려 주세요 · 잠깐만</td></tr>
+    <tr><td>숨 · 감정</td><td><span class="en">Hold your breath.</span></td><td>숨을 참아</td></tr>
+    <tr><td>안에 담음</td><td><span class="en">This bottle holds one liter.</span></td><td>이 병은 1리터가 들어간다</td></tr>
+    <tr><td>행사를 열어 둠</td><td><span class="en">We held a meeting.</span></td><td>회의를 열었다</td></tr>
+  </table>
+  <p class="note">전화의 <span class="en">hold</span>와 <span class="en">hold on</span>은 "끊지 않고 그대로 기다림"이라 <a href="36-wait.html">36 WAIT 묶음</a>과 이어진다.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>HOLD 묶음</b>이다. 쥐고 있지 않고 <b>손에서 내려 자리에 두면</b> 테두리 밖 문으로 PUT 묶음에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 HOLD 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 놓치지 않게 붙들고 있나에서 아니오, 내려놓으면 묶음 밖 문 put, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 hold, 힘이면 Q3에서 grip과 squeeze, 순간이나 마음이면 Q4에서 grasp와 clutch로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 계속 잡고 있나?</th><th>② 무엇이 HOW를 고르나</th><th>③ hold를 늘 포함하나?</th></tr>
+    <tr><td><b>hold</b></td><td>예 — 지속적 지지</td><td>— (방식 미지정)</td><td>예 (기본)</td></tr>
+    <tr><td><b>grip</b></td><td>예</td><td>마찰 — 손가락 압력</td><td>예</td></tr>
+    <tr><td><b>grasp</b></td><td>확보하는 순간에 초점</td><td>확보 순간</td><td>예 — 잡은 뒤 지탱</td></tr>
+    <tr><td><b>clutch</b></td><td>예 — 바짝</td><td>감정 (두려움·긴급성)</td><td>예</td></tr>
+    <tr><td><b>squeeze</b></td><td>꼭은 아님</td><td>압축 목적</td><td>아니오 — 압박 자체가 핵심</td></tr>
+  </table>
+  <p class="note">길잡이지 칼같은 규칙이 아니다. ②는 노트의 "마찰·확보 순간·감정·압축 목적이 HOW를 선택한다", squeeze의 ③은 노트의 분류 경계 그대로다. 나머지 칸 나눔은 짐작이다.</p>
+
+  <h2>5. 실제 문장으로 — 무엇을, 어떻게</h2>
+  <p>이 묶음은 잡는 대상을 <b>바로</b> 목적어로 받는다. 뒤에 <b>어떻게 · 언제 · 왜</b>를 붙이면 장면이 산다. 과거형 철자가 갈리는 자리(held · gripped)를 같이 본다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">붙이는 말에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">붙이는 것</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>무엇을</th><th>+ 어떻게 · 언제</th><th>다른 모양</th></tr>
+    <tr><td><b>hold</b></td><td><span class="en">held the handle</span> (✗ holded)</td><td><span class="en">while the bus is moving</span></td><td><span class="en">Hold on!</span> — 꽉 잡아 · 잠깐만</td></tr>
+    <tr><td><b>grip</b></td><td><span class="en">gripped the handle</span></td><td><span class="en">tightly</span></td><td><span class="en">Get a grip!</span> — 정신 차려</td></tr>
+    <tr><td><b>grasp</b></td><td><span class="en">grasped the handle</span></td><td><span class="en">just in time</span></td><td><span class="en">grasp the idea</span> — 이해하다</td></tr>
+    <tr><td><b>clutch</b></td><td><span class="en">clutched the handle</span></td><td><span class="en">during the storm</span></td><td><span class="en">clutched her bag</span> — 가방을 꼭 쥠</td></tr>
+    <tr><td><b>squeeze</b></td><td><span class="en">squeezed the handle</span></td><td><span class="en">to open the door</span></td><td><span class="en">squeeze a lemon</span> — 짜다</td></tr>
+  </table>
+  <p class="note">경향 한 줄: 힘이 세지거나 순간이 짧아질수록 "그대로 유지"에서 멀어진다 — hold(유지) → grip · clutch(세게 유지) → grasp(잡는 순간) → squeeze(누르기 자체).</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>HOLD</b> — 컵을 그냥 <b>들고 있는다</b>. 힘은 신경 쓰지 않는다.</li>
+    <li><b>GRIP</b> — 젖은 컵이라고 생각하고 손가락을 감아 <b>힘을 준다</b>.</li>
+    <li><b>GRASP</b> — 책상 끝에서 굴러떨어지는 펜을 <b>확 뻗어</b> 붙잡는다.</li>
+    <li><b>CLUTCH</b> — 무서운 영화를 보는 척, 쿠션을 가슴에 <b>바짝</b> 끌어안는다.</li>
+    <li><b>SQUEEZE</b> — 스트레스볼이나 빈 페트병을 <b>안쪽으로 꾹</b> 누른다.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것. grasp는 회화에서 손으로 잡는 장면이 드물 것 같아(짐작) 장면을 넣지 않았다.</li>
+      <li>3절 hold 쓰임 표(가방·문·전화·숨·용량·회의)는 노트에 없다.</li>
+      <li>5절 "다른 모양"(Hold on · Get a grip · grasp the idea · clutched her bag · squeeze a lemon)과 ✗ griped(p 하나는 다른 낱말 gripe)는 노트에 없다. 노트에 있는 것은 holded가 아니라는 것, gripped가 p를 겹친다는 것, grasp의 TARGET에 "이해할 수 있는 대상", squeeze의 TARGET에 레몬이 든다는 것까지다.</li>
+      <li>4절의 칸 나눔(노트 인용 칸 빼고), 0절 "대신 말하면"의 △·✗ 판정은 짐작이다.</li>
+      <li>노트 <a href="../hold/_family.md">hold/_family.md</a>: "## Shared Result" 제목 아래가 비어 있고, 공통 결과 문장(agent가 TARGET을 놓치지 않도록…)이 "상황에서 꺼내기" 뒤에 떨어져 있다. 노트를 고칠 것.</li>
+      <li>clutch 노트는 케이블카, squeeze 노트는 지하철 비상문이 장면이라 묶음 표의 "버스 handle"과 다르다. 맨 위 그림은 묶음 표를 따랐다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../hold/_family.md">hold/_family.md</a> — "마찰·확보 순간·감정·압축 목적이 HOW를 선택한다"</li>
+    <li>동사 노트: <a href="../hold/hold--keep-supported.md">hold</a> · <a href="../hold/grip--hold-firmly.md">grip</a> · <a href="../hold/grasp--hold-securely.md">grasp</a> · <a href="../hold/clutch--hold-tightly.md">clutch</a> · <a href="../hold/squeeze--hold-with-pressure.md">squeeze</a></li>
+    <li>묶음 밖 이웃: <a href="15-put.html">15 PUT</a>(<a href="../put/_family.md">put/_family.md</a>) — 손에서 내려 자리에 둠. 그 앞 단계(집어 듦)는 <a href="12-take.html">12 TAKE</a>의 pick up.</li>
+    <li>견줘 보기: <a href="16-keep.html">16 KEEP</a> — 손이 아니라 상태를 계속 그대로 둠. 전화의 hold는 <a href="36-wait.html">36 WAIT</a>.</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — hold는 <b>놓치지 않고 붙든 상태</b> 하나를 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 버스 천장 봉 y = 62, 손잡이 고리 x = 430 (그림용) ──
+  const STRAP = (x, len) => '<path d="M' + x + ' 62 V' + (62 + len) + '" stroke="var(--obj-line)" stroke-width="3"/><rect x="' + (x - 11) + '" y="' + (62 + len) + '" width="22" height="22" rx="7" fill="none" stroke="var(--accent2)" stroke-width="4"/>';
+  const BUSIN = FLOOR + '<path d="M244 62 H664" stroke="var(--obj-line)" stroke-width="4"/>' +
+    '<rect x="500" y="96" width="150" height="70" rx="6" fill="none" stroke="var(--line)" stroke-width="1.5"/><path d="M575 96 V166" stroke="var(--line)"/>' + tx(575, 184, 11, '버스 창', 'var(--muted)');
+  // 팔: 어깨 (x1, y1) → 손 (x2, y2)
+  const ARM = (x1, y1, x2, y2, c) => '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + '" stroke="' + (c || 'var(--sleeve)') + '" stroke-width="9" stroke-linecap="round"/><circle cx="' + x2 + '" cy="' + y2 + '" r="8" fill="var(--skin)" stroke="var(--obj-line)"/>';
+  const SQZ = (x, y) => '<path d="M' + (x - 14) + ' ' + (y - 8) + ' l-7 -5 M' + (x + 14) + ' ' + (y - 8) + ' l7 -5 M' + (x - 14) + ' ' + (y + 8) + ' l-7 5 M' + (x + 14) + ' ' + (y + 8) + ' l7 5" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>';
+  const DROPW = (x, y) => '<path d="M' + x + ' ' + y + ' q5 8 0 11 q-5 -3 0 -11 z" fill="var(--water)" stroke="var(--obj-line)" stroke-width=".8"/>';
+  const TOP = {
+    first: 'grasp', keep: 'HOLD',
+    keepSay: '<b>HOLD</b>는 이 장면에도 맞다 — 힘·순간·마음을 빼고 손잡이를 놓치지 않고 있다는 것만 말한다. <span class="en">She held the handle.</span> 다만 squeeze 장면은 예외 — 잡기만 해서는 안 열리니 누르는 힘이 빠진다.',
+    chips: ['HOLD', 'GRIP', 'GRASP', 'CLUTCH', 'SQUEEZE'], out: [['PUT (손에서 내려놓음)', '15-put.html']],
+    hows: {
+      hold: { btn: '잡고 있음', how: '방식 미지정', verb: 'HOLD', chips: ['HOLD'], target: 'TARGET · the bus handle',
+        result: '손잡이를 잡은 채 — 균형을 유지',
+        pic: () => BUSIN + STRAP(430, 38) + STRAP(560, 38) + P(380, 240, 1.3, 'var(--sleeve)') + step(.2, ARM(390, 200, 430, 112)) +
+          step(.4, AR(560, 222, 640, 222, 'var(--muted)', 2) + tx(600, 212, 11, '버스가 달림', 'var(--muted)')),
+        say: '<span class="en">Hold the handle while the bus is moving.</span> 손잡이와 <b>접촉을 유지</b>해 넘어지지 않는다. 얼마나 세게 쥐었는지는 말하지 않는다.' },
+      grip: { btn: '힘주어 꽉', how: '강한 마찰 압력', verb: 'GRIP', chips: ['HOLD', 'GRIP'], target: 'TARGET · the wet bus handle',
+        result: '젖어 미끄러운 손잡이 — 손가락에 힘을 줌',
+        pic: () => BUSIN + STRAP(430, 38) + P(380, 240, 1.3, 'var(--sleeve)') + ARM(390, 200, 430, 112) +
+          DROPW(452, 128) + DROPW(462, 146) + tx(490, 120, 11, '젖은 손잡이', 'var(--muted)', '', 'start') +
+          step(.2, SQZ(430, 112)) + step(.4, '<path d="M560 226 q40 0 70 -30" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="M622 194 l8 2 l-2 8" fill="none" stroke="var(--accent)" stroke-width="2"/>' + tx(586, 210, 12, '급커브', 'var(--accent)', ' font-weight="600"')),
+        say: '<span class="en">She gripped the handle tightly.</span> 손과 손잡이가 젖어 미끄럽다. 손가락을 감고 <b>세게 눌러 마찰</b>을 만든다. 꼭 미끄러질 뻔했어야 하는 것은 아니다.' },
+      grasp: { btn: '뻗어서 확보', how: '손으로 확실히 확보', verb: 'GRASP', chips: ['HOLD', 'GRASP'], target: 'TARGET · the bus handle',
+        result: '버스가 출발하는 순간 — 손을 뻗어 붙잡음',
+        pic: () => BUSIN + STRAP(430, 38) + '<g transform="rotate(-8 380 240)">' + P(380, 240, 1.3, 'var(--sleeve)') + '</g>' +
+          '<g class="fade" opacity=".25">' + ARM(386, 204, 410, 226) + '</g>' +
+          step(.2, AR(404, 196, 422, 136, 'var(--accent)', 2, true)) + step(.35, ARM(388, 198, 430, 112) + tx(470, 128, 16, '확!', 'var(--accent)', ' font-weight="700"')) +
+          step(.1, AR(640, 222, 560, 222, 'var(--muted)', 2) + tx(600, 212, 11, '갑자기 출발', 'var(--muted)')),
+        say: '<span class="en">She grasped the handle just in time.</span> 이미 잡고 있던 상태가 아니라 <b>손을 뻗어 확보하는 순간</b>이 중요하다. grip은 쥐는 힘에, grasp는 잡아 확보함에 초점.' },
+      clutch: { btn: '겁나서 바짝', how: '두려워 바짝 잡음', verb: 'CLUTCH', chips: ['HOLD', 'CLUTCH'], target: 'TARGET · the bus handle',
+        result: '겁이 난 아이 — 두 손으로 바짝 움켜쥠',
+        pic: () => BUSIN + STRAP(430, 76) + P(420, 240, 1.0, 'var(--ok)') + ARM(410, 210, 425, 150, 'var(--ok)') + ARM(430, 210, 436, 152, 'var(--ok)') +
+          step(.2, SQZ(430, 150) + '<path d="M392 186 q-6 8 0 16 M384 182 q-8 12 0 24 M452 186 q6 8 0 16 M460 182 q8 12 0 24" fill="none" stroke="var(--muted)" stroke-width="1.5"/>') +
+          step(.35, tx(600, 140, 16, '덜컹!', 'var(--accent)', ' font-weight="700"') + tx(486, 236, 11, '겁이 남', 'var(--muted)', '', 'start')),
+        say: '<span class="en">The child clutched the handle.</span> 흔들려서 <b>겁이 나</b> 놓지 않으려 두 손으로 바짝, 몸 가까이. 두려움이 흔한 맥락이지만 이 동사만으로 감정이 꼭 정해지지는 않는다.' },
+      squeeze: { btn: '안쪽으로 누름', how: '안쪽으로 압축', verb: 'SQUEEZE', chips: ['SQUEEZE'], target: 'TARGET · the emergency handle',
+        result: '안쪽으로 눌러 — 잠금이 풀림',
+        pic: () => FLOOR + '<rect x="470" y="70" width="140" height="170" rx="4" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M540 70 V240" stroke="var(--obj-line)"/>' +
+          '<rect x="486" y="84" width="74" height="18" rx="3" fill="var(--bad)"/>' + tx(523, 97, 11, '비상 손잡이', '#fff', ' font-weight="600"') +
+          '<rect x="492" y="134" width="12" height="54" rx="3" fill="var(--obj-line)"/>' +
+          '<g class="fade" opacity=".3"><rect x="520" y="134" width="10" height="54" rx="3" fill="var(--accent2)" transform="rotate(14 525 134)"/></g>' +
+          P(390, 240, 1.3, 'var(--sleeve)') + ARM(400, 200, 500, 162) +
+          step(.2, '<rect x="508" y="134" width="10" height="54" rx="3" fill="var(--accent2)"/>' + AR(478, 162, 490, 162, 'var(--accent)', 2.5) + AR(544, 162, 522, 162, 'var(--accent)', 2.5)) +
+          step(.4, tick(560, 200) + tx(575, 228, 11, '잠금 풀림', 'var(--ok)', ' font-weight="600"')),
+        say: '<span class="en">Squeeze the handle to open the door.</span> 잡기만 해서는 안 열린다. 손가락과 손바닥을 <b>안쪽으로 눌러</b> 장치를 작동시킨다. 이 장면은 잡은 채 눌렀지만, squeeze가 늘 hold를 뜻하지는 않는다(그래서 HOLD 칩이 안 켜짐).' },
+    },
+  };
+
+  // 0절 아이콘: 손잡이 고리 + 주먹 (0, 0) 중심
+  const LOOPI = '<path d="M-26 -34 H26" stroke="var(--obj-line)" stroke-width="3"/><path d="M0 -34 V-20" stroke="var(--obj-line)" stroke-width="2.5"/><rect x="-9" y="-20" width="18" height="18" rx="6" fill="none" stroke="var(--accent2)" stroke-width="3.5"/>';
+  const FIST = (x, y) => '<circle cx="' + x + '" cy="' + y + '" r="7" fill="var(--skin)" stroke="var(--obj-line)"/>';
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. squeeze를 먼저 빼 보세요.',
+    cards: [
+      { id: 'hold', t: ['놓치지 않고', '잡고 있음'], v: 'hold', icon: LOOPI + '<path d="M-2 30 L0 -10" stroke="var(--sleeve)" stroke-width="7" stroke-linecap="round"/>' + FIST(0, -11),
+        instead: 'I gripped the handle the whole ride. △', lost: '내내 꽉 쥐었다는 말이 되어 힘이 과장된다. 그냥 잡고 있다는 말이 없다.', why: '놓치지 않게 지지·통제. 방식은 말하지 않는다.' },
+      { id: 'grip', t: ['미끄럽지 않게', '꽉'], v: 'grip', icon: LOOPI + '<path d="M-2 30 L0 -10" stroke="var(--sleeve)" stroke-width="7" stroke-linecap="round"/>' + FIST(0, -11) + SQZ(0, -11) + DROPW(16, 4),
+        instead: 'I held the wet handle. △', lost: '잡긴 잡았는데 미끄러지지 않게 손가락에 힘을 준 그림이 빠진다.', why: '손가락 압력으로 마찰을 높여 단단히.' },
+      { id: 'grasp', t: ['뻗어서', '확보한 순간'], v: 'grasp', icon: LOOPI + '<path d="M-26 30 L-4 -6" stroke="var(--sleeve)" stroke-width="7" stroke-linecap="round" opacity=".25"/>' + '<path d="M-16 30 L0 -10" stroke="var(--sleeve)" stroke-width="7" stroke-linecap="round"/>' + FIST(0, -11) + '<path d="M14 0 l10 4 M12 10 l10 2" stroke="var(--accent)" stroke-width="2"/>',
+        instead: 'I held the handle just in time. △', lost: '손을 뻗어 붙잡는 "순간"이 빠지고, 원래 잡고 있던 상태처럼 들린다.', why: '손을 뻗어 확실히 확보하는 순간.' },
+      { id: 'clutch', t: ['겁이 나서', '바짝'], v: 'clutch', icon: LOOPI + '<path d="M-8 30 L-3 -8 M8 30 L3 -8" stroke="var(--ok)" stroke-width="6" stroke-linecap="round"/>' + FIST(-4, -12) + FIST(5, -10) + '<path d="M-22 6 q-5 6 0 12 M22 6 q5 6 0 12" fill="none" stroke="var(--muted)" stroke-width="1.5"/>',
+        instead: 'The child held the handle tightly. △', lost: '힘은 전해지지만 겁이 나서 몸 가까이 바짝 움켜쥔 그림이 약하다.', why: '두려움·긴급성 때문에 바짝 움켜쥠.' },
+      { id: 'squeeze', t: ['안쪽으로', '눌러 작동'], v: 'squeeze', icon: '<rect x="-14" y="-20" width="8" height="40" rx="2" fill="var(--obj-line)"/><rect x="0" y="-20" width="8" height="40" rx="2" fill="var(--accent2)"/>' + AR(-32, 0, -18, 0, 'var(--accent)', 2.5) + AR(28, 0, 12, 0, 'var(--accent)', 2.5),
+        instead: 'Hold the handle to open the door. ✗', lost: '이 장면은 잡기만 해서는 안 열리는 것이 핵심인데, 그 누르는 힘이 빠진다.', why: '안쪽으로 눌러 압축하는 힘.' },
+      { id: 'put', out: true, t: ['손에서 내려', '자리에 둠'], v: 'put', icon: '<path d="M-30 20 H30" stroke="var(--obj-line)" stroke-width="3"/><rect x="-10" y="2" width="20" height="18" rx="2" fill="var(--accent2)" stroke="var(--obj-line)"/><path d="M0 -30 V-6 m-5 -6 l5 6 l5 -6" fill="none" stroke="var(--muted)" stroke-width="2"/>',
+        instead: 'I held my bag on the seat. ✗', lost: 'hold는 계속 쥐고 있는 그림이라, 손에서 내려 자리에 둔 것을 못 그린다.', why: '손에서 내려 자리에 있게 함 — 이웃 PUT 묶음(15).' },
+    ],
+  };
+
+  const SCENES = {
+    bus: { btn: '버스 안', place: '시내버스 · 서서 가는 중',
+      pic: () => FL + '<path d="M200 34 H660" stroke="' + OL + '" stroke-width="3"/>' + [330, 470, 600].map((x) => '<path d="M' + x + ' 34 V52" stroke="' + OL + '" stroke-width="2"/><rect x="' + (x - 8) + '" y="52" width="16" height="14" rx="5" fill="none" stroke="' + A2 + '" stroke-width="3"/>').join('') +
+        P(300, 150, 1.1, FOG) + P(420, 150, 0.85, SL) + '<path d="M310 112 L330 64" stroke="' + FOG + '" stroke-width="6" stroke-linecap="round"/>' +
+        ST(.2, '<path d="M430 120 L466 66" stroke="' + SL + '" stroke-width="5" stroke-linecap="round"/><circle cx="468" cy="62" r="5" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/>') + ST(.35, AR(560, 140, 640, 140, MU, 2)),
+      lines: [
+        ['엄마', 'The bus is moving. <b>Hold</b> the handle.', '버스 움직인다. 손잡이 잡아.'],
+        ['나', "Okay, I'm <b>holding</b> it!", '네, 잡고 있어요!', 1],
+      ],
+      say: '놓치지 않게 <b>잡고 있는 상태</b> — <span class="en">hold</span>. 얼마나 세게인지는 말하지 않는다. 맨 위 그림의 "잡고 있음".' },
+    phone: { btn: '고객센터 전화', place: '집 · 고객센터에 전화 중',
+      pic: () => FL + P(280, 150, 1.1, SL) + '<rect x="290" y="80" width="9" height="22" rx="3" fill="' + OL + '"/>' +
+        ST(.2, T(350, 70, 16, '♪', MU) + T(380, 58, 14, '♪', MU) + T(410, 72, 16, '♪', MU)) + ST(.35, L(520, 100, '연결을 끊지 않고 대기 중…')),
+      lines: [
+        ['상담원', 'Could you <b>hold</b> for a moment, please?', '잠시만 기다려 주시겠어요?'],
+        ['나', "Sure, I'll <b>hold</b>.", '네, 기다릴게요.', 1],
+      ],
+      say: '손이 아니라 <b>전화 연결을 끊지 않고 그대로 붙들고</b> 있는 것 — 이것도 <span class="en">hold</span>. 3절의 확장 쓰임.' },
+    tennis: { btn: '테니스 수업', place: '테니스장 · 레슨 중',
+      pic: () => FL + P(260, 150, 1.1, OKC) + P(420, 150, 1.1, SL) + '<path d="M432 112 L452 92" stroke="' + SL + '" stroke-width="6" stroke-linecap="round"/>' +
+        '<path d="M454 90 L476 60" stroke="' + OL + '" stroke-width="4"/><ellipse cx="490" cy="44" rx="14" ry="20" transform="rotate(35 490 44)" fill="none" stroke="' + OL + '" stroke-width="2.5"/><circle cx="454" cy="90" r="5" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/>' +
+        ST(.2, '<path d="M440 82 l-6 -4 M466 96 l6 4 M442 100 l-6 4" stroke="' + AC + '" stroke-width="2"/>'),
+      lines: [
+        ['코치', '<b>Grip</b> the racket a little tighter.', '라켓을 조금 더 꽉 쥐어 봐.'],
+        ['나', 'Like this?', '이렇게요?', 1],
+      ],
+      say: '빠지거나 돌아가지 않게 <b>손가락에 힘</b> — <span class="en">grip</span>. 맨 위 그림의 "힘주어 꽉".' },
+    ride: { btn: '놀이공원', place: '놀이공원 · 롤러코스터 위',
+      pic: () => FL + '<path d="M170 42 q120 -30 240 0 t250 -8" fill="none" stroke="' + MU + '" stroke-width="2" stroke-dasharray="6 5"/>' + BX(260, 112, 200, 38) +
+        P(310, 116, 1.0, SL) + P(400, 116, 1.0, FOG) +
+        ST(.2, '<path d="M318 90 L388 84" stroke="' + SL + '" stroke-width="5" stroke-linecap="round"/><circle cx="390" cy="84" r="5" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/>' + '<path d="M380 74 l-4 -6 M396 74 l4 -6" stroke="' + AC + '" stroke-width="2"/>') + L(560, 120, '롤러코스터'),
+      lines: [
+        ['친구', "Ouch! You're <b>clutching</b> my arm.", '아야! 내 팔 너무 꽉 잡고 있잖아.'],
+        ['나', "Sorry! I'm so scared.", '미안! 너무 무서워.', 1],
+      ],
+      say: '무서워서 놓지 못하고 <b>바짝</b> — <span class="en">clutch</span>. 맨 위 그림의 "겁나서 바짝".' },
+    bath: { btn: '욕실', place: '욕실 · 세면대 앞',
+      pic: () => FL + P(250, 150, 1.1, FOG) + P(600, 150, 1.1, SL) + TB(360, 520, 110) +
+        '<path d="M410 104 h70 l12 -8 v-8 l-12 -4 h-70 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+        ST(.2, '<path d="M440 86 q6 8 0 14" fill="none" stroke="' + AC + '" stroke-width="2"/>' + AR(442, 70, 442, 82, AC, 2) + AR(442, 120, 442, 106, AC, 2)) + L(450, 60, '가운데가 눌린 치약'),
+      lines: [
+        ['엄마', 'Who <b>squeezed</b> the toothpaste in the middle?', '누가 치약을 가운데서 짰니?'],
+        ['나', 'Oops, that was me.', '앗, 저예요.', 1],
+      ],
+      say: '잡고 있는 게 아니라 <b>안쪽으로 눌러 짜낸</b> 것 — <span class="en">squeeze</span>. 노트 말대로 squeeze가 늘 hold인 것은 아니다.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'grasp',
+    region: { x: 66, y: 66, w: 562, h: 258, label: 'HOLD 묶음 · RESULT = 놓치지 않게 유지', at: [74, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 260, t: 'Q1. 놓치지 않게 붙들고 있나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 172, y: 180, w: 180, t: 'Q3. 힘이 어느 쪽으로?', sub: '마찰 · 압축' },
+      q4: { x: 512, y: 180, w: 180, t: 'Q4. 언제 · 왜 잡았나?', sub: '확보 순간 · 두려움' },
+    },
+    leaves: {
+      grip:    { x: 120, y: 262, w: 88, v: 'grip', sub: '마찰 · 꽉', seg: 'f', say: '<span class="en">She gripped the handle tightly.</span> 미끄러지지 않게 손가락 압력.' },
+      squeeze: { x: 225, y: 262, w: 96, v: 'squeeze', sub: '안쪽으로 눌러', seg: 'f', say: '<span class="en">Squeeze the handle to open the door.</span> 압박 자체가 핵심 — 늘 hold는 아니다.' },
+      hold:    { x: 340, y: 262, w: 92, v: 'hold', sub: '방식 말 안 함', seg: 'b', say: '<span class="en">Hold the handle while the bus is moving.</span> 이 묶음의 기본 동사.' },
+      grasp:   { x: 455, y: 262, w: 88, v: 'grasp', sub: '뻗어 확보', seg: 'm', say: '<span class="en">She grasped the handle just in time.</span> 확보하는 순간.' },
+      clutch:  { x: 570, y: 262, w: 88, v: 'clutch', sub: '겁나서 바짝', seg: 'm', say: '<span class="en">The child clutched the handle.</span> 두려움·긴급성으로 바짝.' },
+      put:     { x: 600, y: 36, w: 120, v: 'put', sub: '→ PUT 묶음', seg: '', out: true, say: '<span class="en">I put my bag on the seat.</span> 쥐고 있지 않고 <b>손에서 내려 자리에 둠</b> → HOLD 묶음 밖, <a href="15-put.html">15 PUT</a>.' },
+    },
+    edges: [
+      ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'put', '내려놓음', 'right', [512, 28], true],
+      ['q2', 'q3', '힘의 방향', 'left'], ['q2', 'hold', '말하지 않음'], ['q2', 'q4', '순간 · 마음', 'right'],
+      ['q3', 'grip', '마찰'], ['q3', 'squeeze', '압축'],
+      ['q4', 'grasp', '확보 순간'], ['q4', 'clutch', '두려움'],
+    ],
+    segs: [[70, 280, '힘 (마찰 · 압축)', 'f'], [290, 392, '기본', 'b'], [402, 624, '순간 · 마음', 'm']],
+  };
+
+  const SLOTS = {
+    first: ['hold', 'obj'],
+    slots: { obj: '무엇을', how: '+ 어떻게 · 언제', other: '다른 모양' },
+    verbs: {
+      hold: {
+        obj:   { ok: [['She', 's'], ['held', 'v'], ['the handle', 'o']], bad: [['She', 's'], ['holded', 'v'], ['the handle', 'o']], say: '과거·과거분사는 <b>held</b>. <span class="en">holded</span>가 아니다(노트).' },
+        how:   { ok: [['Hold', 'v'], ['the handle', 'o'], ['while the bus moves', 'x']], say: '언제까지 붙들고 있는지가 붙는다.' },
+        other: { ok: [['Hold', 'v'], ['on', 'r']], say: '<span class="en">Hold on!</span> — 꽉 잡아 / (전화) 잠깐만. 놓지 않고 그대로.' },
+      },
+      grip: {
+        obj:   { ok: [['She', 's'], ['gripped', 'v'], ['the handle', 'o']], bad: [['She', 's'], ['griped', 'v'], ['the handle', 'o']], say: 'p를 겹쳐 <b>gripped</b>(노트). p 하나인 griped는 다른 낱말(gripe, 투덜대다)이 된다.' },
+        how:   { ok: [['She', 's'], ['gripped', 'v'], ['the handle', 'o'], ['tightly', 'r']], say: '<span class="en">tightly</span>가 자주 붙는다.' },
+        other: { ok: [['Get', 'v'], ['a grip', 'o']], say: '명사 grip. <span class="en">Get a grip!</span> — 정신 차려(마음을 꽉 붙들어).' },
+      },
+      grasp: {
+        obj:   { ok: [['She', 's'], ['grasped', 'v'], ['the handle', 'o']], say: '끝 -ed는 /t/ 소리(노트).' },
+        how:   { ok: [['She', 's'], ['grasped', 'v'], ['the handle', 'o'], ['just in time', 'x']], say: '"아슬아슬하게 그 순간"이 grasp의 그림.' },
+        other: { ok: [['I', 's'], ["can't grasp", 'v'], ['the idea', 'o']], say: '머리로 확실히 붙잡음 = <b>이해하다</b>. 노트의 TARGET에 "이해할 수 있는 대상"이 들어 있다.' },
+      },
+      clutch: {
+        obj:   { ok: [['The child', 's'], ['clutched', 'v'], ['the handle', 'o']], say: '규칙 변화 clutched.' },
+        how:   { ok: [['The child', 's'], ['clutched', 'v'], ['the handle', 'o'], ['during the storm', 'x']], say: '왜 겁이 났는지(폭풍·흔들림)가 같이 붙기 쉽다.' },
+        other: { ok: [['She', 's'], ['clutched', 'v'], ['her bag', 'o']], say: '가방·인형·서류를 <b>몸 가까이</b> 꼭 쥔 모습.' },
+      },
+      squeeze: {
+        obj:   { ok: [['She', 's'], ['squeezed', 'v'], ['the handle', 'o']], say: 'e로 끝나 -d만 붙인다(노트).' },
+        how:   { ok: [['Squeeze', 'v'], ['the handle', 'o'], ['to open the door', 'x']], say: '왜 누르는지(작동 목적)가 붙는다.' },
+        other: { ok: [['Squeeze', 'v'], ['a lemon', 'o']], say: '레몬을 <b>짜다</b> — 잡고 있는 게 아니라 압축 자체. 노트의 TARGET에 레몬·스펀지가 있다.' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>

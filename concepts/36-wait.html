@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WAIT 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/36-wait.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+  /* 표에 긴 칸이 많아 휴대폰 폭에서 칸 여백을 줄인다 */
+  @media (max-width: 600px) { th, td { padding: 6px 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="35-hold.html">HOLD 묶음</a> · 다음: <a href="37-show.html">SHOW 묶음</a> · 견줘 보기: <a href="16-keep.html">KEEP 묶음 (상태 유지)</a> · <a href="02-phrasal-direction.html">02 구동사의 방향 (line up)</a></p>
+  <h1>WAIT 묶음 — 같은 버스, 다른 기다림</h1>
+  <p class="lead">학교 정문 정류장, <b>버스는 아직 오지 않았다</b>. 아이들이 버스가 올 때까지 다음 행동을 보류한다는 것은 같고, <b>어떤 말투로 말하는지, 줄이 보이는지, 줄을 지키는지 만드는지</b>만 바꾸면 wait · await · queue · line up으로 갈린다. wait는 방식을 말하지 않고 <b>올 때까지 미룬다</b>만 그린다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="wait" title="wait 소리로 듣기"><span class="en">wait</span><span class="ipa">/weɪt/</span><span class="ko">[웨이트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="await" title="await 소리로 듣기"><span class="en">await</span><span class="ipa">/əˈweɪt/</span><span class="ko">[어<b>웨이트</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="queue" title="queue 소리로 듣기"><span class="en">queue</span><span class="ipa">/kjuː/</span><span class="ko">[큐]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="line up" title="line up 소리로 듣기"><span class="en">line up</span><span class="ipa">/laɪn ʌp/</span><span class="ko">[라인 업]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">기다리는 방식에 따라 정류장의 아이들 모습이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 학교 정문 버스 정류장과 아이들이다. wait는 아이들이 흩어져 서 있고 시계가 돌아감, await는 공지판에 We await the bus라고 적힘, queue는 아이들이 정류장 표지 뒤로 번호 순서대로 줄을 섬, line up은 흩어져 있던 아이들이 교사의 손짓에 한 줄을 만드는 장면이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">WAIT · 올 때까지 보류</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 기다리나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 사람 수·시간은 그림용이다. 정류장 장면은 <a href="../wait/_family.md">wait/_family.md</a>의 고정 TARGET(the bus, 학교 정문 정류장)을 옮겼다. 버스는 어느 장면에서도 아직 오지 않았다 — wait는 <b>도착을 보장하지 않는다</b>(노트).</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"기다리다" 하나면 될 것 같다. 그런데 <b>공지문처럼 격식 있게</b>, <b>줄에서 차례를 지키며</b>, <b>흩어져 있다가 줄을 만들며</b>를 말하고 싶을 때는? 그리고 기다림과 그냥 <b>멈춤</b>은 무엇이 다를까? 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>WAIT 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "올 때까지 보류"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC은 <b>예상하는 사건이 일어날 때까지 다음 행동을 보류한 채 시간을 보냄</b> = <span class="en">WAIT</span>이다. 노트의 경계: <span class="en">STOP</span>은 단지 멈춤, <span class="en">KEEP</span>은 상태 유지다. WAIT에는 <b>기대하는 사건</b>과 <b>그때까지의 시간 간격</b>이 있다. 노트 비교표의 HOW를 식으로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">WAIT</span><span class="op">+</span><span>방식 미지정 — 도착 전까지</span><span class="op">=</span><span class="v">WAIT</span>
+    <span class="r">WAIT</span><span class="op">+</span><span>격식체 · 목적어를 바로 받음</span><span class="op">=</span><span class="v">AWAIT</span>
+    <span class="r">WAIT</span><span class="op">+</span><span>차례를 지키며 줄을 서서</span><span class="op">=</span><span class="v">QUEUE</span>
+    <span class="r">WAIT</span><span class="op">+</span><span>한 줄을 만들어 탑승을 기다림</span><span class="op">=</span><span class="v">LINE UP</span>
+  </div>
+  <p>노트가 짚은 점: queue · line up은 <b>줄 서는 동작만</b> 뜻할 수도 있다. 이 묶음에서는 버스 탑승 차례를 기다리는 상황으로 한정했다. 이 묶음의 노트는 넷이다.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>기다림</b> → 수업은 끝났지만 통학버스가 늦는다. 아이들은 출발하지 않고 정류장에 남는다. 줄은 중요하지 않다. <span class="en">The children waited for the bus.</span></li>
+    <li><b>격식 있게</b> → 학교 공지문이 같은 기다림을 격식 있게 쓴다. <b>for 없이</b> 대상을 바로. <span class="en">The children awaited the bus.</span></li>
+    <li><b>줄에서 차례</b> → 정류장이 좁고 아이가 많다. 표지 뒤로 한 명씩 서서 <b>차례를 지킨다</b>. <span class="en">The children queued for the bus.</span></li>
+    <li><b>줄을 만듦</b> → 흩어져 있던 아이들이 교사의 손짓에 선 뒤로 <b>한 줄을 만든다</b>. <span class="en">The children lined up for the bus.</span></li>
+    <li>어느 장면이든 "버스가 올 때까지 기다린다"는 맞으니 <span class="en">wait</span>도 쓸 수 있다. 그래서 WAIT 칩이 같이 켜진다. 다만 line up은 줄만 만들고 곧 타면 긴 기다림이 없을 수 있다(노트).</li>
+  </ul>
+
+  <h2>3. wait for · await — for가 있나 없나</h2>
+  <p>노트가 두 번이나 짚은 자리: <span class="en">wait for the bus</span>에는 <b>for</b>가 있고, <span class="en">await the bus</span>에는 <b>넣지 않는다</b>. 한국어 "~를 기다리다"를 옮길 때 가장 자주 틀리는 곳이다.</p>
+  <table>
+    <tr><th>모양</th><th>문장</th><th>한국어</th></tr>
+    <tr><td>wait <b>for</b> + 대상</td><td><span class="en">We waited for the bus.</span> (✗ waited the bus)</td><td>버스를 기다렸다</td></tr>
+    <tr><td>await + 대상</td><td><span class="en">We awaited the bus.</span> (✗ awaited for)</td><td>(격식) 버스를 기다렸다</td></tr>
+    <tr><td>wait (대상 없이)</td><td><span class="en">Please wait here.</span></td><td>여기서 기다려 주세요</td></tr>
+    <tr><td>wait <b>to</b> + 동사</td><td><span class="en">We waited to get on.</span></td><td>타려고 기다렸다</td></tr>
+    <tr><td>wait for A to B</td><td><span class="en">We waited for the bus to come.</span></td><td>버스가 오기를 기다렸다</td></tr>
+    <tr><td>can't wait</td><td><span class="en">I can't wait!</span></td><td>너무 기대돼!</td></tr>
+  </table>
+  <p class="note">wait는 기다리는 "사건"을 for 뒤에 둔다. 35 HOLD의 <span class="en">Please hold.</span>(전화를 끊지 말고 기다려)도 같은 자리에서 쓰인다.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>WAIT 묶음</b>이다. 기대하는 사건 없이 <b>그냥 멈췄으면</b> 테두리 밖 문으로 STOP 묶음에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 WAIT 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 기대하는 일이 올 때까지 미루나에서 아니오, 그냥 멈춤이면 묶음 밖 문 stop, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 wait, 격식 있는 말투면 await, 줄이면 Q3에서 line up과 queue로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① for가 붙나?</th><th>② 줄이 보이나?</th><th>③ 무엇이 HOW를 고르나</th></tr>
+    <tr><td><b>wait</b></td><td>예 — wait for</td><td>아니오</td><td>— (기본) · 도착은 보장 안 함</td></tr>
+    <tr><td><b>await</b></td><td>아니오 — 대상을 바로</td><td>아니오</td><td>격식 있는 어조</td></tr>
+    <tr><td><b>queue</b></td><td>예 — queue for</td><td>예 — 차례를 지킴</td><td>줄의 질서 · 영국식에 흔함</td></tr>
+    <tr><td><b>line up</b></td><td>예 — line up for</td><td>예 — 줄을 만드는 순간</td><td>몸을 순서대로 배열</td></tr>
+  </table>
+  <p class="note">표의 칸은 노트 비교표와 각 노트의 "선택 경계"를 옮긴 것이다. 흐름 그림의 질문 순서는 그림을 위해 정했다.</p>
+
+  <h2>5. 실제 문장으로 — 대상을 어떻게 잇나</h2>
+  <p>wait · queue · line up은 기다리는 대상을 <b>for</b>로 잇고, await만 <b>바로</b> 받는다. line up은 <b>두 낱말</b>이다 — 붙여 쓴 lineup은 명사(노트).</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">대상을 잇는 방법에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">붙이는 것</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>+ 대상</th><th>대상 없이</th><th>다른 모양</th></tr>
+    <tr><td><b>wait</b></td><td><span class="en">waited for the bus</span></td><td><span class="en">Please wait here.</span></td><td><span class="en">I can't wait for the trip.</span></td></tr>
+    <tr><td><b>await</b></td><td><span class="en">awaited the bus</span> (✗ for)</td><td>잘 안 씀 — wait로</td><td><span class="en">We await your reply.</span> (편지·메일)</td></tr>
+    <tr><td><b>queue</b></td><td><span class="en">queued for the bus</span></td><td><span class="en">Please queue here.</span></td><td>명사 <span class="en">a queue</span> — 줄 (미국은 <span class="en">line</span>)</td></tr>
+    <tr><td><b>line up</b></td><td><span class="en">lined up for the bus</span></td><td><span class="en">Everyone, line up!</span></td><td><span class="en">lined up the kids</span> — 줄 세우다</td></tr>
+  </table>
+  <p class="note">경향 한 줄: 격식이 올라갈수록 전치사가 빠진다 — <span class="en">wait for</span> → <span class="en">await</span>. 줄이 보일수록 몸의 배치가 낱말에 들어간다 — <span class="en">queue</span> · <span class="en">line up</span>.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>WAIT</b> — 문 앞에 서서 팔짱을 끼고 <b>시계를 한 번</b> 본다. 아직 안 왔다.</li>
+    <li><b>AWAIT</b> — 허리를 펴고 손을 앞에 모은다. 아나운서 목소리로 "We <b>await</b> the bus."</li>
+    <li><b>QUEUE</b> — 앞사람 뒤에 한 걸음 떨어져 서서, 앞사람이 움직이면 <b>한 칸씩</b> 따라간다.</li>
+    <li><b>LINE UP</b> — 흩어져 있다가 "한 줄로!" 소리에 <b>재빨리 앞사람 뒤로</b> 붙는다.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>3절 표에서 노트에 있는 것은 wait for / await(for 없음) 두 줄이다. Please wait here · wait to · wait for A to B · can't wait은 노트에 없다.</li>
+      <li>5절의 "대상 없이" 칸(await는 잘 안 씀, ✗ We are awaiting.)과 "다른 모양"(We await your reply · 명사 queue · lined up the kids)은 노트에 없다. 노트에 있는 것은 await에 for를 붙이지 않는다는 것, line up과 명사 lineup을 구별한다는 것, 미국 영어에서는 line up이 더 익숙할 수 있다는 것까지다.</li>
+      <li>0절 "대신 말하면"의 △·✗ 판정은 짐작이다.</li>
+      <li>이 묶음의 노트는 넷뿐이다(wait · await · queue · line up). 그래서 HOW 버튼 넷, 0절 카드 다섯(묶음 밖 stop 포함)이다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../wait/_family.md">wait/_family.md</a> — "기다림 자체·격식·줄에서 기다림·줄 만들기 중 무엇을 말할지 고르자"</li>
+    <li>동사 노트: <a href="../wait/wait--hold-action-until-event.md">wait</a> · <a href="../wait/await--wait-for-expected-event.md">await</a> · <a href="../wait/queue--wait-in-line.md">queue</a> · <a href="../wait/line-up--form-line-to-wait.md">line up</a></li>
+    <li>묶음 밖 이웃: <a href="../stop/_family.md">stop/_family.md</a> — 기대하는 사건 없이 진행이 멈춤. 상태를 그대로 두는 것은 <a href="16-keep.html">16 KEEP</a>.</li>
+    <li>견줘 보기: <a href="02-phrasal-direction.html">02 구동사의 방향</a> — line up의 up(흩어진 것이 한 줄로 갖춰짐). 전화의 hold는 <a href="35-hold.html">35 HOLD</a>.</li>
+    <li>출발점: <a href="04-core-question.html">04 핵심 질문</a> — wait는 <b>기대하는 사건까지 보류된 시간</b> 하나를 그린다.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 정류장 표지 x = 620 (그림용) ──
+  const STOPSIGN = '<path d="M620 110 V240" stroke="var(--obj-line)" stroke-width="4"/><rect x="596" y="84" width="48" height="28" rx="5" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(620, 103, 12, 'BUS', 'var(--text)', ' font-weight="700"');
+  const KID = (x, c, op) => (op ? '<g opacity="' + op + '">' : '<g>') + P(x, 240, 0.9, c) + '</g>';
+  const CLOCK = (x, y) => '<circle cx="' + x + '" cy="' + y + '" r="16" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M' + x + ' ' + y + ' V' + (y - 10) + ' M' + x + ' ' + y + ' l7 5" stroke="var(--obj-line)" stroke-width="2" stroke-linecap="round"/>';
+  const STAND = FLOOR + STOPSIGN;
+  const TOP = {
+    first: 'lineup', keep: 'WAIT',
+    keepSay: '<b>WAIT</b>는 이 장면에도 맞다 — 말투·줄을 빼고 버스가 올 때까지 기다린다는 것만 말한다. <span class="en">The children waited for the bus.</span>',
+    chips: ['WAIT', 'AWAIT', 'QUEUE', 'LINE UP'], out: [['STOP (그냥 멈춤)', '../stop/_family.md']],
+    hows: {
+      wait: { btn: '기다림', how: '방식 미지정', verb: 'WAIT', chips: ['WAIT'], target: 'TARGET · the bus (아직 안 옴)',
+        result: '버스가 올 때까지 — 출발을 미룸',
+        pic: () => STAND + KID(320, 'var(--fog)') + KID(390, 'var(--ok)') + KID(520, 'var(--sleeve)') +
+          step(.2, CLOCK(455, 120) + '<path d="M478 104 a26 26 0 0 1 0 32" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="M473 134 l5 3 l2 -6" fill="none" stroke="var(--accent)" stroke-width="2"/>') +
+          step(.4, tx(455, 160, 12, '20분째…', 'var(--accent)', ' font-weight="600"')),
+        say: '<span class="en">The children waited for the bus.</span> 수업은 끝났지만 버스가 늦는다. 아이들은 <b>출발하지 않고</b> 정류장에 남는다. 버스가 결국 왔다는 뜻은 아니다.' },
+      await: { btn: '격식 있게', how: '격식 · 목적어 바로', verb: 'AWAIT', chips: ['WAIT', 'AWAIT'], target: 'TARGET · the bus (아직 안 옴)',
+        result: '공지문의 격식 있는 말 — for 없이 the bus',
+        pic: () => STAND + '<rect x="262" y="72" width="180" height="84" rx="6" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M290 156 V240 M414 156 V240" stroke="var(--obj-line)" stroke-width="3"/>' +
+          tx(352, 94, 12, '공지', 'var(--muted)', ' font-weight="600"') +
+          step(.2, tx(352, 122, 15, 'We await the bus.', 'var(--en)', ' font-weight="600"')) + step(.4, tx(352, 144, 11, 'await + 대상 (for 없음)', 'var(--accent)')) +
+          KID(480, 'var(--fog)') + KID(525, 'var(--ok)') + KID(570, 'var(--sleeve)'),
+        say: '<span class="en">The children awaited the bus.</span> 같은 기다림을 <b>공지문처럼 격식 있게</b>. 대상을 바로 받으므로 <span class="en">await for the bus</span>라고 쓰지 않는다.' },
+      queue: { btn: '줄에서 차례', how: '차례 지키며 줄에서', verb: 'QUEUE', chips: ['WAIT', 'QUEUE'], target: 'TARGET · the bus (아직 안 옴)',
+        result: '차례를 지키며 줄에서 — 버스를 기다림',
+        pic: () => STAND + '<path d="M584 238 h20" stroke="var(--accent2)" stroke-width="4"/>' +
+          [560, 510, 460, 410, 360].map((x, i) => step(.1 * i, KID(x, ['var(--sleeve)', 'var(--ok)', 'var(--fog)', 'var(--sleeve)', 'var(--ok)'][i]) + tx(x, 176, 12, String(i + 1), 'var(--accent)', ' font-weight="700"'))).join('') +
+          step(.6, AR(330, 140, 580, 140, 'var(--muted)', 1.5, true) + tx(455, 132, 11, '타는 순서', 'var(--muted)')),
+        say: '<span class="en">The children queued for the bus.</span> 기다리는 방식이 <b>질서 있는 줄</b>이다. 자기 차례를 지킨다. 영국식에 더 흔하고, 미국 영어에서는 line up이 더 익숙할 수 있다(노트).' },
+      lineup: { btn: '줄을 만듦', how: '한 줄을 만듦', verb: 'LINE UP', chips: ['WAIT', 'LINE UP'], target: 'TARGET · the bus (아직 안 옴)',
+        result: '흩어져 있다가 — 한 줄이 만들어짐',
+        pic: () => STAND + P(280, 240, 1.2, 'var(--ok)') + '<path d="M292 196 L330 178" stroke="var(--ok)" stroke-width="7" stroke-linecap="round"/>' + tx(300, 146, 13, '한 줄로!', 'var(--accent)', ' font-weight="700"') +
+          '<g class="fade">' + KID(370, 'var(--fog)', .25) + KID(430, 'var(--sleeve)', .25) + KID(470, 'var(--ok)', .25) + KID(545, 'var(--fog)', .25) + '</g>' +
+          '<path d="M584 238 h20" stroke="var(--accent2)" stroke-width="4"/>' +
+          step(.3, KID(565, 'var(--fog)') + KID(520, 'var(--sleeve)') + KID(475, 'var(--ok)') + KID(430, 'var(--fog)')) +
+          step(.5, AR(400, 150, 580, 150, 'var(--accent)', 2) + tx(490, 140, 11, '한 줄이 생김', 'var(--accent)')),
+        say: '<span class="en">The children lined up for the bus.</span> 흩어져 있다가 <b>줄을 만드는 순간</b>. queue는 줄에서 차례를 지키는 모습, line up은 줄이 만들어지는 움직임에 초점(노트). 줄만 만들고 곧 타면 긴 기다림은 없을 수도 있다.' },
+    },
+  };
+
+  // 0절 아이콘 ((0, 0) 중심)
+  const SIGNI = '<path d="M26 -30 V30" stroke="var(--obj-line)" stroke-width="2.5"/><rect x="14" y="-36" width="24" height="14" rx="3" fill="var(--card)" stroke="var(--obj-line)"/>';
+  const MINI = (x, c, op) => '<g transform="translate(' + x + ' 30) scale(.5)"' + (op ? ' opacity="' + op + '"' : '') + '><circle cx="0" cy="-50" r="11" fill="var(--skin)" stroke="var(--obj-line)"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. line up을 먼저 빼 보세요.',
+    cards: [
+      { id: 'wait', t: ['올 때까지', '미룸'], v: 'wait', icon: SIGNI + MINI(-20, 'var(--sleeve)') + MINI(0, 'var(--fog)') + '<circle cx="-10" cy="-24" r="10" fill="var(--card)" stroke="var(--obj-line)"/><path d="M-10 -24 v-6 M-10 -24 l4 3" stroke="var(--obj-line)" stroke-width="1.5"/>',
+        instead: 'The children stopped for the bus. △', lost: '멈췄다는 말은 되지만, 버스가 오기를 기대하며 시간을 보내는 그림이 빠진다.', why: '기대하는 사건 전까지 행동을 보류.' },
+      { id: 'await', t: ['격식 있게', '대상을 바로'], v: 'await', icon: '<rect x="-34" y="-30" width="68" height="40" rx="4" fill="var(--card)" stroke="var(--obj-line)"/><path d="M-26 -18 h52 M-26 -8 h40 M-26 2 h46" stroke="var(--muted)" stroke-width="2"/><path d="M-20 10 V30 M20 10 V30" stroke="var(--obj-line)" stroke-width="2.5"/>',
+        instead: 'We are waiting for the bus. (공지문) △', lost: '뜻은 같지만 공지문·안내문의 격식 있는 어조가 빠진다.', why: '격식 있는 말로 예상 사건을 바로 받음.' },
+      { id: 'queue', t: ['줄에서', '차례대로'], v: 'queue', icon: SIGNI + MINI(4, 'var(--sleeve)') + MINI(-12, 'var(--ok)') + MINI(-28, 'var(--fog)') + '<path d="M-34 -18 H10" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 3"/>',
+        instead: 'The children waited for the bus. △', lost: '기다린 것은 맞지만 차례를 지키며 줄에 선 모습이 빠진다.', why: '차례가 있는 줄에서 기다림.' },
+      { id: 'lineup', t: ['흩어졌다가', '줄을 만듦'], v: 'line up', icon: SIGNI + MINI(-30, 'var(--fog)', .25) + MINI(-6, 'var(--ok)', .25) + MINI(4, 'var(--sleeve)') + MINI(-12, 'var(--ok)') + MINI(-28, 'var(--fog)') + '<path d="M-30 -28 l10 6 M-6 -30 l-4 6" stroke="var(--accent)" stroke-width="1.5"/>',
+        instead: 'The children waited in a line. △', lost: '줄에 있었다는 말은 되지만, 흩어져 있다가 줄을 만드는 순간(움직임)이 빠진다.', why: '몸을 순서대로 배열해 줄을 만듦.' },
+      { id: 'stop', out: true, t: ['기대 없이', '그냥 멈춤'], v: 'stop', icon: '<rect x="-24" y="-24" width="48" height="48" rx="8" fill="var(--card)" stroke="var(--obj-line)"/><rect x="-12" y="-12" width="9" height="24" fill="var(--bad)"/><rect x="3" y="-12" width="9" height="24" fill="var(--bad)"/>',
+        instead: 'I waited the treadmill. ✗', lost: 'wait는 무언가를 기대하며 미루는 그림이라, 기계를 그냥 멈춘 것을 못 그린다.', why: '진행이 멈춤 — 이웃 STOP 묶음.' },
+    ],
+  };
+
+  const SCENES = {
+    restaurant: { btn: '식당 입구', place: '식당 입구 · 저녁 시간',
+      pic: () => FL + '<rect x="600" y="50" width="56" height="100" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' + L(628, 42, '만석') +
+        P(270, 150, 1.1, SL) + P(330, 150, 1.1, FOG) + P(540, 150, 1.1, OKC) +
+        ST(.2, '<circle cx="430" cy="70" r="16" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/><path d="M430 70 V60 M430 70 l7 5" stroke="' + OL + '" stroke-width="2"/>') + ST(.35, L(430, 108, '약 10분')),
+      lines: [
+        ['직원', 'Could you <b>wait</b> about ten minutes for a table?', '자리가 나려면 10분쯤 기다려 주시겠어요?'],
+        ['나', "Sure, we'll <b>wait</b>.", '네, 기다릴게요.', 1],
+      ],
+      say: '자리가 날 때까지 들어가지 않고 미룬다 — <span class="en">wait</span>. 대상은 <b>for</b> a table.' },
+    airport: { btn: '공항 탑승구', place: '공항 · 5번 탑승구',
+      pic: () => FL + '<rect x="420" y="36" width="190" height="40" rx="4" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' + T(515, 62, 14, 'GATE 5 · FLIGHT 302', 'var(--text)', ' font-weight="600"') +
+        TB(220, 380, 124) + P(260, 124, 1.0, SL) + P(330, 124, 1.0, FOG) +
+        ST(.2, '<path d="M640 92 l10 -6 v24 l-10 -6 z" fill="' + MU + '"/><path d="M656 90 q6 8 0 16" fill="none" stroke="' + MU + '" stroke-width="2"/>') + L(560, 110, '안내 방송'),
+      lines: [
+        ['안내 방송', 'Passengers <b>awaiting</b> Flight 302, please stay near Gate 5.', '302편을 기다리시는 승객께서는 5번 탑승구 근처에 계셔 주십시오.'],
+        ['나', "That's our flight. Let's stay here.", '우리 비행기다. 여기 있자.', 1],
+      ],
+      say: '방송·안내문의 <b>격식</b> 있는 말 — <span class="en">await</span>. for 없이 Flight 302를 바로 받는다.' },
+    london: { btn: '런던 정류장', place: '런던 · 버스 정류장',
+      pic: () => FL + '<path d="M630 60 V150" stroke="' + OL + '" stroke-width="3"/><rect x="612" y="40" width="36" height="22" rx="4" fill="' + BAD + '"/>' + T(630, 56, 11, 'BUS', '#fff', ' font-weight="700"') +
+        [580, 530, 480, 430].map((x, i) => ST(.1 * i, P(x, 150, 1.0, [SL, FOG, OKC, SL][i]))).join('') + P(280, 150, 1.1, FOG) + P(340, 150, 1.1, SL) + L(505, 66, '도착한 순서대로'),
+      lines: [
+        ['친구', 'In London, people always <b>queue</b> for the bus.', '런던에서는 다들 버스 탈 때 꼭 줄을 서.'],
+        ['나', 'Even when it\'s raining?', '비가 와도?', 1],
+      ],
+      say: '차례를 지키며 줄에서 기다린다 — <span class="en">queue</span>. 노트 말대로 영국식에 흔하다.' },
+    school: { btn: '학교 복도', place: '학교 · 체육 시간 전 복도',
+      pic: () => FL + '<rect x="610" y="48" width="44" height="102" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/><circle cx="618" cy="100" r="3" fill="' + OL + '"/>' + P(240, 150, 1.1, OKC) + T(240, 70, 13, '한 줄로!', AC, ' font-weight="700"') +
+        '<g opacity=".25">' + P(330, 150, 0.8, SL) + P(390, 150, 0.8, FOG) + P(470, 150, 0.8, OKC) + '</g>' +
+        ST(.3, P(580, 150, 0.8, SL) + P(545, 150, 0.8, FOG) + P(510, 150, 0.8, OKC)),
+      lines: [
+        ['선생님', 'Everyone, <b>line up</b> at the door!', '다들 문 앞에 한 줄로 서!'],
+        ['나', 'Can I be first?', '저 맨 앞에 서도 돼요?', 1],
+      ],
+      say: '흩어져 있다가 <b>줄을 만든다</b> — <span class="en">line up</span>. 02 구동사 페이지의 up(갖춰짐)과 같은 그림.' },
+    chat: { btn: '여행 전날 메신저', place: '메신저 · 여행 전날 밤',
+      pic: () => FL + P(250, 150, 1.1, SL) + '<rect x="380" y="34" width="120" height="112" rx="12" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+        ST(.2, '<rect x="392" y="50" width="80" height="22" rx="8" fill="' + BG + '" stroke="var(--line)"/>' + T(432, 65, 11, '내일이다!', MU)) +
+        ST(.4, '<rect x="408" y="82" width="80" height="22" rx="8" fill="var(--chip-on)" stroke="' + AC + '"/>' + T(448, 97, 11, '못 기다리겠어', AC)) + L(590, 90, 'D-1'),
+      lines: [
+        ['친구', "I can't <b>wait</b> for the trip!", '여행 너무 기대돼!'],
+        ['나', 'Me neither!', '나도!', 1],
+      ],
+      say: '"기다릴 수가 없다" = <b>너무 기대된다</b>. 기대하는 사건(the trip)이 <b>for</b> 뒤에 그대로 있다 — 3절의 can\'t wait.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'lineup',
+    region: { x: 96, y: 66, w: 532, h: 258, label: 'WAIT 묶음 · RESULT = 사건까지 보류', at: [104, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 280, t: 'Q1. 기대하는 일까지 미루나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 512, y: 180, w: 180, t: 'Q3. 줄의 어느 순간?', sub: '만듦 · 지킴' },
+    },
+    leaves: {
+      await:  { x: 170, y: 262, w: 88, v: 'await', sub: '격식 · for 없음', seg: 'b', say: '<span class="en">The children awaited the bus.</span> 공지문의 격식 있는 말.' },
+      wait:   { x: 340, y: 262, w: 92, v: 'wait', sub: '방식 말 안 함', seg: 'b', say: '<span class="en">The children waited for the bus.</span> 이 묶음의 기본 동사.' },
+      lineup: { x: 455, y: 262, w: 88, v: 'line up', sub: '줄을 만듦', seg: 'l', say: '<span class="en">The children lined up for the bus.</span> 줄이 만들어지는 순간.' },
+      queue:  { x: 570, y: 262, w: 88, v: 'queue', sub: '차례를 지킴', seg: 'l', say: '<span class="en">The children queued for the bus.</span> 줄에서 차례를 지키며.' },
+      stop:   { x: 600, y: 36, w: 120, v: 'stop', sub: '→ STOP 묶음', seg: '', out: true, say: '<span class="en">I stopped the treadmill.</span> 기대하는 사건 없이 <b>진행이 그냥 멈춤</b> → WAIT 묶음 밖, STOP 묶음(<a href="../stop/_family.md">stop/_family.md</a>).' },
+    },
+    edges: [
+      ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'stop', '그냥 멈춤', 'right', [512, 28], true],
+      ['q2', 'await', '말투 (격식)', 'left'], ['q2', 'wait', '말하지 않음'], ['q2', 'q3', '줄', 'right'],
+      ['q3', 'lineup', '만드는 순간'], ['q3', 'queue', '차례를 지킴'],
+    ],
+    segs: [[100, 392, '기다림 자체 · 말투', 'b'], [402, 624, '줄 (몸의 배치)', 'l']],
+  };
+
+  const SLOTS = {
+    first: ['await', 'for'],
+    slots: { for: '+ 대상', none: '대상 없이', other: '다른 모양' },
+    verbs: {
+      wait: {
+        for:   { ok: [['The children', 's'], ['waited', 'v'], ['for', 'x'], ['the bus', 'o']], bad: [['The children', 's'], ['waited', 'v'], ['the bus', 'o']], say: '기다리는 대상은 <b>for</b> 뒤에(노트).' },
+        none:  { ok: [['Please', 'x'], ['wait', 'v'], ['here', 'r']], say: '대상 없이 "기다려"만으로도 끝난다.' },
+        other: { ok: [['I', 's'], ["can't wait", 'v'], ['for', 'x'], ['the trip', 'o']], say: '"못 기다리겠다" = <b>너무 기대된다</b>.' },
+      },
+      await: {
+        for:   { ok: [['The children', 's'], ['awaited', 'v'], ['the bus', 'o']], bad: [['The children', 's'], ['awaited', 'v'], ['for', 'x'], ['the bus', 'o']], say: 'await는 대상을 <b>바로</b> 받는다. <span class="en">await for</span>라고 하지 않는다(노트).' },
+        none:  { ok: [['We', 's'], ['are waiting', 'v']], bad: [['We', 's'], ['are awaiting', 'v']], say: '대상 없이 "기다리는 중"이면 wait. await는 대상이 있어야 자연스럽다.' },
+        other: { ok: [['We', 's'], ['await', 'v'], ['your reply', 'o']], say: '편지·메일 끝의 격식 있는 말 — 답장을 기다리겠습니다.' },
+      },
+      queue: {
+        for:   { ok: [['The children', 's'], ['queued', 'v'], ['for', 'x'], ['the bus', 'o']], say: 'for는 기다리는 서비스·탑승 기회(노트).' },
+        none:  { ok: [['Please', 'x'], ['queue', 'v'], ['here', 'r']], say: '"여기 줄 서 주세요" — 영국식 안내.' },
+        other: { ok: [['We', 's'], ['waited', 'v'], ['in the queue', 'r']], say: '명사 <b>queue</b> = 줄. 미국에서는 보통 <span class="en">line</span>.' },
+      },
+      'line up': {
+        for:   { ok: [['The children', 's'], ['lined', 'v'], ['up', 'r'], ['for', 'x'], ['the bus', 'o']], bad: [['The children', 's'], ['lineup', 'v'], ['for the bus', 'x']], say: '두 낱말 동사. 붙여 쓴 <b>lineup</b>은 명사(노트). 과거는 lined up — up은 안 변한다.' },
+        none:  { ok: [['Everyone,', 'x'], ['line', 'v'], ['up', 'r']], say: '대상 없이 "줄 서!"' },
+        other: { ok: [['The teacher', 's'], ['lined', 'v'], ['up', 'r'], ['the kids', 'o']], say: '목적어를 넣으면 <b>줄 세우다</b>.' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>
