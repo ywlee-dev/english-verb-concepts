@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROMISE 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/57-promise.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+@media (max-width: 600px) { th, td { padding: 6px 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="56-plan.html">PLAN 묶음</a> · 다음: <a href="58-agree.html">AGREE 묶음</a> · 견줘 보기: <a href="07-commit.html">07 commit (넘겨서 묶음)</a> · <a href="56-plan.html">PLAN 묶음 (혼자 짜는 구조)</a></p>
+  <h1>PROMISE 묶음 — 같은 놀이터, 다른 무게의 약속</h1>
+  <p class="lead">폭풍에 망가진 놀이터를 토요일에 고친다. 미나가 <b>"돕겠다"는 미래 책임</b>을 진다는 것은 같고, <b>친구들에게 그냥 말하는지, 동생 앞에서 엄숙히 다짐하는지, 설명회에서 공개적으로 밝히는지, 의심하는 친구에게 힘주어 맹세하는지</b>만 바꾸면 promise · vow · pledge · swear로 갈린다. 넷 다 <b>말</b>이다 — 시간·돈·나를 실제로 넘겨 묶으면 <a href="07-commit.html">07 commit</a>이다.</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="promise" title="promise 소리로 듣기"><span class="en">promise</span><span class="ipa">/ˈprɑː.mɪs/</span><span class="ko">[<b>프라</b>미스]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="vow" title="vow 소리로 듣기"><span class="en">vow</span><span class="ipa">/vaʊ/</span><span class="ko">[바우]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="pledge" title="pledge 소리로 듣기"><span class="en">pledge</span><span class="ipa">/pledʒ/</span><span class="ko">[플레지]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="swear" title="swear 소리로 듣기"><span class="en">swear</span><span class="ipa">/swer/</span><span class="ko">[스웨어]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">약속하는 자리와 무게에 따라 미나가 미래 책임을 지는 장면이 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽은 미나와 약속을 듣는 쪽이다. promise는 친구들에게 토요일에 돕겠다고 말하고 친구들이 역할표에 미나 이름을 적음, vow는 망가진 미끄럼틀 앞에서 슬퍼하는 동생에게 꼭 고치겠다고 엄숙히 다짐함, pledge는 학교 설명회에서 참여를 밝히고 자원봉사 명단에 서명함, swear는 정말 올지 의심하는 친구들에게 비가 와도 오겠다고 손을 들고 맹세하는 장면이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">PROMISE · 미래 책임</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 약속했나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 역할표·명단 글자는 그림용이다. 장면은 <a href="../promise/_family.md">promise/_family.md</a>의 고정 행동(폭풍 뒤 놀이터 재건 돕기)과 각 노트 장면(운동장 · 놀이터 앞 동생 · 자원봉사 설명회 · 무너진 울타리 앞)을 옮겼다. 네 장면 모두 "약속"이라 PROMISE 칩은 늘 켜진다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"약속하다" 하나로 다 될 것 같다. 그런데 <b>엄숙한 다짐</b>, <b>사람들 앞의 공개 약속</b>, <b>"정말이야" 하고 힘주는 맹세</b>는 무게와 자리가 다르다. 그리고 말이 아니라 <b>이미 넘겨서 묶은</b> 것은 약속이 아니다. 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>PROMISE 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "미래 책임"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>agent가 미래 행동을 하겠다는 책임을 상대에게 분명히 짐</b> = <span class="en">PROMISE</span>다. 묶음 노트: <span class="en">PLAN</span>은 실행 구조, <span class="en">DECIDE</span>는 개인의 선택이지만, PROMISE는 <b>듣는 사람과의 약속 관계</b>를 만든다. 노트의 비교표를 식으로 옮겼다.</p>
+  <div class="formula">
+    <span class="r">약속 관계가 생김</span><span class="op">+</span><span>상대에게 이행을 확약</span><span class="op">=</span><span class="v">PROMISE</span>
+    <span class="r">PROMISE</span><span class="op">+</span><span>엄숙하고 단호하게</span><span class="op">=</span><span class="v">VOW</span>
+    <span class="r">PROMISE</span><span class="op">+</span><span>공개적·공식적으로 책임을 밝힘</span><span class="op">=</span><span class="v">PLEDGE</span>
+    <span class="r">PROMISE</span><span class="op">+</span><span>진정성을 강하게 주장</span><span class="op">=</span><span class="v">SWEAR</span>
+  </div>
+  <p>노트가 짚은 점: 넷 다 <b>이행을 뜻하지 않는다</b> — <span class="en">Mina has promised to help.</span>이어도 놀이터는 아직이다. 실제 재건 성공도 보장하지 않는다. vow · pledge · swear는 <b>어조와 사회적 자리</b>의 차이가 크다. <span class="en">swear — swore — sworn</span>만 불규칙이다(✗ sweared).</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>약속함</b> → 미나가 친구들에게 "토요일에 와서 도울게". 친구들이 역할표에 미나 이름을 적는다 — <b>기대할 수 있게</b> 됐다. <span class="en">Mina promised to help rebuild the playground.</span></li>
+    <li><b>엄숙한 다짐</b> → 쓰러진 미끄럼틀 앞에서 슬퍼하는 동생에게 <b>진지하게</b> "꼭 고치는 거 도울게". <span class="en">Mina vowed to help rebuild the playground after the storm.</span></li>
+    <li><b>공개 약속</b> → 학교 설명회에서 참여를 <b>밝히고 명단에 서명</b>한다. 학교가 미나를 일정에 넣는다. <span class="en">Mina pledged to help rebuild the playground at the school meeting.</span></li>
+    <li><b>힘준 맹세</b> → 정말 올지 <b>의심하는</b> 친구들 앞에서 "비가 와도 갈게". <span class="en">Mina swore to help rebuild the playground, even if it rained.</span></li>
+    <li>어느 장면이든 "돕겠다고 약속했다"는 맞으니 <span class="en">promise</span>도 쓸 수 있다. 그래서 PROMISE 칩은 늘 켜진다. 다만 사소한 일에 vow는 과장될 수 있다(노트).</li>
+  </ul>
+
+  <h2>3. 한국어 "약속"의 함정 — promise가 아닌 약속들</h2>
+  <p>한국어 "약속"은 <b>하겠다는 확약</b>도, <b>만날 일정</b>도, <b>예약</b>도 다 덮는다. 영어 promise는 그중 <b>첫째만</b>이다. 그리고 말이 아니라 무언가를 넘겨 묶으면 <a href="07-commit.html">07 commit</a> — promise는 어길 수 있는 <b>말</b>, commit은 이미 <b>넘겨 버린</b> 것이다.</p>
+  <table>
+    <tr><th>한국어</th><th>영어</th><th>그림</th></tr>
+    <tr><td>도와주겠다고 약속했어</td><td><span class="en">I promised to help.</span></td><td>미래 행동 확약 — promise</td></tr>
+    <tr><td>오늘 약속 있어</td><td><span class="en">I have plans today.</span> (✗ I have a promise.)</td><td>만날 일정 — plans (56)</td></tr>
+    <tr><td>3시에 친구 만나기로 했어</td><td><span class="en">I'm meeting a friend at three.</span></td><td>정해진 일정 — 진행형</td></tr>
+    <tr><td>병원 약속(예약) 있어</td><td><span class="en">I have an appointment.</span></td><td>시간 칸 — schedule (56)</td></tr>
+    <tr><td>약속 지켜 / 어기지 마</td><td><span class="en">Keep your promise. / Don't break it.</span></td><td>명사 promise</td></tr>
+    <tr><td>이 일에 다 걸었어</td><td><span class="en">I'm committed to this.</span></td><td>넘겨서 묶음 — commit (07)</td></tr>
+  </table>
+  <p class="note">07 commit의 표와 같은 경계다: promise는 <b>상대에게 한 말</b>이라 어기면 실망이 남고, commit은 시간·돈·나를 <b>이미 넘겨</b> 되돌리려면 새 행동이 필요하다.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>PROMISE 묶음</b>이다. 말이 아니라 시간·돈·나를 <b>넘겨서 묶었으면</b> 테두리 밖 문으로 07 commit에 간다. 07의 묶음 밖 문이 거꾸로 이 묶음으로 온다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 PROMISE 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 상대에게 미래 행동을 말로 확약했나에서 넘겨서 묶었으면 묶음 밖 문 commit, 예면 Q2 무엇을 말하고 싶나로 간다. 말하지 않으면 promise, 어디서 했나면 Q3에서 pledge, 얼마나 무겁게면 Q4에서 vow와 swear로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 누구 앞에서</th><th>② 무게 · 어조</th><th>③ 이행했나</th></tr>
+    <tr><td><b>promise</b></td><td>상대 (친구들)</td><td>보통 — 기대할 수 있게</td><td>아직 — 미래</td></tr>
+    <tr><td><b>vow</b></td><td>가까운 상대 (동생)</td><td>엄숙 · 단호</td><td>아직</td></tr>
+    <tr><td><b>pledge</b></td><td>공동체 · 공식 자리</td><td>공개 책임 (기록될 수 있음)</td><td>아직</td></tr>
+    <tr><td><b>swear</b></td><td>의심하는 상대</td><td>진심임을 강하게 주장</td><td>아직</td></tr>
+  </table>
+  <p class="note">칸 내용은 각 노트의 Scene · 선택 경계를 옮겼다. 서명은 pledge 장면의 기록일 뿐 필수 조건이 아니다(노트). 흐름 그림의 질문 순서와 Q3 · Q4 묶음은 그림을 위해 정했다.</p>
+
+  <h2>5. 실제 문장으로 — 무엇을 약속했나</h2>
+  <p>넷 다 약속한 행동을 <b>to + 동사</b>로 붙인다. promise · swear는 <b>절</b>도 받는다. 명사로도 자주 쓴다 — a promise · a vow · a pledge.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">붙이는 말에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">붙이는 것</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>to + 동사</th><th>사람 · 절 · 목적어</th><th>다른 모양</th></tr>
+    <tr><td><b>promise</b></td><td><span class="en">promised to help rebuild the playground</span> (✗ promised helping)</td><td><span class="en">promised me she would come</span></td><td><span class="en">keep · break a promise</span></td></tr>
+    <tr><td><b>vow</b></td><td><span class="en">vowed to help rebuild the playground</span></td><td><span class="en">vowed that she would never give up</span></td><td><span class="en">wedding vows</span> — 결혼 서약</td></tr>
+    <tr><td><b>pledge</b></td><td><span class="en">pledged to help rebuild the playground</span></td><td><span class="en">pledged their support to the school</span></td><td><span class="en">sign the pledge</span> — 서약서</td></tr>
+    <tr><td><b>swear</b></td><td><span class="en">swore to help, even if it rained</span> (✗ sweared)</td><td><span class="en">I swear I didn't take it.</span></td><td><span class="en">Don't swear.</span> — 욕하다</td></tr>
+  </table>
+  <p class="note">경향 한 줄: 약속의 내용은 <b>to + 동사</b>(앞으로 할 일), 절을 붙이면 "~라고"(promise that · swear that). swear + 절은 미래 약속뿐 아니라 <b>지금 사실이 진짜</b>라는 주장도 된다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>PROMISE</b> — 새끼손가락을 내밀며 "토요일에 갈게."</li>
+    <li><b>VOW</b> — 손을 가슴에 얹고 <b>천천히, 낮게</b> "꼭."</li>
+    <li><b>PLEDGE</b> — 일어서서 사람들을 둘러보고 종이에 <b>서명</b>.</li>
+    <li><b>SWEAR</b> — 손바닥을 들어 올리고 눈을 맞추며 "<b>진짜야!</b>"</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 마지막 장소(메신저)의 <span class="en">plans</span>는 이 묶음 동사가 아니라 3절 함정을 보이려고 넣은 명사다. 자연스러운지 사전 예문으로 확인할 것.</li>
+      <li>3절 표(plans · appointment · I'm meeting · keep/break a promise · I'm committed)와 ✗ <span class="en">I have a promise.</span>는 노트에 없는 풀이다. 07 commit 3절 표와 경계를 맞췄다.</li>
+      <li>5절의 ✗ promised helping, <span class="en">promised me she would come · vowed that … · pledged their support to · wedding vows · sign the pledge · I swear I didn't take it · Don't swear</span>는 노트에 없다. to help rebuild the playground · even if it rained · ✗ sweared(노트: "sweared가 아니다")만 노트에 있다. swear의 욕설 뜻은 노트가 "이 장면과 다르다"고만 적었다.</li>
+      <li>4절 표의 칸 판정과 0절 "대신 말하면"의 △·✗ 판정은 짐작이다. commit 카드의 ✗ <span class="en">I promised to the project.</span>는 07 commit 0절 카드와 같은 문장이다.</li>
+      <li>노트끼리 이름이 다르다: promise 노트의 영어 뜻풀이가 "commit to future action"이다. 07 commit 확인할 것에도 적혔듯 "promise는 말, commit은 넘겨서 묶음" 경계와 어긋나니 노트 제목을 맞출 것.</li>
+      <li>swear 노트 Scene에 "미나는 예전에 봉사 약속을 한 번 잊은 적이 있다"는 배경이 있지만 묶음 표·상황 4번에는 없다. 맨 위 그림은 "친구들이 의심한다"만 그렸다.</li>
+      <li>promise 노트 Scene은 친구들이 "역할표에 이름을 적는다"인데, pledge 노트도 "신청서에 이름을 적는다"라 두 장면이 비슷해 보인다. 그림은 promise = 친구들이 적어 줌, pledge = 미나가 직접 서명으로 나눴다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../promise/_family.md">promise/_family.md</a> — "누구에게 어떤 무게로 미래 행동을 맡기는가?"</li>
+    <li>동사 노트: <a href="../promise/promise--commit-to-future-action.md">promise</a> · <a href="../promise/vow--promise-solemnly.md">vow</a> · <a href="../promise/pledge--promise-publicly.md">pledge</a> · <a href="../promise/swear--promise-emphatically.md">swear</a></li>
+    <li>묶음 밖 이웃: <a href="07-commit.html">07 commit</a> — 시간·돈·나를 넘겨 묶음. 07의 묶음 밖 문(말로만 약속)이 이 묶음으로 온다.</li>
+    <li>견줘 보기: <a href="56-plan.html">56 PLAN</a> — 혼자서도 짤 수 있는 실행 구조. <a href="23-think.html">23 THINK</a>의 decide — 나 혼자의 선택. <a href="58-agree.html">58 AGREE</a> — 남의 제안에 찬성.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 미나 x = 300, 듣는 쪽 x ≈ 540~640 (그림용) ──
+  const NAME = (x, t, y) => tx(x, y || 150, 12, t, 'var(--muted)');
+  const MINA = P(300, 240, 1.3, 'var(--sleeve)') + NAME(300, '미나');
+  const BUB = (x, y, w, t, c, dbl) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="34" rx="10" fill="var(--card)" stroke="' + (c || 'var(--accent)') + '" stroke-width="' + (dbl ? 3 : 1.5) + '"/>' +
+    (dbl ? '<rect x="' + (x + 4) + '" y="' + (y + 4) + '" width="' + (w - 8) + '" height="26" rx="7" fill="none" stroke="' + c + '" stroke-width="1"/>' : '') +
+    '<path d="M' + (x + 14) + ' ' + (y + 34) + ' l-6 12 l16 -12" fill="var(--card)" stroke="' + (c || 'var(--accent)') + '" stroke-width="1.5"/>' + tx(x + w / 2, y + 22, 13, t, 'var(--text)', ' font-weight="600"');
+  const FUTURE = (x, y) => tx(x, y, 11, '토요일 = 아직 미래', 'var(--muted)');
+  const TOP = {
+    first: 'swear', keep: 'PROMISE',
+    keepSay: '<b>PROMISE</b>는 이 장면에도 맞다 — 자리와 무게를 빼고 미래 책임을 졌다는 것만 말한다. <span class="en">Mina promised to help rebuild the playground.</span>',
+    chips: ['PROMISE', 'VOW', 'PLEDGE', 'SWEAR'], out: [['COMMIT (넘겨서 묶음 · 07)', '07-commit.html']],
+    hows: {
+      promise: { btn: '약속함', how: '상대에게 이행을 확약', verb: 'PROMISE', chips: ['PROMISE'], target: 'ACTION · help rebuild the playground',
+        result: '친구들이 미나를 기대할 수 있음 — 작업은 토요일',
+        pic: () => FLOOR + MINA + P(560, 240, 1.2, 'var(--fog)') + P(625, 240, 1.2, 'var(--ok)') + NAME(592, '친구들', 156) +
+          step(.2, BUB(330, 64, 150, '토요일에 도울게!')) +
+          step(.45, '<rect x="510" y="48" width="140" height="84" rx="4" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(580, 66, 11, '토요일 역할표', 'var(--muted)', ' font-weight="600"') +
+            tx(526, 88, 12, '진 — 울타리', 'var(--text)', '', 'start') + tx(526, 106, 12, '하나 — 페인트', 'var(--text)', '', 'start')) +
+          step(.7, tx(526, 124, 12, '미나 — 울타리', 'var(--accent)', ' font-weight="700"', 'start')),
+        say: '<span class="en">Mina promised to help rebuild the playground.</span> 혼자 생각한 게 아니라 <b>친구들에게</b> 말했다. 친구들은 이제 미나를 <b>믿고 기대할 수 있다</b>. 실제 작업은 아직 토요일이다(노트).' },
+      vow: { btn: '엄숙한 다짐', how: '엄숙하고 단호하게', verb: 'VOW', chips: ['PROMISE', 'VOW'], target: 'ACTION · help rebuild the playground',
+        result: '슬퍼하는 동생 앞 — 무거운 다짐 (재건은 아직)',
+        pic: () => FLOOR + MINA + '<path d="M560 240 L600 150 h30 v90" fill="none" stroke="var(--obj-line)" stroke-width="2"/><path d="M600 150 L640 236" stroke="var(--muted)" stroke-width="5" stroke-linecap="round" transform="rotate(14 600 150)"/>' + tx(612, 140, 11, '쓰러진 미끄럼틀', 'var(--muted)') +
+          P(500, 240, .85, 'var(--gold)') + NAME(500, '동생', 182) + '<path d="M495 200 v6 M505 200 v6" stroke="var(--water)" stroke-width="2" stroke-linecap="round"/>' +
+          '<circle cx="306" cy="200" r="8" fill="var(--skin)" stroke="var(--obj-line)"/>' +
+          step(.25, BUB(330, 70, 180, '꼭 고치는 거 도울게.', 'var(--accent)', true)) + step(.5, tx(420, 132, 11, '천천히 · 진지하게', 'var(--accent)', ' font-weight="600"')),
+        say: '<span class="en">Mina vowed to help rebuild the playground after the storm.</span> 가벼운 대답이 아니라 <b>깊은 결심</b>을 말하는 자리다. 사소한 물건 가져오기 같은 일상 약속에 vow를 쓰면 과장된다(노트).' },
+      pledge: { btn: '공개 약속', how: '공개적·공식적으로', verb: 'PLEDGE', chips: ['PROMISE', 'PLEDGE'], target: 'ACTION · help rebuild the playground',
+        result: '설명회에서 참여를 밝히고 명단에 서명',
+        pic: () => FLOOR + MINA + '<path d="M326 240 v-56 h44 v56" fill="var(--wood)" stroke="var(--obj-line)"/>' + tx(348, 214, 10, '설명회', 'var(--text)', ' font-weight="600"') +
+          [470, 520, 570, 620].map((x, i) => P(x, 240, .7, i % 2 ? 'var(--fog)' : 'var(--ok)')).join('') + tx(545, 182, 11, '학생 · 학부모', 'var(--muted)') +
+          step(.2, '<rect x="440" y="48" width="160" height="96" rx="4" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' + tx(520, 66, 11, '토요일 자원봉사 명단', 'var(--muted)', ' font-weight="600"') +
+            [86, 106, 126].map((y) => '<path d="M456 ' + y + ' h128" stroke="var(--line)"/>').join('') + tx(462, 82, 12, '1. 진', 'var(--text)', '', 'start')) +
+          step(.5, tx(462, 102, 12, '2. 미나', 'var(--accent)', ' font-weight="700"', 'start') + '<path d="M520 100 q6 -10 12 0 q6 10 12 -2 q6 -8 14 2" fill="none" stroke="var(--accent)" stroke-width="2"/>'),
+        say: '<span class="en">Mina pledged to help rebuild the playground at the school meeting.</span> 친구 한 명에게 사적으로 말하면 promise. <b>공동체 앞에서</b> 책임을 밝히고 기록이 남으면 pledge. 서명은 이 장면의 기록이지 필수 조건은 아니다(노트).' },
+      swear: { btn: '힘준 맹세', how: '진심을 힘주어', verb: 'SWEAR', chips: ['PROMISE', 'SWEAR'], target: 'ACTION · help rebuild the playground',
+        result: '의심하는 친구들 앞 — "비가 와도 갈게"',
+        pic: () => FLOOR + MINA + at(332, 120, 180, HAND) + P(570, 240, 1.2, 'var(--fog)') + P(630, 240, 1.2, 'var(--ok)') + NAME(600, '친구들', 156) +
+          tx(570, 132, 20, '?', 'var(--muted)', ' font-weight="700"') + tx(630, 132, 20, '?', 'var(--muted)', ' font-weight="700"') +
+          step(.2, '<path d="M430 74 a14 14 0 0 1 22 -12 a18 18 0 0 1 32 6 a12 12 0 0 1 2 24 h-52 a10 10 0 0 1 -4 -18 z" fill="var(--fog)" stroke="var(--obj-line)"/>' +
+            [442, 458, 474].map((x) => '<path d="M' + x + ' 100 l-4 10" stroke="var(--water)" stroke-width="2" stroke-linecap="round"/>').join('')) +
+          step(.45, BUB(370, 132, 170, '비가 와도 갈게!', 'var(--bad)')),
+        say: '<span class="en">Mina swore to help rebuild the playground, even if it rained.</span> 평범한 약속으로는 친구들의 <b>의심</b>이 풀리지 않는다. "정말이야, 믿어 줘" — <b>진심을 힘주어</b> 확약한다. 욕하다·법정 선서의 swear와는 다른 뜻이다(노트).' },
+    },
+  };
+
+  // 0절 아이콘 ((0, 0) 중심)
+  const head = (x, y) => '<circle cx="' + x + '" cy="' + (y || 0) + '" r="11" fill="var(--skin)" stroke="var(--obj-line)"/>';
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. commit을 먼저 빼 보세요.',
+    cards: [
+      { id: 'promise', t: ['상대에게', '하겠다고'], v: 'promise', icon: head(-26, 14) + head(26, 14) + '<rect x="-34" y="-34" width="52" height="24" rx="8" fill="var(--card)" stroke="var(--accent)"/>' + tx(-8, -18, 10, '토요일!', 'var(--accent)', ' font-weight="700"'),
+        instead: 'Mina said she would help. △', lost: '하겠다고 말한 건 남지만, 친구들이 믿고 기대할 책임 관계가 약하다.', why: '상대에게 미래 행동을 확약.' },
+      { id: 'vow', t: ['엄숙하게', '꼭'], v: 'vow', icon: '<path d="M0 22 C-34 0 -26 -30 0 -14 C26 -30 34 0 0 22 z" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2.5"/><path d="M0 14 C-22 0 -18 -20 0 -8 C18 -20 22 0 0 14 z" fill="none" stroke="var(--accent)" stroke-width="1"/>',
+        instead: 'Mina promised to help. △', lost: '약속은 남지만 결심의 엄숙함·무게가 빠진다(노트).', why: '엄숙하고 단호하게 다짐.' },
+      { id: 'pledge', t: ['사람들 앞에서', '공개로'], v: 'pledge', icon: '<rect x="-24" y="-34" width="48" height="44" rx="3" fill="var(--card)" stroke="var(--obj-line)"/><path d="M-18 -22 h36 M-18 -12 h36" stroke="var(--line)" stroke-width="2"/><path d="M-16 0 q5 -8 10 0 q5 8 10 -2 q5 -6 12 2" fill="none" stroke="var(--accent)" stroke-width="2"/>' +
+          head(-24, 26) + head(0, 26) + head(24, 26),
+        instead: 'Mina told everyone she would help. △', lost: '알렸다는 건 남지만, 공동체 앞에서 공식 책임을 지고 기록했다는 그림이 빠진다.', why: '공개적·공식적으로 약속.' },
+      { id: 'swear', t: ['정말이야', '믿어 줘'], v: 'swear', icon: at(-6, -34, 180, HAND).replace('rotate(180)', 'rotate(180) scale(.6)') + tx(20, -6, 22, '!', 'var(--bad)', ' font-weight="700"'),
+        instead: 'Mina promised again. △', lost: '다시 약속했을 뿐 "정말이야, 믿어 줘"라는 강한 진정성 주장이 빠진다.', why: '진심을 힘주어 맹세.' },
+      { id: 'commit', out: true, t: ['넘겨서', '묶어 둠'], v: 'commit', icon: '<rect x="2" y="-24" width="36" height="44" rx="4" fill="var(--card)" stroke="var(--accent2)"/>' + AR(-38, -2, -2, -2, 'var(--accent2)', 2.5) + tx(-24, -10, 10, '시간', 'var(--accent2)', ' font-weight="600"') + LOCK(20, 2),
+        instead: 'I promised to the project. ✗', lost: 'promise는 말 한마디라, 시간·나 자신을 이미 넘겨 묶었다는 그림이 없다(07).', why: '넘겨서 묶음 — 이웃 07 commit.' },
+    ],
+  };
+
+  const SCENES = {
+    home: { btn: '거실', place: '집 거실 · 저녁 전',
+      pic: () => FL + P(300, 150, 0.85, A2) + L(300, 92, '나') + P(520, 150, 1.1, OKC) + L(520, 72, '엄마') +
+        BX(360, 130, 20, 20, SL) + BX(384, 136, 26, 14, AC) + L(372, 124, '장난감'),
+      lines: [
+        ['엄마', 'Clean your room before dinner.', '저녁 먹기 전에 방 치워.'],
+        ['나', 'I <b>promise</b> I\'ll do it right after this game.', '이 판만 하고 바로 할게, 약속해.', 1],
+      ],
+      say: '상대가 <b>기대할 수 있는</b> 미래 행동 — <span class="en">promise</span>. 일상의 작은 약속은 늘 promise.' },
+    wedding: { btn: '결혼식', place: '결혼식장 · 서약',
+      pic: () => FL + '<path d="M360 150 V60 Q430 10 500 60 V150" fill="none" stroke="' + A2 + '" stroke-width="3"/>' + P(400, 150, 1.1, OL) + P(460, 150, 1.1, CARD) + P(600, 150, 1.0, FOG) + L(600, 80, '주례') +
+        ST(.2, T(430, 52, 16, '♥', AC)),
+      lines: [
+        ['신랑', 'I <b>vow</b> to always stand by you.', '언제나 당신 곁에 있겠다고 맹세합니다.', 1],
+        ['신부', 'And I <b>vow</b> the same to you.', '저도 당신에게 똑같이 맹세해요.'],
+      ],
+      say: '가볍게 할 수 없는 <b>엄숙한 다짐</b> — <span class="en">vow</span>. 명사 wedding vows(혼인 서약)도 같은 그림.' },
+    charity: { btn: '모금 행사', place: '자선 모금 행사 · 무대',
+      pic: () => FL + '<rect x="380" y="24" width="180" height="50" rx="4" fill="' + BG + '" stroke="' + OL + '"/>' + T(470, 46, 12, '수해 복구 모금', 'var(--text)', ' font-weight="700"') + ST(.2, T(470, 64, 12, '약정 ₩5,000,000', AC, ' font-weight="600"')) +
+        P(300, 150, 1.1, SL) + L(300, 72, '나') + P(620, 150, 1.1, OKC) + L(620, 72, '진행자'),
+      lines: [
+        ['진행자', 'We already have two hundred donors tonight!', '오늘 밤 벌써 200명이 기부해 주셨어요!'],
+        ['나', 'I\'d like to <b>pledge</b> fifty dollars.', '저도 50달러를 약정할게요.', 1],
+      ],
+      say: '사람들 앞에서 <b>공개적으로</b> 내겠다고 밝힘 — <span class="en">pledge</span>. 돈·지지를 목적어로 받는다.' },
+    secret: { btn: '비밀', place: '학교 복도 · 쉬는 시간',
+      pic: () => FL + P(320, 150, 1.1, FOG) + P(400, 150, 1.1, SL) + L(400, 72, '나') + ST(.4, at(430, 70, 180, HAND).replace('rotate(180)', 'rotate(180) scale(.5)')),
+      lines: [
+        ['친구', 'Don\'t tell anyone, okay?', '아무한테도 말하지 마, 알았지?'],
+        ['나', 'I <b>swear</b> I won\'t tell.', '절대 말 안 해, 맹세해.', 1],
+      ],
+      say: '"정말이야"라고 <b>힘주어</b> 확약 — <span class="en">swear</span>. 노트 TARGET에도 keeping a secret이 있다.' },
+    chat: { btn: '메신저', place: '메신저 · 저녁 약속',
+      pic: () => FL + P(300, 150, 1.1, SL) + L(300, 72, '나') + '<rect x="400" y="20" width="200" height="120" rx="12" fill="' + CARD + '" stroke="' + OL + '"/>' +
+        '<rect x="414" y="36" width="124" height="26" rx="8" fill="' + BG + '" stroke="var(--line)"/>' + T(476, 54, 11, '오늘 저녁 먹을래?', 'var(--text)') +
+        ST(.2, '<rect x="470" y="76" width="118" height="26" rx="8" fill="var(--chip-on)" stroke="' + AC + '"/>' + T(529, 94, 11, '미안, 약속 있어', 'var(--text)')),
+      lines: [
+        ['친구', 'Want to grab dinner tonight?', '오늘 저녁 먹을래?'],
+        ['나', 'Sorry, I already have <b>plans</b>.', '미안, 오늘 약속 있어.', 1],
+      ],
+      say: '함정 — "약속 있어"는 promise가 아니라 <b>plans</b>(만날 일정, <a href="56-plan.html">56 PLAN</a>). promise는 "하겠다고 확약"할 때만.' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'swear',
+    region: { x: 84, y: 66, w: 544, h: 258, label: 'PROMISE 묶음 · 미래 책임', at: [92, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 260, t: 'Q1. 미래 행동을 말로 확약했나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 말하고 싶나?' },
+      q3: { x: 195, y: 180, w: 180, t: 'Q3. 어디서 했나?', sub: '공개 자리' },
+      q4: { x: 520, y: 180, w: 180, t: 'Q4. 얼마나 무겁게?', sub: '엄숙 · 진심 강조' },
+    },
+    leaves: {
+      pledge:  { x: 195, y: 262, w: 100, v: 'pledge', sub: '공개 약속', seg: 'w', say: '<span class="en">Mina pledged to help at the school meeting.</span> 공동체 앞에서.' },
+      promise: { x: 360, y: 262, w: 100, v: 'promise', sub: '무게 말 안 함', seg: 'b', say: '<span class="en">Mina promised to help.</span> 이 묶음의 기본 동사.' },
+      vow:     { x: 465, y: 262, w: 92, v: 'vow', sub: '엄숙한 다짐', seg: 'h', say: '<span class="en">Mina vowed to help.</span> 결심의 무게.' },
+      swear:   { x: 575, y: 262, w: 92, v: 'swear', sub: '진심 강조', seg: 'h', say: '<span class="en">Mina swore to help, even if it rained.</span> "정말이야".' },
+      commit:  { x: 600, y: 36, w: 120, v: 'commit', sub: '→ 07 commit', seg: '', out: true, say: '<span class="en">She committed to volunteering every Saturday.</span> 말이 아니라 시간을 <b>넘겨서 묶음</b> → PROMISE 묶음 밖, <a href="07-commit.html">07 commit</a>.' },
+    },
+    edges: [
+      ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'commit', '넘겨 묶음', 'right', [510, 28], true],
+      ['q2', 'q3', '자리', 'left'], ['q2', 'promise', '말하지 않음'], ['q2', 'q4', '무게', 'right'],
+      ['q3', 'pledge', '공개 · 공식'],
+      ['q4', 'vow', '엄숙'], ['q4', 'swear', '진심 강조'],
+    ],
+    segs: [[90, 306, '자리 (공개 · 공식)', 'w'], [316, 408, '기본', 'b'], [416, 624, '무게 (엄숙 · 진심 강조)', 'h']],
+  };
+
+  const SLOTS = {
+    first: ['promise', 'to'],
+    slots: { to: 'to + 동사', that: '사람 · 절 · 목적어', other: '다른 모양' },
+    verbs: {
+      promise: {
+        to:    { ok: [['Mina', 's'], ['promised', 'v'], ['to help rebuild the playground', 'x']], bad: [['Mina', 's'], ['promised', 'v'], ['helping', 'x']], say: '노트 예문. 약속한 행동은 <b>to + 동사</b>.' },
+        that:  { ok: [['She', 's'], ['promised', 'v'], ['me', 'o'], ['she would come', 'x']], say: '사람을 바로 뒤에 둘 수 있다 — promise <b>me</b> (that) ….' },
+        other: { ok: [['You', 's'], ['have to', 'x'], ['keep', 'v'], ['your promise', 'o']], say: '명사 promise — <b>keep</b>(지키다) · <b>break</b>(어기다) a promise.' },
+      },
+      vow: {
+        to:    { ok: [['Mina', 's'], ['vowed', 'v'], ['to help rebuild the playground', 'x']], say: '노트 예문.' },
+        that:  { ok: [['She', 's'], ['vowed', 'v'], ['that she would never give up', 'x']], say: 'that 절로 다짐의 내용을.' },
+        other: { ok: [['They', 's'], ['exchanged', 'v'], ['wedding vows', 'o']], say: '명사 vow — 혼인 서약.' },
+      },
+      pledge: {
+        to:    { ok: [['Mina', 's'], ['pledged', 'v'], ['to help', 'x'], ['at the school meeting', 'r']], say: '노트 예문. 공개한 자리는 <b>at</b>.' },
+        that:  { ok: [['They', 's'], ['pledged', 'v'], ['their support', 'o'], ['to the school', 'r']], say: '지지·돈을 목적어로 — pledge A <b>to</b> B.' },
+        other: { ok: [['She', 's'], ['signed', 'v'], ['the pledge', 'o']], say: '명사 — 서약(서).' },
+      },
+      swear: {
+        to:    { ok: [['Mina', 's'], ['swore', 'v'], ['to help', 'x'], ['even if it rained', 'r']], bad: [['Mina', 's'], ['sweared', 'v'], ['to help', 'x']], say: '노트 예문. 불규칙 — swear · <b>swore</b> · sworn.' },
+        that:  { ok: [['I', 's'], ['swear', 'v'], ['I didn\'t take it', 'x']], say: '절을 붙이면 "정말이야" — 지금 사실이 진짜라는 주장도 된다.' },
+        other: { ok: [['Don\'t', 'x'], ['swear', 'v'], ['in class', 'r']], say: '전혀 다른 뜻 — <b>욕하다</b>. 노트가 이 장면과 구별한다.' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>
