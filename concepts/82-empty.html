@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EMPTY 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/82-empty.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+@media (max-width: 600px) { th, td { padding: 6px 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="81-separate.html">SEPARATE 묶음</a> · 이 페이지가 마지막이다 — <a href="index.html">목록으로</a> · 견줘 보기: <a href="73-fill.html">73 FILL (반대 — 채움)</a> · <a href="72-clean.html">72 CLEAN</a></p>
+  <h1>EMPTY 묶음 — 같은 "밖으로", 다른 비우기</h1>
+  <p class="lead">학교 정리실 · 미술실 · 모래 놀이터 · 화단 · 창고 앞에서 <b>용기 안에 든 것이 밖으로 나간다</b>. 안이 줄어든다는 그림은 같고, <b>빈 결과를 말하는지, 기울여 액체를 흘려보내는지, 뒤집어 한꺼번에 쏟는지, 출구로 액체를 빼는지, 실어 온 짐을 내리는지</b>만 바꾸면 empty · pour out · dump · drain · unload로 갈린다. FILL의 반대 방향이다. 단, empty 말고는 <b>용기가 완전히 비었다는 뜻이 아니다</b>(묶음 노트).</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="empty" title="empty 소리로 듣기"><span class="en">empty</span><span class="ipa">/ˈem.pti/</span><span class="ko">[<b>엠</b>프티]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="pour out" title="pour out 소리로 듣기"><span class="en">pour out</span><span class="ipa">/pɔːr aʊt/</span><span class="ko">[포어<b>아웃</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="dump" title="dump 소리로 듣기"><span class="en">dump</span><span class="ipa">/dʌmp/</span><span class="ko">[<b>덤</b>프]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="drain" title="drain 소리로 듣기"><span class="en">drain</span><span class="ipa">/dreɪn/</span><span class="ko">[<b>드레</b>인]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="unload" title="unload 소리로 듣기"><span class="en">unload</span><span class="ipa">/ʌnˈloʊd/</span><span class="ko">[언<b>로</b>우드]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">비우는 방식에 따라 장면과 얼마나 나갔는지 띠가 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽 위는 용기 안에 있던 것 중 얼마나 나갔는지 보여 주는 띠, 아래는 사람과 용기다. empty는 상자 속 미술 재료가 모두 선반으로 옮겨져 상자가 텅 비고 띠가 끝까지 참, pour out은 양동이를 싱크대 쪽으로 기울여 더러운 물이 흘러나가고 띠의 나머지는 남았는지 말하지 않는 점선, dump는 상자를 뒤집어 모래가 놀이통에 한꺼번에 떨어짐, drain은 들 수 없는 큰 물통의 아래 밸브를 열어 물이 호스로 배수구까지 흘러 수위가 바닥까지 내려감, unload는 트럭 짐칸의 책 상자를 내려 창고 앞에 쌓는 장면이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">EMPTY · 안을 비움</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 비우나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 띠의 나간 정도와 상자 수는 그림용이다. 장면은 <a href="../empty/_family.md">empty/_family.md</a>의 Scenario contrast와 각 노트의 Scene Scenario(미술 수업 뒤 정리실 · 미술실 싱크대 · 운동장 모래 놀이 구역 · 학교 화단 물통 옆 · 기증품 창고 앞)를 옮겼다. TARGET이 동사마다 그릇(상자 · 물통 · 트럭)이거나 내용물(물 · 모래)이다 — 묶음 노트의 Target note 그대로다. <b>EMPTY 칩은 empty 장면에서만 켰다</b> — 네 노트의 식은 <span class="en">EMPTY + …</span>이지만, 묶음 노트가 "HOW 동사 하나만으로 용기 전체가 언제나 완전히 비었다고 단정하지 않는다"고 하기 때문이다. 그래서 띠도 그 넷은 나머지 칸을 점선(말 안 함)으로 두었다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"비우다 · 빼다" 하나로 다 될 것 같다. 그런데 한국어도 <b>비우다 · 따라 버리다 · 쏟다 · 물을 빼다 · 짐을 내리다</b>로 나눠 말한다. 그리고 반대로 <b>채웠다면</b>? 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>EMPTY 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "안을 비움"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>용기 · 공간 안에 있던 내용물이 밖으로 나가 점유된 정도가 줄거나 없어진다</b> = <span class="en">EMPTY</span>다. 여기에 기울임 · 한꺼번에 · 출구 · 운반 화물이 붙는다. 노트의 식을 옮겼다.</p>
+  <div class="formula">
+    <span class="r">상자 안에 내용물 있음</span><span class="op">+</span><span>밖으로 내보냄 → 상자가 빔</span><span class="op">=</span><span class="v">EMPTY</span>
+    <span class="r">EMPTY</span><span class="op">+</span><span>용기를 기울여 액체를 흐르게 함</span><span class="op">=</span><span class="v">POUR OUT</span>
+    <span class="r">EMPTY</span><span class="op">+</span><span>내용물을 한꺼번에 쏟음</span><span class="op">=</span><span class="v">DUMP</span>
+    <span class="r">EMPTY</span><span class="op">+</span><span>출구를 통해 액체 배출</span><span class="op">=</span><span class="v">DRAIN</span>
+    <span class="r">EMPTY</span><span class="op">+</span><span>운반 화물을 차량에서 내림</span><span class="op">=</span><span class="v">UNLOAD</span>
+  </div>
+  <p>노트가 짚은 점: <b>remove</b>는 특정 대상을 빼는 행동일 뿐 용기 전체가 비었다고 보장하지 않는다 — 연필 하나를 remove해도 상자는 안 빈다. 모두 꺼내면 empty. pour out · dump · drain · unload는 <b>나가는 방식</b>에 초점이 있고, 그것만으로 용기가 완전히 비었다고 단정하지 않는다. 작은 통은 기울여 pour out, 큰 물통은 출구로 drain. 조심히 따르면 pour out, 거칠게 한꺼번에면 dump. pour out은 강세가 뒤 out에 — [포어<b>아웃</b>].</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>비움</b> → 상자의 재료를 분류해 보관해야 한다. 모두 꺼내 선반에 놓아 <b>상자가 빈다</b>. 무엇을 어떤 순서로 꺼냈는지는 말하지 않는다. <span class="en">Mina emptied the box.</span></li>
+    <li><b>따라 버림</b> → 붓 씻은 더러운 물이 양동이에 남았다. 양동이를 싱크대 쪽으로 <b>기울여 흘려보낸다</b>. 물기가 조금 남았는지는 말하지 않는다. <span class="en">Mina poured out the old water from the bucket.</span></li>
+    <li><b>쏟음</b> → 상자의 모래를 넓은 놀이통으로 옮긴다. 한 줌씩 덜지 않고 상자를 <b>뒤집어 한꺼번에</b> 떨어뜨린다. <span class="en">Jin dumped the sand out of the box.</span></li>
+    <li><b>물 뺌</b> → 물통이 너무 무거워 기울일 수 없다. 아래쪽 <b>밸브를 열어</b> 물이 호스로 빠져 수위가 바닥까지 내려간다. <span class="en">Mina drained the water tank.</span></li>
+    <li><b>짐 내림</b> → 트럭에 실려 온 책 상자를 창고로 옮긴다. <b>운반해 온 짐</b>을 하나씩 내려 쌓는다. <span class="en">The students unloaded the truck.</span></li>
+    <li>위 띠는 "안에 있던 것 중 얼마나 나갔나"다. 주황은 나간 것, 점선은 <b>다 나갔는지 말하지 않는 칸</b>이다.</li>
+  </ul>
+
+  <h2>3. 무엇을 목적어로 — 그릇이냐, 내용물이냐</h2>
+  <p>묶음 노트의 Target note: <span class="en">empty the box</span>처럼 <b>그릇</b>이 목적어일 수도, <span class="en">pour out the water</span>처럼 <b>내용물</b>이 목적어일 수도 있다. 한국어 "물을 버리다 · 통을 비우다"도 같은 갈림이 있다.</p>
+  <table>
+    <tr><th>동사</th><th>그릇이 목적어</th><th>내용물이 목적어</th><th>한국어</th></tr>
+    <tr><td><b>empty</b></td><td><span class="en">empty the lunchbox</span> (노트)</td><td>— 노트 예문은 모두 그릇</td><td>비우다</td></tr>
+    <tr><td><b>pour out</b></td><td>— 그릇은 <span class="en">from the bucket</span></td><td><span class="en">pour out the cold coffee</span> (노트)</td><td>따라 버리다</td></tr>
+    <tr><td><b>dump</b></td><td>— 그릇은 <span class="en">out of the box</span></td><td><span class="en">dump the sand</span> (노트)</td><td>쏟다 · 붓다</td></tr>
+    <tr><td><b>drain</b></td><td><span class="en">drain the bathtub</span> (노트)</td><td><span class="en">drain the water</span></td><td>물을 빼다</td></tr>
+    <tr><td><b>unload</b></td><td><span class="en">unload the truck</span> (노트)</td><td><span class="en">unload the groceries</span> (노트)</td><td>짐을 내리다</td></tr>
+    <tr><td>fill (반대)</td><td><span class="en">fill the glass</span> (fill 노트)</td><td>✗ <span class="en">fill water</span></td><td>채우다</td></tr>
+  </table>
+  <p class="note">반대 방향 <a href="73-fill.html">73 FILL</a>도 같은 갈림을 3절에서 다룬다. 짝을 지으면 fill ↔ empty, load ↔ unload. 그릇을 목적어로 잡는 쪽(empty · drain · unload the truck)은 <b>그릇의 상태</b>, 내용물을 잡는 쪽(pour out · dump)은 <b>내용물이 나간 방식</b>이 앞에 선다.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>EMPTY 묶음</b>이다. 꺼내는 게 아니라 <b>넣어서 채우는</b> 쪽이면 테두리 밖 문으로 FILL 묶음에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 EMPTY 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 안에 든 것을 밖으로 내나에서 넣어 채우면 묶음 밖 문 fill, 예면 Q2 무엇이 중요한가로 간다. 빈 결과면 empty, 실어 온 짐을 내리면 unload, 나가는 방식이면 Q3 어떻게 나가나에서 기울여 흘리면 pour out, 한꺼번에 쏟으면 dump, 출구로 빼면 drain으로 갈린다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 시작할 때 (노트)</th><th>② 끝 모습 (노트)</th><th>③ 다 비었나</th></tr>
+    <tr><td><b>empty</b></td><td>안에 내용물이 남아 있음</td><td>새 재료를 담을 수 있음</td><td>예</td></tr>
+    <tr><td><b>pour out</b></td><td>액체 · 쏟아도 되는 곳</td><td>깨끗한 물 받을 준비</td><td>말 안 함</td></tr>
+    <tr><td><b>dump</b></td><td>받아 줄 곳 · 손상 걱정 적음</td><td>상자가 빔</td><td>말 안 함</td></tr>
+    <tr><td><b>drain</b></td><td>출구 · 배출 경로가 있음</td><td>수위가 바닥</td><td>말 안 함</td></tr>
+    <tr><td><b>unload</b></td><td>차량 도착 · 둘 곳 있음</td><td>적재 공간이 빔</td><td>말 안 함</td></tr>
+  </table>
+  <p class="note">①② 칸은 각 노트의 Precondition · 시제와 결과를, ③ 칸은 묶음 노트의 "HOW 동사 하나만으로 … 완전히 비었다고 단정하지 않는다"를 옮겼다. ②에 "빔"이 있어도 그 장면의 결과일 뿐 동사의 뜻은 아니다. 흐름 그림의 질문 순서와 Q3 묶음은 그림을 위해 정했다.</p>
+
+  <h2>5. 실제 문장으로 — 그릇 자리, 내용물 자리</h2>
+  <p>3절의 갈림을 문장으로 확인한다. empty · drain은 <b>그릇</b>, pour out · dump는 <b>내용물 + out of · from 그릇</b>, unload는 둘 다 노트에 있다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">목적어 자리에 그릇을 두느냐 내용물을 두느냐에 따라 문장의 낱말 순서가 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장, 아래 줄은 틀린 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">목적어 자리</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>노트 예문</th><th>다른 모양</th><th>뜻</th></tr>
+    <tr><td><b>empty</b></td><td><span class="en">I emptied the lunchbox before washing it.</span></td><td><span class="en">The room is empty.</span></td><td>방이 비어 있다</td></tr>
+    <tr><td><b>pour out</b></td><td><span class="en">I poured out the cold coffee.</span></td><td><span class="en">Pour it out.</span></td><td>it은 사이에</td></tr>
+    <tr><td><b>dump</b></td><td><span class="en">I dumped the sand out of the bucket.</span></td><td><span class="en">Just dump them on the bed.</span></td><td>대충 놔 둬</td></tr>
+    <tr><td><b>drain</b></td><td><span class="en">I drained the bathtub.</span></td><td><span class="en">I'm drained.</span></td><td>녹초가 됐다</td></tr>
+    <tr><td><b>unload</b></td><td><span class="en">I unloaded the groceries from the car.</span></td><td><span class="en">unload the dishwasher</span></td><td>식기세척기를 비우다</td></tr>
+  </table>
+  <p class="note">경향 한 줄: 빈 상태를 말하는 empty · drain은 <b>그릇</b>을 목적어로 붙잡고, 나가는 동작이 보이는 pour out · dump는 <b>내용물</b>을 목적어로 두고 out of · from으로 그릇을 붙인다. unload는 트럭(그릇)도 식료품(내용물)도 목적어가 된다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>EMPTY</b> — 상자에서 하나씩 꺼내다 마지막에 안을 들여다보며 "<b>텅</b>".</li>
+    <li><b>POUR OUT</b> — 컵 쥔 손목을 천천히 <b>기울여</b> 흘려보낸다.</li>
+    <li><b>DUMP</b> — 두 손으로 든 상자를 <b>휙 뒤집는다</b>.</li>
+    <li><b>DRAIN</b> — 손가락으로 마개를 <b>뽑고</b>, 물이 빙글빙글 내려가는 시늉.</li>
+    <li><b>UNLOAD</b> — 높은 곳(짐칸)의 상자를 두 손으로 <b>내려</b> 바닥에 놓는다.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것. 특히 <span class="en">I'll just pour it out · Can you drain it? (pasta) · Just dump them on the bed.</span></li>
+      <li>3절의 <span class="en">drain the water</span>, ✗ <span class="en">fill water</span>, "empty는 노트 예문이 모두 그릇"에서 더 나아간 판단은 노트에 없다. <span class="en">empty the water into the sink</span>처럼 내용물을 목적어로 한 empty가 맞는지 사전으로 확인할 것.</li>
+      <li>5절의 "다른 모양" 칸(<span class="en">The room is empty · Pour it out (✗ pour out it) · dump them on the bed · I'm drained · unload the dishwasher</span>)과 아래 그림의 줄, 경향 한 줄은 짐작이다.</li>
+      <li>0절 "대신 말하면"의 △·✗ 판정은 짐작이다.</li>
+      <li>맨 위 그림에서 pour out · dump · drain · unload 장면은 EMPTY 칩을 껐다(묶음 노트의 "완전히 비었다고 단정하지 않는다"). 띠의 나간 정도는 그림용이다.</li>
+      <li>노트끼리 어긋남: 묶음 노트는 HOW 동사만으로 다 비었다고 단정하지 않는다는데, 네 노트의 식은 <span class="en">EMPTY + … = POUR OUT / DUMP / DRAIN / UNLOAD</span>로 EMPTY를 BASIC으로 쓴다. dump 노트는 "dump 자체가 항상 용기를 완전히 비웠다는 뜻은 아니다"면서 시제와 결과는 <span class="en">The box is empty now.</span>, unload 노트는 "차 안의 다른 물건까지 모두 비울 필요는 없다"면서 시제와 결과는 <span class="en">Its cargo space is empty now.</span>다. 어느 쪽으로 맞출지 정할 것.</li>
+      <li>노트 문제: unload 노트의 제목은 <span class="en">remove transported cargo</span>, 파일 이름은 <span class="en">empty-transport-cargo</span>로 다르다. dump 노트는 TARGET이 모래(내용물)인데 PURPOSE는 "상자를 빨리 비운다"(그릇)다. 다섯 노트 모두 "언제" 장면(도시락통 · 커피 · 양동이 · 욕조 · 식료품)과 Scene Scenario의 TARGET이 다르다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../empty/_family.md">empty/_family.md</a> — "용기 전체를 비웠는지, 액체를 따랐는지, 한꺼번에 쏟았는지, 배수구로 뺐는지, 운반한 짐을 내렸는지"</li>
+    <li>동사 노트: <a href="../empty/empty--remove-contents.md">empty</a> · <a href="../empty/pour-out--empty-by-tilting.md">pour out</a> · <a href="../empty/dump--empty-at-once.md">dump</a> · <a href="../empty/drain--empty-liquid-through-outlet.md">drain</a> · <a href="../empty/unload--empty-transport-cargo.md">unload</a></li>
+    <li>묶음 밖 이웃: <a href="73-fill.html">73 FILL</a> — 반대 방향. fill ↔ empty, load ↔ unload. pour out의 out은 <a href="02-phrasal-direction.html">02 구동사의 방향</a>에 나온다.</li>
+    <li>견줘 보기: <a href="72-clean.html">72 CLEAN</a> — 도시락통은 empty한 다음 씻는다(empty 노트). 붙어 있던 것을 떼면 <a href="81-separate.html">81 SEPARATE</a>.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 위 "얼마나 나갔나" 띠 y = 60~82, 사람 x = 290 (그림용) ──
+  // 띠: b = 나간 정도, open = 나머지는 "남았는지 말 안 함"
+  const OUTBAR = (b, cap, open) => tx(260, 52, 11, '안에 있던 것 중 얼마나 나갔나', 'var(--muted)', '', 'start') + tx(640, 52, 11, cap, 'var(--accent)', ' font-weight="600"', 'end') +
+    '<rect x="260" y="60" width="380" height="22" rx="4" fill="var(--bg)" stroke="var(--line)"/>' +
+    step(.2, '<rect x="261" y="61" width="' + (378 * b) + '" height="20" rx="3" fill="var(--accent)" opacity=".75"/>' + tx(261 + 189 * b, 76, 11, '나감', 'var(--text)', ' font-weight="600"')) +
+    (open ? '<rect x="' + (262 + 378 * b) + '" y="62" width="' + (378 * (1 - b) - 3) + '" height="18" rx="3" fill="none" stroke="var(--muted)" stroke-dasharray="4 3"/>' + tx(261 + 378 * (1 + b) / 2, 76, 11, '남았나?', 'var(--muted)') : '');
+  const WHO = (c, place) => FLOOR + P(290, 240, 1.5, c) + tx(290, 138, 12, place, 'var(--muted)');
+  const BIG = (x, y, t, d) => step(d || 1, tx(x, y, 13, t, 'var(--accent)', ' font-weight="700"'));
+  const STUFF = (dx, dy) => '<rect x="' + (548 + dx) + '" y="' + (170 + dy) + '" width="24" height="20" fill="var(--accent)" stroke="var(--obj-line)"/><rect x="' + (578 + dx) + '" y="' + (176 + dy) + '" width="30" height="14" fill="var(--bg)" stroke="var(--obj-line)"/><circle cx="' + (622 + dx) + '" cy="' + (181 + dy) + '" r="9" fill="var(--gold)" stroke="var(--obj-line)"/>';
+  const BUCKET = '<path d="M-20 -22 h40 l-5 44 h-30 z" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M-20 -22 q20 -18 40 0" fill="none" stroke="var(--obj-line)" stroke-width="1.5"/>';
+  const CRATE = (x, y) => '<rect x="' + x + '" y="' + y + '" width="28" height="28" rx="2" fill="var(--wood)" stroke="var(--obj-line)"/>';
+  const TOP = {
+    first: 'drain', keep: 'EMPTY',
+    keepSay: '<b>EMPTY</b>는 용기 안이 <b>빈 결과</b>를 말한다. 나머지 넷도 노트의 식은 <span class="en">EMPTY + …</span>지만, 묶음 노트가 "HOW 동사 하나만으로 용기 전체가 언제나 완전히 비었다고 단정하지 않는다"고 해서 그 장면들에는 EMPTY 칩을 켜지 않았다. <span class="en">Mina emptied the box.</span>',
+    chips: ['EMPTY', 'POUR OUT', 'DUMP', 'DRAIN', 'UNLOAD'], out: [['FILL (반대 — 채움)', '73-fill.html']],
+    hows: {
+      empty: { btn: '비움', how: '다 꺼내 빈 상태', verb: 'EMPTY', chips: ['EMPTY'], target: 'TARGET · the box',
+        result: '재료를 모두 꺼냄 — 상자가 빔',
+        pic: () => WHO('var(--sleeve)', '미나 · 정리실') + OUTBAR(1, '모두 나감 · 빈 상자') +
+          '<g opacity=".3">' + STUFF(-150, 30) + '</g>' +
+          '<rect x="390" y="180" width="90" height="60" fill="none" stroke="var(--wood)" stroke-width="4"/><path d="M390 180 l-14 -16 M480 180 l14 -16" stroke="var(--wood)" stroke-width="4" stroke-linecap="round"/>' +
+          '<path d="M540 190 H640 M548 190 V240 M632 190 V240" stroke="var(--wood)" stroke-width="5"/>' +
+          step(.3, AR(488, 196, 534, 182, 'var(--accent)', 2.5)) + step(.5, STUFF(0, 0)) + BIG(435, 220, '텅', .8),
+        say: '<span class="en">Mina emptied the box.</span> 재료를 모두 꺼내 선반에 놓아 <b>상자가 빈다</b>. 무엇을 어떤 순서로 꺼냈는지보다 상자가 빈 결과가 핵심(노트). 연필 하나만 빼면 remove. 노트의 다른 장면: <span class="en">I emptied the lunchbox before washing it.</span>' },
+      pourout: { btn: '따라 버림', how: '기울여 흘려보냄', verb: 'POUR OUT', chips: ['POUR OUT'], target: 'TARGET · the old water',
+        result: '기울인 양동이 — 더러운 물이 흘러나감',
+        pic: () => WHO('var(--ok)', '미나 · 미술실 싱크대') + OUTBAR(.8, '기울여 흘려보냄', true) +
+          '<rect x="500" y="190" width="140" height="50" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M516 190 v20 a6 6 0 0 0 6 6 h86 a6 6 0 0 0 6 -6 v-20" fill="var(--bg)" stroke="var(--obj-line)"/>' +
+          '<path d="M628 190 V156 h-22 v8" fill="none" stroke="var(--obj-line)" stroke-width="4"/>' +
+          step(.1, at(462, 158, 100, BUCKET)) +
+          step(.35, '<path d="M484 168 q26 4 40 36" fill="none" stroke="var(--water)" stroke-width="6" stroke-linecap="round"/>') +
+          step(.6, '<ellipse cx="560" cy="208" rx="34" ry="5" fill="var(--water)"/>') + BIG(560, 140, '주르륵', .8),
+        say: '<span class="en">Mina poured out the old water from the bucket.</span> 밸브 없이 손으로 양동이를 <b>기울여</b> 액체가 흘러나가게 한다(노트). 물기가 조금 남았는지는 말하지 않는다 — 그래서 EMPTY 칩은 꺼 두었다. 노트의 다른 장면: <span class="en">I poured out the cold coffee.</span>' },
+      dump: { btn: '쏟음', how: '한꺼번에 쏟음', verb: 'DUMP', chips: ['DUMP'], target: 'TARGET · the sand',
+        result: '상자를 뒤집어 — 모래가 한꺼번에',
+        pic: () => WHO('var(--accent2)', '진 · 모래 놀이터') + OUTBAR(.8, '뒤집어 한꺼번에', true) +
+          '<path d="M470 240 v-28 M640 240 v-28" stroke="var(--obj-line)" stroke-width="2.5"/>' + tx(636, 206, 11, '놀이통', 'var(--muted)', '', 'end') +
+          step(.1, '<path d="M600 124 q30 -6 22 -34" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 3"/>' + AR(626, 98, 622, 90, 'var(--accent)', 2)) +
+          '<path d="M525 160 V124 H585 V160" fill="none" stroke="var(--wood)" stroke-width="4"/>' +
+          step(.3, [[532, 168], [544, 176], [556, 166], [568, 180], [578, 170], [538, 188], [552, 194], [566, 190], [574, 200], [546, 204]].map(([x, y]) => '<circle cx="' + x + '" cy="' + y + '" r="3" fill="var(--gold)"/>').join('')) +
+          step(.55, '<path d="M490 238 Q555 196 620 238 z" fill="var(--gold)" stroke="var(--obj-line)"/>') + BIG(440, 150, '와르르', .8),
+        say: '<span class="en">Jin dumped the sand out of the box.</span> 조심히 하나씩 꺼내지 않고 상자를 <b>뒤집어 한꺼번에</b> 쏟는다(노트). 빠르고 거친 느낌. dump만으로 상자가 완전히 비었다는 뜻은 아니다(노트). 노트의 다른 장면: <span class="en">I dumped the sand out of the bucket.</span>' },
+      drain: { btn: '물 뺌', how: '출구로 액체를 뺌', verb: 'DRAIN', chips: ['DRAIN'], target: 'TARGET · the water tank',
+        result: '밸브를 열어 — 수위가 바닥까지',
+        pic: () => WHO('var(--sleeve)', '미나 · 화단 물통 옆') + OUTBAR(.85, '출구로 빠짐', true) +
+          '<rect x="402" y="146" width="96" height="92" fill="var(--water)" opacity=".2"/>' +
+          '<rect x="400" y="130" width="100" height="110" rx="4" fill="none" stroke="var(--obj-line)" stroke-width="2"/>' +
+          '<path d="M402 146 H498" stroke="var(--water)" stroke-width="2" stroke-dasharray="5 4"/>' + tx(394, 155, 11, '처음 수위', 'var(--muted)', '', 'end') +
+          '<rect x="500" y="224" width="12" height="12" fill="var(--accent2)" stroke="var(--obj-line)"/><rect x="596" y="234" width="36" height="6" fill="var(--obj-line)"/>' + tx(614, 226, 11, '배수구', 'var(--muted)') +
+          step(.2, '<path d="M512 230 Q556 238 598 234" fill="none" stroke="var(--water)" stroke-width="5"/>') +
+          step(.4, AR(450, 158, 450, 212, 'var(--accent)', 2.5)) + step(.6, '<rect x="402" y="224" width="96" height="14" fill="var(--water)"/>'),
+        say: '<span class="en">Mina drained the water tank.</span> 통이 너무 무거워 기울일 수 없다. 아래쪽 <b>밸브 · 출구</b>로 물을 내보내 수위가 바닥까지 내려간다(노트). 작은 통이면 기울여 pour out. 노트의 다른 장면: <span class="en">I drained the bathtub.</span>' },
+      unload: { btn: '짐 내림', how: '실은 짐을 내림', verb: 'UNLOAD', chips: ['UNLOAD'], target: 'TARGET · the truck',
+        result: '실려 온 책 상자 — 차 밖으로',
+        pic: () => WHO('var(--ok)', '학생들 · 창고 앞') + OUTBAR(.75, '실어 온 짐을 내림', true) +
+          '<rect x="520" y="140" width="96" height="80" rx="2" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M616 166 h16 l10 14 v40 h-26 z" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>' +
+          '<circle cx="546" cy="229" r="10" fill="var(--obj-line)"/><circle cx="624" cy="229" r="10" fill="var(--obj-line)"/>' +
+          '<g opacity=".3">' + CRATE(530, 190) + CRATE(562, 190) + CRATE(546, 162) + '</g>' +
+          step(.2, AR(516, 200, 478, 200, 'var(--accent)', 2.5)) +
+          step(.4, CRATE(400, 212) + CRATE(434, 212)) + step(.6, CRATE(417, 184)),
+        say: '<span class="en">The students unloaded the truck.</span> 일반 상자가 아니라 <b>운반 차량에 실려 온 화물</b>을 내린다(노트). 차 안의 다른 물건까지 모두 비웠다는 뜻은 아니다(묶음 노트). 노트의 다른 장면: <span class="en">I unloaded the groceries from the car.</span>' },
+    },
+  };
+
+  // 0절 아이콘 ((0, 0) 중심)
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. unload를 먼저 빼 보세요.',
+    cards: [
+      { id: 'empty', t: ['통 안이', '텅 비게'], v: 'empty', icon: '<rect x="-34" y="-6" width="44" height="28" rx="4" fill="var(--bg)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M-12 -6 v28" stroke="var(--line)"/>' +
+          AR(12, 0, 24, -14, 'var(--accent)', 2) + '<rect x="22" y="-30" width="14" height="10" rx="2" fill="var(--gold)" stroke="var(--obj-line)"/><circle cx="32" cy="-6" r="5" fill="var(--ok)" stroke="var(--obj-line)"/>',
+        instead: 'I took out the food. △', lost: '음식을 꺼낸 사실뿐이다. 통 안에 아무것도 남지 않은 결과가 빠진다.', why: '용기 안을 빈 상태로.' },
+      { id: 'pourout', t: ['기울여', '흘려보냄'], v: 'pour out', icon: at(-12, -8, 100, '<path d="M-14 -16 h28 l-4 32 h-20 z" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/>') +
+          '<path d="M4 -2 q14 4 18 30" fill="none" stroke="var(--water)" stroke-width="4" stroke-linecap="round"/>',
+        instead: 'I threw away the coffee. △', lost: '버렸다는 결과만 남는다. 컵을 기울여 액체가 흘러나간 그림이 빠진다.', why: '기울여 액체를 흘려보냄.' },
+      { id: 'dump', t: ['뒤집어', '한꺼번에'], v: 'dump', icon: '<path d="M-18 -8 V-32 H18 V-8" fill="none" stroke="var(--wood)" stroke-width="3"/>' +
+          [[-10, -2], [0, 4], [10, -2], [-4, 10], [6, 12]].map(([x, y]) => '<circle cx="' + x + '" cy="' + y + '" r="2.5" fill="var(--gold)"/>').join('') + '<path d="M-28 30 Q0 10 28 30 z" fill="var(--gold)" stroke="var(--obj-line)"/>',
+        instead: 'I poured out the sand. △', lost: '조심스럽게 따르는 느낌이 된다. 뒤집어 한꺼번에 쏟은 거친 그림이 빠진다.', why: '한꺼번에 거칠게 쏟음.' },
+      { id: 'drain', t: ['배수구로', '물을 뺌'], v: 'drain', icon: '<path d="M-36 -10 h72 v16 a12 12 0 0 1 -12 12 h-48 a12 12 0 0 1 -12 -12 z" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><rect x="-32" y="6" width="64" height="8" fill="var(--water)"/>' +
+          '<path d="M-36 -10 h72" stroke="var(--water)" stroke-dasharray="4 3"/>' + AR(0, 20, 0, 36, 'var(--accent)', 2.5),
+        instead: 'I emptied the bathtub. △', lost: '결과는 맞다. 기울일 수 없는 욕조에서 배수구로 물이 빠진 경로가 빠진다.', why: '출구 · 배수구로 액체를 뺌.' },
+      { id: 'unload', t: ['실어 온 짐을', '내림'], v: 'unload', icon: '<rect x="-4" y="-22" width="40" height="34" rx="2" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><circle cx="6" cy="16" r="6" fill="var(--obj-line)"/><circle cx="28" cy="16" r="6" fill="var(--obj-line)"/>' +
+          AR(-6, -4, -20, 6, 'var(--accent)', 2) + CRATE(-40, 8).replace('width="28" height="28"', 'width="16" height="16"') + CRATE(-22, 8).replace('width="28" height="28"', 'width="16" height="16"'),
+        instead: 'I emptied the car. △', lost: '차 안을 다 비웠다는 말이 된다. 운반해 온 짐을 내린 그림이 빠진다.', why: '실어 온 짐을 내림.' },
+      { id: 'fill', out: true, t: ['반대로', '채움'], v: 'fill', icon: '<path d="M-16 -28 h32 l-4 52 h-24 z" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><path d="M-15.4 -22 h30.8 l-3.6 44 h-23.6 z" fill="var(--water)"/>' + AR(26, 18, 26, -20, 'var(--accent)', 2),
+        instead: 'I put water in the glass. △', lost: '넣은 사실뿐이다. 빈 공간이 차오른 결과가 빠진다.', why: '빈 곳을 채움 — 반대 방향 73 FILL.' },
+    ],
+  };
+
+  const SCENES = {
+    trash: { btn: '교실', place: '교실 · 쓰레기통',
+      pic: () => FL + '<path d="M450 150 l-6 -50 h52 l-6 50 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/><path d="M440 100 h60" stroke="' + OL + '" stroke-width="3"/>' +
+        ST(.2, '<path d="M540 150 q-4 -30 14 -40 q18 10 14 40 z" fill="' + FOG + '" stroke="' + OL + '"/>' + AR(504, 116, 532, 116, AC, 2)) +
+        P(300, 150, 1.1, OKC) + P(620, 150, 1.1, SL) + L(470, 74, '쓰레기통') + L(554, 74, '봉투'),
+      lines: [
+        ['선생님', 'Can someone <b>empty</b> the trash can?', '누가 쓰레기통 좀 비워 줄래?'],
+        ['나', "I'll do it.", '제가 할게요.', 1],
+      ],
+      say: '쓰레기통 안을 다 꺼내 <b>빈 상태</b>로 — <span class="en">empty</span>. 노트의 "한 번 더 떠올리기"와 같은 장면.' },
+    coffee: { btn: '부엌', place: '부엌 · 식은 커피',
+      pic: () => FL + TB(380, 560, 110) + '<path d="M480 110 v-14 h80 v14" fill="none" stroke="' + OL + '" stroke-width="2"/>' +
+        ST(.2, at(450, 80, 100, '<path d="M-12 -14 h24 l-3 28 h-18 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>') + '<path d="M466 86 q14 2 24 20" fill="none" stroke="' + A2 + '" stroke-width="4" stroke-linecap="round"/>') +
+        P(300, 150, 1.1, FOG) + P(620, 150, 1.1, SL) + L(520, 74, '싱크대'),
+      lines: [
+        ['엄마', 'Your coffee is cold.', '커피 다 식었네.'],
+        ['나', "I'll just <b>pour</b> it <b>out</b> and make a new one.", '그냥 따라 버리고 새로 탈게요.', 1],
+      ],
+      say: '컵을 기울여 식은 커피를 흘려보냄 — <span class="en">pour out</span>. it 같은 대명사는 <b>pour와 out 사이</b>에 들어간다.' },
+    pasta: { btn: '저녁 준비', place: '부엌 · 파스타',
+      pic: () => FL + TB(380, 560, 110) + '<path d="M470 110 q0 -24 30 -24 q30 0 30 24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' + '<path d="M480 104 h40" stroke="' + OL + '" stroke-dasharray="2 4"/>' +
+        ST(.2, '<path d="M440 76 h44 l-8 20 h-28 z" fill="' + FOG + '" stroke="' + OL + '"/><path d="M462 98 v8 M456 98 v6 M468 98 v6" stroke="var(--water)" stroke-width="2"/>') +
+        P(300, 150, 1.1, OKC) + P(620, 150, 1.1, SL) + L(462, 66, '체 · 파스타'),
+      lines: [
+        ['아빠', 'The pasta is ready. Can you <b>drain</b> it?', '파스타 다 됐다. 물 좀 빼 줄래?'],
+        ['나', "Sure. Where's the colander?", '네. 체가 어디 있어요?', 1],
+      ],
+      say: '체를 통해 물만 빠져나가게 — <span class="en">drain</span>. 이때 목적어 pasta는 <b>남는 쪽</b>이다(짐작). 노트 장면은 욕조 · 물통.' },
+    trip: { btn: '여행 뒤', place: '방 · 여행 다녀온 뒤',
+      pic: () => FL + '<rect x="420" y="110" width="150" height="40" rx="4" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/><rect x="420" y="96" width="30" height="14" rx="4" fill="' + BG + '" stroke="' + OL + '"/>' +
+        ST(.2, at(386, 92, 150, '<rect x="-16" y="-12" width="32" height="24" rx="3" fill="' + A2 + '" stroke="' + OL + '"/>') + '<path d="M470 104 q14 -12 30 -2 q12 -10 26 2 q10 -8 24 2" fill="none" stroke="' + SL + '" stroke-width="5" stroke-linecap="round"/>') +
+        P(300, 150, 1.1, FOG) + P(620, 150, 1.1, SL) + L(500, 74, '침대'),
+      lines: [
+        ['동생', 'Where should I put these clothes?', '이 옷들 어디 둬?'],
+        ['나', 'Just <b>dump</b> them on the bed for now.', '일단 침대에 대충 쏟아 놔.', 1],
+      ],
+      say: '가방을 뒤집어 한꺼번에, 정리 없이 — <span class="en">dump</span>. 조심히 하나씩 꺼내면 dump가 아니다.' },
+    car: { btn: '집 앞', place: '집 앞 · 장 보고 와서',
+      pic: () => FL + CAR(430) + ST(.2, '<path d="M380 150 v-26 h22 v26 z M352 150 v-20 h22 v20 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' + AR(428, 126, 408, 132, AC, 2)) +
+        P(300, 150, 1.1, OKC) + P(660, 150, 1.1, SL) + L(380, 74, '식료품 봉지'),
+      lines: [
+        ['엄마', 'Can you help me <b>unload</b> the car?', '차에서 짐 내리는 것 좀 도와줄래?'],
+        ['나', "Sure, I'll take the heavy bags.", '네, 무거운 봉지는 제가 들게요.', 1],
+      ],
+      say: '장 보고 실어 온 짐을 차에서 내림 — <span class="en">unload</span>. 실을 때는 반대말 <span class="en">load</span>(73 FILL).' },
+  };
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'drain',
+    region: { x: 60, y: 66, w: 584, h: 258, label: 'EMPTY 묶음 · 안이 줄어듦', at: [68, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 280, t: 'Q1. 안에 든 것을 밖으로 내나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇이 중요한가?' },
+      q3: { x: 350, y: 180, w: 200, t: 'Q3. 어떻게 나가나', sub: '기울임 · 뒤집음 · 출구' },
+    },
+    leaves: {
+      empty:   { x: 120, y: 262, w: 96, v: 'empty', sub: '빈 결과', seg: 'r', say: '<span class="en">I emptied the lunchbox.</span> 통이 빈 결과. 이 묶음의 기본 동사.' },
+      pourout: { x: 240, y: 262, w: 104, v: 'pour out', sub: '기울여 흘림', seg: 'h', say: '<span class="en">I poured out the cold coffee.</span> 기울여 액체가 흐름.' },
+      dump:    { x: 350, y: 262, w: 96, v: 'dump', sub: '한꺼번에', seg: 'h', say: '<span class="en">I dumped the sand out of the bucket.</span> 뒤집어 한꺼번에.' },
+      drain:   { x: 460, y: 262, w: 96, v: 'drain', sub: '출구로', seg: 'h', say: '<span class="en">I drained the bathtub.</span> 배수구 · 밸브로 뺌.' },
+      unload:  { x: 580, y: 262, w: 104, v: 'unload', sub: '운반한 짐', seg: 'c', say: '<span class="en">I unloaded the groceries from the car.</span> 실어 온 짐을 내림.' },
+      fill:    { x: 600, y: 36, w: 120, v: 'fill', sub: '→ 73 FILL', seg: '', out: true, say: '<span class="en">I filled the glass with water.</span> 꺼내는 게 아니라 <b>넣어 채움</b> → EMPTY 묶음 밖, <a href="73-fill.html">73 FILL</a>.' },
+    },
+    edges: [
+      ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'fill', '넣음', 'right', [510, 28], true],
+      ['q2', 'empty', '빈 결과', 'left'], ['q2', 'q3', '나가는 방식'], ['q2', 'unload', '실어 온 짐', 'right'],
+      ['q3', 'pourout', '기울여 흘림'], ['q3', 'dump', '한꺼번에'], ['q3', 'drain', '출구로'],
+    ],
+    segs: [[66, 176, '결과', 'r'], [184, 514, '나가는 방식', 'h'], [522, 638, '운반 짐', 'c']],
+  };
+
+  const SLOTS = {
+    first: ['pourout', 'other'],
+    slots: { cont: '그릇이 목적어', item: '내용물이 목적어', other: '다른 모양' },
+    verbs: {
+      empty: {
+        cont:  { ok: [['I', 's'], ['emptied', 'v'], ['the lunchbox', 'o']], say: '노트 예문 — 그릇(도시락통)이 목적어. 빈 결과가 핵심.' },
+        item:  { ok: [['She', 's'], ['emptied', 'v'], ['the water', 'o'], ['into the sink', 'r']], say: '내용물을 목적어로 한 empty는 노트에 없다(짐작). 노트 예문은 모두 그릇.' },
+        other: { ok: [['The room', 's'], ['is', 'v'], ['empty', 'r']], say: '형용사 empty — 비어 있다.' },
+      },
+      pourout: {
+        cont:  { ok: [['Mina', 's'], ['poured out', 'v'], ['the old water', 'o'], ['from the bucket', 'x']], say: '노트 예문 — 그릇은 목적어가 아니라 <b>from</b> 뒤.' },
+        item:  { ok: [['I', 's'], ['poured out', 'v'], ['the cold coffee', 'o']], say: '노트 예문 — 내용물(커피)이 목적어.' },
+        other: { ok: [['Pour', 'v'], ['it', 'o'], ['out', 'r']], bad: [['Pour', 'v'], ['out', 'r'], ['it', 'o']], say: '대명사(it)는 pour와 out <b>사이</b>에. 명사면 <span class="en">pour out the coffee</span>도 된다.' },
+      },
+      dump: {
+        cont:  { ok: [['Jin', 's'], ['dumped', 'v'], ['the sand', 'o'], ['out of the box', 'x']], say: '노트 예문 — 그릇은 <b>out of</b> 뒤.' },
+        item:  { ok: [['I', 's'], ['dumped', 'v'], ['the leaves', 'o'], ['into the compost bin', 'r']], say: '노트 예문 — 내용물 + 받는 곳(into).' },
+        other: { ok: [['Just', 'x'], ['dump', 'v'], ['them', 'o'], ['on the bed', 'r']], say: '정리 없이 대충 내려놓다(짐작).' },
+      },
+      drain: {
+        cont:  { ok: [['I', 's'], ['drained', 'v'], ['the bathtub', 'o']], say: '노트 예문 — 그릇(욕조)이 목적어.' },
+        item:  { ok: [['I', 's'], ['drained', 'v'], ['the water', 'o'], ['from the tank', 'x']], say: '물을 목적어로 + from 그릇(짐작).' },
+        other: { ok: [['I', 's'], ['am', 'v'], ['drained', 'r']], say: '힘이 다 빠졌다 — 녹초(짐작).' },
+      },
+      unload: {
+        cont:  { ok: [['The students', 's'], ['unloaded', 'v'], ['the truck', 'o']], say: '노트 예문 — 운반 수단(트럭)이 목적어.' },
+        item:  { ok: [['I', 's'], ['unloaded', 'v'], ['the groceries', 'o'], ['from the car', 'x']], say: '노트 예문 — 짐이 목적어, 차는 <b>from</b> 뒤. 두 방향 다 노트에 있다.' },
+        other: { ok: [['Can you', 'x'], ['help me', 'x'], ['unload', 'v'], ['the dishwasher', 'o']], say: '식기세척기에서 다 된 그릇을 꺼내다(짐작).' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>

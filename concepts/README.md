@@ -201,15 +201,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 77 | [77-draw.html](77-draw.html) | DRAW 묶음 — draw · sketch · trace · doodle · illustrate. "그리기와 쓰기의 짝" | HOW 버튼 → 이젤의 종이(벽부터 차례로·흐린 선·밑그림 따라·여백 낙서·이야기 옆 그림) / 질문 흐름 + WRITE로 가는 문 | |
 | 78 | [78-hide.html](78-hide.html) | HIDE 묶음 — hide · conceal · stash · camouflage. "숨기다와 숨다" | HOW 버튼 → 무대와 관객 시선(가림막 뒤·커튼·무대 아래·검은 천) / 질문 흐름 + REVEAL로 가는 문 | |
 | 79 | [79-measure.html](79-measure.html) | MEASURE 묶음 — measure · weigh · time · gauge · pace out. "물건이 주어일 때" | HOW 버튼 → 알아낸 값 막대(4 m·8 kg·18초·절반 아래·약 30걸음) / 질문 흐름 + COUNT로 가는 문 | |
+| 80 | [80-build.html](80-build.html) | BUILD 묶음 — build · construct · assemble · erect · install. "새로 생기나, 있던 것인가" | HOW 버튼 → 무엇에서 시작했나 띠(막대·도면 순서·완성 부품·누운 골조·완성 장비) / 질문 흐름 + MAKE로 가는 문 | |
+| 81 | [81-separate.html](81-separate.html) | SEPARATE 묶음 — separate · detach · disconnect · split · unclip. "무엇을 되돌리나" | HOW 버튼 → 원래 무엇으로 이어져 있었나 띠(섞임·붙은 부품·신호 경로·한 덩어리·클립) / 질문 흐름 + CONNECT로 가는 문 | |
+| 82 | [82-empty.html](82-empty.html) | EMPTY 묶음 — empty · pour out · dump · drain · unload. "그릇과 내용물, 반대 방향" | HOW 버튼 → 얼마나 나갔나 띠(상자·양동이·모래·물탱크·트럭) / 질문 흐름 + FILL로 가는 문 | |
 
-01~79 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~79)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~79와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~82 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~82)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~82와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- **build · empty · separate 묶음** — 노트는 있지만 페이지가 아직 없다. 지금은 13 MAKE · 70 MIX · 72 CLEAN · 73 FILL · 75 CONNECT에서 노트로만 연결된다
+- 동사 묶음 페이지는 82장으로 모두 만들었다(2026-11-03)
 
 ## 생성기로 만들기 (08부터)
 
