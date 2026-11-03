@@ -126,9 +126,9 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 02 | [02-phrasal-direction.html](02-phrasal-direction.html) | 구동사 방향 — up · down · out · in, 진짜 방향과 비유. 목적어 자리(뒤 · 가운데 · 대명사) 칸, 동사 10개 | 방향·동사 버튼 → 길을 따라 움직이는 애니메이션, 실선(물건)·점선(비유) / 동사 × 자리 버튼 → 낱말 상자 ✓·✗ 줄 |
 | 03 | [03-solve.html](03-solve.html) | SOLVE 묶음 — 풀이 방식으로 solve · work out · figure out · crack, TARGET을 사안으로 바꾸면 resolve(경계). 목적어 자리(명사·it·절) 칸 | 방식·TARGET 버튼 → 장면 통째로 바꾸기, 차례로 나타나는 줄(.step), 자물쇠 열기 / 질문 흐름 Q1~Q3 + resolve 옆길 / 동사 × 목적어 버튼 → 낱말 상자 ✓·✗ 줄 |
 | 04 | [04-core-question.html](04-core-question.html) | 핵심 질문 하나 — 듣는 사람 머릿속 그림으로 동사·주어·낱말 순서를 고른다. BREAK·SOLVE 두 사건, 이미 앎/처음 들음 | 말하는 사람 → 듣는 사람 머릿속 말풍선, 그림 고르기 버튼 → 말풍선 그림 + 문장 낱말 상자(주어 = 사람/물건, 이미 앎/새로 그림) |
-| 05 | [05-resolve.html](05-resolve.html) | RESOLVE 묶음 — 같은 다툼을 매듭짓는 방식으로 resolve · settle · sort out · clear up · work out. resolve 전용 "여러 갈래 → 하나"(다툼·merge conflict·Promise·DNS·결심). **노트 없이 먼저 만든 페이지** | HOW 버튼 → 두 사람 사이 장면(합의 도장·매듭 풀림·조각 정리·구름 걷힘) / 대상 버튼 → 갈래가 한 점에 모이는 그림 / 질문 흐름 + SOLVE로 가는 문 / 목적어 자리 |
+| 05 | [05-resolve.html](05-resolve.html) | RESOLVE 묶음 — 같은 다툼을 매듭짓는 방식으로 resolve · settle · sort out · clear up · work out. resolve 전용 "여러 갈래 → 하나"(다툼·merge conflict·Promise·DNS·결심). 노트보다 먼저 만든 페이지(노트는 2026-11-03에 추가) | HOW 버튼 → 두 사람 사이 장면(합의 도장·매듭 풀림·조각 정리·구름 걷힘) / 대상 버튼 → 갈래가 한 점에 모이는 그림 / 질문 흐름 + SOLVE로 가는 문 / 목적어 자리 |
 | 06 | [06-nudge.html](06-nudge.html) | PUSH 묶음 — 미는 세기·한 점·속도로 push · nudge · shove · press · thrust, nudge 전용 "작은 힘, 작은 변화"(컵·팔꿈치·선택·숫자·알림). **기본이 결과가 아니라 힘인 묶음** — 스펙트럼에서 모두 방식 쪽, 결과는 뒤의 말(into place) | HOW 버튼 → 탁자 위 상자가 움직이는 거리·모양(TARGET이 버튼·구조봉으로 바뀌는 장면 포함) / 대상 버튼 → 막대 위 점이 조금만 옮겨 가는 그림 / 질문 흐름 + PULL로 가는 문 / 목적어 · 결과 말 · 사람이 목적어 |
-| 07 | [07-commit.html](07-commit.html) | COMMIT — HOW 묶음이 아니라 **한 동사가 여러 TARGET**(코드·돈·나 자신·죄·기억)을 받는 경우라 식을 BASIC + TARGET = 뜻으로 쓴다. commit 전용 "왜 git은 save가 아니라 commit인가". **노트 없이 먼저 만든 페이지** | TARGET 버튼 → 넘기는 선을 건너 잠기는 장면 / 명령 버튼 → 작업 폴더·스테이징·기록 사슬(save·add·commit·revert·DB) / 질문 흐름 + PROMISE로 가는 문 / 뒤에 붙는 모양(to + -ing ✓·✗) |
+| 07 | [07-commit.html](07-commit.html) | COMMIT — HOW 묶음이 아니라 **한 동사가 여러 TARGET**(코드·돈·나 자신·죄·기억)을 받는 경우라 식을 BASIC + TARGET = 뜻으로 쓴다. commit 전용 "왜 git은 save가 아니라 commit인가". 노트보다 먼저 만든 페이지(노트는 2026-11-03에 추가) | TARGET 버튼 → 넘기는 선을 건너 잠기는 장면 / 명령 버튼 → 작업 폴더·스테이징·기록 사슬(save·add·commit·revert·DB) / 질문 흐름 + PROMISE로 가는 문 / 뒤에 붙는 모양(to + -ing ✓·✗) |
 | 08 | [08-go.html](08-go.html) | GO 묶음 — 걷기·뛰기·급함·낮은 자세로 go · walk · run · rush · crawl. go 전용 "여기서 멀어짐"(go vs come). **생성기로 만든 첫 페이지** | HOW 버튼 → 처음 자리에서 문까지 발자국·시계·탁자 아래 / 질문 흐름 + COME으로 가는 문 / to + 장소 · home · 목적어가 바로(walk the dog) |
 | 09 | [09-look.html](09-look.html) | LOOK 묶음 — 시간·감정·보이는 정도로 look · stare · gaze · glance · peer. "stare와 gaze — 둘 다 오래 보는데" | HOW 버튼 → 눈에서 그림까지 눈길(점선·고정·부채꼴·스침·어둠) / 질문 흐름 + SEE로 가는 문 / at + 대상 · 목적어 ✗ · 다른 말 |
 | 10 | [10-escape.html](10-escape.html) | ESCAPE 묶음 — 결과 묶음. escape · break out of · slip out of · sneak out of. "slip out과 sneak out — 기회냐 작정이냐" | HOW 버튼 → 감시 방(부서진 문·문틈·밤 순찰) / 질문 흐름 + LEAVE로 가는 문 / out of · 목적어 · 장소 없이(다른 뜻) |
@@ -208,9 +208,6 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 01~82 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~82)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~82와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
-
-- **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
-- **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
 - 동사 묶음 페이지는 82장으로 모두 만들었다(2026-11-03)
 

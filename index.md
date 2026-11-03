@@ -1,6 +1,6 @@
 # Verb Index
 
-**Phase 2 (Sound & Forms) 완료:** 78 / 78 Family, 377 / 377 개별 노트. 각 노트 상단 `## 0. Sound & Forms`에서 미국식 발음·강세·기본형-과거-과거분사·시제 대비 문장을 확인할 수 있다. 자세한 진행 이력은 [EXPANSION-ROADMAP.md](EXPANSION-ROADMAP.md) 참고.
+**Phase 2 (Sound & Forms) 완료:** 80 / 80 Family, 387 / 387 개별 노트. 각 노트 상단 `## 0. Sound & Forms`에서 미국식 발음·강세·기본형-과거-과거분사·시제 대비 문장을 확인할 수 있다. 자세한 진행 이력은 [EXPANSION-ROADMAP.md](EXPANSION-ROADMAP.md) 참고.
 
 | Result Family | Specific Verb | Sense | Note |
 |---|---|---|---|
@@ -63,6 +63,11 @@
 | COME | RETURN | come back to a previous place | [return](come/return--come-back.md) |
 | COME | APPROACH | come nearer without necessarily reaching | [approach](come/approach--come-nearer.md) |
 | COME | ENTER | come across a boundary into a place | [enter](come/enter--come-inside.md) |
+| COMMIT | COMMIT | record changes permanently | [commit](commit/commit--record-changes-permanently.md) |
+| COMMIT | COMMIT | allocate resources | [commit](commit/commit--allocate-resources.md) |
+| COMMIT | COMMIT | bind oneself to | [commit](commit/commit--bind-oneself-to.md) |
+| COMMIT | COMMIT | carry out a wrong act | [commit](commit/commit--carry-out-wrong-act.md) |
+| COMMIT | COMMIT | fix in memory | [commit](commit/commit--fix-in-memory.md) |
 | CONNECT | CONNECT | establish a link | [connect](connect/connect--establish-link.md) |
 | CONNECT | ATTACH | join physically | [attach](connect/attach--join-physically.md) |
 | CONNECT | PLUG IN | connect by a plug | [plug in](connect/plug-in--connect-by-plug.md) |
@@ -261,7 +266,7 @@
 | PLAY | PERFORM | present prepared expression to an audience | [perform](play/perform--play-for-audience.md) |
 | PLAY | PRETEND | act as if something unreal were real | [pretend](play/pretend--act-as-if.md) |
 | PLAY | REHEARSE | practice a specific performance | [rehearse](play/rehearse--practice-for-performance.md) |
-| PROMISE | PROMISE | commit to future action | [promise](promise/promise--commit-to-future-action.md) |
+| PROMISE | PROMISE | say you will do something | [promise](promise/promise--commit-to-future-action.md) |
 | PROMISE | VOW | promise solemnly | [vow](promise/vow--promise-solemnly.md) |
 | PROMISE | PLEDGE | promise publicly | [pledge](promise/pledge--promise-publicly.md) |
 | PROMISE | SWEAR | promise emphatically | [swear](promise/swear--promise-emphatically.md) |
@@ -289,6 +294,11 @@
 | REFUSE | DECLINE | refuse politely | [decline](refuse/decline--refuse-politely.md) |
 | REFUSE | REJECT | dismiss an offer | [reject](refuse/reject--dismiss-offer.md) |
 | REFUSE | TURN DOWN | decline an offer | [turn down](refuse/turn-down--decline-offer.md) |
+| RESOLVE | RESOLVE | bring to a definite end | [resolve](resolve/resolve--bring-to-definite-end.md) |
+| RESOLVE | SETTLE | end a dispute by agreement | [settle](resolve/settle--end-dispute-by-agreement.md) |
+| RESOLVE | SORT OUT | fix a tangled problem | [sort out](resolve/sort-out--fix-tangled-problem.md) |
+| RESOLVE | CLEAR UP | remove a misunderstanding | [clear up](resolve/clear-up--remove-misunderstanding.md) |
+| RESOLVE | WORK OUT | resolve over time | [work out](resolve/work-out--resolve-over-time.md) |
 | SAY | SAY | express words or a message | [say](say/say--express-words.md) |
 | SAY | WHISPER | say very quietly with breath | [whisper](say/whisper--say-very-quietly.md) |
 | SAY | SHOUT | say very loudly | [shout](say/shout--say-loudly.md) |
