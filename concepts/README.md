@@ -198,15 +198,18 @@ think about  →  work out · figure out · crack  →  (없음)  →  solve
 | 74 | [74-achieve.html](74-achieve.html) | ACHIEVE 묶음 — achieve · accomplish · attain · reach. "성공했나?" | HOW 버튼 → 모금 막대와 $500 선(합계 달성·맡은 일 체크·다섯 달 막대·온도계가 선에 닿음) / 질문 흐름 + FAIL로 가는 문 | |
 | 75 | [75-connect.html](75-connect.html) | CONNECT 묶음 — connect · attach · plug in · link · hook up. "꽂았다 ≠ 켰다" | HOW 버튼 → 경로 종류 띠(말 안 함·붙음·전기·신호·전기+신호) / 질문 흐름 + DISCONNECT로 가는 문 | |
 | 76 | [76-count.html](76-count.html) | COUNT 묶음 — count · tally · recount · count out · enumerate. "몇 개? 얼마나?" | HOW 버튼 → 의자 두 줄과 알게 된 것 띠(14개·바른 표시·다시 12·열 개 따로·어느 의자) / 질문 흐름 + MEASURE로 가는 문 | |
+| 77 | [77-draw.html](77-draw.html) | DRAW 묶음 — draw · sketch · trace · doodle · illustrate. "그리기와 쓰기의 짝" | HOW 버튼 → 이젤의 종이(벽부터 차례로·흐린 선·밑그림 따라·여백 낙서·이야기 옆 그림) / 질문 흐름 + WRITE로 가는 문 | |
+| 78 | [78-hide.html](78-hide.html) | HIDE 묶음 — hide · conceal · stash · camouflage. "숨기다와 숨다" | HOW 버튼 → 무대와 관객 시선(가림막 뒤·커튼·무대 아래·검은 천) / 질문 흐름 + REVEAL로 가는 문 | |
+| 79 | [79-measure.html](79-measure.html) | MEASURE 묶음 — measure · weigh · time · gauge · pace out. "물건이 주어일 때" | HOW 버튼 → 알아낸 값 막대(4 m·8 kg·18초·절반 아래·약 30걸음) / 질문 흐름 + COUNT로 가는 문 | |
 
-01~76 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~76)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~76와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
+01~79 모두 0번(왜 존재하나)과 4·5번(목적어 자리, 경향 한 줄)을 갖췄다. 0번은 묶음 페이지(01·03·05·06·08~79)와 07에서 그림, 02·04에서 표다. 6번(질문 흐름)은 묶음 페이지인 01·03·05·06·08~79와 07에 있다. 02는 묶음 페이지가 아니라 여러 묶음의 구동사를 모은 페이지라 1~3번과 6번 대신 방향 나침반과 진짜·반쯤·비유 표시를 쓴다.
 
 ## 다음 후보
 
 - **commit 노트** — 07 COMMIT 페이지를 노트보다 먼저 만들었다. 발음·형태·다섯 갈래를 사전으로 확인해 노트를 만들고, promise 노트의 "commit to future action"과 경계를 맞춘다
 - **resolve/ 노트 묶음** — 05 RESOLVE 페이지를 노트보다 먼저 만들었다. `_family.md`와 resolve · settle · sort out · clear up · work out 노트(발음·형태·TARGET 조건)를 만들고 페이지의 "확인할 것"을 정리한다
 
-- 나머지 묶음(3개) — 자주 쓰는 동사부터 아래 "생성기로 만들기" 방식으로 세 개씩 차례로. 다음: draw · hide · measure
+- **build · empty · separate 묶음** — 노트는 있지만 페이지가 아직 없다. 지금은 13 MAKE · 70 MIX · 72 CLEAN · 73 FILL · 75 CONNECT에서 노트로만 연결된다
 
 ## 생성기로 만들기 (08부터)
 
