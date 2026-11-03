@@ -2,6 +2,8 @@
 
 ## Shared Result
 
+agent가 TARGET을 놓치지 않도록 지지하거나 통제된 상태로 유지한다.
+
 ## 상황에서 꺼내기 — 설명을 보기 전에
 
 버스 손잡이를 잡은 모습을 떠올려 힘의 종류를 구별해 보자.
@@ -23,8 +25,6 @@
 </details>
 
 내 장면으로 바꿔 보기: 오늘 손에 쥔 물건 하나를 떠올려 잡은 상태인지, 압박을 가했는지 구별해 말해 보자. `squeeze`가 언제나 `hold`를 뜻하지는 않는다.
-
-agent가 TARGET을 놓치지 않도록 지지하거나 통제된 상태로 유지한다.
 
 | Verb | Same-target example | Distinctive HOW / Pressure |
 |---|---|---|

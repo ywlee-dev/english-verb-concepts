@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˈɔːr.ɡə.naɪz/ [**오어**거나이즈] — 첫 음절 강세; 끝은 /s/가 아닌 /z/.
 - **Forms:** `organize` (기본형/현재) — `organized` (과거) — `organized` (과거분사)
-- **시제와 결과:** `We organized the school trip yesterday.` → `We have organized the school trip. The bus and tickets are booked now.` `organized`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `We organized the school trip yesterday.` → `We have organized the school trip. The bus and tickets are booked now.` `organized`는 여기서 `have/has` 뒤의 과거분사이다.
 
 - **Sense:** 여행을 위해 사람·예약·교통·준비물을 맞춰 실행 가능하게 하다.
 - **Example:** `We organized the school trip in advance.`

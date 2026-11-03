@@ -29,7 +29,7 @@ agent가 다른 사람의 제안이나 의견에 **찬성하는 입장**이 된�
 | AGREE | The class agreed to the picnic plan. | 제안에 동의 |
 | ACCEPT | The class accepted the picnic plan. | 제안을 받아 실행 대상으로 삼음 |
 | ENDORSE | The class endorsed the picnic plan. | 공개적으로 지지함 |
-| GO ALONG WITH | The class went along with the picnic plan. | 적극적이지 않아도 반대하지 않고 따름 |
+| GO ALONG WITH | The students went along with the picnic plan. | 적극적이지 않아도 반대하지 않고 따름 |
 
 `accept`는 실제 채택, `endorse`는 공개 지지, `go along with`는 소극적인 동의까지 표현한다. 모든 `accept`가 마음속 찬성을 뜻하지는 않으므로 이 장면에서는 학급이 자발적으로 계획을 받아들였다고 한정한다.
 

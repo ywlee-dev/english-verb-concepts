@@ -6,7 +6,7 @@
 - **Forms:** `stroke` — `stroked` — `stroked`; 규칙 변화다.
 - **시제와 결과:** `She stroked the child's shoulder gently in the waiting room.` → `She has stroked the child's shoulder. He is calmer now.` 부드럽게 쓰다듬은 사건과 현재의 진정된 상태를 구별한다.
 
-- **Sense:** 손을 TARGET 표면에 댄 채 한 방향으로 부드럽게 움직이다.
+- **Sense:** 손을 TARGET 표면에 댄 채 표면을 따라 부드럽게 움직이다.
 - **Example:** `She stroked the child's shoulder gently.`
 - **Target Condition:** 표면을 따라 지속적이고 부드러운 손 이동을 받을 수 있는 대상
 

@@ -9,11 +9,11 @@
 | BORROW | borrow a bike | 소유자의 허락으로 임시 사용 |
 | CHECK OUT | check out a bike | 대여 시스템에 등록하고 가져감 |
 | RENT | rent a bike | 돈을 내고 일정 시간 사용 |
-| LEASE | lease a bike | 계약으로 비교적 긴 기간 사용 |
+| LEASE | lease a car | 계약으로 비교적 긴 기간 사용 |
 
 ## Scenario contrast
 
-친구의 bike를 허락받아 잠시 쓰면 BORROW, 공유 자전거 시스템에서 등록해 꺼내면 CHECK OUT, 가게에 시간당 요금을 내면 RENT, 장기 계약으로 몇 달 쓰면 LEASE이다. 넓은 의미의 학습용 Family로 묶되, `rent`와 `lease`는 일상 영어에서 유료 사용이라는 조건이 핵심이다.
+친구의 bike를 허락받아 잠시 쓰면 BORROW, 공유 자전거 시스템에서 등록해 꺼내면 CHECK OUT, 가게에 시간당 요금을 내면 RENT, 가족이 차를 사지 않고 장기 계약으로 1년 쓰면 LEASE이다. 넓은 의미의 학습용 Family로 묶되, `rent`와 `lease`는 일상 영어에서 유료 사용이라는 조건이 핵심이다.
 
 ## 상황에서 꺼내기 — 설명을 보기 전에
 

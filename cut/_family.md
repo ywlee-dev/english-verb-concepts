@@ -2,6 +2,16 @@
 
 ## Shared Result
 
+날카로운 모서리나 도구로 TARGET의 재료를 분리하거나 일부를 제거한다.
+
+| Verb | Same-target example | Distinctive Pattern / Purpose |
+|---|---|---|
+| CUT | cut the carrot | 절단 모양·횟수 미지정 |
+| SLICE | slice the carrot | 넓고 얇은 조각으로 연속 절단 |
+| CHOP | chop the carrot | 강한 아래 방향 동작으로 작은 조각 생성 |
+| TRIM | trim the carrot | 끝·겉의 불필요한 소량만 제거 |
+| CARVE | carve the carrot | 재료를 조금씩 깎아 의도한 모양 생성 |
+
 ## 상황에서 꺼내기 — 설명을 보기 전에
 
 당근을 손질한다고 상상하고 먼저 영어 동사를 떠올려 보자.
@@ -23,16 +33,6 @@
 </details>
 
 내 장면으로 바꿔 보기: 오늘 음식이나 종이·나무를 다룬 장면 하나를 골라, 무엇을 어떤 모양으로 만들려 했는지 한 문장으로 말해 보자.
-
-날카로운 모서리나 도구로 TARGET의 재료를 분리하거나 일부를 제거한다.
-
-| Verb | Same-target example | Distinctive Pattern / Purpose |
-|---|---|---|
-| CUT | cut the carrot | 절단 모양·횟수 미지정 |
-| SLICE | slice the carrot | 넓고 얇은 조각으로 연속 절단 |
-| CHOP | chop the carrot | 강한 아래 방향 동작으로 작은 조각 생성 |
-| TRIM | trim the carrot | 끝·겉의 불필요한 소량만 제거 |
-| CARVE | carve the carrot | 재료를 조금씩 깎아 의도한 모양 생성 |
 
 ## Scenario contrast
 

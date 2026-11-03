@@ -8,7 +8,7 @@
 |---|---|---|
 | MIX | mix the batter | 재료를 섞음, 방법 미지정 |
 | STIR | stir the batter | 숟가락을 돌려 섞음 |
-| BLEND | blend the ingredients | 경계가 흐려질 정도로 고르게 섞음 |
+| BLEND | blend the banana and milk | 경계가 흐려질 정도로 고르게 섞음 |
 | WHISK | whisk the batter | 거품기로 빠르게 저어 공기를 넣음 |
 | FOLD IN | fold the berries into the batter | 부드럽게 뒤집어 넣어 형태를 보존 |
 

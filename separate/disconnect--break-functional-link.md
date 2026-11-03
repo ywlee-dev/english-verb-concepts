@@ -22,10 +22,10 @@
 
 ## Scene Scenario
 - **PLACE:** 공연 뒤 무대 뒤편
-- **SITUATION / PROBLEM:** 스피커를 옮기기 전에 전원과 음향선을 안전하게 끊어야 한다.
-- **PURPOSE:** 장치를 이동할 수 있게 신호·전기 경로를 없앤다.
+- **SITUATION / PROBLEM:** 스피커를 옮기기 전에 음향선을 안전하게 끊어야 한다.
+- **PURPOSE:** 장치를 이동할 수 있게 신호 경로를 없앤다.
 - **WHY THIS HOW?:** 단순한 물리 거리보다 기능적 연결을 끊는 것이 핵심이라 `DISCONNECT`를 쓴다.
-- **ACTION → RESULT:** Jin이 장치를 끄고 케이블을 포트에서 뽑아 소리와 전원 경로가 끊긴다.
+- **ACTION → RESULT:** Jin이 음향 케이블을 포트에서 뽑아 소리 경로가 끊긴다. 스피커 전원은 별개다.
 
 ```text
 SEPARATE + 작동 경로를 끊음 = DISCONNECT

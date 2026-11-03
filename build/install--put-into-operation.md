@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ɪnˈstɔːl/ [인**스톨**] — 뒤 음절 강세다.
 - **Forms:** `install` — `installed` — `installed`; 규칙 변화다.
-- **시제와 결과:** `They installed a heater in the shelter for the winter.` → `They have installed the heater. It is running now.` 배치·연결한 사건과 현재의 작동 상태를 구별한다.
+- **시제와 결과:** `They installed a heater in the shelter for the winter.` → `They have installed the heater. It is in place and connected now.` 배치·연결한 사건과 현재의 사용 가능한 상태를 구별한다. 실제로 돌아가는지는 따로 확인한다.
 
 - **Sense:** 장비·부품을 필요한 위치에 배치하고 연결해 사용할 수 있게 하다.
 - **Example:** `They installed a heater in the shelter.`
@@ -30,3 +30,5 @@
 ```text
 BUILD + 장비 배치·연결로 사용 가능 = INSTALL
 ```
+
+BUILD 장면(대피소 준비) 안에서 쓰일 때의 식이다 — `install`은 새로 만드는 것이 아니라 기존 장비를 배치·연결한다.

@@ -7,7 +7,7 @@ agent가 TARGET의 크기·양·지속 시간을 기준 단위와 비교해 값�
 | Verb | Example | Distinctive HOW / Dimension |
 |---|---|---|
 | MEASURE | measure the rope | 단위를 대어 길이 확인 |
-| WEIGH | weigh the rope | 저울로 무게 확인 |
+| WEIGH | weigh the equipment bag | 저울로 무게 확인 |
 | TIME | time the race | 시계로 걸린 시간 확인 |
 | GAUGE | gauge the water level | 눈금·단서로 수준 판단 |
 | PACE OUT | pace out the distance | 걸음 수를 단위 삼아 거리 확인 |

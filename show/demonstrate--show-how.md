@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˈdem.ən.streɪt/ [**데**먼스트레이트] — 첫 음절 강세다.
 - **Forms:** `demonstrate` — `demonstrated` — `demonstrated`; 규칙 변화다.
-- **시제와 결과:** `The guide demonstrated the knot in front of the tent at the campsite.` → `The guide has demonstrated the knot. The children understand the steps now.` 실제로 수행해 보여 준 사건과 현재의 이해된 상태를 구별한다.
+- **시제와 결과:** `The guide demonstrated the knot in front of the tent at the campsite.` → `The guide has demonstrated the knot. The children have seen every step now.` 실제로 수행해 보여 준 사건과 과정을 모두 본 현재 상태를 구별한다. 아이들이 익혔는지는 `demonstrate`가 보장하지 않는다.
 
 - **Sense:** 실제 동작이나 예시를 수행하여 방법이나 원리를 이해하게 하다.
 - **Example:** `The guide demonstrated the knot.`

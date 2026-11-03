@@ -2,7 +2,7 @@
 
 ## 0. Sound & Forms
 
-- **Pronunciation (US):** /ʌnˈkʌv.ɚ/ [언**커**버] — 가운데 음절 강세다.
+- **Pronunciation (US):** /ʌnˈkʌv.ər/ [언**커**버] — 가운데 음절 강세다.
 - **Forms:** `uncover` — `uncovered` — `uncovered`; 규칙 변화다.
 - **시제와 결과:** `She uncovered the box by removing the cloth in the prop room.` → `She has uncovered the box. Its outside is visible now.` 천을 치운 것이지 상자 뚜껑을 열었다고 보장하지 않는다.
 

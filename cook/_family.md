@@ -9,7 +9,7 @@ agent가 음식에 열을 가해 먹을 수 있거나 먹기 좋은 상태로 �
 | COOK | cook a potato | 열로 음식 준비 |
 | BAKE | bake a potato | 오븐의 건조한 열 |
 | BOIL | boil a potato | 끓는 물 속에서 가열 |
-| FRY | fry a potato | 뜨거운 기름에 접촉 |
+| FRY | fry potato slices | 뜨거운 기름에 접촉 |
 | STEAM | steam a potato | 끓는 물 위의 수증기로 가열 |
 
 ## Scenario contrast

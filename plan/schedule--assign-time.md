@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˈskedʒ.uːl/ [**스케**줄] — 첫 음절 강세; 미국식 첫소리는 /sk/, 영국식 /ʃ/와 다르다.
 - **Forms:** `schedule` (기본형/현재) — `scheduled` (과거) — `scheduled` (과거분사)
-- **시제와 결과:** `We scheduled the school trip yesterday.` → `We have scheduled the school trip for Friday. The date is fixed now.` `scheduled`는 여기서 현재완료의 동사형이고, 실제 여행은 아직 하지 않았다.
+- **시제와 결과:** `We scheduled the school trip yesterday.` → `We have scheduled the school trip for Friday. The date is fixed now.` `scheduled`는 여기서 `have/has` 뒤의 과거분사이고, 실제 여행은 아직 하지 않았다.
 
 - **Sense:** 미래 활동의 날짜·시간을 정해 일정에 배치하다.
 - **Example:** `We scheduled the school trip for next Friday.`

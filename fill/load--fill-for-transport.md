@@ -17,7 +17,7 @@
 
 - **내가 할 말:** `I loaded the car with suitcases.`
 - **BASIC/RESULT + HOW:** 운반할 물건이 차에 들어감 + 짐을 실어 이동을 준비함 = `LOAD`
-- **선택 기준:** 물건을 운반 수단에 실었다면 `load`; 공간을 가득 채운 정도를 말하고 싶다면 `fill`이다.
+- **선택 기준:** 운반·사용할 물건을 차량·용기에 실었다면 `load`; 공간을 가득 채운 정도를 말하고 싶다면 `fill`이다.
 - **한 번 더 떠올리기:** 배송 트럭에 상자들을 실었다면? → `We loaded the truck with boxes.`
 
 ## Scene Scenario
@@ -30,6 +30,8 @@
 ```text
 FILL + 운반·사용 목적의 내용물을 넣음 = LOAD
 ```
+
+FILL 장면에서 쓰일 때의 식이다 — `load` 자체는 용기가 가득 찼다는 보장이 없다.
 
 ## Minimal Contrast
 

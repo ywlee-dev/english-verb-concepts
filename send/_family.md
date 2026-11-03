@@ -9,7 +9,7 @@ agent가 TARGET을 현재 위치에서 떨어진 수신자·목적지 쪽으로 
 | SEND | send a message | 발송 방식 미지정 |
 | MAIL | mail a letter | 우편 경로로 발송 |
 | EMAIL | email a message | 전자우편으로 발송 |
-| TEXT | text a message | 휴대전화 문자로 발송 |
+| TEXT | text Jin the time | 휴대전화 문자로 발송 |
 | FORWARD | forward a message | 받은 내용을 다른 사람에게 다시 발송 |
 
 ## Same-scene contrast

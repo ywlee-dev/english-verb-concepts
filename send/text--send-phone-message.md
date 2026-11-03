@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /tekst/ [**텍**스트] — 단음절이다.
 - **Forms:** `text` — `texted` — `texted`; 규칙 변화다.
-- **시제와 결과:** `Mina texted Jin the new time at the bus stop.` → `Mina has texted Jin. He knows about the delay now.` 문자를 보낸 사건과 현재의 정보 인지 상태를 구별한다.
+- **시제와 결과:** `Mina texted Jin the new time at the bus stop.` → `Mina has texted Jin. Her message about the delay is on its way to him now.` 문자를 보낸 사건과 현재의 발송된 상태를 구별한다. Jin이 읽었는지는 말하지 않는다.
 
 - **Sense:** 휴대전화의 문자·메시지 기능으로 짧은 글을 보내다.
 - **Example:** `Mina texted Jin the time.`

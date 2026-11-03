@@ -14,7 +14,7 @@
 1. **SELL** — `I sold my bike to my neighbor.` 대가를 받고 내 권리를 이웃에게 넘겼다.
 2. **RESELL** — `I resold the bike I bought last month.` 이미 취득한 물건을 다시 판매했다. 처음 판매할 때도 `sell`은 쓸 수 있다.
 3. **RETAIL** — `The shop retails bikes to local families.` 최종 사용자인 소비자에게 판매한다. 일상 대화에서는 `sells bikes`가 더 흔하다.
-4. **WHOLESALE** — `The manufacturer wholesales bikes to local shops.` 다시 판매할 가게에 도매 경로로 공급한다.
+4. **WHOLESALE** — `The factory wholesales bikes to local shops.` 다시 판매할 가게에 도매 경로로 공급한다.
 
 </details>
 

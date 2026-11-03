@@ -32,7 +32,7 @@ agent의 돈이나 가치가 다른 사람·기관으로 이동하여 가격·�
 2. `I tipped the guide.` — 서비스에 대한 추가 돈이다. 실제로 팁을 주는 장소·상황인지는 먼저 확인해야 한다.
 3. `I reimbursed my friend for the ticket.` — 친구가 먼저 지출한 내 몫을 갚는다.
 4. `The museum refunded me for the canceled tour.` — 판매자가 기존 결제액을 되돌린다.
-5. `I settled the bill.` — 남은 청구를 마무리한다. 이 장면에서는 잔액을 전부 냈다.
+5. `I settled the bill.` — 남은 청구를 잔액까지 전부 내고 마무리한다.
 
 </details>
 

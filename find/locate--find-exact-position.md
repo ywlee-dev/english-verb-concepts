@@ -4,10 +4,10 @@
 
 - **Pronunciation (US):** /ˈloʊ.keɪt/ [**로**우케이트] — 첫 음절 강세다.
 - **Forms:** `locate` — `located` — `located`; 규칙 변화다.
-- **시제와 결과:** `Mina located the key on the lost-and-found records.` → `Mina has located the key. She knows it is in box B-12 now.` 위치를 특정한 사건과 현재의 정확히 파악된 상태를 구별한다.
+- **시제와 결과:** `Mina located the key using the lost-and-found records.` → `Mina has located the key. She knows it is in box B-12 now.` 위치를 특정한 사건과 현재의 정확히 파악된 상태를 구별한다.
 
 - **Sense:** 체계적인 정보나 탐색으로 TARGET의 정확한 위치를 확인하다.
-- **Example:** `Mina located the key on the classroom map.`
+- **Example:** `Mina located the key in box B-12.`
 - **Target Condition:** 좌표·구역·관계로 위치를 정확히 특정할 수 있는 대상
 - **Precondition:** 넓은 범위와 위치를 좁힐 정보가 있다.
 

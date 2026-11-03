@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˈpræk.tɪs/ [**프랙**티스] — 첫 음절 강세다.
 - **Forms:** `practice` — `practiced` — `practiced`; 규칙 변화다.
-- **시제와 결과:** `Mina practiced adding fractions at the math corner.` → `Mina has practiced the skill. She solves the problems more accurately now.` 반복 수행한 사건과 현재의 향상된 정확도 상태를 구별한다.
+- **시제와 결과:** `Mina practiced adding fractions at the math corner.` → `Mina has practiced the skill. She has repeated it many times now.` 반복 수행한 사건과 현재의 반복을 마친 상태를 구별한다. 반드시 곧바로 향상됐다는 뜻은 아니다.
 
 - **Sense:** 기술을 더 잘 수행하기 위해 같은 종류의 행동을 반복하다.
 - **Example:** `Mina practiced adding fractions.`
@@ -31,6 +31,8 @@ Mina는 규칙은 이해하지만 문제를 풀 때 순서를 놓친다. 비슷�
 ```text
 LEARN + 수행 반복과 피드백으로 능력 향상 = PRACTICE
 ```
+
+LEARN을 목표로 한 활동을 나타내는 식이다 — `practice` 자체는 능력을 실제로 얻었다는 것을 보장하지 않는다(묶음 노트).
 
 ## Minimal Contrast
 

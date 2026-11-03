@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /hæv/ [해브] — 철자 `l`은 묵음. /v/는 윗니와 아랫입술을 가볍게 맞댄 소리다.
 - **Forms:** `halve` (기본형/현재) — `halved` (과거) — `halved` (과거분사)
-- **시제와 결과:** `The shop halved the ticket price yesterday.` → `The shop has halved the ticket price. It is now $10.` `halved`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `The shop halved the ticket price yesterday.` → `The shop has halved the ticket price. It is now $10.` `halved`는 여기서 `has` 뒤의 과거분사이다.
 
 - **Sense:** 수량·가격을 정확히 절반으로 만들다.
 - **Example:** `The shop halved the ticket price from $20 to $10.`

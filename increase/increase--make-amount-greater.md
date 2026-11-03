@@ -12,7 +12,7 @@
 - **Targets:** ticket price, room temperature, number of seats
 - **Target Condition:** 이전 값과 새 값을 비교할 수 있는 양·정도를 가진 대상
 - **Compatibility:** `increase the ticket price`와 `raise the ticket price`는 모두 자연스럽고, 후자는 결정권자가 값을 위로 조정하는 HOW를 더한다.
-- **Precondition:** 비교할 기존 값이 있고, 가격을 바꿀 권한이 있다.
+- **Precondition:** 비교할 기존 값이 있다. 누가 바꿨는지는 정하지 않는다.
 
 ## 언제 이 말을 꺼낼까?
 

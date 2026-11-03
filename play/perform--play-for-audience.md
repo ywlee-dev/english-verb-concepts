@@ -26,6 +26,8 @@
 PLAY + 관객 앞에서 준비한 표현을 제시 = PERFORM
 ```
 
+PLAY 장면에서 쓰일 때의 식이다 — `perform` 자체가 언제나 `play`의 하위 사건인 것은 아니다(묶음 노트).
+
 ## Minimal Contrast
 
 집에서 피아노를 `play`하고, 무대에서 곡을 관객에게 `perform`한다.

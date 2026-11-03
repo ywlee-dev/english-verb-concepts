@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /kræk/ [크랙] — 한 음절; 과거형 `cracked`의 끝소리는 /t/.
 - **Forms:** `crack` (기본형/현재) — `cracked` (과거) — `cracked` (과거분사)
-- **시제와 결과:** `Mina cracked the math problem yesterday.` → `Mina has cracked the math problem. She can explain the answer now.` `cracked`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `Mina cracked the math problem yesterday.` → `Mina has cracked the math problem. She can explain the answer now.` `cracked`는 여기서 `have/has` 뒤의 과거분사이다.
 
 - **Sense:** 어렵고 막혀 있던 문제를 마침내 풀다. 여기서는 깨뜨린다는 물리적 의미가 아니다.
 - **Example:** `Mina finally cracked the math problem.`

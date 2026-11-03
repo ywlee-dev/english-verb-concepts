@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /liːv/ [리브] — 한 음절; 끝은 /v/ 소리다.
 - **Forms:** `leave` (기본형/현재) — `left` (과거) — `left` (과거분사); `leaved`가 아니다.
-- **시제와 결과:** `The students left the classroom after the bell.` → `The students have left the classroom. They are in the hallway now.` `left`는 여기서 현재완료의 동사형이며 교실이라는 출발점을 떠났다.
+- **시제와 결과:** `The students left the classroom after the bell.` → `The students have left the classroom. They are in the hallway now.` `left`는 여기서 `have/has` 뒤의 과거분사이며 교실이라는 출발점을 떠났다.
 
 - **Sense:** 있던 교실을 떠나 더 이상 그 안에 있지 않다.
 - **Example:** `The students left the classroom after the bell rang.`

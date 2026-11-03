@@ -10,7 +10,7 @@ agent가 구분 가능한 TARGET들을 하나씩 대응시켜 **몇 개인지** 
 | TALLY | tally the chairs | 항목마다 표시를 남기며 셈 |
 | RECOUNT | recount the chairs | 같은 것을 다시 세어 확인 |
 | COUNT OUT | count out ten chairs | 필요한 개수만큼 하나씩 골라 냄 |
-| ENUMERATE | enumerate the chairs | 항목을 빠짐없이 하나씩 열거 |
+| ENUMERATE | enumerate the chairs that needed repair | 항목을 빠짐없이 하나씩 열거 |
 
 ## Boundary
 

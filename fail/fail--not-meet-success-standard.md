@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /feɪl/ [페일] — 한 음절; /eɪ/에서 모음 소리가 움직인다.
 - **Forms:** `fail` (기본형/현재) — `failed` (과거) — `failed` (과거분사)
-- **시제와 결과:** `Mina failed the exam yesterday.` → `Mina has failed the exam. Her score is two points below the passing mark.` `failed`는 여기서 현재완료의 동사형이며, 실패가 미나의 능력 전체를 평가하는 말은 아니다.
+- **시제와 결과:** `Mina failed the exam yesterday.` → `Mina has failed the exam. Her score is two points below the passing mark.` `failed`는 여기서 `has` 뒤의 과거분사이며, 실패가 미나의 능력 전체를 평가하는 말은 아니다.
 
 - **Sense:** 시험에서 합격 기준을 충족하지 못하다.
 - **Example:** `Mina failed the exam by two points.`

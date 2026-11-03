@@ -2,6 +2,8 @@
 
 ## Shared Result
 
+agent가 TARGET의 기능이나 가치를 특정 목적을 이루는 수단으로 작동시킨다.
+
 ## 상황에서 꺼내기 — 설명을 보기 전에
 
 그림을 완성하고 교실을 정리하는 장면이다. 무엇을 어떤 수단으로 썼는지 골라 보자.
@@ -24,12 +26,10 @@
 
 내 장면으로 바꿔 보기: 오늘 사용한 도구 하나와 그 일에 쓴 시간 하나를 영어로 말해 보자.
 
-agent가 TARGET의 기능이나 가치를 특정 목적을 이루는 수단으로 작동시킨다.
-
 | Verb | Example | Distinctive HOW |
 |---|---|---|
 | USE | use the tablet | 기능을 목적에 활용 |
-| OPERATE | operate the tablet | 조작 절차로 기계를 작동 |
+| OPERATE | operate the printer | 조작 절차로 기계를 작동 |
 | APPLY | apply the paint | 물질·규칙을 대상에 직접 작용시킴 |
 | SPEND | spend ten minutes | 시간·돈을 사용해 잔량을 줄임 |
 | REUSE | reuse the box | 이미 쓴 대상을 다시 활용 |

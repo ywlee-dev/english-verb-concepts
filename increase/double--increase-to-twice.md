@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˈdʌbəl/ [**더**블] — 첫 음절 강세; 과거형 `doubled`는 /ˈdʌbəld/.
 - **Forms:** `double` (기본형/현재) — `doubled` (과거) — `doubled` (과거분사)
-- **시제와 결과:** `The shop doubled the ticket price yesterday.` → `The shop has doubled the ticket price. It is now $20.` `doubled`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `The shop doubled the ticket price yesterday.` → `The shop has doubled the ticket price. It is now $20.` `doubled`는 여기서 `has` 뒤의 과거분사이다.
 
 - **Sense:** 양·가격을 정확히 두 배로 만들다.
 - **Example:** `The shop doubled the ticket price from $10 to $20.`

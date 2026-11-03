@@ -31,6 +31,8 @@
 EMPTY + 용기를 기울여 액체를 흐르게 함 = POUR OUT
 ```
 
+EMPTY 장면에서 쓰일 때의 식이다 — `pour out` 자체는 용기가 완전히 비었다는 보장이 없다.
+
 ## Minimal Contrast
 
 양동이를 기울여 물을 `pour out`하고, 배수구가 있는 통은 밸브로 `drain`할 수 있다.

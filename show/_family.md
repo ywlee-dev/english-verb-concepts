@@ -32,8 +32,8 @@ agent가 TARGET을 시야나 이해 가능한 증거로 제시하여 OBSERVER가
 | DISPLAY | display the map | 여러 사람이 잘 보도록 펼쳐 둠 |
 | POINT OUT | point out the trail | 특정 대상을 지목해 주의를 이끎 |
 | DEMONSTRATE | demonstrate the knot | 실제 동작으로 방법을 보여 줌 |
-| REVEAL | reveal the hidden door | 가려졌던 것을 드러냄 |
+| REVEAL | reveal the model | 가려졌던 것을 드러냄 |
 
 ## Scenario contrast
 
-지도를 친구에게 내보이면 SHOW, 교실 앞에 펼쳐 모두가 보게 하면 DISPLAY, 지도 속 길을 손가락으로 짚으면 POINT OUT, 매듭 묶는 동작을 실행하면 DEMONSTRATE, 지도 뒤 숨은 문양을 드러내면 REVEAL이 된다.
+지도를 친구에게 내보이면 SHOW, 복도 게시판에 붙여 모두가 보게 하면 DISPLAY, 지도 속 길을 손가락으로 짚으면 POINT OUT, 매듭 묶는 동작을 실행하면 DEMONSTRATE, 천 아래 가려 둔 과학 모형을 드러내면 REVEAL이 된다.

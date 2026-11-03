@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** 현재형 /riːd/ [**리**드], 과거·과거분사 /rɛd/ [**레**드] — 철자는 같지만 소리가 다르다.
 - **Forms:** `read` — `read` — `read`; 철자는 바뀌지 않지만 과거·과거분사에서 발음만 바뀌는 불규칙이다.
-- **시제와 결과:** `Mina read the article about whales in the library.` (과거, 발음 [레드]) → `Mina has read the article. She knows about whale migration now.` 문장을 따라간 사건과 현재의 습득한 지식 상태를 구별한다.
+- **시제와 결과:** `Mina read the article about whales in the library.` (과거, 발음 [레드]) → `Mina has read the article. She knows about whale migration now.` 문장을 따라간 사건과 현재의 습득한 지식 상태를 구별한다. 내용을 모두 완벽히 이해했다는 뜻까지는 아니다.
 
 - **Sense:** 쓰인 글자를 따라가 언어적 내용을 이해하다.
 - **Example:** `Mina read the article about whales.`

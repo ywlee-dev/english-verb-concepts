@@ -31,6 +31,8 @@
 EMPTY + 출구를 통해 액체 배출 = DRAIN
 ```
 
+EMPTY 장면에서 쓰일 때의 식이다 — `drain` 자체는 용기가 완전히 비었다는 보장이 없다.
+
 ## Minimal Contrast
 
 작은 통은 기울여 `pour out`, 큰 물통은 출구로 `drain`한다.

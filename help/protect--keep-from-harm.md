@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /prəˈtekt/ [프러**텍**트] — 뒤 음절 강세다.
 - **Forms:** `protect` — `protected` — `protected`; 규칙 변화다.
-- **시제와 결과:** `Jin protected Mina from the rain on the sudden downpour at the field.` → `Jin has protected Mina and her artwork. They are dry now.` 해로운 영향을 막은 사건과 현재의 무사한 상태를 구별한다.
+- **시제와 결과:** `Jin protected Mina from the rain during the sudden downpour on the field.` → `Jin has protected Mina and her artwork. They are dry now.` 해로운 영향을 막은 사건과 현재의 무사한 상태를 구별한다.
 
 - **Sense:** 위험하거나 해로운 것이 TARGET에 닿거나 영향을 주지 못하게 막다.
 - **Example:** `Jin protected Mina from the rain.`

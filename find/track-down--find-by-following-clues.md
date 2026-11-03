@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /træk daʊn/ [트랙**다**운] — 구동사이며 뒤 단어 `down`에 강세가 있다.
 - **Forms:** `track down` — `tracked down` — `tracked down`; 규칙 변화다.
-- **시제와 결과:** `Mina tracked down the missing key across the school building.` → `Mina has tracked down the key. It is back in her hand now.` 단서를 추적한 사건과 현재의 되찾은 상태를 구별한다.
+- **시제와 결과:** `Mina tracked down the missing key across the school building.` → `Mina has tracked down the key. She found it on the playground bench.` 단서를 추적한 사건과 끝내 찾아낸 결과를 구별한다.
 
 - **Sense:** 여러 단서를 차례로 추적하여 찾기 어려운 TARGET을 끝내 찾아내다.
 - **Example:** `Mina tracked down the missing key.`

@@ -9,7 +9,7 @@ agent가 TARGET 표면·공간의 먼지·얼룩·불필요한 물질을 제거�
 | CLEAN | clean the floor | 오염 제거 방식 미지정 |
 | WASH | wash the floor | 물·세제를 사용 |
 | WIPE | wipe the floor | 천을 표면에 문질러 닦음 |
-| SCRUB | scrub the floor | 강하게 반복 마찰 |
+| SCRUB | scrub the paint stain from the floor | 강하게 반복 마찰 |
 | SWEEP | sweep the floor | 빗자루로 마른 먼지를 모음 |
 
 ## Scenario contrast

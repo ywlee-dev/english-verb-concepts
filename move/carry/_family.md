@@ -2,6 +2,8 @@
 
 ## Shared Event Backbone
 
+agent가 TARGET의 무게를 지지한 상태로 함께 이동한다.
+
 ## 상황에서 꺼내기 — 설명을 보기 전에
 
 가방을 위층으로 옮기되 무게를 어떻게 받치는지 살펴보자.
@@ -23,8 +25,6 @@
 </details>
 
 내 장면으로 바꿔 보기: 오늘 든 짐 하나를 떠올려 어디가 무겁거나 불편했는지 말해 보자.
-
-agent가 TARGET의 무게를 지지한 상태로 함께 이동한다.
 
 `CARRY`는 최상위 Result Family가 아니다. `carry the bag upstairs`에서 HOW를 빼면 `move the bag upstairs`가 자연스럽고, 가방의 위치 변화는 유지된다. 이 문서의 sibling 비교는 [MOVE Family](../_family.md) 아래의 자세한 하위 묶음이다.
 

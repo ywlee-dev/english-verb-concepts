@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /flʌŋk/ [플렁크] — 한 음절; /ŋk/는 `ng` 뒤에 /k/가 이어지는 소리다.
 - **Forms:** `flunk` (기본형/현재) — `flunked` (과거) — `flunked` (과거분사)
-- **시제와 결과:** `Mina flunked the exam yesterday.` → `Mina has flunked the exam. Her score is far below the passing mark.` `flunked`는 여기서 현재완료의 동사형이고 구어적인 어감이 있다.
+- **시제와 결과:** `Mina flunked the exam yesterday.` → `Mina has flunked the exam. Her score is far below the passing mark.` `flunked`는 여기서 `has` 뒤의 과거분사이고 구어적인 어감이 있다.
 
 - **Sense:** 시험에 낙제하다. 일상적이고 직설적인 말투다.
 - **Example:** `Mina flunked the exam after missing most questions.`

@@ -16,7 +16,7 @@
 
 - **내가 할 말:** `Please shut the car door all the way.`
 - **BASIC/RESULT + HOW:** 열린 통로를 막음 + 문을 끝 위치까지 맞닿게 함 = 이 장면의 `SHUT`
-- **선택 기준:** 이 문장에 `close`도 자연스럽다. 완전한 닫힘은 `shut` 한 단어만의 필수 의미라기보다 이 장면과 `all the way`가 분명히 해 준다. 세게 꽝 닫는다는 뜻도 아니다.
+- **선택 기준:** 이 문장에 `close`도 자연스럽다. `shut`을 쓰면 끝 위치까지 확실히 닫는 쪽에 초점이 가고, `all the way`가 그 점을 더 분명히 해 준다. 세게 꽝 닫는다는 뜻은 아니다.
 - **한 번 더 떠올리기:** 잠자기 전 창문이 조금 열려 있다면? → `I shut the window all the way.`
 
 ## Scene Scenario

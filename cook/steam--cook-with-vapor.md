@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /stiːm/ [스**팀**] — 단음절이다.
 - **Forms:** `steam` — `steamed` — `steamed`; 규칙 변화다.
-- **시제와 결과:** `Jin steamed a potato over boiling water at the steamer.` → `Jin has steamed the potato. It is soft without excess water now.` 수증기로 익힌 동작과 현재의 물기 없는 상태를 구별한다.
+- **시제와 결과:** `Jin steamed a potato in a steamer over boiling water.` → `Jin has steamed the potato. It is soft without excess water now.` 수증기로 익힌 동작과 현재의 물기 없는 상태를 구별한다.
 
 - **Sense:** 끓는 물에서 올라오는 수증기로 음식을 익히다.
 - **Example:** `Jin steamed a potato over boiling water.`

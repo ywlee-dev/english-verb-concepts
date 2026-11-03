@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /plæn/ [플랜] — 한 음절; /æ/는 한글 ‘애’와 정확히 같지 않다.
 - **Forms:** `plan` (기본형/현재) — `planned` (과거) — `planned` (과거분사); 끝 자음 `n`을 한 번 더 적는다.
-- **시제와 결과:** `We planned the school trip yesterday.` → `We have planned the school trip. The itinerary is ready.` `planned`는 여기서 현재완료의 동사형이며, 여행 자체는 아직 시작되지 않았다.
+- **시제와 결과:** `We planned the school trip yesterday.` → `We have planned the school trip. The itinerary is ready.` `planned`는 여기서 `have/has` 뒤의 과거분사이며, 여행 자체는 아직 시작되지 않았다.
 
 - **Sense:** 미래의 학교 여행을 위해 할 일과 순서를 미리 정하다.
 - **Example:** `We planned the school trip for next Friday.`

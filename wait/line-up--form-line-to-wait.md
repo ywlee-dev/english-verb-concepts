@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** `line` /laɪn/ [라인] + `up` /ʌp/ [업] — 두 단어로 된 동사 표현이다.
 - **Forms:** `line up` (기본형/현재) — `lined up` (과거) — `lined up` (과거분사); `up`은 변하지 않는다.
-- **시제와 결과:** `The children lined up for the bus yesterday.` → `The children have lined up for the bus. They are standing in order now.` `lined up`은 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `The children lined up for the bus yesterday.` → `The children have lined up for the bus. They are standing in order now.` `lined up`은 여기서 `have/has` 뒤의 과거분사이다.
 
 - **Sense:** 버스 탑승을 기다리려고 한 줄을 만들다.
 - **Example:** `The children lined up for the bus outside school.`

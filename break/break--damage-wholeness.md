@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /breɪk/ [브레이크] — `broke` /broʊk/, `broken` /ˈbroʊ.kən/과 모음이 달라진다.
 - **Forms:** `break` — `broke` — `broken`; 불규칙 변화다.
-- **시제와 결과:** `She broke the vase when it fell on the kitchen floor.` → `She has broken the vase. It is no longer whole.` 여기서 `broken`은 현재완료의 동사형이다.
+- **시제와 결과:** `She broke the vase when it fell on the kitchen floor.` → `She has broken the vase. It is no longer whole.` 여기서 `broken`은 `have/has` 뒤의 과거분사이다.
 - Sense: TARGET의 온전함·형태·정상 기능을 손상하다.
 - Target Condition: 힘이나 작용으로 구조 또는 기능을 잃을 수 있는 대상
 

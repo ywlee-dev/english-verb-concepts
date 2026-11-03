@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /riːtʃ/ [리치] — 한 음절; 길게 나는 /iː/ 뒤에 /tʃ/가 온다.
 - **Forms:** `reach` (기본형/현재) — `reached` (과거) — `reached` (과거분사)
-- **시제와 결과:** `The class reached its $500 goal yesterday.` → `The class has reached its goal. The progress chart now shows $500.` `reached`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `The class reached its $500 goal yesterday.` → `The class has reached its goal. The progress chart now shows $500.` `reached`는 여기서 `has` 뒤의 과거분사이다.
 
 - **Sense:** 수치나 목표에 마침내 도달하다. 여기서는 손을 뻗는 물리적 의미가 아니다.
 - **Example:** `The class reached its $500 goal on Friday.`

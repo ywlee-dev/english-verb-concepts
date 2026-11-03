@@ -6,11 +6,11 @@ agent의 손·손가락·도구가 TARGET 표면과 물리적 접촉을 만든�
 
 | Verb | Same-target example | Distinctive Contact |
 |---|---|---|
-| TOUCH | touch her shoulder | 접촉 방식 미지정 |
-| TAP | tap her shoulder | 짧고 가벼운 접촉 한두 번 |
-| PAT | pat her shoulder | 열린 손으로 부드럽게 반복 접촉 |
-| STROKE | stroke her shoulder | 표면을 따라 손을 부드럽게 이동 |
-| POKE | poke her shoulder | 손가락 끝으로 짧게 밀어 누름 |
+| TOUCH | touch his shoulder | 접촉 방식 미지정 |
+| TAP | tap him on the shoulder | 짧고 가벼운 접촉 한두 번 |
+| PAT | pat her on the shoulder | 열린 손으로 부드럽게 반복 접촉 |
+| STROKE | stroke the child's shoulder | 표면을 따라 손을 부드럽게 이동 |
+| POKE | poke him in the shoulder | 손가락 끝으로 짧게 밀어 누름 |
 
 ## Scenario contrast
 

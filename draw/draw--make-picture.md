@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /drɔː/ [드**로**] — 단음절이다.
 - **Forms:** `draw` — `drew` — `drawn`; 불규칙이며 세 형태가 모두 다르다.
-- **시제와 결과:** `Mina drew a house on paper at her art class desk.` → `Mina has drawn the house. The reader can see what it looks like now.` 선을 만든 동작과 현재의 알아볼 수 있는 그림 상태를 구별한다.
+- **시제와 결과:** `Mina drew a house on paper at her art class desk.` → `Mina has drawn the house. There is a picture of a house on the paper now.` 선을 만든 동작과 현재의 알아볼 수 있는 그림 상태를 구별한다.
 
 - **Sense:** 선과 형태를 표면에 만들어 대상을 시각적으로 나타내다.
 - **Example:** `Mina drew a house on paper.`
@@ -23,8 +23,8 @@
 
 ## Scene Scenario
 - **PLACE:** 미술 교실 책상
-- **SITUATION / PROBLEM:** 집에 관한 짧은 이야기에 그림 한 장이 필요하다.
-- **PURPOSE:** 독자가 집의 모습을 볼 수 있게 한다.
+- **SITUATION / PROBLEM:** 미술 시간에 빈 종이가 한 장 있다.
+- **PURPOSE:** 집의 모습을 종이 위에 눈에 보이게 나타낸다.
 - **WHY THIS HOW?:** 문장 설명이 아니라 선과 형태로 시각적 결과를 만드므로 `DRAW`를 쓴다.
 - **ACTION → RESULT:** Mina가 종이에 지붕·벽·문을 선으로 그려 집 그림이 생긴다.
 

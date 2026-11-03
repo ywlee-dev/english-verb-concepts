@@ -25,7 +25,7 @@
 - **SITUATION / PROBLEM:** 첫 design이 사용하기 불편하다는 의견을 받았다.
 - **PURPOSE:** design을 이전과 다르게 만든다.
 - **WHY THIS HOW?:** 변화의 크기나 방법보다 달라졌다는 결과가 중요해 `CHANGE`가 선택된다.
-- **ACTION → RESULT:** 구성원들이 요소를 다시 정해 새 design을 만든다.
+- **ACTION → RESULT:** 구성원들이 요소를 다시 정해 이전 design을 다르게 바꾼다.
 
 ```text
 이전 상태 → 다른 상태 = CHANGE

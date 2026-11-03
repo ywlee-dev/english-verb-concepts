@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /əˈtʃiːv/ [어**치브**] — 둘째 음절 강세; 끝은 /v/ 소리다.
 - **Forms:** `achieve` (기본형/현재) — `achieved` (과거) — `achieved` (과거분사)
-- **시제와 결과:** `The class achieved its $500 goal yesterday.` → `The class has achieved its goal. The total is now $500.` `achieved`는 여기서 현재완료의 동사형이며 목표 달성은 실제 결과다.
+- **시제와 결과:** `The class achieved its $500 goal yesterday.` → `The class has achieved its goal. The total is now $500.` `achieved`는 여기서 `has` 뒤의 과거분사이며 목표 달성은 실제 결과다.
 
 - **Sense:** 정해 둔 목표를 실제로 이루다.
 - **Example:** `The class achieved its goal of raising $500.`

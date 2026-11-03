@@ -2,9 +2,9 @@
 
 ## 0. Sound & Forms
 
-- **Pronunciation (US):** `work` /wɝːk/ [워크] + `out` /aʊt/ [아웃] — 두 단어를 이어 말한다. `workout`(운동)이라는 명사 한 단어와 구별한다.
+- **Pronunciation (US):** `work` /wɜːrk/ [워크] + `out` /aʊt/ [아웃] — 두 단어를 이어 말한다. `workout`(운동)이라는 명사 한 단어와 구별한다.
 - **Forms:** `work out` (기본형/현재) — `worked out` (과거) — `worked out` (과거분사); `out`은 변하지 않는다.
-- **시제와 결과:** `Mina worked out the math problem yesterday.` → `Mina has worked out the math problem. Her steps are on the page now.` `worked out`은 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `Mina worked out the math problem yesterday.` → `Mina has worked out the math problem. Her steps are on the page now.` `worked out`은 여기서 `have/has` 뒤의 과거분사이다.
 
 - **Sense:** 계산·추론 단계를 밟아 문제의 답을 구하다. 여기서는 운동한다는 의미가 아니다.
 - **Example:** `Mina worked out the math problem on paper.`

@@ -2,9 +2,9 @@
 
 ## 0. Sound & Forms
 
-- **Pronunciation (US):** `melt` /melt/ [멜트] + `down` /daʊn/ [다운] — 두 단어를 이어 말한다. 문장에서는 `down`을 강조할 수 있다.
+- **Pronunciation (US):** /melt daʊn/ [멜트**다운**] — 구동사이며 뒤 단어 `down`에 강세가 있다.
 - **Forms:** `melt down` (기본형/현재) — `melted down` (과거) — `melted down` (과거분사); `down`은 변하지 않는다.
-- **시제와 결과:** `The baker melted down the chocolate bars yesterday.` → `The baker has melted down the chocolate bars. The chocolate is liquid now.` `melted down`은 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `The baker melted down the chocolate bars yesterday.` → `The baker has melted down the chocolate bars. The chocolate is liquid now.` `melted down`은 여기서 `has` 뒤의 과거분사이다.
 
 - **Sense:** 고체 덩어리를 가열해 액체 재료로 녹이다. 여기서는 감정적으로 무너진다는 의미가 아니다.
 - **Example:** `The baker melted down the chocolate bars for the glaze.`

@@ -8,7 +8,7 @@ agent가 선·형태·색을 표면에 만들어 시각적으로 알아볼 수 �
 |---|---|---|
 | DRAW | draw a house | 선과 형태로 나타냄 |
 | SKETCH | sketch a house | 빠르고 거친 기본형을 그림 |
-| TRACE | trace a house outline | 기존 윤곽을 따라 그림 |
+| TRACE | trace the outline of a house | 기존 윤곽을 따라 그림 |
 | DOODLE | doodle a house | 목적 없이 가볍게 그림 |
 | ILLUSTRATE | illustrate a story with a house | 이야기·설명을 돕는 그림을 그림 |
 

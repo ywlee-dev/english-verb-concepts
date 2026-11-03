@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /sɑːlv/ [살브] — 한 음절; 끝의 /v/를 확인한다.
 - **Forms:** `solve` (기본형/현재) — `solved` (과거) — `solved` (과거분사)
-- **시제와 결과:** `Mina solved the math problem yesterday.` → `Mina has solved the math problem. She knows the answer now.` `solved`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `Mina solved the math problem yesterday.` → `Mina has solved the math problem. She knows the answer now.` `solved`는 여기서 `have/has` 뒤의 과거분사이다.
 
 - **Sense:** 수학 문제에 맞는 답을 찾아 풀다.
 - **Example:** `Mina solved the math problem before class ended.`

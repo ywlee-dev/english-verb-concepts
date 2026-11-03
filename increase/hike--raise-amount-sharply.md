@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /haɪk/ [하이크] — 한 음절; 과거형 `hiked`는 /haɪkt/.
 - **Forms:** `hike` (기본형/현재) — `hiked` (과거) — `hiked` (과거분사)
-- **시제와 결과:** `The shop hiked the ticket price yesterday.` → `The shop has hiked the ticket price. It is now $20.` `hiked`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `The shop hiked the ticket price yesterday.` → `The shop has hiked the ticket price. It is now $20.` `hiked`는 여기서 `has` 뒤의 과거분사이다.
 
 - **Sense:** 가격·요금 등을 크게, 특히 부담스럽게 올리다. 여기서는 걷기 의미가 아니다.
 - **Example:** `The shop hiked the ticket price from $10 to $20.`
@@ -25,7 +25,7 @@
 
 ```text
 BEFORE: 표 값 $10
-HOW: 운영자가 충분한 예고 없이 값을 $20로 크게 올림
+HOW: 운영자가 값을 $20로 크게 올림(이 장면에서는 충분한 예고 없이)
 AFTER: 표 값 $20; 손님들이 부담을 느낌
 ```
 

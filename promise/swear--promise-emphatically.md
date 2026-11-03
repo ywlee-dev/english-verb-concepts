@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /swer/ [스웨어] — 한 음절; `swore` /swɔːr/와 소리가 달라진다.
 - **Forms:** `swear` — `swore` — `sworn`; `sweared`가 아니다.
-- **시제와 결과:** `Mina swore to help rebuild the playground, even if it rained.` → `Mina has sworn to help rebuild the playground. Her friends know she is serious now.` `sworn`은 현재완료의 동사형이며 실제 참여는 미래다.
+- **시제와 결과:** `Mina swore to help rebuild the playground, even if it rained.` → `Mina has sworn to help rebuild the playground. Her friends know she is serious now.` `sworn`은 `have/has` 뒤의 과거분사이며 실제 참여는 미래다.
 
 - **Sense:** 자신이 정말 도울 것이라고 강하게 맹세하다. 여기서는 욕설하다/법정 선서의 다른 의미가 아니다.
 - **Example:** `Mina swore to help rebuild the playground, even if it rained.`

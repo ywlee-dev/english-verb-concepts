@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˈloʊər/ [**로**어] — 첫 음절 강세; 한글 표기는 실제 영어 모음을 대신하지 못한다.
 - **Forms:** `lower` (기본형/현재) — `lowered` (과거) — `lowered` (과거분사)
-- **시제와 결과:** `The shop lowered the ticket price yesterday.` → `The shop has lowered the ticket price. It is now $18.` `lowered`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `The shop lowered the ticket price yesterday.` → `The shop has lowered the ticket price. It is now $18.` `lowered`는 여기서 `has` 뒤의 과거분사이다.
 
 - **Sense:** 가격·수준을 아래로 조정하다. 여기서는 물체를 낮은 곳에 놓는 의미가 아니다.
 - **Example:** `The shop lowered the ticket price from $20 to $18.`

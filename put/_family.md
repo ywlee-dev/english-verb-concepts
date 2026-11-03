@@ -2,6 +2,8 @@
 
 ## Shared Result
 
+agent가 TARGET을 특정 PLACE나 POSITION에 있게 만든다.
+
 ## 상황에서 꺼내기 — 설명을 보기 전에
 
 책을 탁자나 독서대에 두는 방식을 상상해 보자.
@@ -23,8 +25,6 @@
 </details>
 
 내 장면으로 바꿔 보기: 오늘 어디엔가 둔 물건 하나를 떠올려 장소만 중요한지, 놓는 방식이 중요한지 말해 보자. `drop`은 의도치 않게 떨어뜨릴 때도 쓴다.
-
-agent가 TARGET을 특정 PLACE나 POSITION에 있게 만든다.
 
 | Verb | Same-target example | Distinctive HOW / Result |
 |---|---|---|

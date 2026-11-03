@@ -7,7 +7,7 @@ agent가 언어적 내용을 문자로 만들어 종이·화면 등에 남긴다
 | Verb | Same-target example | Distinctive HOW |
 |---|---|---|
 | WRITE | write a message | 글로 남기는 방식 미지정 |
-| JOT DOWN | jot down a message | 빠르게 짧게 적음 |
+| JOT DOWN | jot down a page number | 빠르게 짧게 적음 |
 | DRAFT | draft a message | 최종본 전 초안을 만듦 |
 | TYPE | type a message | 키보드로 입력 |
 | COMPOSE | compose a message | 표현·구조를 생각하며 내용을 지음 |

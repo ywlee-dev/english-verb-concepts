@@ -28,8 +28,8 @@ buyer가 대가를 지불하기로 하고 물건·서비스의 소유 또는 이
 |---|---|---|
 | BUY | buy a ticket | 대가를 주고 권리 획득 |
 | ORDER | order a ticket online | 판매자에게 구매 요청을 넣음; 수령은 아직일 수 있음 |
-| PREORDER | preorder a ticket | 판매 시작·제공 전에 미리 주문 |
-| BUY BACK | buy back a ticket | 이전에 팔거나 넘긴 것을 다시 구매 |
+| PREORDER | preorder a new book | 판매 시작·제공 전에 미리 주문 |
+| BUY BACK | buy back an old bike | 이전에 팔거나 넘긴 것을 다시 구매 |
 
 ## Boundary
 

@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /bɑːm/ [밤] — 끝 철자 `b`는 발음하지 않는다.
 - **Forms:** `bomb` (기본형/현재) — `bombed` (과거) — `bombed` (과거분사)
-- **시제와 결과:** `Mina bombed the exam yesterday.` → `Mina has bombed the exam. She scored 35, below the passing mark of 70.` `bombed`는 여기서 현재완료의 동사형이다. `bombed`만 듣고 실제 점수를 모르면 불합격을 단정하지 않는다.
+- **시제와 결과:** `Mina bombed the exam yesterday.` → `Mina has bombed the exam. She scored 35, below the passing mark of 70.` `bombed`는 여기서 `has` 뒤의 과거분사이다. `bombed`만 듣고 실제 점수를 모르면 불합격을 단정하지 않는다.
 
 - **Sense:** 시험을 매우 못 보다. 구어체이며 실패 결과를 강하게 느끼게 한다. 폭탄 의미가 아니다.
 - **Example:** `Mina bombed the exam and scored 35 out of 100.`

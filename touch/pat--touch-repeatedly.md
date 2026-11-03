@@ -6,7 +6,7 @@
 - **Forms:** `pat` — `patted` — `patted`; 짧은 모음 뒤 자음을 겹쳐 적는다.
 - **시제와 결과:** `The coach patted her on the shoulder right after the game.` → `The coach has patted her shoulder. She feels encouraged now.` 반복해 두드린 사건과 현재의 격려받은 상태를 구별한다.
 
-- **Sense:** 열린 손바닥으로 TARGET을 부드럽게 여러 번 두드리다.
+- **Sense:** 열린 손바닥으로 TARGET을 부드럽게 두드리다. 보통 여러 번 두드린다.
 - **Example:** `The coach patted her on the shoulder.`
 - **Target Condition:** 반복적인 부드러운 접촉을 격려·칭찬·안정 신호로 받을 수 있는 대상
 

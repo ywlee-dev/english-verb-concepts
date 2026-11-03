@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /skæn/ [스**캔**] — 단음절이다.
 - **Forms:** `scan` — `scanned` — `scanned`; 짧은 모음 뒤 자음을 겹쳐 적는다.
-- **시제와 결과:** `Mina scanned the article for the migration date in the reading room.` → `Mina has scanned the article. She has found the date now.` 특정 정보를 찾은 동작과 현재의 발견된 상태를 구별한다.
+- **시제와 결과:** `Mina scanned the article for the migration date in the reading room.` → `Mina has scanned the article for the date. She has checked the whole page for it now.` 특정 정보를 찾아 훑은 동작과 현재의 훑어보기를 마친 상태를 구별한다. 이 장면에서는 날짜를 찾았지만, 발견 자체는 `scan`이 보장하지 않는다.
 
 - **Sense:** 글 전체를 따라 읽지 않고 필요한 한 정보가 있는지 빠르게 찾다.
 - **Example:** `Mina scanned the article for the migration date.`

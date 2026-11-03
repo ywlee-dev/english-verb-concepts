@@ -7,7 +7,7 @@
 - **시제와 결과:** `The bean seed germinated on the wet cotton in the classroom.` → `The seed has germinated. A root has begun growing inside it now.` 내부 성장이 시작된 사건과 현재의 진행 중인 상태를 구별한다.
 
 - **Sense:** 씨앗이 물·온도 조건을 받아 내부 성장을 시작하다.
-- **Example:** `The bean seed germinated in the soil.`
+- **Example:** `The bean seed germinated on the wet cotton.`
 - **Target Condition:** 적절한 조건에서 배아가 성장할 수 있는 살아 있는 씨앗
 - **Precondition:** 물·온도·산소가 있고 씨앗이 생존 가능하다.
 

@@ -31,7 +31,7 @@
     <li><b>팖</b> → 더는 타지 않는 자전거를 진이 미나에게 넘기고 <b>값을 받는다</b>. 이제 미나의 것. <span class="en">Jin sold his bike to Mina.</span></li>
     <li><b>되팖</b> → 진이 <b>지난달 중고로 산</b> 자전거가 작아서 다시 판다. 이 이력이 중요하다. <span class="en">Jin resold the bike to Mina.</span></li>
     <li><b>소매</b> → 동네 가게가 <b>직접 탈 손님 가족</b>에게 크기에 맞는 자전거를 <b>한 대씩</b>. <span class="en">The shop retails bikes to local families.</span></li>
-    <li><b>도매</b> → 공장이 봄 판매를 앞둔 <b>가게들</b>에 자전거 수십 대를 <b>묶음으로</b>. 가게는 그걸 다시 판다. <span class="en">The company wholesales bikes to local shops.</span></li>
+    <li><b>도매</b> → 공장이 봄 판매를 앞둔 <b>가게들</b>에 자전거 수십 대를 <b>묶음으로</b>. 가게는 그걸 다시 판다. <span class="en">The factory wholesales bikes to local shops.</span></li>
     <li>어느 장면이든 "값을 받고 넘겼다"는 맞으니 <span class="en">sell</span>도 쓸 수 있다. 그래서 SELL 칩이 같이 켜진다.</li>
   </ul>
 
@@ -86,7 +86,6 @@
       <li>5절의 ✗ 판정(resell · retail · wholesale이 "사람 + 물건"을 안 받음 · reselled)과 "다른 모양"(sold out · retails for $300 · sell wholesale), <span class="en">Jin sold Mina his bike</span>는 노트에 없다.</li>
       <li>4절 표의 칸 판정과 0절 "대신 말하면"의 △·✗ 판정은 짐작이다.</li>
       <li>retail · wholesale 노트의 "시제와 결과" 예문(<span class="en">The shop retailed the bike to the family last weekend.</span> · <span class="en">The factory wholesaled dozens of bikes …</span>)은 한 번의 판매를 동사로 쓴다. 두 동사는 동사로는 대개 판매 방식(현재형 <span class="en">retails</span> · <span class="en">wholesales</span>)이나 <span class="en">retails for</span> · <span class="en">sell wholesale</span> 꼴로 쓰는 것 같다. 사전으로 확인하고 예문을 고칠지 정할 것.</li>
-      <li>wholesale 노트 안에서 주어가 둘이다: Example은 <span class="en">The company</span>, "내가 할 말"은 <span class="en">The manufacturer</span>, 시제와 결과는 <span class="en">The factory</span>. 같은 대상이니 하나로 맞출지 정할 것.</li>
     </ul>
   </div>
 
@@ -142,7 +141,7 @@
           BIKE(380, 214, .35) + BIKE(406, 214, .35) + BIKE(432, 214, .35) + BIKE(392, 196, .35) + BIKE(418, 196, .35) +
           step(.2, SHOPBOX(574, 66, '가게 A') + SHOPBOX(574, 124, '가게 B') + SHOPBOX(574, 182, '가게 C')) +
           step(.45, AR(508, 196, 568, 90, 'var(--accent)', 2) + AR(508, 200, 568, 146, 'var(--accent)', 2) + AR(508, 206, 568, 202, 'var(--accent)', 2) + tx(470, 128, 12, '묶음으로', 'var(--accent)', ' font-weight="600"')),
-        say: '<span class="en">The company wholesales bikes to local shops.</span> 최종 소비자 한 명이 아니라 <b>다시 팔 가게들</b>에 <b>대량으로</b>. 가게들은 이 재고를 손님에게 retail한다.' },
+        say: '<span class="en">The factory wholesales bikes to local shops.</span> 최종 소비자 한 명이 아니라 <b>다시 팔 가게들</b>에 <b>대량으로</b>. 가게들은 이 재고를 손님에게 retail한다.' },
     },
   };
 
@@ -158,7 +157,7 @@
       { id: 'retail', t: ['쓸 사람에게', '한 개씩'], v: 'retail', icon: '<rect x="-38" y="-26" width="34" height="46" fill="var(--card)" stroke="var(--obj-line)"/><path d="M-38 -20 h34" stroke="var(--accent2)" stroke-width="6"/>' + AR(-2, 0, 18, 0, 'var(--accent)', 2) + '<circle cx="30" cy="-10" r="7" fill="var(--skin)" stroke="var(--obj-line)"/><rect x="22" y="-2" width="16" height="20" rx="6" fill="var(--fog)"/>',
         instead: 'The shop sells bikes to families. △', lost: '일상에서는 이걸로 충분하다. 다만 도매와 나눠 "소비자 직판"이라는 경로를 사업 문맥에서 집어 말할 낱말이 빠진다.', why: '최종 소비자에게 직접 판매.' },
       { id: 'wholesale', t: ['다시 팔 가게에', '묶음으로'], v: 'wholesale', icon: [-34, -22, -10].map((x) => BIKE(x, 4, .25)).join('') + [-28, -16].map((x) => BIKE(x, -8, .25)).join('') + AR(4, -4, 18, -4, 'var(--accent)', 2) + '<rect x="20" y="-26" width="22" height="16" fill="var(--card)" stroke="var(--obj-line)"/><rect x="20" y="-4" width="22" height="16" fill="var(--card)" stroke="var(--obj-line)"/><rect x="20" y="18" width="22" height="16" fill="var(--card)" stroke="var(--obj-line)"/>',
-        instead: 'The company sells a lot of bikes to shops. △', lost: '많이 판 것은 보이지만, 가게가 다시 팔 물량을 공급하는 도매 경로라는 점이 흐려진다.', why: '사업자에게 대량으로 판매.' },
+        instead: 'The factory sells a lot of bikes to shops. △', lost: '많이 판 것은 보이지만, 가게가 다시 팔 물량을 공급하는 도매 경로라는 점이 흐려진다.', why: '사업자에게 대량으로 판매.' },
       { id: 'buy', out: true, t: ['같은 거래를', '얻는 쪽'], v: 'buy', icon: COIN(-30, -18) + AR(-18, -18, 10, -18, 'var(--accent2)', 2) + BIKE(-4, 22, .55) + AR(-16, 22, -38, 22, 'var(--ok)', 1.5),
         instead: 'Jin sold the bike to Mina. △', lost: '같은 거래지만 주어가 판 사람이 된다. 미나가 값을 치르고 얻었다는 쪽에서 말할 낱말이 없다.', why: '대가를 주고 얻음 — 이웃 BUY 묶음(41).' },
     ],
@@ -225,7 +224,7 @@
       resell:    { x: 180, y: 262, w: 96, v: 'resell', sub: '산 걸 다시', seg: 'w', say: '<span class="en">Jin resold the bike to Mina.</span> 먼저 산 이력까지.' },
       sell:      { x: 340, y: 262, w: 88, v: 'sell', sub: '방식 말 안 함', seg: 'b', say: '<span class="en">Jin sold his bike to Mina.</span> 이 묶음의 기본 동사.' },
       retail:    { x: 465, y: 262, w: 92, v: 'retail', sub: '소비자 · 한 개씩', seg: 'h', say: '<span class="en">The shop retails bikes to local families.</span> 직접 쓸 사람에게.' },
-      wholesale: { x: 574, y: 262, w: 104, v: 'wholesale', sub: '가게 · 대량', seg: 'h', say: '<span class="en">The company wholesales bikes to local shops.</span> 다시 팔 사업자에게 묶음으로.' },
+      wholesale: { x: 574, y: 262, w: 104, v: 'wholesale', sub: '가게 · 대량', seg: 'h', say: '<span class="en">The factory wholesales bikes to local shops.</span> 다시 팔 사업자에게 묶음으로.' },
       buy:       { x: 600, y: 36, w: 120, v: 'buy', sub: '→ BUY 묶음', seg: '', out: true, say: '<span class="en">Mina bought the bike from Jin.</span> 값을 <b>치르고 얻는</b> 쪽 → SELL 묶음 밖, <a href="41-buy.html">41 BUY</a>.' },
     },
     edges: [
@@ -259,7 +258,7 @@
       },
       wholesale: {
         who:   { ok: [['They', 's'], ['wholesale', 'v'], ['bikes', 'o'], ['to shops', 'r']], bad: [['They', 's'], ['wholesale', 'v'], ['shops', 'o'], ['bikes', 'o']], say: '사는 쪽은 <b>to</b>로 뒤에.' },
-        to:    { ok: [['The company', 's'], ['wholesales', 'v'], ['bikes', 'o'], ['to local shops', 'r']], say: '노트 예문.' },
+        to:    { ok: [['The factory', 's'], ['wholesales', 'v'], ['bikes', 'o'], ['to local shops', 'r']], say: '노트 예문.' },
         other: { ok: [['We', 's'], ['sell', 'v'], ['wholesale', 'x']], say: 'wholesale을 "<b>도매로</b>"라는 말로 sell · buy 뒤에 붙이는 모양.' },
       },
     },

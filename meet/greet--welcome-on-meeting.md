@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ɡriːt/ [그**리**트] — 단음절이다.
 - **Forms:** `greet` — `greeted` — `greeted`; 규칙 변화다.
-- **시제와 결과:** `Jin greeted Mina at the library door.` → `Jin has greeted Mina. She feels welcomed now.` 맞이한 사건과 현재의 환영받은 상태를 구별한다.
+- **시제와 결과:** `Jin greeted Mina at the library door.` → `Jin has greeted Mina. She has been welcomed at the door now.` 맞이한 사건과 현재의 인사를 받은 상태를 구별한다.
 
 - **Sense:** 만난 사람을 말·표정·몸짓으로 알아보고 맞이하다.
 - **Example:** `Jin greeted Mina at the door.`

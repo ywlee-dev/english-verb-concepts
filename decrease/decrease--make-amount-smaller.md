@@ -12,7 +12,7 @@
 - **Targets:** ticket price, room temperature, number of seats
 - **Target Condition:** 이전과 이후의 값을 비교할 수 있는 양·정도
 - **Compatibility:** `decrease the ticket price` / `lower the ticket price` 모두 자연스럽다. 후자는 조정 주체를 더 드러낸다.
-- **Precondition:** 기존 가격이 있고 가격을 바꿀 수 있다.
+- **Precondition:** 기존 가격이 있다. 누가 바꿨는지는 정하지 않는다.
 
 ## 언제 이 말을 꺼낼까?
 

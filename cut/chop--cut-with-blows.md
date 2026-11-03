@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /tʃɑːp/ [**찹**] — 단음절이다.
 - **Forms:** `chop` — `chopped` — `chopped`; 짧은 모음 뒤 자음을 겹쳐 적는다.
-- **시제와 결과:** `She chopped the carrot for the soup in the school kitchen.` → `She has chopped the carrot. It is in small even chunks now.` 강하게 반복해 자른 사건과 현재의 고른 조각 상태를 구별한다.
+- **시제와 결과:** `She chopped the carrot for the soup in the school kitchen.` → `She has chopped the carrot. It is in small chunks now.` 강하게 반복해 자른 사건과 현재의 조각 상태를 구별한다.
 
 - **Sense:** 강한 아래 방향 동작을 반복해 TARGET을 작은 덩어리로 자르다.
 - **Example:** `She chopped the carrot for the soup.`

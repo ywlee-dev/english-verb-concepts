@@ -7,7 +7,7 @@
 - **시제와 결과:** `The teacher split the piece of wood in two at the workshop table.` → `The teacher has split the wood. Two teams can use one piece each now.` 갈라낸 동작과 현재의 두 조각 상태를 구별한다.
 
 - **Sense:** 한 덩어리였던 TARGET을 갈라 둘 이상의 부분으로 나누다.
-- **Example:** `Jin split the piece of wood in two.`
+- **Example:** `The teacher split the piece of wood in two.`
 - **Target Condition:** 힘이나 도구로 갈라질 수 있는 하나의 덩어리
 - **Precondition:** TARGET에 나눌 수 있는 구조와 가할 힘이 있다.
 

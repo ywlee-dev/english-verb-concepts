@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˈlɪk.wə.faɪ/ [**릭**워파이] — 첫 음절 강세; 가운데 모음은 약하게 발음한다.
 - **Forms:** `liquefy` (기본형/현재) — `liquefied` (과거) — `liquefied` (과거분사); 철자 `-fy`가 `-fied`로 바뀐다.
-- **시제와 결과:** `The baker liquefied the chocolate yesterday.` → `The baker has liquefied the chocolate. It flows into the machine now.` `liquefied`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `The baker liquefied the chocolate yesterday.` → `The baker has liquefied the chocolate. It flows into the machine now.` `liquefied`는 여기서 `has` 뒤의 과거분사이다.
 
 - **Sense:** 고체를 액체 상태로 만들다. 여기서는 가열로 초콜릿을 녹이는 조리·가공 맥락이다.
 - **Example:** `The baker liquefied the chocolate with gentle heat.`

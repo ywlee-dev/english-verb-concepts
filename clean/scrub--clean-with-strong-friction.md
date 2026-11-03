@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /skrʌb/ [스크**럽**] — 단음절이다.
 - **Forms:** `scrub` — `scrubbed` — `scrubbed`; 짧은 모음 뒤 자음을 겹쳐 적는다.
-- **시제와 결과:** `Mina scrubbed the paint stain from the floor in the corner.` → `Mina has scrubbed the stain. It is gone from the floor now.` 강하게 문지른 동작과 현재의 제거된 상태를 구별한다.
+- **시제와 결과:** `Mina scrubbed the paint stain from the floor in the corner.` → `Mina has scrubbed the stain. The floor is cleaner now.` 강하게 문지른 동작과 현재의 더 깨끗해진 상태를 구별한다. 얼룩이 다 빠졌는지는 따로 말한다.
 
 - **Sense:** 붙은 오염을 떼기 위해 솔·천으로 힘주어 반복해서 문지르다.
 - **Example:** `Mina scrubbed the paint stain from the floor.`
@@ -31,6 +31,8 @@
 ```text
 CLEAN + 강한 반복 마찰 = SCRUB
 ```
+
+CLEAN 장면에서 쓰일 때의 식이다 — `scrub` 자체는 얼룩이 완전히 빠졌다는 결과를 보장하지 않는다.
 
 ## Minimal Contrast
 

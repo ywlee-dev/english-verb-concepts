@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /kənˈstrʌkt/ [컨스트**럭**트] — 뒤 음절 강세다.
 - **Forms:** `construct` — `constructed` — `constructed`; 규칙 변화다.
-- **시제와 결과:** `Workers constructed a shelter from a plan at the disaster relief site.` → `Workers have constructed the shelter. It meets the safety standard now.` 계획대로 시공한 사건과 현재의 기준 충족 상태를 구별한다.
+- **시제와 결과:** `Workers constructed a shelter from a plan at the disaster relief site.` → `Workers have constructed the shelter. It stands on the site now.` 계획대로 시공한 사건과 현재의 완성된 구조 상태를 구별한다. 안전 기준 통과는 따로 확인한다.
 
 - **Sense:** 도면·계획·정해진 절차에 따라 구조를 체계적으로 짓다.
 - **Example:** `Workers constructed a shelter from a plan.`

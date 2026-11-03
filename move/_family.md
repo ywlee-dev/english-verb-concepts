@@ -2,6 +2,8 @@
 
 ## Shared Result
 
+TARGET의 위치가 이전과 달라진다.
+
 ## 상황에서 꺼내기 — 설명을 보기 전에
 
 상자가 창고 바닥에서 문 쪽으로 이동하는 모습을 떠올려 보자.
@@ -21,8 +23,6 @@
 </details>
 
 내 장면으로 바꿔 보기: 오늘 위치를 바꾼 물건 하나를 골라 어떻게 움직였는지 말해 보자. [CARRY](carry/_family.md)와 [THROW](throw/_family.md)는 MOVE 아래의 더 자세한 HOW 묶음이다.
-
-TARGET의 위치가 이전과 달라진다.
 
 ```text
                          MOVE

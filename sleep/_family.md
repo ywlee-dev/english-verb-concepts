@@ -14,7 +14,7 @@ agent의 의식과 활동 수준이 낮아져 일정 시간 잠든 상태에 들
 
 ## Scenario contrast
 
-밤새 잠든 상태에 머물면 SLEEP, 깨어 있다가 잠드는 경계는 FALL ASLEEP, 낮에 계획한 짧은 잠은 NAP, 의자에서 자신도 모르게 얕게 졸면 DOZE, 알람을 지나 늦게까지 자면 OVERSLEEP이다.
+밤새 잠든 상태에 머물면 SLEEP, 깨어 있다가 잠드는 경계는 FALL ASLEEP, 낮에 짧게 쉬려고 자는 잠은 NAP, 의자에서 자신도 모르게 얕게 졸면 DOZE, 알람을 지나 늦게까지 자면 OVERSLEEP이다.
 
 `SLEEP`은 상태의 지속이고 `FALL ASLEEP`은 그 상태로 들어가는 변화다. 두 표현을 억지로 같은 시간 순서의 HOW로 보지 않는다.
 

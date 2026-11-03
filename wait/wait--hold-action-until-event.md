@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /weɪt/ [웨이트] — 한 음절; `wait for the bus`에서 `for`는 기다리는 대상을 잇는다.
 - **Forms:** `wait` (기본형/현재) — `waited` (과거) — `waited` (과거분사)
-- **시제와 결과:** `The children waited for the bus yesterday.` → `The children have waited for the bus for twenty minutes. It still has not arrived.` `waited`는 여기서 현재완료의 동사형이며 버스 도착을 보장하지 않는다.
+- **시제와 결과:** `The children waited for the bus yesterday.` → `The children have waited for the bus for twenty minutes. It still has not arrived.` `waited`는 여기서 `have/has` 뒤의 과거분사이며 버스 도착을 보장하지 않는다.
 
 - **Sense:** 버스가 올 때까지 출발 행동을 보류하다.
 - **Example:** `The children waited for the bus outside school.`

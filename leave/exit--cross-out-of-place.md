@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˈek.sɪt/ [**엑**싯] — 첫 음절 강세; /ˈeɡ.zɪt/ [**에그**짓]도 쓰인다.
 - **Forms:** `exit` (기본형/현재) — `exited` (과거) — `exited` (과거분사)
-- **시제와 결과:** `The students exited the classroom through the side door.` → `The students have exited the classroom. They are in the hallway now.` `exited`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `The students exited the classroom through the side door.` → `The students have exited the classroom. They are in the hallway now.` `exited`는 여기서 `have/has` 뒤의 과거분사이다.
 
 - **Sense:** 교실의 출구를 통해 밖으로 나가다.
 - **Example:** `The students exited the classroom through the side door.`

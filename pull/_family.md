@@ -32,7 +32,7 @@ agent가 TARGET 또는 연결된 선에 힘을 가해 자신이나 기준점 쪽
 | TUG | tug the rope | 짧은 당김(반복 가능) |
 | YANK | yank the rope | 갑작스럽고 날카로운 강한 당김 |
 | TOW | tow the car | 연결선을 이용해 차량·짐을 끌고 이동 |
-| REEL | reel in the rope | 감는 장치로 선을 회수 |
+| REEL | reel in the fishing line | 감는 장치로 선을 회수 |
 
 ## Scenario contrast
 

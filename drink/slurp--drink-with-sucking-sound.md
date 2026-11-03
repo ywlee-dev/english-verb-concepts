@@ -32,6 +32,8 @@
 DRINK + 입술로 소리 나게 빨아들임 = SLURP
 ```
 
+액체를 마시는 장면에서 쓰일 때의 식이다 — `slurp`는 면이 든 음식을 소리 내어 먹을 때에도 쓴다(Target Condition).
+
 ## Minimal Contrast
 
 조용히 조금씩 마시면 `sip`, 소리 나게 빨아들이면 `slurp`이다.

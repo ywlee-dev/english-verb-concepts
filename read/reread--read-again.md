@@ -9,7 +9,7 @@
 - **Sense:** 같은 글을 한 번 더 읽어 이해·확인을 높이다.
 - **Example:** `Mina reread the difficult paragraph.`
 - **Target Condition:** 이전에 읽었으나 다시 확인할 수 있는 글
-- **Precondition:** 첫 읽기에서 이해가 부족하거나 기억이 불확실하다.
+- **Precondition:** 같은 글을 이미 한 번 읽었다. 이 장면에서는 첫 읽기에서 이해가 부족했다.
 
 ## 언제 이 말을 꺼낼까?
 

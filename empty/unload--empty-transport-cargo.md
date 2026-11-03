@@ -1,10 +1,10 @@
-# UNLOAD — remove transported cargo
+# UNLOAD — empty transported cargo
 
 ## 0. Sound & Forms
 
 - **Pronunciation (US):** /ʌnˈloʊd/ [언**로**우드] — 뒤 음절 강세다.
 - **Forms:** `unload` — `unloaded` — `unloaded`; 규칙 변화다.
-- **시제와 결과:** `The students unloaded the truck in front of the donation warehouse.` → `The students have unloaded the truck. Its cargo space is empty now.` 화물을 내린 동작과 현재의 빈 적재 공간 상태를 구별한다.
+- **시제와 결과:** `The students unloaded the truck in front of the donation warehouse.` → `The students have unloaded the truck. The cargo is off the truck now.` 화물을 내린 동작과 현재 화물이 차 밖에 나온 상태를 구별한다.
 
 - **Sense:** 차량·배·운반 용기에 실린 화물을 내려 비우다.
 - **Example:** `The students unloaded the truck.`
@@ -30,6 +30,8 @@
 ```text
 EMPTY + 운반 화물을 차량에서 내림 = UNLOAD
 ```
+
+EMPTY 장면에서 쓰일 때의 식이다 — `unload` 자체는 용기가 완전히 비었다는 보장이 없다.
 
 ## Minimal Contrast
 

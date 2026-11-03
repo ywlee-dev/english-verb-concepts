@@ -1,4 +1,4 @@
-# PROMISE — commit to future action
+# PROMISE — say you will do something
 
 ## 0. Sound & Forms
 

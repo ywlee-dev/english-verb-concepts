@@ -9,12 +9,12 @@ agent가 고체 음식을 입으로 받아 몸 안에 섭취한다.
 | EAT | eat the apple | 음식을 섭취 |
 | BITE | bite the apple | 이로 눌러 한 조각을 떼어 냄 |
 | CHEW | chew the apple | 이로 반복해서 잘게 부숨 |
-| NIBBLE | nibble the apple | 아주 조금씩 여러 번 베어 먹음 |
-| DEVOUR | devour the meal | 매우 빠르고 많이 먹어 치움 |
+| NIBBLE | nibble the carrot | 아주 조금씩 여러 번 베어 먹음 |
+| DEVOUR | devour the sandwich | 매우 빠르고 많이 먹어 치움 |
 
 ## Scenario contrast
 
-사과를 음식으로 섭취하면 EAT, 이로 한 조각을 떼면 BITE, 입 안에서 잘게 부수면 CHEW, 가장자리를 조금씩 먹으면 NIBBLE, 몹시 배고파 식사를 빠르게 먹어 치우면 DEVOUR가 된다.
+사과를 음식으로 섭취하면 EAT, 이로 한 조각을 떼면 BITE, 입 안에서 잘게 부수면 CHEW, 토끼가 당근 가장자리를 조금씩 먹으면 NIBBLE, 몹시 배고픈 Jin이 샌드위치를 빠르게 먹어 치우면 DEVOUR가 된다.
 
 `BITE`와 `CHEW`는 먹는 과정과 자주 함께 일어나지만 그 자체만으로 삼키거나 섭취했다는 뜻은 아니다. 여기서는 같은 음식 장면에서 입동작의 차이를 배우는 학습용 묶음이다.
 

@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** `figure` /ˈfɪɡ.jɚ/ [**피겨**] + `out` /aʊt/ [아웃] — `figure` 첫 음절에 강세; 한글 표기는 소리 힌트다.
 - **Forms:** `figure out` (기본형/현재) — `figured out` (과거) — `figured out` (과거분사); `out`은 변하지 않는다.
-- **시제와 결과:** `Mina figured out the answer yesterday.` → `Mina has figured out the answer. She understands the pattern now.` `figured out`은 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `Mina figured out the answer yesterday.` → `Mina has figured out the answer. She understands the pattern now.` `figured out`은 여기서 `have/has` 뒤의 과거분사이다.
 
 - **Sense:** 생각을 거쳐 문제의 원리나 답을 알아내다.
 - **Example:** `Mina figured out the answer after spotting a pattern.` — 목적어는 알아낸 것(answer·pattern·rule)이 가장 자연스럽다.

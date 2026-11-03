@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /rɪˈhɜːrs/ [리**허**스] — 뒤 음절 강세다.
 - **Forms:** `rehearse` — `rehearsed` — `rehearsed`; 규칙 변화다.
-- **시제와 결과:** `The class rehearsed the play on the school stage the day before the festival.` → `The class has rehearsed the play. Their entrances and timing are matched now.` 미리 맞춰 본 사건과 현재의 정돈된 동선 상태를 구별한다.
+- **시제와 결과:** `The class rehearsed the play on the school stage the day before the festival.` → `The class has rehearsed the play. They have run through their entrances and timing now.` 미리 맞춰 본 사건과 현재의 흐름을 한 번 맞춰 본 상태를 구별한다. 완벽하게 맞았다는 뜻은 아니다.
 
 - **Sense:** 실제 공연에 대비해 정해진 순서와 동작으로 작품을 연습하다.
 - **Example:** `The class rehearsed the play.`
@@ -25,6 +25,8 @@
 ```text
 PLAY/PERFORM + 실제 공연 전 전체 흐름을 미리 실행 = REHEARSE
 ```
+
+PLAY/PERFORM 장면에서 쓰일 때의 식이다 — `rehearse` 자체가 언제나 `play`의 하위 사건인 것은 아니다(묶음 노트).
 
 ## Minimal Contrast
 

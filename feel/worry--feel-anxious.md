@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˈwɜːr.i/ [**워**리] — 첫 음절 강세다.
 - **Forms:** `worry` — `worried` — `worried`; `y`를 `ied`로 바꾼다.
-- **시제와 결과:** `Mina worried about the storm at home on the rainy night.` → `Mina has worried about the doghouse. She cannot stop thinking about it now.` 불안을 느낀 사건과 현재까지 이어지는 걱정 상태를 구별한다.
+- **시제와 결과:** `Mina worried about the doghouse during the storm.` → `Mina has worried about the doghouse. She cannot stop thinking about it now.` 불안을 느낀 사건과 현재까지 이어지는 걱정 상태를 구별한다.
 
 - **Sense:** 나쁜 일이 생길 가능성을 계속 생각하며 불안을 느끼다.
 - **Example:** `Mina worried about the storm.`

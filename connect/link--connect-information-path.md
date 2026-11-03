@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /lɪŋk/ [**링**크] — 단음절이다.
 - **Forms:** `link` — `linked` — `linked`; 규칙 변화다.
-- **시제와 결과:** `Mina linked the two speakers wirelessly in the large room.` → `Mina has linked the speakers. They play the same sound together now.` 신호 경로를 만든 동작과 현재의 동기화된 상태를 구별한다.
+- **시제와 결과:** `Mina linked the two speakers wirelessly in the large room.` → `Mina has linked the speakers. They can share the same signal now.` 신호 경로를 만든 동작과 현재의 동기화된 상태를 구별한다. 실제 재생은 별개다.
 
 - **Sense:** 둘 이상의 대상이 정보·신호로 서로 이어지게 하다.
 - **Example:** `Mina linked the two speakers wirelessly.`
@@ -25,7 +25,7 @@
 - **SITUATION / PROBLEM:** 뒤쪽 스피커까지 케이블을 놓으면 사람들이 걸려 넘어질 수 있다.
 - **PURPOSE:** 두 스피커가 같은 소리를 무선으로 내게 한다.
 - **WHY THIS HOW?:** 물리적 접촉 없이 신호 관계를 설정하므로 `LINK`를 쓴다.
-- **ACTION → RESULT:** Mina가 두 스피커의 연결 메뉴를 선택해 신호가 공유되고 함께 소리가 난다.
+- **ACTION → RESULT:** Mina가 두 스피커의 연결 메뉴를 선택해 신호가 공유된다. 함께 소리가 나는지는 재생에 달려 있다.
 
 ```text
 CONNECT + 정보·신호 경로 설정 = LINK

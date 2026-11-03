@@ -32,6 +32,8 @@ Mina가 불을 끄고 누웠지만 처음엔 시계 소리를 듣고 있다. 잠
 SLEEP + 깨어 있음에서 잠으로 진입 = FALL ASLEEP
 ```
 
+SLEEP 상태로 들어가는 변화를 나타내는 식이다 — 묶음 노트대로 `fall asleep`을 `sleep`과 같은 시간 순서의 HOW로 보지는 않는다.
+
 ## Minimal Contrast
 
 10시에 `fall asleep`한 뒤 아침까지 `sleep`할 수 있다.

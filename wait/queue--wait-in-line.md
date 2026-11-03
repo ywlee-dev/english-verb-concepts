@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /kjuː/ [큐] — 여러 글자지만 한 음절이다.
 - **Forms:** `queue` (기본형/현재) — `queued` (과거) — `queued` (과거분사)
-- **시제와 결과:** `The children queued for the bus yesterday.` → `The children have queued for the bus. They are now at the front of the line.` `queued`는 여기서 현재완료의 동사형이며 줄을 선 결과가 현재 장면에 남아 있다.
+- **시제와 결과:** `The children queued for the bus yesterday.` → `The children have queued for the bus. They are now at the front of the line.` `queued`는 여기서 `have/has` 뒤의 과거분사이며 줄을 선 결과가 현재 장면에 남아 있다.
 
 - **Sense:** 버스를 타기 위해 차례대로 줄을 서서 기다리다.
 - **Example:** `The children queued for the bus outside school.`

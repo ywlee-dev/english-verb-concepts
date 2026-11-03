@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** `walk` /wɑːk/ [워크] + `out of` /aʊt əv/ [아웃 어브] — `walk`의 철자 `l`은 발음하지 않는다.
 - **Forms:** `walk out of` (기본형/현재) — `walked out of` (과거) — `walked out of` (과거분사); `out of`는 변하지 않는다.
-- **시제와 결과:** `The students walked out of the classroom after the bell.` → `The students have walked out of the classroom. They are in the hallway now.` `walked`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `The students walked out of the classroom after the bell.` → `The students have walked out of the classroom. They are in the hallway now.` `walked`는 여기서 `have/has` 뒤의 과거분사이다.
 
 - **Sense:** 교실에서 걸어 나가다.
 - **Example:** `The students walked out of the classroom after the bell.`

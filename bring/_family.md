@@ -2,6 +2,8 @@
 
 ## Shared Event Backbone
 
+agent가 TARGET을 기준 사람이나 목적지 쪽으로 오게 만든다.
+
 ## 상황에서 꺼내기 — 설명을 보기 전에
 
 사무실에 필요한 물건이 움직이는 경로를 떠올려 보자.
@@ -21,8 +23,6 @@
 </details>
 
 내 장면으로 바꿔 보기: 최근 물건 하나를 옮긴 일을 떠올리고, 어디로 가져왔는지 또는 어디로 보냈는지 말해 보자. `ship`은 개념상 `send` 쪽에 더 가깝다.
-
-agent가 TARGET을 기준 사람이나 목적지 쪽으로 오게 만든다.
 
 | Verb | Package example | Distinctive Route / Purpose |
 |---|---|---|

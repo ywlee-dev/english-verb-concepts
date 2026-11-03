@@ -3,7 +3,7 @@
 ## 0. Sound & Forms
 
 - **Pronunciation (US):** /doʊz/ [**도**우즈] — 단음절이며 끝소리는 /z/다.
-- **Forms:** `doze` — `dozed` — `dozed`; 규칙 변화다.
+- **Forms:** `doze` — `dozed` — `dozed`; 규칙 변화다. `doze off`도 같은 변화를 따른다(`dozed off`).
 - **시제와 결과:** `Grandpa dozed in the chair in the waiting room.` → `Grandpa has dozed off. He is lightly asleep in the chair now.` 얕게 존 사건과 현재의 불완전한 수면 상태를 구별한다.
 
 - **Sense:** 짧고 얕게, 때로는 자신도 모르게 졸다.
@@ -34,4 +34,4 @@ SLEEP + 얕고 짧으며 불완전한 잠 = DOZE
 
 ## Minimal Contrast
 
-계획한 짧은 잠은 `nap`, 자신도 모르게 얕게 조는 것은 `doze`이다.
+쉬려고 자는 짧은 잠은 `nap`, 자신도 모르게 얕게 조는 것은 `doze`이다.

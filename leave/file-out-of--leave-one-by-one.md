@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** `file` /faɪl/ [파일] + `out of` /aʊt əv/ [아웃 어브] — `file`은 한 음절이다.
 - **Forms:** `file out of` (기본형/현재) — `filed out of` (과거) — `filed out of` (과거분사); `out of`는 변하지 않는다.
-- **시제와 결과:** `The students filed out of the classroom quietly.` → `The students have filed out of the classroom. The room is empty now.` `filed`는 여기서 현재완료의 동사형이며 여러 사람이 차례로 나간 장면이다.
+- **시제와 결과:** `The students filed out of the classroom quietly.` → `The students have filed out of the classroom. The room is empty now.` `filed`는 여기서 `have/has` 뒤의 과거분사이며 여러 사람이 차례로 나간 장면이다.
 
 - **Sense:** 여러 사람이 한 줄로 차례차례 교실을 나가다.
 - **Example:** `The students filed out of the classroom quietly.`

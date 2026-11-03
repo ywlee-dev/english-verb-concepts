@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˈstʌd.i/ [스**터**디] — 첫 음절 강세다.
 - **Forms:** `study` — `studied` — `studied`; `y`를 `ied`로 바꾼다.
-- **시제와 결과:** `Mina studied the fraction examples at the library desk.` → `Mina has studied the examples. Her knowledge of the rule has grown now.` 집중해 살핀 사건과 현재의 향상된 이해 상태를 구별한다.
+- **시제와 결과:** `Mina studied the fraction examples at the library desk.` → `Mina has studied the examples. She has worked through them carefully now.` 집중해 살핀 사건과 현재의 학습 시간을 들인 상태를 구별한다. 실제로 다 배웠다는 뜻은 아니다.
 
 - **Sense:** 지식을 얻기 위해 자료나 대상을 의도적으로 자세히 살피다.
 - **Example:** `Mina studied the fraction examples.`
@@ -31,6 +31,8 @@
 ```text
 LEARN + 자료에 의도적 시간과 주의를 투입 = STUDY
 ```
+
+LEARN을 목표로 한 활동을 나타내는 식이다 — `study` 자체는 지식을 실제로 얻었다는 것을 보장하지 않는다(묶음 노트).
 
 ## Minimal Contrast
 

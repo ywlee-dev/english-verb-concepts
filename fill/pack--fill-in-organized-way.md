@@ -1,4 +1,4 @@
-# PACK — fill in an organized way
+# PACK — fill with things to store or carry
 
 ## 0. Sound & Forms
 
@@ -31,6 +31,8 @@
 FILL + 보관·운반 목적에 맞게 배치 = PACK
 ```
 
+FILL 장면에서 쓰일 때의 식이다. 정돈된 배치는 이 장면의 모습이고, `pack` 자체는 가지런함도 가득 참도 보장하지 않는다.
+
 ## Minimal Contrast
 
-내용물로 상자를 `fill`하고, 안전한 배치까지 고려하면 `pack`한다.
+내용물로 상자를 `fill`하고, 보관·운반을 위해 챙겨 넣으면 `pack`한다.

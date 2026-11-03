@@ -7,8 +7,8 @@ agent가 경험·설명·연습을 통해 이전에 없던 지식이나 능력�
 | Verb | Example | Distinctive Learning HOW |
 |---|---|---|
 | LEARN | learn the rule | 지식이나 능력을 새로 획득 |
-| STUDY | study the rule | 자료에 의도적으로 시간과 주의를 씀 |
-| PRACTICE | practice the skill | 같은 수행을 반복해 능력을 높임 |
+| STUDY | study the fraction examples | 자료에 의도적으로 시간과 주의를 씀 |
+| PRACTICE | practice adding fractions | 같은 수행을 반복해 능력을 높임 |
 | DISCOVER | discover the rule | 관찰·탐색 중 스스로 새 사실을 찾아냄 |
 | MEMORIZE | memorize the rule | 정확히 다시 꺼낼 수 있도록 기억에 고정 |
 

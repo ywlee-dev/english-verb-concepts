@@ -8,7 +8,7 @@
 |---|---|---|
 | ACHIEVE | The team achieved its goal. | 목표 달성, 과정 미지정 |
 | ACCOMPLISH | The team accomplished its goal. | 계획된 일을 끝내 성취 |
-| ATTAIN | The team attained its goal. | 오래 추구한 수준에 이름; 격식체 |
+| ATTAIN | The team attained its goal. | 추구하던 수준에 이름; 격식체 |
 | REACH | The team reached its goal. | 목표를 도착점처럼 바라봄 |
 
 같은 모금 목표 $500에 대해, 여러 활동을 끝낸 성취는 `accomplish`, 오랜 노력 끝에 목표치에 닿으면 `attain/reach`가 어울린다. 네 동사는 같은 결과를 다른 관점에서 볼 수 있으며 서로 배타적인 HOW가 아니다.

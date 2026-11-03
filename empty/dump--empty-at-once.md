@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /dʌmp/ [**덤**프] — 단음절이다.
 - **Forms:** `dump` — `dumped` — `dumped`; 규칙 변화다.
-- **시제와 결과:** `Jin dumped the sand out of the box at the playground.` → `Jin has dumped the sand out. The box is empty now.` 한꺼번에 쏟은 동작과 현재의 빈 상자 상태를 구별한다.
+- **시제와 결과:** `Jin dumped the sand out of the box at the playground.` → `Jin has dumped the sand out. The sand is out of the box now.` 한꺼번에 쏟은 동작과 현재 모래가 상자 밖에 나온 상태를 구별한다.
 
 - **Sense:** 내용물을 한 번에 거칠거나 빠르게 쏟아 내다.
 - **Example:** `Jin dumped the sand out of the box.`
@@ -30,6 +30,8 @@
 ```text
 EMPTY + 내용물을 한꺼번에 쏟음 = DUMP
 ```
+
+EMPTY 장면에서 쓰일 때의 식이다 — `dump` 자체는 용기가 완전히 비었다는 보장이 없다.
 
 ## Minimal Contrast
 

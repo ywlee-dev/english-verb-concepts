@@ -34,4 +34,4 @@ DRAW + 빠르고 거친 기본형 = SKETCH
 
 ## Minimal Contrast
 
-완성된 집 그림을 `draw`하고, 그 전에 위치를 시험하며 `sketch`한다.
+집을 그리면 `draw`, 위치를 시험하며 대략 빠르게 그리면 `sketch`한다. 뒤에 완성본이 꼭 따르지는 않는다.

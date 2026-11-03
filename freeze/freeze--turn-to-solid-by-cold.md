@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /friːz/ [프리즈] — 한 음절; 끝은 /s/가 아닌 /z/.
 - **Forms:** `freeze` (기본형/현재) — `froze` (과거) — `frozen` (과거분사)
-- **시제와 결과:** `The cook froze the peas yesterday.` → `The cook has frozen the peas. The peas are frozen now.` 앞의 `frozen`은 현재완료의 동사형, 뒤의 `frozen`은 콩의 냉동 상태를 나타낸다.
+- **시제와 결과:** `The cook froze the peas yesterday.` → `The cook has frozen the peas. The peas are frozen now.` 앞의 `frozen`은 `has` 뒤의 과거분사, 뒤의 `frozen`은 콩의 냉동 상태를 나타낸다.
 
 - **Sense:** 차갑게 하여 액체 또는 음식 속 수분을 얼리다.
 - **Example:** `The cook froze the peas for later use.`

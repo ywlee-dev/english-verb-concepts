@@ -2,12 +2,12 @@
 
 ## 0. Sound & Forms
 
-- **Pronunciation (US):** `go` /ɡoʊ/ [고우], `along` /əˈlɑːŋ/ [어**랑**]. `along`의 뒤쪽 음절에 강세가 있다.
+- **Pronunciation (US):** `go` /ɡoʊ/ [고우], `along` /əˈlɑːŋ/ [어**랑**], `with` /wɪð/ [위드]. `along`의 뒤쪽 음절에 강세가 있다.
 - **Forms:** `go along with` — `went along with` — `gone along with`; `go`만 불규칙하게 바뀐다.
-- **시제와 결과:** `The class went along with the picnic plan despite some doubts.` → `The class has gone along with the picnic plan. The teacher can proceed now.` 적극 지지가 아니라 반대하지 않고 따른 결과다.
+- **시제와 결과:** `The students went along with the picnic plan despite some doubts.` → `The students have gone along with the picnic plan. The teacher can proceed now.` 적극 지지가 아니라 반대하지 않고 따른 결과다.
 
 - **Sense:** 썩 마음에 들지 않아도 소풍 계획에 반대하지 않고 따르다.
-- **Example:** `The class went along with the picnic plan despite some doubts.`
+- **Example:** `The students went along with the picnic plan despite some doubts.`
 - **Result Verb:** 이 장면에서는 `AGREE`라는 사회적 수용. 강한 내적 찬성은 보장하지 않는다.
 - **Targets:** picnic plan, suggestion, group decision
 - **Target Condition:** 다른 사람이 먼저 제안했고 함께 따를 수 있는 결정

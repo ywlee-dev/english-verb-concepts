@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˌriːˈmelt/ [리 **멜트**] — `melt`에 주강세.
 - **Forms:** `remelt` (기본형/현재) — `remelted` (과거) — `remelted` (과거분사)
-- **시제와 결과:** `The baker remelted the chocolate yesterday.` → `The baker has remelted the chocolate. It is liquid again.` `remelted`는 여기서 현재완료의 동사형이고, 마지막 문장은 결과 상태를 따로 말한다.
+- **시제와 결과:** `The baker remelted the chocolate yesterday.` → `The baker has remelted the chocolate. It is liquid again.` `remelted`는 여기서 `has` 뒤의 과거분사이고, 마지막 문장은 결과 상태를 따로 말한다.
 
 - **Sense:** 한 번 녹았다 다시 굳은 것을 재차 녹이다.
 - **Example:** `The baker remelted the chocolate after it hardened.`

@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˈfɔːr.wərd/ [**포**워드] — 첫 음절 강세다.
 - **Forms:** `forward` — `forwarded` — `forwarded`; 규칙 변화다.
-- **시제와 결과:** `Mina forwarded the message to Jin from the group chat at home.` → `Mina has forwarded the message. Jin has the same announcement now.` 재발송한 사건과 현재의 동일 정보 보유 상태를 구별한다.
+- **시제와 결과:** `Mina forwarded the message to Jin from the group chat at home.` → `Mina has forwarded the message. The same announcement is on its way to Jin now.` 재발송한 사건과 현재의 같은 내용이 다시 발송된 상태를 구별한다.
 
 - **Sense:** 자신이 받은 정보나 물건을 다른 수신자에게 다시 보내다.
 - **Example:** `Mina forwarded the message to Jin.`

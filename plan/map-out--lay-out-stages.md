@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** `map` /mæp/ [맵] + `out` /aʊt/ [아웃] — 두 단어를 이어 말한다. 문장에서는 `out`을 강조할 수 있다.
 - **Forms:** `map out` (기본형/현재) — `mapped out` (과거) — `mapped out` (과거분사); `map`의 `p`를 한 번 더 적고 `out`은 그대로 둔다.
-- **시제와 결과:** `We mapped out the school trip yesterday.` → `We have mapped out the school trip. The route is on the paper now.` `mapped out`은 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `We mapped out the school trip yesterday.` → `We have mapped out the school trip. The route is on the paper now.` `mapped out`은 여기서 `have/has` 뒤의 과거분사이다.
 
 - **Sense:** 앞으로 할 일의 단계나 경로를 한눈에 보이도록 구체화하다.
 - **Example:** `We mapped out the school trip on a large sheet of paper.`

@@ -74,7 +74,7 @@
     <tr><td><b>clean</b></td><td><span class="en">cleaned the classroom floor</span> (노트)</td><td><span class="en">cleaned up the mess</span></td><td><span class="en">cleaned my room</span></td></tr>
     <tr><td><b>wash</b></td><td><span class="en">washed the muddy floor</span> (노트)</td><td><span class="en">washed the mud off</span></td><td><span class="en">washed my hands</span></td></tr>
     <tr><td><b>wipe</b></td><td><span class="en">wiped the wet floor with a cloth</span> (노트)</td><td><span class="en">wiped the sweat off his face</span></td><td><span class="en">Wipe your feet.</span></td></tr>
-    <tr><td><b>scrub</b></td><td><span class="en">scrub the floor</span> (묶음 표)</td><td><span class="en">scrubbed the paint stain from the floor</span> (노트)</td><td><span class="en">scrubbed the pot</span></td></tr>
+    <tr><td><b>scrub</b></td><td><span class="en">scrub the floor</span></td><td><span class="en">scrubbed the paint stain from the floor</span> (노트)</td><td><span class="en">scrubbed the pot</span></td></tr>
     <tr><td><b>sweep</b></td><td><span class="en">swept the classroom floor</span> (노트)</td><td><span class="en">swept the scraps into a pile</span></td><td>✗ <span class="en">sweeped</span></td></tr>
   </table>
   <p class="note">경향 한 줄: 표면이 목적어면 "어디를 닦았나"로 끝나고, 오염이 목적어면 <b>off · from · into</b>가 붙어 "어디로 떨어져 나갔나"까지 말한다.</p>
@@ -95,8 +95,7 @@
       <li>5절의 노트 표시 없는 문장(<span class="en">cleaned up the mess · washed the mud off · wiped the sweat off his face · Wipe your feet · scrubbed the pot · swept the scraps into a pile</span>), 아래 그림의 ✗ 줄(<span class="en">washed my teeth · scrubed · sweeped</span>), 경향 한 줄은 짐작이다.</li>
       <li>0절 "대신 말하면"의 △·✗ 판정은 짐작이다.</li>
       <li>맨 위 그림에서 scrub 장면만 CLEAN 칩을 껐다. scrub 노트 "언제"의 "scrubbed만으로 얼룩이 완전히 사라졌다고 단정하지 않는다"를 따른 판단이다.</li>
-      <li>노트끼리 어긋남: scrub 노트 안에서 "언제"는 위처럼 말하는데, 시제와 결과는 <span class="en">It is gone from the floor now.</span>로 다 빠졌다고 적었다. 식도 <span class="en">CLEAN + 강한 반복 마찰 = SCRUB</span>이라 결과를 보장하는 것처럼 읽힌다. 어느 쪽으로 맞출지 정할 것.</li>
-      <li>노트 문제: 묶음 표는 다섯 동사 모두 <span class="en">the floor</span>가 TARGET인데, scrub 노트 예문의 목적어는 <span class="en">the paint stain</span>(오염)이다. wipe 노트 "언제"의 장면은 "책상 옆 바닥", Scene Scenario는 "물감 작업대 옆"으로 조금 다르다. 묶음에 칫솔의 brush(이를 닦다)가 없다.</li>
+      <li>wipe 노트 "언제"의 장면은 "책상 옆 바닥", Scene Scenario는 "물감 작업대 옆"으로 조금 다르다(일상 예와 고정 장면). 묶음에 칫솔의 brush(이를 닦다)가 없다. 3절 표의 <span class="en">scrub the floor</span>(표면이 목적어)는 짐작이다.</li>
     </ul>
   </div>
 
@@ -296,7 +295,7 @@
         other: { ok: [['Wipe', 'v'], ['your feet', 'o']], say: '현관 매트에 발을 닦아 — 신발 바닥의 흙을 훑어 냄.' },
       },
       scrub: {
-        surf:  { ok: [['I', 's'], ['scrubbed', 'v'], ['the floor', 'o']], say: '표면을 목적어로도 쓴다(묶음 표 <span class="en">scrub the floor</span>).' },
+        surf:  { ok: [['I', 's'], ['scrubbed', 'v'], ['the floor', 'o']], say: '표면을 목적어로도 쓴다(짐작 — 노트 예문은 얼룩이 목적어).' },
         dirt:  { ok: [['Mina', 's'], ['scrubbed', 'v'], ['the paint stain', 'o'], ['from the floor', 'r']], say: '얼룩을 바닥에서 <b>from</b> — 떼어 냄(노트 예문).' },
         other: { ok: [['She', 's'], ['scrubbed', 'v'], ['the pot', 'o']], bad: [['She', 's'], ['scrubed', 'v'], ['the pot', 'o']], say: '짧은 모음 뒤라 b를 겹친다 — <b>scrubbed</b>(노트 Forms).' },
       },

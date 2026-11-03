@@ -4,14 +4,14 @@
 
 - **Pronunciation (US):** /əˈteɪn/ [어**테인**] — 둘째 음절 강세.
 - **Forms:** `attain` (기본형/현재) — `attained` (과거) — `attained` (과거분사)
-- **시제와 결과:** `The class attained its $500 goal yesterday.` → `The class has attained its goal. The total has reached $500.` `attained`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `The class attained its $500 goal yesterday.` → `The class has attained its goal. The total is $500 now.` `attained`는 여기서 `has` 뒤의 과거분사이다.
 
-- **Sense:** 오랫동안 추구한 목표 수준에 이르다. 비교적 격식 있는 표현이다.
+- **Sense:** 추구하던 목표 수준에 이르다. 비교적 격식 있는 표현이다.
 - **Example:** `After months of work, the class attained its $500 goal.`
 - **Result Verb:** `ACHIEVE`; 정한 모금액을 실제로 채운다.
 - **Targets:** fundraising goal, target score, desired level
 - **Target Condition:** 계속 추구하다 도달할 수 있는 목표치·수준
-- **Compatibility:** `achieve its goal` / `attain its goal` 모두 자연스럽고, 후자는 오래 추구한 수준에 닿는 느낌이다.
+- **Compatibility:** `achieve its goal` / `attain its goal` 모두 자연스럽고, 후자는 추구하던 수준에 닿는 느낌이다.
 - **Precondition:** 목표와 그것을 향한 지속적인 노력이 있다.
 
 ## 언제 이 말을 꺼낼까?

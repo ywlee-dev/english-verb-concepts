@@ -7,7 +7,7 @@ agent가 액체를 입으로 받아 삼켜 몸 안에 섭취한다.
 | Verb | Example | Distinctive HOW |
 |---|---|---|
 | DRINK | drink the water | 액체를 섭취 |
-| SIP | sip the water | 한 번에 아주 조금씩 마심 |
+| SIP | sip the hot chocolate | 한 번에 아주 조금씩 마심 |
 | GULP | gulp the water | 큰 양을 급히 삼킴 |
 | SWALLOW | swallow the water | 입에서 목 아래로 넘김 |
 | SLURP | slurp the soup | 소리를 내며 빨아들여 마심 |

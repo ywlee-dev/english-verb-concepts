@@ -28,7 +28,7 @@ TARGET의 **수량·크기·정도**가 이전보다 커진다. 무엇이 늘었
 |---|---|---|
 | INCREASE | The shop increased the ticket price. | 증가 폭이나 방식은 지정하지 않음 |
 | RAISE | The shop raised the ticket price. | 결정권자가 값을 위로 조정 |
-| HIKE | The shop hiked the ticket price. | 갑작스럽거나 부담스러운 큰 인상 |
+| HIKE | The shop hiked the ticket price. | 부담스러운 큰 인상(갑작스러움은 흔하지만 필수 아님) |
 | DOUBLE | The shop doubled the ticket price. | 정확히 두 배가 되는 변화 |
 
 ## Scene contrast

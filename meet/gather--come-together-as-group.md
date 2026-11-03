@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /ˈɡæð.ər/ [**개**더] — 첫 음절 강세다.
 - **Forms:** `gather` — `gathered` — `gathered`; 규칙 변화다.
-- **시제와 결과:** `The students gathered at the round table in the library.` → `The students have gathered. The whole group is at the table now.` 모여든 사건과 현재의 집결된 상태를 구별한다.
+- **시제와 결과:** `The students gathered at the round table in the library.` → `The students have gathered. They are together at the table now.` 모여든 사건과 현재의 집결된 상태를 구별한다.
 
 - **Sense:** 여러 사람이나 대상이 흩어진 곳에서 한 장소로 모이다.
 - **Example:** `The students gathered in the library.`

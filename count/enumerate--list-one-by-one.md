@@ -2,7 +2,7 @@
 
 ## 0. Sound & Forms
 
-- **Pronunciation (US):** /ɪˈnuː.mə.reɪt/ [이**누**머레이트] — 뒤 음절 강세다.
+- **Pronunciation (US):** /ɪˈnuː.mə.reɪt/ [이**누**머레이트] — 둘째 음절 강세다.
 - **Forms:** `enumerate` — `enumerated` — `enumerated`; 규칙 변화다.
 - **시제와 결과:** `Mina enumerated the chairs that needed repair during the classroom check.` → `Mina has enumerated the chairs. The teacher knows exactly which ones to fix now.` 항목을 열거한 동작과 현재의 구체적으로 파악된 상태를 구별한다.
 

@@ -7,7 +7,7 @@
 - **시제와 결과:** `The two teams competed in the race at the sports day field.` → `The two teams have competed. The results show the ranking now.` 겨룬 사건과 현재의 순위 확정 상태를 구별한다.
 
 - **Sense:** 같은 목표·점수·순위를 두고 다른 사람이나 팀과 겨루다.
-- **Example:** `The two teams competed in the game.`
+- **Example:** `The two teams competed in the race.`
 - **Target Condition:** 공통 규칙으로 성과를 비교하고 승패나 순위를 정할 수 있는 활동
 - **Precondition:** 둘 이상의 참가자와 비교 기준이 있다.
 
@@ -25,6 +25,8 @@
 ```text
 PLAY + 같은 기준 아래 승패를 두고 겨룸 = COMPETE
 ```
+
+PLAY 장면에서 쓰일 때의 식이다 — `compete` 자체가 언제나 `play`의 하위 사건인 것은 아니다(묶음 노트).
 
 ## Minimal Contrast
 

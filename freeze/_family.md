@@ -29,7 +29,7 @@
 | FREEZE | The cook froze the peas. | 냉동 속도·반복 여부를 지정하지 않음 |
 | FLASH-FREEZE | The cook flash-froze the peas. | 매우 빠르게 냉동 |
 | DEEP-FREEZE | The cook deep-froze the peas. | 장기 보관을 위해 매우 낮은 온도로 냉동 |
-| REFREEZE | I refroze the ice pack. | 녹았던 것을 다시 냉동 |
+| REFREEZE | The cook refroze the peas. | 녹았던 것을 다시 냉동 |
 
 ## Scene contrast
 

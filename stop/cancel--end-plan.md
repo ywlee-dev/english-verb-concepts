@@ -8,7 +8,7 @@
 
 - **Sense:** 예정된 활동·예약·행사의 계획 효력을 없애 실행되지 않게 하다.
 - **Example:** `The school canceled the meeting.`
-- **Target Condition:** 아직 예정 또는 진행 중이며 공식 결정으로 없앨 수 있는 계획·행사·예약
+- **Target Condition:** 아직 시작 전의 예정 상태이며 공식 결정으로 없앨 수 있는 계획·행사·예약
 
 ## 언제 이 말을 꺼낼까?
 

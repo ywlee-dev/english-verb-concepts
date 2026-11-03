@@ -4,7 +4,7 @@
 
 - **Pronunciation (US):** /əˈkɑːm.plɪʃ/ [어**캄**플리시] — 둘째 음절 강세; 한글은 소리 힌트다.
 - **Forms:** `accomplish` (기본형/현재) — `accomplished` (과거) — `accomplished` (과거분사)
-- **시제와 결과:** `The class accomplished its fundraising goal yesterday.` → `The class has accomplished its goal. The fundraising work is complete.` `accomplished`는 여기서 현재완료의 동사형이다.
+- **시제와 결과:** `The class accomplished its fundraising goal yesterday.` → `The class has accomplished its goal. The fundraising work is complete.` `accomplished`는 여기서 `has` 뒤의 과거분사이다.
 
 - **Sense:** 계획한 일을 끝내 목표를 성취하다.
 - **Example:** `The class accomplished its fundraising goal.`
