@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COUNT 묶음 개념</title>
+<!-- 이 파일은 tools/build.py가 tools/pages/76-count.html에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->
+<style>
+  :root {
+    --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce;
+    --link: #185FA5; --en: #185FA5; --accent: #D85A30; --accent2: #BA7517; --ok: #1D9E75; --bad: #C0392B;
+    --obj: #dfe8f3; --obj-line: #5f5e5a; --chip-on: #fbe9e2; --fog: #b9b7af;
+    --skin: #f2c9a0; --sleeve: #7f9cc0; --wood: #c49a6c; --water: #9cc6e8; --gold: #d9a21b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f;
+      --link: #85B7EB; --en: #9cc6f0; --obj: #34465a; --obj-line: #b4b2a9; --chip-on: #4a2c22; --fog: #6b6a65;
+      --skin: #c99a72; --sleeve: #5a7090; --bad: #e0705f; --wood: #8a6a48; --water: #2f5878; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+  .buttons .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  button { font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button[aria-pressed="true"] { border-color: var(--accent); background: var(--chip-on); font-weight: 600; }
+  .say { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .chips .cap { font-size: 15px; color: var(--muted); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 3px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .chip.on { border-color: var(--accent); background: var(--chip-on); color: var(--text); font-weight: 600; }
+  /* 묶음 밖 동사: 점선 칩, 앞에 "묶음 밖 →" (03·05와 같은 표시) */
+  .chip.out { border-style: dashed; border-color: var(--accent2); text-decoration: none; font-weight: 400; }
+  .chips .exit { font-size: 13px; color: var(--accent2); margin-left: 10px; }
+  .en { color: var(--en); font-weight: 500; }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: 14px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 6px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: var(--accent); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  td:first-child { white-space: nowrap; }
+  th { color: var(--muted); font-weight: 500; }
+  svg text { font-family: inherit; }
+  .note { font-size: 14px; color: var(--muted); }
+  .check { border: 1px dashed var(--accent2); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .check b:first-child { color: var(--accent2); }
+  a { color: var(--link); }
+  .fig { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fig-hint { display: none; }
+  /* 그림용: 장면을 새로 그릴 때마다 .step이 차례로 나타나고 .fade는 흐려진다. 끝 모습이 기본값이라 애니메이션이 멈춰도 다 보인다 */
+  .step { animation: stepIn .45s ease-out backwards; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(6px); } }
+  .fade { animation: fadeOut .9s ease-out backwards; }
+  @keyframes fadeOut { from { opacity: 1; } }
+  @media (max-width: 600px) {
+    .fig svg { min-width: 560px; }
+    .fig-hint { display: block; font-size: 13px; color: var(--muted); text-align: center; margin: 4px 0 0; }
+    .formula { font-size: 14px; padding: 8px 10px; }
+    table { font-size: 14px; }
+    th, td { padding: 6px; }
+  }
+  /* 발음 줄: 누르면 브라우저 음성으로 읽어 준다(음성이 없으면 표기만) */
+  .pron { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: -8px 0 20px; }
+  .pron .cap { font-size: 14px; color: var(--muted); margin-right: 4px; }
+  .pron button { font-size: 14px; padding: 3px 10px; border-radius: 999px; line-height: 1.5; }
+  .pron .ipa { font-family: "Segoe UI", "Lucida Sans Unicode", "Arial Unicode MS", sans-serif; color: var(--muted); margin: 0 4px; }
+  .pron .ko { color: var(--muted); font-size: 13px; }
+  .pron .ko b { color: var(--text); font-weight: 600; }
+  .pron .spk { font-size: 12px; margin-left: 4px; }
+  .pron .star { color: var(--accent2); }
+  .pron-note { font-size: 13px; color: var(--muted); margin: -14px 0 20px; }
+  /* 상황 칸: 장소 그림 + 대화 말풍선. 🔊는 그 줄을 브라우저 음성으로 읽는다 */
+  .talk { display: grid; gap: 8px; margin-top: 12px; }
+  .talk .line { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 8px; align-items: start; }
+  .talk .who { font-size: 13px; color: var(--muted); padding-top: 7px; text-align: right; }
+  .talk .bubble { background: var(--bg); border: 1px solid var(--line); border-radius: 4px 12px 12px 12px; padding: 6px 12px; }
+  .talk .me .bubble { border-color: var(--accent, #D85A30); }
+  .talk .bubble .en b { color: var(--accent, #D85A30); }
+  .talk .bubble .ko { display: block; font-size: 14px; color: var(--muted); }
+  .talk button.speak { font-size: 12px; padding: 4px 8px; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .talk .line { grid-template-columns: 1fr auto; gap: 2px 6px; }
+    .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
+  }
+@media (max-width: 600px) { th, td { padding: 6px 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="note"><a href="index.html">← 개념 그림 목록</a> · 이전: <a href="75-connect.html">CONNECT 묶음</a> · 다음: <a href="77-draw.html">DRAW 묶음</a> · 견줘 보기: <a href="79-measure.html">79 MEASURE (개수 아닌 크기 · 무게 · 시간)</a></p>
+  <h1>COUNT 묶음 — 같은 의자, 다른 세기</h1>
+  <p class="lead">발표 전 교실, 미나가 손님용 <b>의자</b>를 챙긴다. 하나씩 떨어진 것에 수를 대응시킨다는 그림은 같고, <b>총수를 처음 알아내는지, 들어올 때마다 표시를 남기는지, 앞의 수를 다시 세어 확인하는지, 정해진 수만큼 골라 내는지, 어느 것인지 하나씩 빠짐없이 짚는지</b>만 바꾸면 count · tally · recount · count out · enumerate로 갈린다. 단, count out과 enumerate는 <b>총수를 아는 데서 한 걸음 더</b> 간다(묶음 노트 Boundary).</p>
+  <div class="pron"><span class="cap">발음 (미국식)</span>
+    <button type="button" data-word="count" title="count 소리로 듣기"><span class="en">count</span><span class="ipa">/kaʊnt/</span><span class="ko">[<b>카</b>운트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="tally" title="tally 소리로 듣기"><span class="en">tally</span><span class="ipa">/ˈtæl.i/</span><span class="ko">[<b>탈</b>리]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="recount" title="recount 소리로 듣기"><span class="en">recount</span><span class="ipa">/ˌriːˈkaʊnt/</span><span class="ko">[리<b>카</b>운트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="count out" title="count out 소리로 듣기"><span class="en">count out</span><span class="ipa">/kaʊnt aʊt/</span><span class="ko">[카운트<b>아웃</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
+    <button type="button" data-word="enumerate" title="enumerate 소리로 듣기"><span class="en">enumerate</span><span class="ipa">/ɪˈnuː.mə.reɪt/</span><span class="ko">[이<b>누</b>머레이트]</span><span class="spk" aria-hidden="true">🔊</span></button>
+  </div>
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 290" role="img" aria-labelledby="t1 d1">
+      <title id="t1">세는 방식에 따라 의자 장면과 미나가 알게 된 것 띠가 바뀌는 그림</title>
+      <desc id="d1">왼쪽은 BASIC + HOW = 동사 식이고, 오른쪽 위는 미나가 알게 된 것을 적는 띠, 아래는 미나와 의자다. count는 두 줄 의자 열네 개 위에 1부터 14까지 차례로 수가 붙어 띠에 14개가 나옴, tally는 문으로 의자가 하나씩 들어올 때마다 띠에 획이 하나씩 그어져 다섯씩 묶인 14개 표시가 됨, recount는 아까 14였던 수에 줄이 그어지고 다시 세니 12개, 빈자리 두 곳은 점선 의자, count out은 창고에 쌓인 의자 더미에서 열 개만 하나씩 세어 옆으로 따로 놓음, enumerate는 의자 열네 개 가운데 흔들리는 세 개에 1 창가 첫 번째, 2 뒤쪽 두 번째, 3 문 옆이 차례로 붙는 장면이다.</desc>
+      <g font-size="12" fill="var(--muted)">
+        <text x="24" y="30">BASIC (기본 그림)</text>
+        <text x="24" y="122">HOW (방식)</text>
+      </g>
+      <rect x="24" y="38" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="112" y="66" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)">COUNT · 몇 개인지 앎</text>
+      <text x="112" y="108" text-anchor="middle" font-size="18" fill="var(--muted)">+</text>
+      <rect x="24" y="130" width="176" height="44" rx="8" fill="var(--bg)" stroke="var(--accent)"/>
+      <text id="howLabel" x="112" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="var(--text)"></text>
+      <text x="112" y="200" text-anchor="middle" font-size="18" fill="var(--muted)">=</text>
+      <rect x="24" y="212" width="176" height="56" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>
+      <text id="verbLabel" x="112" y="248" text-anchor="middle" font-size="22" font-weight="700" fill="var(--accent)"></text>
+      <line x1="226" y1="20" x2="226" y2="276" stroke="var(--line)"/>
+      <text id="targetLabel" x="660" y="30" text-anchor="end" font-size="13" fill="var(--muted)"></text>
+      <g id="scene"></g>
+      <text id="resultLabel" x="450" y="274" text-anchor="middle" font-size="14" fill="var(--muted)"></text>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="howBtns"><span class="cap">어떻게 세나</span></div>
+    <div class="chips" id="chipBox" aria-label="동사를 누르면 그 장면으로 바뀜">
+      <span class="cap">동사 눌러 보기</span>
+      <span class="exit" id="chipExit">묶음 밖 →</span>
+    </div>
+    <p class="say" id="say"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 의자 배치 · 두 줄 모양은 그림용이다. 장면은 <a href="../count/_family.md">count/_family.md</a>의 비교표 TARGET(the chairs)과 각 노트의 Scene Scenario(발표 전 교실 · 행사 준비실 문 앞 · 쉬는 시간 뒤 교실 · 행사 전 창고 · 행사 전 교실 점검)를 옮겼다. <b>enumerate 장면에서는 COUNT 칩을 켜지 않았다</b> — enumerate 노트가 "총수를 알아내는 것만이 목적은 아니다"라고 하고, 결과가 개수가 아니라 "각 항목이 식별됨"이기 때문이다. count out은 식이 <span class="en">COUNT + 정해진 개수만큼 분리</span>라서 켰다.</p>
+
+  <h2>0. 왜 존재하나 — 이 동사가 없으면 못 그리는 그림</h2>
+  <p>"세다" 하나로 다 될 것 같다. 그런데 <b>투표함 표를 칠판에 바를 정(正) 자로 적어 가며</b>, <b>개표가 의심스러워 한 번 더</b>, <b>거스름돈을 정확히 세어 내주는 것</b>, <b>이유를 첫째 · 둘째로 짚는 것</b>은 한국어로도 말이 다르다. 그리고 <b>개수가 아니라 길이 · 무게</b>라면? 하나씩 빼 보세요.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 262" role="img" aria-labelledby="texistScene dexistScene">
+      <title id="texistScene">말하고 싶은 그림마다 그것을 그리는 동사가 있고, 하나를 빼면 그 칸이 비는 그림</title>
+      <desc id="dexistScene">카드가 한 줄로 있고, 카드마다 말하고 싶은 그림과 그것을 그리는 동사가 아래에 붙어 있다. 점선 카드는 묶음 밖 이웃 동사다. 동사 하나를 빼면 그 카드가 물음표 빈칸이 되고, 맨 아래에 다른 동사로 대신 말한 문장이 나온다.</desc>
+      <g id="existScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="existBtns"><span class="cap">빼 보기</span></div>
+    <output class="say" id="esay" style="display:block"></output>
+  </div>
+
+  <h2>0+. 이런 상황에서 — 장소 하나, 대화 한 토막</h2>
+  <p>뜻을 알아도 언제 입에서 나오는지는 장면으로 붙여야 남는다. 장소를 골라 보세요. 대화 속 <b>COUNT 묶음 동사</b>가 위의 그림 어디에 해당하는지 함께 나온다. 🔊를 누르면 그 줄을 읽어 준다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tS dS">
+      <title id="tS">고른 장소의 장면 그림</title>
+      <desc id="dS">고른 장소가 그려지고, 대화 속 동사가 그 장소에서 만드는 변화가 함께 보인다.</desc>
+      <g id="sceneScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="sceneBtns"><span class="cap">장소</span></div>
+    <div class="talk" id="sceneTalk"></div>
+    <output class="say" id="ssay" style="display:block"></output>
+  </div>
+
+  <h2>1. 무엇인가 — "몇 개인지 앎"에 HOW가 붙는다</h2>
+  <p>이 묶음의 BASIC/RESULT는 <b>agent가 구분 가능한 TARGET들을 하나씩 대응시켜 몇 개인지 알아낸다</b> = <span class="en">COUNT</span>다. 여기에 표시 · 다시 · 골라 냄 · 열거가 붙는다. 노트의 식을 옮겼다.</p>
+  <div class="formula">
+    <span class="r">전체 개수 모름</span><span class="op">+</span><span>항목마다 수 하나 대응</span><span class="op">=</span><span class="v">COUNT</span>
+    <span class="r">COUNT</span><span class="op">+</span><span>항목마다 표식을 남김</span><span class="op">=</span><span class="v">TALLY</span>
+    <span class="r">COUNT</span><span class="op">+</span><span>같은 범위를 다시 세어 검증</span><span class="op">=</span><span class="v">RECOUNT</span>
+    <span class="r">COUNT</span><span class="op">+</span><span>정해진 개수만큼 분리</span><span class="op">=</span><span class="v">COUNT OUT</span>
+    <span class="r">COUNT의 하나씩 대응</span><span class="op">+</span><span>항목의 정체를 빠짐없이 열거</span><span class="op">=</span><span class="v">ENUMERATE</span>
+  </div>
+  <p>노트가 짚은 점: <b>measure</b>는 길이 · 무게처럼 이어진 크기를 단위로 알아내고, count는 <b>떨어진 항목의 개수</b>를 알아낸다 — 의자 몇 개는 count, 의자 높이는 measure. recount는 처음 수와 꼭 같아야 하는 건 아니다(14 → 12). tally의 종이 획은 이 장면의 도구일 뿐, 전자 기록도 된다. enumerate는 격식 있는 말이고 일상에서는 <span class="en">list</span>가 편할 수 있다. 다섯 모두 규칙 변화 — 철자만 <span class="en">tally → tallied</span>.</p>
+
+  <h2>2. 그림에서 일어나는 일</h2>
+  <ul>
+    <li><b>총수 셈</b> → 손님 열두 명이 오는데 의자가 충분한지 모른다. 하나씩 가리키며 <b>수를 붙여</b> 14개임을 안다. <span class="en">Mina counted the chairs.</span></li>
+    <li><b>표시하며</b> → 다른 반 학생들이 의자를 한 개씩 가져와 수가 계속 변한다. 들어올 때마다 <b>획 하나</b>를 그어 14개를 기록한다. <span class="en">Mina tallied the chairs as they arrived.</span></li>
+    <li><b>다시 셈</b> → 아까는 14개였지만 몇 개가 다른 방으로 갔을 수 있다. <b>다시 세어 확인</b>하니 12개. <span class="en">Mina recounted the chairs after the break.</span></li>
+    <li><b>세어 골라 냄</b> → 창고에 의자가 많지만 손님용은 정확히 열 개. 하나씩 세며 <b>열 개만 따로</b> 빼놓는다. <span class="en">Mina counted out ten chairs for the guests.</span></li>
+    <li><b>하나씩 열거</b> → 의자 세 개가 흔들린다. 선생님은 <b>어느 의자인지</b> 알아야 고친다. 창가 첫 번째 · 뒤쪽 두 번째 · 문 옆을 차례로 말한다. <span class="en">Mina enumerated the chairs that needed repair.</span></li>
+    <li>위 띠는 "미나가 알게 된 것"이다. count · tally · recount는 <b>수</b>, count out은 <b>따로 놓인 열 개</b>, enumerate는 <b>어느 것인지 목록</b>이 남는다.</li>
+  </ul>
+
+  <h2>3. 몇 개? 얼마나? — count와 measure 가르기</h2>
+  <p>한국어 "세다 · 재다"처럼 영어도 질문에 따라 동사가 갈린다. <b>하나씩 떨어진 것의 개수</b>(how many)면 count, <b>이어진 크기 · 양</b>(how long · how heavy · how much)이면 measure 묶음이다.</p>
+  <table>
+    <tr><th>묻는 것</th><th>대상</th><th>동사</th><th>예</th></tr>
+    <tr><td>몇 개?</td><td>의자 (떨어짐)</td><td><b>count</b></td><td><span class="en">count the chairs</span> (노트)</td></tr>
+    <tr><td>얼마나 높아?</td><td>의자 하나</td><td>measure</td><td>의자 높이 (count 노트)</td></tr>
+    <tr><td>얼마나 길어?</td><td>줄</td><td>measure</td><td><span class="en">measure the rope</span> (measure 노트)</td></tr>
+    <tr><td>얼마나 무거워?</td><td>줄</td><td>weigh</td><td><span class="en">weigh the rope</span> (measure 노트)</td></tr>
+    <tr><td>얼마나 걸려?</td><td>달리기</td><td>time</td><td><span class="en">time the race</span> (measure 노트)</td></tr>
+  </table>
+  <p class="note">count에는 세기 말고도 자주 듣는 모양이 있다 — <span class="en">Every vote counts.</span>(한 표도 중요하다), <span class="en">You can count on me.</span>(나만 믿어), <span class="en">Count me in!</span>(나도 낄게). 모두 노트에 없는 쓰임이다.</p>
+
+  <h2>4. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <p>점선 테두리가 <b>COUNT 묶음</b>이다. 떨어진 개수가 아니라 <b>길이 · 무게 · 시간</b>이면 테두리 밖 문으로 MEASURE 묶음에 간다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 350" role="img" aria-labelledby="tflowScene dflowScene">
+      <title id="tflowScene">질문을 따라 COUNT 묶음의 동사를 고르는 흐름 그림</title>
+      <desc id="dflowScene">맨 위 Q1 하나씩 떨어진 것을 세나에서 길이 · 무게면 묶음 밖 문 measure, 예면 Q2 무엇을 하려나로 간다. 총수를 알려면 Q3 어떻게 세나에서 처음 count, 표시하며 tally, 다시 recount로 갈리고, 정해진 수만큼 골라 내면 count out, 어느 것인지 짚으면 enumerate다.</desc>
+      <g id="flowScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="flowBtns"><span class="cap">동사까지 가는 길</span></div>
+    <output class="say" id="fsay" style="display:block"></output>
+  </div>
+  <table>
+    <tr><th>동사</th><th>① 시작할 때 (노트)</th><th>② 끝 모습 (노트)</th><th>③ 남는 것</th></tr>
+    <tr><td><b>count</b></td><td>범위가 정해져 있음</td><td>14개임을 앎</td><td>수</td></tr>
+    <tr><td><b>tally</b></td><td>여러 번 나타나 기억이 어려움</td><td>종이에 14개 표시</td><td>수 + 기록</td></tr>
+    <tr><td><b>recount</b></td><td>앞서 얻은 수가 있음</td><td>12개로 확인됨</td><td>검증된 수</td></tr>
+    <tr><td><b>count out</b></td><td>목표 수가 정해져 있음</td><td>문 옆에 따로 놓임</td><td>골라 낸 물건</td></tr>
+    <tr><td><b>enumerate</b></td><td>각 항목의 정체를 알아야 함</td><td>어느 것을 고칠지 앎</td><td>목록</td></tr>
+  </table>
+  <p class="note">①② 칸은 각 노트의 Precondition · 시제와 결과를 줄였다. ③ 칸은 묶음 노트 Boundary와 각 노트의 BASIC/RESULT 줄에서 정리했다. 흐름 그림의 질문 순서와 Q3(어떻게 세나) 묶음은 그림을 위해 정했다.</p>
+
+  <h2>5. 실제 문장으로 — 무엇을 세나, 뒤에 무엇이</h2>
+  <p>세는 대상은 동사 바로 뒤에 온다. count out은 <b>몇 개</b>를 목적어 앞에 붙인다(<span class="en">ten chairs</span>). 몇몇 동사는 세기와 다른 뜻으로도 자주 쓴다.</p>
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 170" role="img" aria-labelledby="tslotScene dslotScene">
+      <title id="tslotScene">세는 대상과 뒤에 붙는 말에 따라 문장이 바뀌는 그림</title>
+      <desc id="dslotScene">위 줄은 맞는 문장이다. 낱말마다 상자로 나누고 위에 주어·동사·목적어·결과 같은 역할을 적었다.</desc>
+      <g id="slotScene"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <div class="buttons" id="ovBtns"><span class="cap">동사</span></div>
+    <div class="buttons" id="slotBtns"><span class="cap">무엇을 보나</span></div>
+    <output class="say" id="osay" style="display:block"></output>
+  </div>
+  <table style="margin-top:12px">
+    <tr><th>동사</th><th>노트 예문</th><th>다른 모양</th><th>뜻</th></tr>
+    <tr><td><b>count</b></td><td><span class="en">Mina counted the chairs.</span></td><td><span class="en">Every vote counts.</span></td><td>한 표도 중요하다</td></tr>
+    <tr><td><b>tally</b></td><td><span class="en">Mina tallied the chairs as they arrived.</span></td><td><span class="en">The numbers don't tally.</span></td><td>수가 안 맞는다</td></tr>
+    <tr><td><b>recount</b></td><td><span class="en">Mina recounted the chairs after the break.</span></td><td><span class="en">He recounted his trip.</span></td><td>여행 이야기를 했다</td></tr>
+    <tr><td><b>count out</b></td><td><span class="en">Mina counted out ten chairs for the guests.</span></td><td><span class="en">Count me out.</span></td><td>난 빼 줘</td></tr>
+    <tr><td><b>enumerate</b></td><td><span class="en">Mina enumerated the chairs that needed repair.</span></td><td><span class="en">I listed the reasons.</span></td><td>이유를 나열했다</td></tr>
+  </table>
+  <p class="note">경향 한 줄: 세는 대상이 바로 뒤 목적어 자리에 오고, 언제 · 어떻게 셌는지(<span class="en">as they arrived · after the break</span>)는 그 뒤에 붙는다 — count out만 "몇 개"가 목적어 안에 들어간다.</p>
+
+  <h2>6. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>COUNT</b> — 검지로 하나씩 <b>톡 · 톡 · 톡</b> 가리키며 "one, two, three…".</li>
+    <li><b>TALLY</b> — 하나 올 때마다 허공에 <b>세로 획</b>, 다섯째는 비스듬히 긋는다.</li>
+    <li><b>RECOUNT</b> — 다 센 뒤 고개를 갸웃, 처음부터 <b>다시</b> 톡 · 톡.</li>
+    <li><b>COUNT OUT</b> — 한 손 더미에서 다른 손으로 <b>하나씩 옮기며</b> 세다가 열에서 딱 멈춘다.</li>
+    <li><b>ENUMERATE</b> — 손가락을 하나씩 펴며 "<b>첫째</b> 창가, <b>둘째</b> 뒤쪽, <b>셋째</b> 문 옆".</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절의 장소별 대화는 노트에 없는 작문이다. 자연스러운지 사전 예문으로 확인할 것. 특히 <span class="en">let me count out your change · They're recounting the votes · Can you enumerate the main causes?</span></li>
+      <li>3절 표의 의자 높이 줄은 count 노트, 줄 · 무게 · 시간 줄은 measure/_family.md에서 왔다. 표 아래 <span class="en">Every vote counts · count on me · Count me in</span>은 노트에 없다.</li>
+      <li>5절의 "다른 모양" 칸(<span class="en">I listed the reasons</span>의 list는 enumerate 노트에 있음)과 위 그림의 "다른 뜻" 줄, 경향 한 줄은 짐작이다. 특히 "이야기하다" 뜻의 recount는 세기 recount와 강세 · 소리가 조금 다르다고 알려져 있으니 사전으로 확인할 것.</li>
+      <li>0절 "대신 말하면"의 △·✗ 판정은 짐작이다(<span class="en">I counted three broken chairs</span>는 enumerate 노트의 대조 문장).</li>
+      <li>맨 위 그림에서 enumerate 장면은 COUNT 칩을 껐다. 묶음 노트는 enumerate를 "넓은 세기 사건의 HOW"로 묶었으니, 켜는 쪽이 맞다면 고칠 것.</li>
+      <li>노트 문제: 묶음 노트의 Shared Result는 "몇 개인지 알아낸다"인데, count out 노트의 BASIC/RESULT는 "필요한 개수가 따로 확보됨", enumerate 노트는 "각 항목이 식별됨"이라 결과가 다르다. 묶음 노트 Boundary가 이를 인정하지만, 비교표의 <span class="en">enumerate the chairs</span>(모든 의자)와 노트 장면(고장 난 세 개)도 대상이 다르다.</li>
+      <li>노트 문제: enumerate 노트의 발음 설명 "뒤 음절 강세다"는 네 음절 중 둘째(<b>누</b>)에 강세가 있어 헷갈린다. recount 노트에는 "이야기하다" 뜻의 다른 recount가 언급되지 않는다.</li>
+    </ul>
+  </div>
+
+  <h2>7. 원래 자료와 연결하면</h2>
+  <ul>
+    <li>묶음 비교표: <a href="../count/_family.md">count/_family.md</a> — "총수 · 기록 · 재확인 · 선별 · 열거 중 실제 목적을 고르자"</li>
+    <li>동사 노트: <a href="../count/count--determine-number.md">count</a> · <a href="../count/tally--count-with-marks.md">tally</a> · <a href="../count/recount--count-again.md">recount</a> · <a href="../count/count-out--select-exact-number.md">count out</a> · <a href="../count/enumerate--list-one-by-one.md">enumerate</a></li>
+    <li>묶음 밖 이웃: <a href="79-measure.html">79 MEASURE</a> (<a href="../measure/_family.md">measure/_family.md</a>) — 개수가 아니라 길이 · 무게 · 시간을 단위로. 그 묶음 노트도 "COUNT는 개수, MEASURE는 얼마나"로 경계를 긋는다.</li>
+    <li>견줘 보기: <a href="26-find.html">26 FIND</a> — 찾아내 알게 됨. <a href="66-increase.html">66 INCREASE</a> · <a href="67-decrease.html">67 DECREASE</a> — 센 수가 늘고 줄어듦.</li>
+    <li>만드는 규칙: <a href="README.md">concepts/README.md</a></li>
+  </ul>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const tx = (x, y, s, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (anchor || 'middle') + '" fill="' + (fill || 'var(--text)') + '"' + (extra || '') + '>' + txt + '</text>';
+  const step = (d, body) => '<g class="step" style="animation-delay:' + d + 's">' + body + '</g>';
+  const tick = (x, y) => '<path d="M' + x + ' ' + y + ' l7 7 l14 -16" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  const arrow = (x1, x2, y, c, w, dash) => '<path d="M' + x1 + ' ' + y + ' H' + x2 + ' m-8 -6 l8 6 l-8 6" fill="none" stroke="' + c + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>';
+  // 부품 (parts.js에서 복사). 손: (0,0)이 손끝, rotate(-90)이면 손바닥이 오른쪽. 가리키는 손: rotate(90)이면 손가락이 오른쪽
+  const HAND = '<rect x="-9" y="-78" width="18" height="52" rx="4" fill="var(--sleeve)"/>' +
+    '<path d="M-13 -30 h26 v18 a13 13 0 0 1 -26 0 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<path d="M-5 -6 v6 M1 -5 v6 M7 -7 v5" stroke="var(--obj-line)" stroke-width="1" stroke-linecap="round"/>';
+  const POINTER = '<rect x="-8" y="40" width="20" height="56" rx="4" fill="var(--sleeve)"/>' +
+    '<rect x="-12" y="16" width="26" height="28" rx="9" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>' +
+    '<rect x="-4" y="0" width="8" height="22" rx="4" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="1"/>';
+  const at = (x, y, r, body) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ')">' + body + '</g>';
+  const table = (x, y, w) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="10" rx="2" fill="var(--wood)"/>' +
+    '<path d="M' + (x + 15) + ' ' + (y + 10) + ' v30 M' + (x + w - 15) + ' ' + (y + 10) + ' v30" stroke="var(--wood)" stroke-width="5"/>';
+  const FLOOR = '<line x1="244" y1="240" x2="664" y2="240" stroke="var(--obj-line)" stroke-width="1"/>';
+
+  // 0절 카드 그림 (01·03·05·06·07과 같은 함수)
+  function existChart(E, gone) {
+    const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
+    const G = E.cards.find((c) => c.id === gone);
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    E.cards.forEach((c, i) => {
+      const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
+      s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
+        '<g transform="translate(' + (x + 50) + ' 82)" opacity="' + (hole ? 0.15 : 1) + '">' + c.icon + '</g>' +
+        (hole ? tx(x + 50, 98, 40, '?', 'var(--bad)', ' font-weight="700"') : '') +
+        tx(x + 50, 134, 12, c.t[0], hole ? 'var(--muted)' : 'var(--text)', ' font-weight="600"') + tx(x + 50, 152, 12, c.t[1], 'var(--muted)');
+      const cs = hole ? 'var(--bad)' : c.out ? E.outColor : E.color;
+      s += '<rect x="' + (x + 5) + '" y="176" width="90" height="26" rx="13" fill="' + (hole ? 'var(--bg)' : 'var(--chip-on)') + '" stroke="' + cs + '"' + (c.out ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + 50, 194, 13, c.v, hole ? 'var(--muted)' : 'var(--text)', ' font-weight="700"') +
+        (hole ? '<line x1="' + (x + 14) + '" y1="189" x2="' + (x + 86) + '" y2="189" stroke="var(--bad)" stroke-width="2"/>' : '') +
+        (c.out ? tx(x + 50, 218, 11, '묶음 밖 이웃', E.outColor) : '');
+    });
+    if (G) s += tx(340, 248, 15, '대신 말하면: ' + G.instead, 'var(--bad)', ' font-weight="500"');
+    const say = G ? '<b>' + G.v + ' 없이</b> 이 그림을 말하려면 <span class="en">' + G.instead + '</span><br>' + G.lost + '<br>그래서 이 낱말이 있다 — <b>' + G.v + '</b>: ' + G.why : E.intro;
+    return [s, say];
+  }
+
+  // 4절 질문 흐름 (같은 함수)
+  function flowChart(F, pick) {
+    const all = Object.assign({}, F.nodes, F.leaves), up = {}, H = 44;
+    F.edges.forEach((e) => { up[e[1]] = e; });
+    const path = [];
+    for (let k = pick; up[k]; k = up[k][0]) path.unshift(up[k]);
+    const onE = new Set(path), onN = new Set(path.map((e) => e[0]));
+    const tx = (x, y, size, txt, fill, extra, anchor) => '<text x="' + x + '" y="' + y + '" font-size="' + size + '" text-anchor="' + (anchor || 'middle') + '" fill="' + fill + '"' + (extra || '') + '>' + txt + '</text>';
+    // out = 묶음 밖으로 나가는 문 (점선, 다른 색)
+    const box = (n, on, leaf) => '<rect x="' + (n.x - n.w / 2) + '" y="' + (n.y - H / 2) + '" width="' + n.w + '" height="' + H + '" rx="8" fill="' + (leaf && on ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (n.out ? 'var(--accent2)' : on ? F.color : 'var(--line)') + '" stroke-width="' + (on ? 2 : 1) + '"' + (n.out ? ' stroke-dasharray="5 4"' : '') + '/>';
+    let s = '';
+    // 묶음 테두리: 같은 BASIC을 가진 동사들이 이 안에 있다
+    if (F.region) { const r = F.region; s += '<rect x="' + r.x + '" y="' + r.y + '" width="' + r.w + '" height="' + r.h + '" rx="14" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="6 5" opacity=".8"/>' + tx(r.at[0], r.at[1], 11, r.label, 'var(--muted)', ' font-weight="600"', 'start'); }
+    F.segs.forEach(([x1, x2, name, key]) => {
+      const hi = F.leaves[pick].seg === key;
+      s += '<rect x="' + x1 + '" y="' + F.segY + '" width="' + (x2 - x1) + '" height="22" rx="4" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + (hi ? F.color : 'var(--line)') + '"/>' +
+        tx((x1 + x2) / 2, F.segY + 15, 12, name, hi ? 'var(--text)' : 'var(--muted)', hi ? ' font-weight="600"' : '');
+    });
+    s += tx(16, 344, 11, '← 동작(방식) 쪽', 'var(--muted)', '', 'start') + tx(664, 344, 11, '상태(결과) 쪽 →', 'var(--muted)', '', 'end');
+    F.edges.forEach((e) => {
+      const [a, b, , side, at, dash] = e, A = all[a], B = all[b], hi = onE.has(e), by = B.y - H / 2;
+      const d = B.y === A.y ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + (B.x - B.w / 2)
+        : side === 'left' ? 'M' + (A.x - A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : side === 'right' ? 'M' + (A.x + A.w / 2) + ' ' + A.y + ' H' + B.x + ' V' + by
+        : 'M' + A.x + ' ' + (A.y + H / 2) + ' V' + ((A.y + H / 2 + by) / 2) + ' H' + B.x + ' V' + by;
+      s += '<path d="' + d + '" fill="none" stroke="' + (hi ? F.color : 'var(--line)') + '" stroke-width="' + (hi ? 3 : 1.5) + '"' + (dash ? ' stroke-dasharray="5 4"' : '') + '/>';
+      if (at) s += tx(at[0], at[1], 12, e[2], hi ? F.color : 'var(--muted)', hi ? ' font-weight="600"' : '', at[2]);
+    });
+    Object.entries(F.nodes).forEach(([k, n]) => {
+      const on = onN.has(k);
+      s += box(n, on) + tx(n.x, n.y + (n.sub ? -3 : 5), 14, n.t, on ? 'var(--text)' : 'var(--muted)', ' font-weight="600"') + (n.sub ? tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') : '');
+    });
+    Object.keys(F.leaves).forEach((k) => {
+      const n = F.leaves[k], on = k === pick;
+      s += '<g data-leaf="' + k + '" style="cursor:pointer">' + box(n, on, true) + tx(n.x, n.y - 2, 15, n.v, on ? (n.out ? 'var(--accent2)' : F.color) : 'var(--text)', ' font-weight="700"') + tx(n.x, n.y + 14, 11, n.sub, 'var(--muted)') + '</g>';
+    });
+    const say = path.map((e) => '<b>' + all[e[0]].t + '</b> → ' + e[2]).join('<br>') + '<br>⇒ ' + F.leaves[pick].say;
+    return [s, say];
+  }
+
+  // 5절 낱말 역할 = [이름, 테두리색, 강조, 점선]
+  const ROLE = { s: ['주어', 'var(--line)'], v: ['동사', 'var(--line)'], o: ['목적어', 'var(--accent)', true], r: ['결과·방향', 'var(--accent2)', false, true], x: ['', 'var(--line)'] };
+  // 낱말 상자 한 줄 (01·02·03·05와 같은 그림). 글자 폭은 눈대중(그림용): 19px 글꼴에서 글자당 10.5px, 역할 이름은 12px 글꼴에서 글자당 12px
+  const wordRow = (words, y, good) => {
+    let x = 70, s = tx(34, y + 7, 26, good ? '✓' : '✗', good ? 'var(--ok)' : 'var(--bad)', ' font-weight="700"');
+    words.forEach(([w, r]) => {
+      const [name, stroke, hi, dash] = ROLE[r], wd = Math.max(Math.round(w.length * 10.5 + 22), name.length * 12 + 12);
+      s += '<rect x="' + x + '" y="' + (y - 18) + '" width="' + wd + '" height="34" rx="7" fill="' + (hi ? 'var(--chip-on)' : 'var(--bg)') + '" stroke="' + stroke + '" stroke-width="1.5"' + (dash ? ' stroke-dasharray="4 3"' : '') + '/>' +
+        tx(x + wd / 2, y + 6, 19, w, good ? 'var(--text)' : 'var(--muted)', hi || r === 'v' ? ' font-weight="600"' : '') +
+        (name ? tx(x + wd / 2, y - 25, 12, name, 'var(--muted)') : '');
+      x += wd + 10;
+    });
+    if (!good) s += '<line x1="66" y1="' + y + '" x2="' + (x - 6) + '" y2="' + y + '" stroke="var(--bad)" stroke-width="2.5" opacity=".8"/>';
+    return s;
+  };
+
+  // ── 0+절: 이런 상황에서. 장소 그림(좌표는 그림용, 바닥 y = 150) + 대화 ──
+  const AC = 'var(--accent, #D85A30)', A2 = 'var(--accent2, #BA7517)', FOG = 'var(--fog, #b9b7af)', SL = 'var(--sleeve, #7f9cc0)',
+    OKC = 'var(--ok, #1D9E75)', BAD = 'var(--bad, #C0392B)', OL = 'var(--obj-line)', MU = 'var(--muted)', CARD = 'var(--card)', BG = 'var(--bg)';
+  const T = (x, y, s, t, f, ex, a) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="' + (a || 'middle') + '" fill="' + (f || 'var(--text)') + '"' + (ex || '') + '>' + t + '</text>';
+  const L = (x, y, t) => T(x, y, 11, t, MU);
+  const ST = (d, b) => '<g class="step" style="animation-delay:' + d + 's">' + b + '</g>';
+  // 사람: (x, y)가 발. 머리 r11 · 몸 37 (s배)
+  const P = (x, y, s, c) => '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><circle cx="0" cy="-50" r="11" fill="var(--skin, #f2c9a0)" stroke="' + OL + '"/><rect x="-12" y="-37" width="24" height="37" rx="9" fill="' + c + '"/></g>';
+  const FL = '<line x1="150" y1="150" x2="670" y2="150" stroke="var(--line)" stroke-width="2"/>';
+  const TB = (x1, x2, y) => '<rect x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="7" rx="2" fill="' + OL + '"/><path d="M' + (x1 + 10) + ' ' + (y + 7) + ' V150 M' + (x2 - 10) + ' ' + (y + 7) + ' V150" stroke="' + OL + '" stroke-width="3"/>';
+  const BX = (x, y, w, h, f) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" fill="' + (f || CARD) + '" stroke="' + OL + '" stroke-width="1.5"/>';
+  const Q = (x, y, t) => '<rect x="' + (x - 13) + '" y="' + (y - 14) + '" width="26" height="22" rx="8" fill="' + CARD + '" stroke="var(--line)"/>' + T(x, y + 2, 13, t, MU, ' font-weight="700"');
+  const AR = (x1, y1, x2, y2, c, w, dash) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
+    return '<path d="M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)) + ' ' + (y2 - h * Math.sin(a - .5)) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)) + ' ' + (y2 - h * Math.sin(a + .5)) + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2) + '" stroke-linecap="round"' + (dash ? ' stroke-dasharray="5 5"' : '') + '/>'; };
+  const LOCK = (x, y, op) => '<g' + (op ? ' opacity="' + op + '"' : '') + '><path d="M' + (x - 5) + ' ' + (y - 4) + ' v-5 a5 5 0 0 1 10 0 v5" fill="none" stroke="' + A2 + '" stroke-width="2.5"/><rect x="' + (x - 8) + '" y="' + (y - 4) + '" width="16" height="13" rx="2" fill="' + A2 + '"/></g>';
+  const CAR = (x, win) => '<path d="M' + x + ' 138 v-24 l30 -26 h100 l30 26 h50 v24 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/>' +
+    '<path d="M' + (x + 38) + ' 112 l18 -18 h30 v18 z M' + (x + 94) + ' 112 v-18 h30 l18 18 z" fill="' + (win || BG) + '" stroke="' + OL + '"/>' +
+    '<circle cx="' + (x + 40) + '" cy="140" r="11" fill="' + OL + '"/><circle cx="' + (x + 160) + '" cy="140" r="11" fill="' + OL + '"/>';
+  // VERB: <b>PUSH 묶음 동사</b>가
+  // CHECK: 0+절의 장소별 대화는 노트에 없는 작문이다. thrust는 회화에서 드물어 장면을 넣지 않았다. 자연스러운지 사전 예문으로 확인할 것.
+
+  // 발음 버튼·대화 🔊: 브라우저에 영어 음성이 있으면 data-word를 읽어 주고, 없으면 🔊를 숨긴다
+  (function () {
+    const ok = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function';
+    if (!ok) {
+      document.querySelectorAll('.pron .spk').forEach((e) => e.remove());
+      document.querySelectorAll('.pron button').forEach((b) => { b.disabled = true; });
+      const st = document.createElement('style'); st.textContent = 'button.speak { display: none; }'; document.head.appendChild(st);
+      return;
+    }
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pron button, button.speak');
+      if (!b) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(b.dataset.word);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    });
+  })();
+
+  // ── 맨 위 그림: 바닥 y = 240, 위 "알게 된 것" 띠 y = 60~90, 미나 x = 290, 뒷줄 의자 y = 186 · 앞줄 y = 240 (그림용) ──
+  // 의자: (x, y) = 뒤 다리 아래, 폭 20 · 높이 34
+  const CHAIR = (x, y, c, extra) => '<path d="M' + x + ' ' + y + ' V' + (y - 34) + ' M' + x + ' ' + (y - 16) + ' H' + (x + 20) + ' V' + y + '" fill="none" stroke="' + (c || 'var(--wood)') + '" stroke-width="3.5" stroke-linecap="round"' + (extra || '') + '/>';
+  const ROWX = (i) => 344 + i * 42;
+  const BACKFLOOR = '<line x1="336" y1="186" x2="640" y2="186" stroke="var(--line)" stroke-dasharray="3 4"/>';
+  const NUM = (x, y, n, d, c) => step(d, tx(x, y, 11, n, c || 'var(--accent)', ' font-weight="700"'));
+  const KNOW = (cap, body) => tx(260, 52, 11, '미나가 알게 된 것', 'var(--muted)', '', 'start') + tx(640, 52, 11, cap, 'var(--accent)', ' font-weight="600"', 'end') +
+    '<rect x="260" y="60" width="380" height="30" rx="4" fill="var(--bg)" stroke="var(--line)"/>' + body;
+  const MINA = (c, place) => FLOOR + P(290, 240, 1.5, c) + tx(290, 138, 12, place, 'var(--muted)');
+  // 두 줄 14개 (뒷줄 0~6, 앞줄 0~6)
+  const ROWS = (c) => BACKFLOOR + [0, 1, 2, 3, 4, 5, 6].map((i) => CHAIR(ROWX(i), 186, c) + CHAIR(ROWX(i), 240, c)).join('');
+  const TALLY = (x, n, d0) => Array.from({ length: n }, (_, i) => { const g = Math.floor(i / 5), j = i % 5, gx = x + g * 56;
+    return step(d0 + i * .08, j < 4 ? '<path d="M' + (gx + j * 10) + ' 66 V84" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>' : '<path d="M' + (gx - 4) + ' 82 L' + (gx + 36) + ' 68" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>'); }).join('');
+  const TOP = {
+    first: 'countout', keep: 'COUNT',
+    keepSay: '<b>COUNT</b>는 항목마다 수를 대응시켜 <b>몇 개인지 알아낸다</b>. tally · recount · count out 노트의 식이 모두 <span class="en">COUNT + …</span>이라 그 장면에도 맞는다. enumerate 장면에는 켜지지 않는다 — 총수가 아니라 <b>어느 것인지</b>가 목적이라서(노트). <span class="en">Mina counted the chairs.</span>',
+    chips: ['COUNT', 'TALLY', 'RECOUNT', 'COUNT OUT', 'ENUMERATE'], out: [['MEASURE (길이 · 무게)', '../measure/_family.md']],
+    hows: {
+      count: { btn: '총수 셈', how: '하나씩 수를 붙임', verb: 'COUNT', chips: ['COUNT'], target: 'TARGET · the chairs',
+        result: '하나씩 수를 붙여 — 14개임을 앎',
+        pic: () => MINA('var(--sleeve)', '미나 · 발표 전 교실') + KNOW('몇 개인지', tx(276, 81, 14, '몇 개?', 'var(--muted)', '', 'start') + step(1.3, tx(400, 81, 15, '→ 14개', 'var(--accent)', ' font-weight="700"', 'start'))) +
+          ROWS() + [0, 1, 2, 3, 4, 5, 6].map((i) => NUM(ROWX(i) + 10, 146, i + 1, .1 + i * .07) + NUM(ROWX(i) + 10, 200, i + 8, .6 + i * .07)).join(''),
+        say: '<span class="en">Mina counted the chairs.</span> 손님 열두 명이 오는데 의자가 충분한지 모른다. 하나씩 가리키며 <b>수를 붙여</b> 14개임을 안다. 길이 · 무게가 아니라 떨어진 의자가 <b>몇 개</b>인지가 질문이다(노트). 의자 높이라면 measure.' },
+      tally: { btn: '표시하며', how: '올 때마다 표시', verb: 'TALLY', chips: ['COUNT', 'TALLY'], target: 'TARGET · the chairs',
+        result: '들어올 때마다 획 하나 — 14개 기록',
+        pic: () => MINA('var(--ok)', '미나 · 준비실 문 앞') + KNOW('종이에 남은 표시', TALLY(286, 14, .1) + step(1.3, tx(470, 81, 15, '= 14', 'var(--accent)', ' font-weight="700"', 'start'))) +
+          '<rect x="312" y="186" width="22" height="28" rx="2" fill="var(--card)" stroke="var(--obj-line)"/><path d="M317 194 v12 M321 194 v12 M325 194 v12" stroke="var(--accent)" stroke-width="1.5"/>' +
+          [0, 1, 2, 3].map((i) => CHAIR(ROWX(i) + 10, 240)).join('') +
+          '<rect x="592" y="112" width="52" height="128" rx="2" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/><circle cx="600" cy="180" r="3" fill="var(--obj-line)"/>' +
+          step(.3, CHAIR(540, 240) + AR(588, 214, 568, 214, 'var(--accent)', 2.5)) + tx(560, 150, 11, '하나씩 들어옴', 'var(--muted)'),
+        say: '<span class="en">Mina tallied the chairs as they arrived.</span> 다른 반 학생들이 의자를 한 개씩 가져와 수가 계속 변한다. 매번 처음부터 세지 않고 <b>들어올 때마다 획 하나</b>를 남겨 누적한다(노트). 종이 획은 도구일 뿐, 전자 기록도 된다.' },
+      recount: { btn: '다시 셈', how: '다시 세어 확인', verb: 'RECOUNT', chips: ['COUNT', 'RECOUNT'], target: 'TARGET · the chairs',
+        result: '같은 범위를 다시 — 지금은 12개',
+        pic: () => MINA('var(--accent2)', '미나 · 쉬는 시간 뒤') +
+          KNOW('앞의 수를 확인', tx(276, 81, 14, '아까 14', 'var(--muted)', '', 'start') + step(.2, '<path d="M274 76 H332" stroke="var(--bad)" stroke-width="2"/>') + step(1.3, tx(360, 81, 15, '→ 다시 세니 12', 'var(--accent)', ' font-weight="700"', 'start'))) +
+          BACKFLOOR + [0, 1, 2, 3, 4, 5].map((i) => CHAIR(ROWX(i), 186) + CHAIR(ROWX(i), 240) + NUM(ROWX(i) + 10, 146, i + 1, .3 + i * .07) + NUM(ROWX(i) + 10, 200, i + 7, .75 + i * .07)).join('') +
+          CHAIR(ROWX(6), 186, 'var(--muted)', ' stroke-dasharray="3 3" opacity=".5"') + CHAIR(ROWX(6), 240, 'var(--muted)', ' stroke-dasharray="3 3" opacity=".5"') + tx(ROWX(6) + 10, 138, 11, '옮겨졌나?', 'var(--muted)'),
+        say: '<span class="en">Mina recounted the chairs after the break.</span> 아까는 14개였지만 몇 개가 다른 방으로 갔을 수 있다. 처음 세는 게 아니라 <b>앞의 수를 검증</b>하려고 같은 범위를 다시 센다 — 지금은 12개(노트). 새 수가 처음과 같아도 recount다.' },
+      countout: { btn: '세어 골라 냄', how: '그 수만큼 골라 냄', verb: 'COUNT OUT', chips: ['COUNT', 'COUNT OUT'], target: 'TARGET · ten chairs',
+        result: '열 개만 세어 — 문 옆에 따로',
+        pic: () => MINA('var(--sleeve)', '미나 · 행사 전 창고') +
+          KNOW('필요한 수만큼', tx(276, 81, 14, '필요한 수 10', 'var(--muted)', '', 'start') + step(1.3, tx(410, 81, 15, '→ 10개를 따로', 'var(--accent)', ' font-weight="700"', 'start'))) +
+          [0, 1, 2].map((s) => [0, 1, 2, 3].map((k) => CHAIR(332 + s * 30, 240 - k * 9, 'var(--muted)')).join('')).join('') + tx(366, 168, 11, '창고 더미', 'var(--muted)') +
+          step(.1, AR(436, 210, 466, 210, 'var(--accent)', 2.5)) + '<line x1="474" y1="186" x2="640" y2="186" stroke="var(--line)" stroke-dasharray="3 4"/>' +
+          [0, 1, 2, 3, 4].map((i) => step(.2 + i * .1, CHAIR(484 + i * 30, 186) + tx(494 + i * 30, 146, 11, i + 1, 'var(--accent)', ' font-weight="700"')) + step(.7 + i * .1, CHAIR(484 + i * 30, 240) + tx(494 + i * 30, 200, 11, i + 6, 'var(--accent)', ' font-weight="700"'))).join(''),
+        say: '<span class="en">Mina counted out ten chairs for the guests.</span> 창고에 의자가 많지만 손님용은 정확히 열 개. <b>하나씩 수를 말하며</b> 열 개를 출입문 쪽으로 빼놓는다. 전체가 몇 개인지 아는 데서 끝나지 않고 <b>그 수만큼 분리</b>한다(노트). 창고 의자 전체를 세면 count.' },
+      enumerate: { btn: '하나씩 열거', how: '어느 것인지 열거', verb: 'ENUMERATE', chips: ['ENUMERATE'], target: 'TARGET · chairs to repair',
+        result: '어느 의자인지 — 하나씩 빠짐없이',
+        pic: () => MINA('var(--ok)', '미나 · 교실 점검') +
+          KNOW('어느 것인지 목록', step(.3, tx(270, 81, 13, '① 창가 첫 번째', 'var(--text)', '', 'start')) + step(.7, tx(392, 81, 13, '② 뒤쪽 두 번째', 'var(--text)', '', 'start')) + step(1.1, tx(520, 81, 13, '③ 문 옆', 'var(--text)', '', 'start'))) +
+          ROWS('var(--fog)') + CHAIR(ROWX(0), 240, 'var(--accent)') + CHAIR(ROWX(1), 186, 'var(--accent)') + CHAIR(ROWX(6), 240, 'var(--accent)') +
+          step(.3, tx(ROWX(0) + 10, 200, 14, '①', 'var(--accent)', ' font-weight="700"')) + step(.7, tx(ROWX(1) + 10, 146, 14, '②', 'var(--accent)', ' font-weight="700"')) + step(1.1, tx(ROWX(6) + 10, 200, 14, '③', 'var(--accent)', ' font-weight="700"')),
+        say: '<span class="en">Mina enumerated the chairs that needed repair.</span> 의자 세 개가 흔들린다. 선생님은 숫자 "셋"이 아니라 <b>어느 의자인지</b> 알아야 고친다. 하나씩 <b>빠짐없이 짚어</b> 목록을 만든다(노트). 그래서 COUNT 칩은 켜지지 않는다. 격식 있는 말 — 일상에서는 <span class="en">listed</span>도 된다.' },
+    },
+  };
+
+  // 0절 아이콘 ((0, 0) 중심)
+  const EXIST = {
+    color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 <b>말하고 싶은 그림</b>이 하나씩 있고, 그 그림을 한 낱말로 그리는 동사가 아래에 붙어 있다. 하나를 빼 보세요. 다른 말로 대신하면 무엇이 어긋나는지가 보인다 — 그 어긋남이 그 동사가 <b>존재하는 이유</b>다. enumerate를 먼저 빼 보세요.',
+    cards: [
+      { id: 'count', t: ['몇 개인지', '알아냄'], v: 'count', icon: [-26, 0, 26].map((x, i) => CHAIR(x - 10, 30, 'var(--wood)') + tx(x, -14, 14, i + 1, 'var(--accent)', ' font-weight="700"')).join(''),
+        instead: 'I looked at the chairs. ✗', lost: '보기만 했다. 몇 개인지 수가 빠진다.', why: '항목마다 수를 대응시켜 개수를 앎.' },
+      { id: 'tally', t: ['올 때마다', '표시하며'], v: 'tally', icon: [0, 1, 2, 3].map((j) => '<path d="M' + (-22 + j * 12) + ' -22 V22" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>').join('') + '<path d="M-30 18 L22 -18" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>',
+        instead: 'I counted the chairs as they came in. △', lost: '뜻은 간다. 하나마다 표시를 남겨 누적한 기록이 빠진다.', why: '항목이 나타날 때마다 표시를 남겨 셈.' },
+      { id: 'recount', t: ['다시 세어', '확인'], v: 'recount', icon: '<path d="M-24 -12 A28 28 0 1 1 -24 14" fill="none" stroke="var(--accent)" stroke-width="2.5"/>' + AR(-20, 8, -25, 16, 'var(--accent)', 2.5) + tx(4, -2, 12, '14?', 'var(--muted)', ' font-weight="600"') + tx(4, 16, 13, '12', 'var(--accent)', ' font-weight="700"'),
+        instead: 'I counted the chairs again. △', lost: '길다. 앞의 수를 검증한다는 그림이 한 낱말로 안 나온다.', why: '같은 대상을 다시 세어 앞의 수를 확인.' },
+      { id: 'countout', t: ['필요한 수만', '골라 냄'], v: 'count out', icon: [0, 1, 2].map((k) => '<circle cx="-26" cy="' + (16 - k * 8) + '" r="10" fill="var(--fog)" stroke="var(--obj-line)"/>').join('') +
+          AR(-12, -16, 8, -16, 'var(--accent)', 2.5) + [0, 1, 2].map((k) => '<circle cx="' + (6 + k * 14) + '" cy="16" r="7" fill="var(--gold)" stroke="var(--obj-line)"/>' + tx(6 + k * 14, 4, 10, k + 1, 'var(--accent)', ' font-weight="700"')).join(''),
+        instead: 'I took ten chairs. △', lost: '열 개를 가져간 사실뿐이다. 하나씩 세며 정확히 그 수만 골랐다는 점이 빠진다.', why: '정해진 수만큼 하나씩 세어 골라 냄.' },
+      { id: 'enumerate', t: ['어느 것인지', '하나씩'], v: 'enumerate', icon: [-20, 0, 20].map((y, i) => tx(-24, y + 5, 14, '①②③'[i], 'var(--accent)', ' font-weight="700"') + '<path d="M-10 ' + y + ' h' + (40 - i * 8) + '" stroke="var(--muted)" stroke-width="3" stroke-linecap="round"/>').join(''),
+        instead: 'I counted three broken chairs. △', lost: '총수 "셋"뿐이다. 어느 의자인지가 빠진다(노트).', why: '항목을 하나씩 빠짐없이 짚어 열거.' },
+      { id: 'measure', out: true, t: ['개수 아닌', '길이 · 무게'], v: 'measure', icon: '<rect x="-38" y="-10" width="76" height="20" rx="2" fill="var(--gold)" stroke="var(--obj-line)"/>' + [-30, -20, -10, 0, 10, 20, 30].map((x, i) => '<path d="M' + x + ' -10 v' + (i % 2 ? 6 : 10) + '" stroke="var(--obj-line)" stroke-width="1.5"/>').join(''),
+        instead: 'I counted how high the chair is. ✗', lost: '세는 말은 떨어진 개수에 쓴다. 높이는 단위를 대어 재야 한다(노트).', why: '이어진 크기를 단위로 알아냄 — MEASURE 묶음.' },
+    ],
+  };
+
+  const SCENES = {
+    shop: { btn: '편의점', place: '편의점 · 계산대',
+      pic: () => FL + BX(400, 96, 160, 54, CARD) + ST(.2, [0, 1, 2, 3].map((k) => '<circle cx="' + (430 + k * 20) + '" cy="88" r="7" fill="var(--gold)" stroke="' + OL + '"/>' + T(430 + k * 20, 74, 10, k + 1, AC, ' font-weight="700"')).join('')) +
+        P(340, 150, 1.1, SL) + P(620, 150, 1.1, OKC) + L(480, 50, '거스름돈'),
+      lines: [
+        ['점원', 'Here, let me <b>count out</b> your change.', '거스름돈 세어 드릴게요.'],
+        ['나', 'Thanks.', '고마워요.', 1],
+      ],
+      say: '정해진 금액만큼 동전을 하나씩 세어 내줌 — <span class="en">count out</span>. 노트 TARGET에 동전 · 카드가 있다.' },
+    bed: { btn: '잠자리', place: '집 · 잠 안 오는 밤',
+      pic: () => FL + '<rect x="380" y="110" width="200" height="30" rx="4" fill="' + CARD + '" stroke="' + OL + '" stroke-width="1.5"/><rect x="380" y="96" width="40" height="14" rx="4" fill="' + BG + '" stroke="' + OL + '"/>' +
+        ST(.2, [0, 1, 2].map((k) => '<ellipse cx="' + (450 + k * 44) + '" cy="60" rx="14" ry="9" fill="' + BG + '" stroke="' + OL + '"/>' + T(450 + k * 44, 42, 10, k + 1, AC, ' font-weight="700"')).join('')) +
+        P(320, 150, 1.1, FOG) + P(630, 150, 1.1, SL),
+      lines: [
+        ['나', "I can't sleep.", '잠이 안 와요.', 1],
+        ['엄마', 'Try <b>counting</b> sheep.', '양을 세어 봐.'],
+      ],
+      say: '하나씩 수를 붙이는 기본 그림 — <span class="en">count</span>. 영어권에서 잠 안 올 때 하는 말.' },
+    vote: { btn: '학급 투표', place: '교실 · 반장 선거',
+      pic: () => FL + BX(400, 26, 170, 84, BG) + T(430, 52, 12, '민수', MU, '', 'start') + T(430, 84, 12, '지아', MU, '', 'start') +
+        ST(.2, TALLY_S(480, 46, 5) + TALLY_S(480, 78, 3)) + P(330, 150, 1.1, SL) + P(620, 150, 1.1, OKC),
+      lines: [
+        ['반장', "Who's going to <b>tally</b> the votes?", '누가 표 세서 적을래?'],
+        ['나', "I'll do it on the board.", '제가 칠판에 할게요.', 1],
+      ],
+      say: '한 표씩 나올 때마다 칠판에 획 — <span class="en">tally</span>. 한국어 "바를 정(正) 자로 세기"에 가깝다.' },
+    news: { btn: '선거 뉴스', place: '집 · 저녁 뉴스',
+      pic: () => FL + BX(410, 30, 150, 90, BG) + T(450, 64, 13, '50.1%', AC, ' font-weight="700"') + T(520, 64, 13, '49.9%', SL, ' font-weight="700"') + ST(.2, T(485, 98, 12, '재검표 중', MU, ' font-weight="600"')) +
+        '<rect x="460" y="120" width="50" height="8" fill="' + OL + '"/>' + P(320, 150, 1.1, FOG) + P(630, 150, 1.1, SL),
+      lines: [
+        ['친구', "Did you hear? They're <b>recounting</b> the votes.", '들었어? 표를 다시 센대.'],
+        ['나', 'Wow, it must have been really close.', '와, 정말 박빙이었나 보다.', 1],
+      ],
+      say: '앞의 결과를 검증하려고 다시 셈 — <span class="en">recount</span>. 선거에서는 명사로도 쓴다: <span class="en">a recount</span>(재검표).' },
+    lesson: { btn: '사회 수업', place: '학교 · 사회 수업',
+      pic: () => FL + BX(400, 22, 180, 96, BG) + ST(.2, ['① 가격', '② 날씨', '③ 수요'].map((t, i) => T(420, 48 + i * 26, 13, t, 'var(--text)', '', 'start')).join('')) +
+        P(330, 150, 1.1, A2) + P(630, 150, 1.1, SL),
+      lines: [
+        ['선생님', 'Can you <b>enumerate</b> the main causes?', '주요 원인을 하나씩 들어 볼래?'],
+        ['나', 'Sure. First, prices went up.', '네. 첫째, 가격이 올랐어요.', 1],
+      ],
+      say: '항목을 하나씩 빠짐없이 짚음 — <span class="en">enumerate</span>. 수업 · 글처럼 격식 있는 자리. 친구끼리면 <span class="en">list</span>.' },
+  };
+  // 0+절 칠판 획 (작게)
+  function TALLY_S(x, y, n) { return Array.from({ length: n }, (_, i) => i < 4 ? '<path d="M' + (x + i * 8) + ' ' + (y - 10) + ' v14" stroke="' + AC + '" stroke-width="2"/>' : '<path d="M' + (x - 4) + ' ' + (y + 2) + ' L' + (x + 30) + ' ' + (y - 8) + '" stroke="' + AC + '" stroke-width="2"/>').join(''); }
+
+  const FLOW = {
+    color: 'var(--accent)', segY: 300, first: 'countout',
+    region: { x: 84, y: 66, w: 552, h: 258, label: 'COUNT 묶음 · RESULT = 몇 개인지 앎', at: [92, 80] },
+    nodes: {
+      q1: { x: 340, y: 36, w: 260, t: 'Q1. 하나씩 떨어진 것을 세나?' },
+      q2: { x: 340, y: 106, w: 220, t: 'Q2. 무엇을 하려나?' },
+      q3: { x: 220, y: 180, w: 200, t: 'Q3. 어떻게 세나', sub: '처음 · 표시 · 다시' },
+    },
+    leaves: {
+      count:     { x: 130, y: 262, w: 80, v: 'count', sub: '처음 셈', seg: 'n', say: '<span class="en">Mina counted the chairs.</span> 이 묶음의 기본 동사.' },
+      tally:     { x: 220, y: 262, w: 84, v: 'tally', sub: '표시하며', seg: 'n', say: '<span class="en">Mina tallied the chairs as they arrived.</span> 올 때마다 표시.' },
+      recount:   { x: 312, y: 262, w: 88, v: 'recount', sub: '다시 확인', seg: 'n', say: '<span class="en">Mina recounted the chairs after the break.</span> 앞의 수를 검증.' },
+      countout:  { x: 424, y: 262, w: 112, v: 'count out', sub: '그 수만큼 분리', seg: 's', say: '<span class="en">Mina counted out ten chairs for the guests.</span> 정해진 수만큼 골라 냄.' },
+      enumerate: { x: 566, y: 262, w: 120, v: 'enumerate', sub: '어느 것인지', seg: 'e', say: '<span class="en">Mina enumerated the chairs that needed repair.</span> 항목을 빠짐없이 열거.' },
+      measure:   { x: 600, y: 36, w: 120, v: 'measure', sub: '→ MEASURE 묶음', seg: '', out: true, say: '<span class="en">measure the rope</span> 떨어진 개수가 아니라 <b>이어진 크기</b> → COUNT 묶음 밖, <a href="../measure/_family.md">measure 묶음</a>.' },
+    },
+    edges: [
+      ['q1', 'q2', '예', '', [350, 81, 'start']],
+      ['q1', 'measure', '길이 · 무게', 'right', [508, 28], true],
+      ['q2', 'q3', '총수를 앎', 'left'], ['q2', 'countout', '그 수만 골라 냄'], ['q2', 'enumerate', '어느 것인지', 'right'],
+      ['q3', 'count', '처음'], ['q3', 'tally', '표시'], ['q3', 'recount', '다시'],
+    ],
+    segs: [[88, 358, '개수를 앎', 'n'], [364, 484, '골라 냄', 's'], [490, 632, '항목 열거', 'e']],
+  };
+
+  const SLOTS = {
+    first: ['countout', 'other'],
+    slots: { obj: '무엇을', more: '뒤에 붙는 것', other: '다른 뜻 · 말' },
+    verbs: {
+      count: {
+        obj:   { ok: [['I', 's'], ['counted', 'v'], ['the chairs', 'o']], say: '노트 예문. 세는 대상이 바로 뒤.' },
+        more:  { ok: [['I', 's'], ['counted', 'v'], ['the chairs', 'o'], ['before the presentation', 'x']], say: '노트의 시제와 결과 문장. 언제는 끝에.' },
+        other: { ok: [['Every vote', 's'], ['counts', 'v']], say: '목적어 없이 — "셈에 들어간다 · 중요하다"(짐작).' },
+      },
+      tally: {
+        obj:   { ok: [['I', 's'], ['tallied', 'v'], ['the votes', 'o']], say: '노트 TARGET의 투표 — 하나씩 나올 때마다 표시.' },
+        more:  { ok: [['I', 's'], ['tallied', 'v'], ['the chairs', 'o'], ['as they arrived', 'x']], say: '노트 예문. <b>as they arrived</b> — 들어올 때마다.' },
+        other: { ok: [['The two numbers', 's'], ["don't tally", 'v']], say: '두 수가 맞아떨어지지 않는다(짐작).' },
+      },
+      recount: {
+        obj:   { ok: [['I', 's'], ['recounted', 'v'], ['the chairs', 'o']], say: '처음이 아니라 <b>다시</b> 세어 확인.' },
+        more:  { ok: [['I', 's'], ['recounted', 'v'], ['the chairs', 'o'], ['after the break', 'x']], say: '노트 예문.' },
+        other: { ok: [['He', 's'], ['recounted', 'v'], ['his trip', 'o']], say: '"이야기하다"라는 다른 recount — 소리가 조금 다르다고 알려져 있다(짐작 · 사전 확인).' },
+      },
+      countout: {
+        obj:   { ok: [['I', 's'], ['counted out', 'v'], ['ten chairs', 'o']], say: '몇 개(<b>ten</b>)가 목적어 안에 들어간다.' },
+        more:  { ok: [['I', 's'], ['counted out', 'v'], ['ten chairs', 'o'], ['for the guests', 'x']], say: '노트 예문. 누구를 위해 골라 냈나.' },
+        other: { ok: [['Count', 'v'], ['me', 'o'], ['out', 'r']], say: '"나는 빼 줘" — 반대는 <span class="en">Count me in</span>(짐작).' },
+      },
+      enumerate: {
+        obj:   { ok: [['I', 's'], ['enumerated', 'v'], ['the chairs', 'o'], ['that needed repair', 'x']], say: '노트 예문. 어느 의자인지가 목적어.' },
+        more:  { ok: [['She', 's'], ['enumerated', 'v'], ['the reasons', 'o'], ['one by one', 'x']], say: '노트 TARGET의 "이유" — 하나씩.' },
+        other: { ok: [['I', 's'], ['listed', 'v'], ['the reasons', 'o']], say: '일상에서는 <b>list</b>가 더 편할 수 있다(노트).' },
+      },
+    },
+  };
+
+  // 페이지 데이터(TOP · EXIST · SCENES · FLOW · SLOTS)가 있으면 그 칸을 그린다. 없는 칸은 건너뛴다
+  // TOP: { first, keep, keepSay, chips, chipTo, hows: { 키: { btn, how, verb, chips, target, result, pic(), say } } }
+  if (typeof TOP !== 'undefined') {
+    let how = TOP.first || Object.keys(TOP.hows)[0];
+    const drawTop = () => {
+      const H = TOP.hows[how];
+      $('scene').innerHTML = '<g data-scene="' + how + '">' + H.pic() + '</g>';
+      $('howLabel').textContent = H.how;
+      $('verbLabel').textContent = H.verb;
+      $('targetLabel').textContent = H.target;
+      $('resultLabel').textContent = H.result;
+      $('say').innerHTML = H.say;
+      document.querySelectorAll('#howBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.how === how));
+      document.querySelectorAll('.chip[data-v]').forEach((c) => c.classList.toggle('on', H.chips.includes(c.dataset.v)));
+    };
+    Object.keys(TOP.hows).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = TOP.hows[k].btn; b.dataset.how = k;
+      b.addEventListener('click', () => { how = k; drawTop(); });
+      $('howBtns').appendChild(b);
+    });
+    // 동사 칩: 누르면 그 장면으로. keep(묶음의 기본 동사)은 다른 장면에서도 맞으니 장면은 그대로 두고 설명만 더한다
+    const chipBox = $('chipBox');
+    TOP.chips.forEach((v) => {
+      const c = document.createElement('button'); c.className = 'chip'; c.dataset.v = v; c.textContent = v;
+      c.addEventListener('click', () => {
+        const k = (TOP.chipTo && TOP.chipTo[v]) || v.toLowerCase().replace(/ /g, ''), keep = v === TOP.keep && how !== k;
+        if (!keep) how = k;
+        drawTop();
+        if (keep) $('say').innerHTML += '<br>' + TOP.keepSay;
+      });
+      chipBox.insertBefore(c, $('chipExit'));
+    });
+    if (!TOP.out || !TOP.out.length) $('chipExit').remove();
+    else TOP.out.forEach(([label, href]) => { const a = document.createElement('a'); a.className = 'chip out'; a.href = href; a.textContent = label; chipBox.appendChild(a); });
+    drawTop();
+  }
+
+  if (typeof EXIST !== 'undefined') {
+    let gone = '';
+    const drawExist = () => {
+      const [svg, say] = existChart(EXIST, gone);
+      $('existScene').innerHTML = '<g data-gone="' + (gone || 'none') + '">' + svg + '</g>';
+      $('esay').innerHTML = say;
+      document.querySelectorAll('#existBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.gone === gone));
+    };
+    [['', '모두 있음']].concat(EXIST.cards.map((c) => [c.id, c.v + ' 없이'])).forEach(([id, label]) => {
+      const b = document.createElement('button');
+      b.textContent = label; b.dataset.gone = id;
+      b.addEventListener('click', () => { gone = id; drawExist(); });
+      $('existBtns').appendChild(b);
+    });
+    drawExist();
+  }
+
+  // SCENES: { 키: { btn, place, pic(), lines: [[누가, 영어(<b>동사</b>), 한국어, 나?]], say } }
+  if (typeof SCENES !== 'undefined') {
+    const place = (t) => T(16, 26, 13, t, MU, ' font-weight="600"', 'start');
+    let scene = Object.keys(SCENES)[0];
+    const drawScene = () => {
+      const c = SCENES[scene];
+      $('sceneScene').innerHTML = '<g data-scene="' + scene + '">' + place(c.place) + c.pic() + '</g>';
+      $('sceneTalk').innerHTML = c.lines.map(([who, en, ko, me]) =>
+        '<div class="line' + (me ? ' me' : '') + '"><span class="who">' + who + '</span><div class="bubble"><span class="en">' + en + '</span><span class="ko">' + ko + '</span></div>' +
+        '<button type="button" class="speak" data-word="' + en.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;') + '" title="이 줄 듣기">🔊</button></div>').join('');
+      $('ssay').innerHTML = c.say;
+      document.querySelectorAll('button[data-scene]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.scene === scene));
+    };
+    Object.entries(SCENES).forEach(([id, c]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.dataset.scene = id; b.textContent = c.btn;
+      b.addEventListener('click', () => { scene = id; drawScene(); }); $('sceneBtns').appendChild(b);
+    });
+    drawScene();
+  }
+
+  if (typeof FLOW !== 'undefined') {
+    let pick = FLOW.first || Object.keys(FLOW.leaves)[0];
+    const drawFlow = () => {
+      const [svg, say] = flowChart(FLOW, pick);
+      $('flowScene').innerHTML = svg;
+      $('fsay').innerHTML = say;
+      document.querySelectorAll('#flowBtns button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.leaf === pick));
+    };
+    Object.keys(FLOW.leaves).forEach((k) => {
+      const b = document.createElement('button');
+      b.textContent = '▸ ' + FLOW.leaves[k].v; b.dataset.leaf = k;
+      b.addEventListener('click', () => { pick = k; drawFlow(); });
+      $('flowBtns').appendChild(b);
+    });
+    $('flowScene').addEventListener('click', (ev) => { const g = ev.target.closest('[data-leaf]'); if (g) { pick = g.dataset.leaf; drawFlow(); } });
+    drawFlow();
+  }
+
+  // SLOTS: { slots: { 키: 버튼 글자 }, first: [동사, 자리], verbs: { 동사: { 자리: { ok, bad, say } } } }
+  if (typeof SLOTS !== 'undefined') {
+    let [ov, slot] = SLOTS.first;
+    const drawSlot = () => {
+      const c = SLOTS.verbs[ov][slot];
+      $('slotScene').innerHTML = '<g data-slot="' + ov + '-' + slot + '">' + (c.ok ? wordRow(c.ok, 58, true) : '') + (c.bad ? wordRow(c.bad, 132, false) : '') + '</g>';
+      $('osay').innerHTML = c.say;
+      document.querySelectorAll('button[data-ov]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.ov === ov));
+      document.querySelectorAll('button[data-slot]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.slot === slot));
+    };
+    const add = (box, key, val, label) => { const b = document.createElement('button'); b.dataset[key] = val; b.textContent = label; b.addEventListener('click', () => { if (key === 'ov') ov = val; else slot = val; drawSlot(); }); $(box).appendChild(b); };
+    Object.keys(SLOTS.verbs).forEach((v) => add('ovBtns', 'ov', v, v));
+    Object.entries(SLOTS.slots).forEach(([k, label]) => add('slotBtns', 'slot', k, label));
+    drawSlot();
+  }
+</script>
+</body>
+</html>
