@@ -1,0 +1,43 @@
+<!-- title: GOOD ↔ BAD 개념 -->
+<!-- pron: good=/ɡʊd/[**굿**]*, bad=/bæd/[**배**드]*, #good/excellent, #good/superb, #good/virtuous, #bad/terrible, #bad/awful, #bad/wicked -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="30-honest-dishonest.html">HONEST ↔ DISHONEST</a> · 다음: <a href="32-real-fake.html">REAL ↔ FAKE</a></p>
+  <h1>GOOD ↔ BAD — 같은 식당, 다른 별점</h1>
+  <p class="lead">기준보다 <b>나으면</b> good, <b>못하면</b> bad. <b>질</b>을 말하는지 <b>도덕</b>을 말하는지부터 가른다. 질을 말하는 excellent · superb, terrible · awful은 서로 넓게 겹친다(노트).</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 좋고 나쁜 장면이 바뀌는 그림|좋은 쪽은 별 네 개, 잘된 발표, 감탄한 식사, 정직한 선택이고 나쁜 쪽은 별 하나, 엉망이 된 여행, 고약한 냄새, 악당의 계획이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>평가가 붙는 동사: <a href="../concepts/27-feel.html">27 FEEL</a> (feel bad) · <a href="../concepts/09-look.html">09 LOOK</a> (look good) · <a href="../concepts/53-change.html">53 CHANGE</a></li><li>자료: english-adjectives 노트의 good · bad 묶음</li></ul>
+</main>
+<script>
+  const STAR = (x, y, r, on) => '<path d="' + Array.from({ length: 10 }, (_, i) => { const a = -Math.PI / 2 + i * Math.PI / 5, q = i % 2 ? r * .45 : r; return (i ? 'L' : 'M') + (x + q * Math.cos(a)).toFixed(1) + ' ' + (y + q * Math.sin(a)).toFixed(1); }).join(' ') + ' z" fill="' + (on ? 'var(--gold)' : 'none') + '" stroke="var(--obj-line)"/>';
+  const STARS = (n) => [0, 1, 2, 3, 4].map((i) => STAR(85 + i * 70, 90, 28, i < n)).join('');
+  const PLATE = (x, y, c) => '<ellipse cx="' + x + '" cy="' + y + '" rx="60" ry="14" fill="var(--card)" stroke="var(--obj-line)"/><ellipse cx="' + x + '" cy="' + (y - 8) + '" rx="36" ry="12" fill="' + c + '"/>';
+  const EXIST = adverbPage({ noun: '형용사', start: 'superb',
+    groups: [
+      { name: '좋은', items: [
+        { v: 'good', k: '좋은', en: 'The food is good.', note: '가장 넓은 말. 부사는 well.', from: 'good — better — best', pic: () => STARS(4) + PLATE(225, 200, 'var(--gold)'), ex: ['기준', '이상', 'The food is OK.', '그럭저럭이라는 뜻이 된다.', '좋은.'] },
+        { v: 'excellent', k: '아주 뛰어난', base: 'GOOD', core: '매우 높은 평가', from: 'excel(뛰어나다) · excellence', en: 'That was an excellent presentation.', note: '폭넓은 칭찬. 점수가 꼭 있을 필요는 없다(노트).', pic: () => GRD + RC(200, 50, 190, 120, 'var(--card)') + LN('M222 150 l40 -30 l36 14 l60 -54', 'var(--accent)', 4) + MAN(130, { f: 'smile', a: 'point', c: 'var(--ok)' }) + [230, 280, 330, 380].map((x) => CR(x, 222, 12, 'var(--skin)')).join('') + STAR(60, 80, 24, true), ex: ['매우', '높음', 'That was a good presentation.', '세기가 빠진다.', '아주 뛰어난.'] },
+        { v: 'superb', k: '감탄이 나오는', base: 'GOOD', core: '감탄을 실은 평가', from: '라틴어 superbus(위풍당당한)', en: 'The meal was superb.', note: '음식 · 공연 · 경치에 강한 칭찬. excellent와 대상이 나뉘지 않는다(노트).', pic: () => GRD + MAN(120, { f: 'o', a: 'up', c: 'var(--accent2)' }) + DESK(200, 190, 200) + PLATE(295, 190, 'var(--bad)') + LN('M270 160 q-8 -12 0 -24 M296 160 q-8 -12 0 -24 M322 160 q-8 -12 0 -24', 'var(--fog)', 3) + tx(120, 84, 18, '와…!', 'var(--accent)', ' font-weight="700"'), ex: ['감탄', '나옴', 'The meal was good.', '감탄이 빠진다.', '훌륭한.'] },
+        { v: 'virtuous', k: '도덕적으로 바른', base: 'GOOD', core: '도덕적 미덕', from: 'virtue(미덕) + ous', en: 'She made a virtuous choice.', note: '질이 아니라 <b>도덕</b>. 격식 있어 일상에는 good이 자연스럽다(노트).', pic: () => GRD + MAN(150, { f: 'smile', a: 'both', c: 'var(--ok)' }) + RC(196, 168, 46, 28, 'var(--wood)') + tx(220, 154, 12, '주운 지갑', 'var(--muted)') + '<g transform="translate(660 0) scale(-1 1)">' + MAN(330, { f: 'o', a: 'both', c: 'var(--obj)' }) + '</g>' + HEART(90, 110), ex: ['도덕', '미덕', 'She made an excellent choice.', '잘 골랐다는 뜻. 도덕이 안 나온다.', '도덕적으로 바른.'] },
+      ] },
+      { name: '나쁜', items: [
+        { v: 'bad', k: '나쁜', en: 'The food is bad.', note: '가장 넓은 말. 음식이 상했을 때도 쓴다.', from: 'bad — worse — worst', pic: () => STARS(1) + PLATE(225, 200, 'var(--fog)'), ex: ['기준', '이하', 'The food is strange.', '이상하다는 뜻이 된다.', '나쁜.'] },
+        { v: 'terrible', k: '아주 나쁜', base: 'BAD', core: '정도가 심함', from: 'terror(공포)에서 왔지만 뜻은 "심하게 나쁜"', en: 'The weather was terrible.', note: '일상에서 두루. 큰 피해가 꼭 있어야 하는 것은 아니다(노트).', pic: () => GRD + RC(120, 190, 210, 20, 'var(--ok)') + MAN(226, { f: 'sad', a: 'up' }) + [70, 130, 190, 270, 330, 390].map((x, i) => LN('M' + x + ' ' + (50 + i % 2 * 24) + ' l-12 34 M' + (x + 8) + ' ' + (140 + i % 2 * 20) + ' l-12 34', 'var(--water)', 4)).join(''), ex: ['심하게', '나쁨', 'The weather was bad.', '세기가 빠진다.', '아주 나쁜.'] },
+        { v: 'awful', k: '지독한', base: 'BAD', core: '매우 불쾌함', from: 'awe(경외) + ful, 지금 뜻은 "지독한"', en: 'That smells awful.', note: '냄새 · 날씨 · 기분 등 넓게. <b>terrible과 겹친다</b>(노트).', pic: () => GRD + MAN(130, { f: 'sad', a: 'hug', r: -10 }) + RC(260, 150, 90, 90, 'var(--fog)') + LN('M252 150 h106', 'var(--obj-line)', 6) + LN('M280 136 q-10 -14 0 -28 t0 -28 M305 136 q-10 -14 0 -28 t0 -28 M330 136 q-10 -14 0 -28 t0 -28', '#8a9a3a', 4), ex: ['매우', '불쾌', 'That smells bad.', '세기가 빠진다.', '지독한.'] },
+        { v: 'wicked', k: '사악한', base: 'BAD', core: '도덕적으로 악함', from: 'wickedness(사악함)', en: 'The villain had a wicked plan.', note: '<b>도덕</b>의 나쁨. 지역 · 말투에 따라 "끝내주는"이라는 칭찬도 된다(노트).', pic: () => RC(50, 50, 350, 190, '#20242c', 'var(--obj-line)', 6) + MAN(150, { y: 236, f: 'smile', a: 'up', c: '#5b2d4a', s: 1.1 }) + LN('M134 112 l12 8 M166 112 l-12 8', '#333', 3) + RC(240, 90, 130, 100, '#efe6cf') + CR(285, 140, 14, 'none', '#b33') + LN('M300 140 l44 -24 M300 140 l40 30', '#b33', 3) + tx(305, 110, 12, '계획', '#333') },
+      ] },
+    ],
+    q: [['Q1. 질인가 도덕인가?', '질 → 아래 두 줄 / 도덕 → <b>virtuous ↔ wicked</b>'], ['Q2. 질이 좋다', '두루 → <b>good</b> / 아주 → <b>excellent · superb</b>(겹침)'], ['Q3. 질이 나쁘다', '두루 → <b>bad</b> / 아주 → <b>terrible · awful</b>(겹침)']],
+    body: ['<b>SUPERB</b> — 손끝에 입 맞추고 펼치기. <b>AWFUL</b> — 코를 막기.', '<b>VIRTUOUS</b> — 지갑을 두 손으로 돌려주기.'],
+    check: ['노트 식은 excellent · superb를 "객관 / 감각"으로, terrible · awful을 "상황 / 감각"으로 나누지만, 같은 노트가 엄격히 나뉘지 않는다고 해 나누지 않았다.', '지갑을 돌려주는 장면은 새로 지었다.'],
+  });
+  const SCENES = {
+    meal: { btn: '식사', place: '식사를 마치고', pic: () => MEET('<ellipse cx="465" cy="104" rx="34" ry="8" fill="' + CARD + '" stroke="' + OL + '"/>'), lines: [['친구', 'How was the food?', '음식 어땠어?'], ['나', '<b>Excellent</b>! But the service was <b>terrible</b>.', '최고! 근데 서비스는 엉망.', true]], say: '말할 때 흔한 짝: <b>great · excellent ↔ terrible · awful</b>.' },
+    sick: { btn: '컨디션', place: '아픈 날', pic: () => MEET(''), lines: [['동료', 'You don\'t look <b>good</b>.', '안 좋아 보여요.'], ['나', 'I feel <b>awful</b>.', '몸이 너무 안 좋아요.', true]], say: '몸이 안 좋을 때 <b>feel awful</b>.' },
+  };
+  const SLOTS = { first: ['good', 'verb'], slots: { be: 'look · feel 뒤', verb: '동사를 꾸밀 때', noun: '명사 앞' }, verbs: {
+    good: { be: { ok: [['It', 's'], ['looks', 'v'], ['good', 'a']], bad: [['It', 's'], ['looks', 'v'], ['goodly', 'd']], say: 'look 뒤는 형용사.' }, verb: { ok: [['She', 's'], ['sings', 'v'], ['well', 'd']], bad: [['She', 's'], ['sings', 'v'], ['good', 'a']], say: '동사를 꾸미면 <b>well</b>(표준 영어).' }, noun: { ok: [['a', 'x'], ['good', 'a'], ['idea', 'n']], say: '좋은 생각.' } },
+    awful: { be: { ok: [['It', 's'], ['smells', 'v'], ['awful', 'a']], bad: [['It', 's'], ['smells', 'v'], ['awfully', 'd']], say: 'smell 뒤는 <b>형용사</b>.' }, verb: { ok: [['It', 's'], ['\'s', 'v'], ['awfully', 'd'], ['cold', 'a']], say: 'awfully는 "몹시"라는 부사.' }, noun: { ok: [['an', 'x'], ['awful', 'a'], ['day', 'n']], say: '지독한 하루.' } },
+  } };
+</script>

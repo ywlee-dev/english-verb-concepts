@@ -1,0 +1,46 @@
+<!-- title: EARLY · FAST ↔ LATE · SLOW 개념 -->
+<!-- pron: early=/ˈɝː.li/[**얼**리]*, fast=/fæst/[**패**스트]*, late=/leɪt/[**레**잇]*, slow=/sloʊ/[슬**로**우]*, #early/premature, #early/swift, #early/rapid, #late/overdue, #late/gradual, #late/sluggish -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="39-new-old.html">NEW ↔ OLD</a></p>
+  <h1>EARLY · FAST ↔ LATE · SLOW — 때와 빠르기는 다르다</h1>
+  <p class="lead"><b>때</b>면 early ↔ late, <b>빠르기</b>면 fast ↔ slow. 한국어 "빠르다"는 둘 다라서 헷갈린다. 노트도 학습 편의로 함께 묶었을 뿐 <b>같은 뜻이 아니라고</b> 한다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 때와 빠르기의 장면이 바뀌는 그림|때의 이른 쪽은 9시 전에 온 사람, 너무 이른 축하이고 빠른 쪽은 달리는 차, 바로 나선 직원, 부쩍 는 도시다. 늦은 쪽은 9시 넘어 온 사람, 기한 넘긴 책이고 느린 쪽은 느린 차, 조금씩 는 실력, 굼뜬 컴퓨터다.}}
+  <h2>5. 동사 · 부사와 연결하면</h2>
+  <ul><li>동사: <a href="../concepts/08-go.html">08 GO</a> · <a href="../concepts/36-wait.html">36 WAIT</a> · <a href="../concepts/66-increase.html">66 INCREASE</a></li><li>부사 짝: <a href="../adverbs/03-slowly-quickly.html">SLOWLY ↔ QUICKLY</a> · <a href="../adverbs/13-suddenly-gradually.html">SUDDENLY ↔ GRADUALLY</a></li><li>자료: english-adjectives 노트의 early · late 묶음</li></ul>
+</main>
+<script>
+  // 시간 줄: 9시가 기준. x = 온 때
+  const LINE9 = (x, body) => TL(200) + NOW(226, 200, '9시') + body + LN('M' + x + ' 190 v20', 'var(--accent)', 5);
+  const CARX = (x) => '<g transform="translate(' + x + ' 0)"><path d="M0 220 v-24 l30 -26 h70 l30 26 h30 v24 z" fill="var(--accent)" stroke="var(--obj-line)" stroke-width="2"/>' + CR(36, 222, 15, 'var(--obj-line)') + CR(126, 222, 15, 'var(--obj-line)') + '</g>';
+  const GRAPH = (pts, c) => LN('M70 220 H400 M70 220 V60', 'var(--obj-line)', 2) + LN(pts, c, 6);
+  const EXIST = adverbPage({ noun: '형용사', start: 'premature',
+    groups: [
+      { name: '때', items: [
+        { v: 'early', k: '이른', en: 'You\'re early.', note: '정한 때보다 <b>먼저</b>. 빠르기가 아니다. 부사로도 같은 모양.', from: 'earlier — earliest', pic: () => LINE9(120, MAN(120, { y: 190, s: .85, f: 'smile', c: 'var(--ok)' })), ex: ['때보다', '먼저', 'You\'re fast.', '빠르게 움직인다는 뜻이 된다.', '이른.'] },
+        { v: 'premature', k: '아직 때가 이른', base: 'EARLY', core: '근거 · 준비 전', from: 'pre(앞) + mature(익은)', en: 'It\'s premature to celebrate.', note: '그냥 이른 게 아니라 <b>근거 · 준비가 갖춰지기 전</b>(노트).', pic: () => GRD + MAN(140, { f: 'smile', a: 'up' }) + LN('M100 60 l10 14 M170 56 l-8 16 M140 44 v16', 'var(--gold)', 4) + RC(260, 70, 130, 120, 'var(--card)') + tx(325, 112, 15, '시험 결과', 'var(--text)') + tx(325, 152, 18, '미정', 'var(--bad)', ' font-weight="700"'), ex: ['아직', '이름', 'It\'s early to celebrate.', '시각이 이르다는 말로 들린다.', '아직 때가 이른.'] },
+        { v: 'late', k: '늦은', en: 'You\'re late.', note: '정한 때보다 <b>나중</b>. 부사로도 같은 모양. lately는 "요즘".', from: 'later — latest', pic: () => LINE9(340, MAN(340, { y: 190, s: .85, f: 'o', c: 'var(--bad)', run: 1 })), ex: ['때보다', '나중', 'You\'re slow.', '느리게 움직인다는 뜻이 된다.', '늦은.'] },
+        { v: 'overdue', k: '기한이 지난', base: 'LATE', core: '정한 기한을 넘김', from: 'over(넘어) + due(기한인)', en: 'The book is overdue.', note: '<b>기한</b>을 넘겼다. 느리다는 뜻이 아니다(노트).', pic: () => RC(60, 120, 120, 100, 'var(--accent)') + RC(60, 206, 120, 14, 'var(--card)') + RC(230, 60, 170, 160, 'var(--card)') + RC(230, 60, 170, 30, 'var(--bad)', 'none') + tx(315, 82, 15, '반납일', '#fff', ' font-weight="700"') + tx(315, 140, 32, '3일', 'var(--text)', ' font-weight="700"') + tx(315, 190, 16, '오늘 7일', 'var(--bad)', ' font-weight="700"'), ex: ['기한', '넘김', 'The book is late.', '뜻은 간다. 기한을 넘겼다는 점이 덜 또렷하다.', '기한이 지난.'] },
+      ] },
+      { name: '빠르기', items: [
+        { v: 'fast', k: '빠른', en: 'This car is fast.', note: '움직임이 빠르다. 부사도 fast — <b>fastly는 없다</b>.', from: 'quick은 짧은 시간에 끝나는 쪽', pic: () => GRD + CARX(220) + FAST(200, 176, 4), ex: ['움직임', '빠름', 'This car is early.', '일찍 왔다는 뜻이 된다.', '빠른.'] },
+        { v: 'swift', k: '신속한', base: 'FAST', core: '행동 · 대응이 바로', from: 'swiftly(신속히)', en: 'The staff took swift action.', note: '지체 없이. 글 · 뉴스에 많다. 너무 이르다는 뜻은 아니다(노트).', pic: () => GRD + MAN(220, { f: 'flat', a: 'fwd', run: 1, r: 10, c: 'var(--card)' }) + RC(258, 176, 44, 34, 'var(--bad)') + LN('M280 184 v18 M271 193 h18', '#fff', 4) + FAST(180, 160) + '<g transform="rotate(80 370 228)">' + MAN(370, { y: 240, s: .6, f: 'sad' }) + '</g>', ex: ['바로', '대응', 'The staff took rapid action.', '뜻은 간다. 대응에는 swift도 잘 어울린다.', '신속한.'] },
+        { v: 'rapid', k: '빠른 (변화)', base: 'FAST', core: '변화 · 증가의 속도', from: 'rapidly(빠르게)', en: 'The city saw rapid growth.', note: '변화 · 증가가 빠르다. 숫자가 꼭 있어야 하는 것은 아니다(노트).', pic: () => GRAPH('M80 210 Q250 200 300 130 T390 64', 'var(--accent)') + [100, 160, 300, 340, 376].map((x, i) => RC(x, 220 - [16, 20, 46, 70, 96][i], 24, [16, 20, 46, 70, 96][i], 'var(--fog)')).join(''), ex: ['변화', '빠름', 'The city saw early growth.', '초기에 컸다는 뜻이 된다.', '변화가 빠른.'] },
+        { v: 'slow', k: '느린', en: 'This car is slow.', note: '움직임이 느리다. 늦게 온 것과 다르다.', from: 'slow down(느려지다)', pic: () => GRD + CARX(150) + LN('M136 200 h-14', 'var(--muted)', 3) + '<g transform="translate(360 240)"><path d="M-20 -6 a20 16 0 0 1 40 0 z" fill="var(--ok)" stroke="var(--obj-line)"/><circle cx="27" cy="-10" r="7" fill="var(--skin)"/><path d="M-12 -6 v6 M12 -6 v6" stroke="var(--obj-line)" stroke-width="5"/></g>', ex: ['움직임', '느림', 'This car is late.', '늦게 왔다는 뜻이 된다.', '느린.'] },
+        { v: 'gradual', k: '조금씩 변하는', base: 'SLOW와 이웃', core: '단계적으로 변화', from: 'grade(단계) + ual', en: 'Her progress was gradual.', note: '서서히 변한다. <b>나쁜 느림이 아니다</b>(노트).', pic: () => GRAPH('M80 210 h50 v-24 h60 v-24 h60 v-24 h60 v-24 h70', 'var(--ok)'), ex: ['조금씩', '변함', 'Her progress was slow.', '느려서 아쉽다는 말로 들린다.', '조금씩 변하는.'] },
+        { v: 'sluggish', k: '굼뜬', base: 'SLOW', core: '기대보다 둔함', from: 'slug(민달팽이) + ish', en: 'My laptop feels sluggish.', note: '반응이 둔하다. 몸 · 시장에도(노트).', pic: () => '<path d="M110 206 h230 l16 12 h-262 z" fill="var(--fog)" stroke="var(--obj-line)" stroke-width="2"/><path d="M126 200 l10 -130 h180 l10 130 z" fill="var(--obj)" stroke="var(--obj-line)" stroke-width="2"/>' + CR(226, 124, 26, 'none', 'var(--fog)') + LN('M226 98 a26 26 0 0 1 24 16', 'var(--accent)', 6) + tx(226, 176, 13, '여는 중…', 'var(--fog)') + CLOCK(388, 90, 22, 2), ex: ['반응', '둔함', 'My laptop feels gradual.', '틀리다. 조금씩 변한다는 뜻이다.', '굼뜬.'] },
+      ] },
+    ],
+    q: [['Q1. 때인가 빠르기인가?', '때 → <b>early ↔ late</b> / 빠르기 → <b>fast ↔ slow</b>'], ['Q2. 때라면', '근거 전이라 이름 → <b>premature</b> / 기한 넘김 → <b>overdue</b>'], ['Q3. 빠르다면', '대응 → <b>swift</b> / 변화 → <b>rapid</b>'], ['Q4. 느리다면', '조금씩 변함 → <b>gradual</b> / 굼뜸 → <b>sluggish</b>']],
+    body: ['<b>EARLY ↔ LATE</b> — 손목시계를 두드리기. <b>FAST ↔ SLOW</b> — 손을 휙, 느릿.', '<b>GRADUAL</b> — 손으로 계단 오르기.'],
+    check: ['노트는 이른/빠른을 한 묶음에 두었다. 노트가 "다른 축"이라고 밝혀 여기서는 때와 빠르기로 단추를 나눴다.', '날짜와 시각은 그림용이다.'],
+  });
+  const SCENES = {
+    meet: { btn: '약속', place: '약속 장소', pic: () => FL + P(330, 150, 1.4, 'var(--ok)') + P(560, 150, 1.4, 'var(--sleeve)'), lines: [['친구', 'Sorry I\'m <b>late</b>!', '늦어서 미안!'], ['나', 'It\'s OK. I was <b>early</b>.', '괜찮아. 내가 일찍 왔어.', true]], say: '때의 짝 <b>early ↔ late</b>.' },
+    net: { btn: '인터넷', place: '카페 와이파이', pic: () => MEET(BX(440, 76, 50, 32)), lines: [['친구', 'Is the Wi-Fi <b>fast</b>?', '와이파이 빨라?'], ['나', 'No, it\'s really <b>slow</b>.', '아니, 엄청 느려.', true]], say: '빠르기의 짝 <b>fast ↔ slow</b>.' },
+  };
+  const SLOTS = { first: ['fast', 'verb'], slots: { be: 'be 뒤', verb: '동사 뒤', noun: '명사 앞' }, verbs: {
+    fast: { be: { ok: [['He', 's'], ['is', 'b'], ['fast', 'a']], say: '빠르다.' }, verb: { ok: [['He', 's'], ['runs', 'v'], ['fast', 'd']], bad: [['He', 's'], ['runs', 'v'], ['fastly', 'x']], say: '부사도 <b>fast</b>.' }, noun: { ok: [['a', 'x'], ['fast', 'a'], ['car', 'n']], say: '빠른 차.' } },
+    late: { be: { ok: [['I', 's'], ['am', 'b'], ['late', 'a'], ['for', 'x'], ['work', 'n']], say: 'late <b>for</b>.' }, verb: { ok: [['He', 's'], ['came', 'v'], ['late', 'd']], bad: [['He', 's'], ['came', 'v'], ['lately', 'd']], say: 'lately는 "요즘".' }, noun: { ok: [['a', 'x'], ['late', 'a'], ['lunch', 'n']], say: '늦은 점심.' } },
+  } };
+</script>

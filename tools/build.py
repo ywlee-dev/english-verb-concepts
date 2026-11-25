@@ -37,9 +37,9 @@ def pron_item(spec):
         w, rest = spec.split('=', 1)
         m = re.match(r'(/[^/]+/)\[([^\]]+)\](\*?)', rest.strip())
         return w.strip(), m.group(1), m.group(2), not m.group(3)
-    if spec.startswith('@'):  # '@extremely/excessively' → 부사 노트에서 찾는다
+    if spec[0] in '@#':  # '@extremely/excessively' → 부사 노트, '#wet/damp' → 형용사 노트에서 찾는다
         d, w = spec[1:].split('/')
-        spec = next((VERBS / '../english-adverbs' / d).glob(w + '--*.md'))
+        spec = next((VERBS / ('../english-adverbs' if spec[0] == '@' else '../english-adjectives') / d).glob(w + '--*.md'))
     text = (VERBS / spec).read_text(encoding='utf-8')
     word = re.match(r'#\s*(.+?)\s+—', text).group(1).strip().lower()
     line = re.search(r'Pronunciation \(US\):\*\*\s*(.+)', text).group(1)
@@ -149,21 +149,21 @@ def slots(title, desc, ov_cap='동사', slot_cap='뒤에 붙는 것'):
                 f'    <div class="buttons" id="ovBtns"><span class="cap">{ov_cap}</span></div>\n    <div class="buttons" id="slotBtns"><span class="cap">{slot_cap}</span></div>\n', 'osay')
 
 
-def adverb(title, desc):
-    """부사 방의 몸통: 맨 위 그림 + 0절 + 0+절 + 식 + 질문 + 문장 자리 + 몸 + 확인할 것. 내용은 adverb.js의 adverbPage가 채운다"""
+def adverb(title, desc, noun='부사'):
+    """부사 · 형용사 방의 몸통: 맨 위 그림 + 0절 + 0+절 + 식 + 질문 + 문장 자리 + 몸 + 확인할 것. 내용은 adverb.js의 adverbPage가 채운다"""
     return ('  <div class="card">\n    <div class="fig">\n'
             f'    <svg width="100%" viewBox="0 0 680 300" role="img" aria-labelledby="tD dD"><title id="tD">{title}</title><desc id="dD">{desc}</desc><g id="dualScene"></g></svg>\n'
             '    </div>\n    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>\n    <div id="dualBtns"></div>\n    <p class="say" id="dualSay" aria-live="polite"></p>\n  </div>\n'
             '  <p class="note">설명을 돕기 위한 단순한 그림이다.</p>\n'
-            '  <h2>0. 왜 존재하나 — 이 부사가 없으면 못 그리는 그림</h2>\n' + exist('부사가') + scenes('<b>부사</b>가') +
+            '  <h2>0. 왜 존재하나 — 이 ' + noun + '가 없으면 못 그리는 그림</h2>\n' + exist(noun + '가') + scenes('<b>' + noun + '</b>가') +
             '  <h2>1. 무엇인가 — 기본 그림에 초점이 붙는다</h2>\n  <div class="formula" id="formulaBox"></div>\n'
             '  <h2>2. 무엇이 다른가 — 질문을 따라 고른다</h2>\n  <table id="qBox"></table>\n  <p class="note">쓰임은 겹친다. 경향이지 규칙이 아니고, 양쪽 낱말이 꼭 일대일 반대말도 아니다.</p>\n'
-            '  <h2>3. 실제 문장으로 — 부사 자리</h2>\n' + slots('부사와 자리에 따라 문장이 바뀌는 그림', '위 줄은 맞는 문장, 아래 줄은 틀린 문장이다.', '부사', '자리') +
+            '  <h2>3. 실제 문장으로 — ' + noun + ' 자리</h2>\n' + slots(noun + '와 자리에 따라 문장이 바뀌는 그림', '위 줄은 맞는 문장, 아래 줄은 틀린 문장이다.', noun, '자리') +
             '  <h2>4. 몸으로 해 보기</h2>\n  <ul id="bodyBox"></ul>\n'
             '  <div class="check"><b>확인할 것</b><ul id="checkBox" style="margin:6px 0 0; padding-left:20px"></ul></div>\n')
 
 
-PH = {'ADVERB': adverb, 'PRON': None, 'TOP': top, 'EXIST': exist, 'SCENES': scenes, 'FLOW': flow, 'SLOTS': slots}
+PH = {'ADVERB': adverb, 'ADJ': lambda t, d: adverb(t, d, '형용사'), 'PRON': None, 'TOP': top, 'EXIST': exist, 'SCENES': scenes, 'FLOW': flow, 'SLOTS': slots}
 
 
 def build(src, out=OUT):
@@ -187,14 +187,14 @@ def build(src, out=OUT):
     main = re.sub(r'^[ \t]*\{\{([^}]+)\}\}', sub, main, flags=re.M)
     left = re.findall(r'\{\{[^}]+\}\}', main)
     assert not left, f'{src.name}: 모르는 자리표시 {left}'
-    if src.parent.name == 'pages-adverbs':
+    if src.parent.name != 'pages':
         extra_css += ('  .dial { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; margin-top: 12px; font-size: 14px; color: var(--muted); }\n'
                       '  .dial input { width: 100%; min-height: 36px; accent-color: var(--accent); }\n')
     html = ('<!doctype html>\n<html lang="ko">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             f'<title>{title}</title>\n<!-- 이 파일은 tools/build.py가 tools/{src.parent.name}/{src.name}에서 만든다. 고칠 때는 원본을 고치고 다시 만든다 -->\n'
             '<style>\n' + read('base.css') + extra_css + '</style>\n</head>\n<body>\n' + main + '\n<script>\n' +
-            read('lib.js') + '\n' + (read('adverb.js') + '\n' if src.parent.name == 'pages-adverbs' else '') + data + '\n\n' + read('boot.js') + '</script>\n</body>\n</html>\n')
+            read('lib.js') + '\n' + (read('adverb.js') + '\n' if src.parent.name != 'pages' else '') + data + '\n\n' + read('boot.js') + '</script>\n</body>\n</html>\n')
     out.mkdir(exist_ok=True)
     (out / src.name).write_text(html, encoding='utf-8', newline='\n')
     return out / src.name

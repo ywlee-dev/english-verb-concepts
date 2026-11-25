@@ -1,0 +1,40 @@
+<!-- title: ALIVE ↔ DEAD 개념 -->
+<!-- pron: alive=/əˈlaɪv/[얼**라**이브]*, dead=/ded/[**데**드]*, #alive/lively, #alive/thriving, #dead/lifeless, #dead/deceased -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="15-whole-broken.html">WHOLE ↔ BROKEN</a> · 다음: <a href="17-big-small.html">BIG ↔ SMALL</a></p>
+  <h1>ALIVE ↔ DEAD — 같은 화분, 산 것과 죽은 것</h1>
+  <p class="lead">화분이 <b>살아 있으면</b> alive, <b>죽었으면</b> dead. 활기인지, 잘 자라는지, 생기가 없어 보이는지, 돌아가신 분인지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 살아 있고 죽은 장면이 바뀌는 그림|산 쪽은 푸른 화분, 뛰는 강아지, 무성한 텃밭이고 죽은 쪽은 마른 화분, 불 꺼진 휑한 방, 문서의 이름이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>살아 있는 동안의 동사: <a href="../concepts/65-grow.html">65 GROW</a> · <a href="../concepts/16-keep.html">16 KEEP</a> (keep alive)</li><li>자료: english-adjectives 노트의 alive · dead 묶음</li></ul>
+</main>
+<script>
+  const POT = (body) => '<path d="M180 180 h92 l-14 56 h-64 z" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="2"/>' + body;
+  const LEAFS = (c, droop) => LN('M226 180 V' + (droop ? 110 : 80), c, 5) + (droop ? LN('M226 130 q-30 -10 -44 30 M226 118 q30 -10 46 34', c, 5) : [[190, 130, -30], [262, 120, 30], [196, 92, -40], [256, 84, 40]].map(([x, y, r]) => '<ellipse cx="' + x + '" cy="' + y + '" rx="28" ry="12" fill="' + c + '" transform="rotate(' + r + ' ' + x + ' ' + y + ')"/>').join(''));
+  const EXIST = adverbPage({ noun: '형용사', start: 'lively',
+    groups: [
+      { name: '살아 있는', items: [
+        { v: 'alive', k: '살아 있는', en: 'The plant is still alive.', note: '생명이 있다. 명사 앞에는 안 쓰고 <b>be 뒤</b>에만.', from: 'live(살다)와 짝', pic: () => POT(LEAFS('var(--ok)')), ex: ['생명이', '있다', 'The plant lives here.', '여기 산다는 뜻. 살아 있는지 묻는 말이 아니다.', '살아 있는.'] },
+        { v: 'lively', k: '활기찬', base: 'ALIVE와 이웃', core: '지금 활발함', from: 'live + ly지만 <b>형용사</b>', en: 'The puppy is lively today.', note: '에너지가 보인다. 모임 · 대화에도(노트).', pic: () => GRD + '<g transform="rotate(-10 226 190)"><ellipse cx="226" cy="190" rx="62" ry="30" fill="var(--wood)" stroke="var(--obj-line)"/>' + CR(296, 164, 26, 'var(--wood)') + CR(304, 160, 3, '#333') + CR(322, 168, 5, '#333') + LN('M166 180 q-24 -10 -26 -34', 'var(--wood)', 8) + LN('M190 214 l-14 22 M208 218 l8 22 M250 216 l18 18 M268 208 l22 10', 'var(--wood)', 8) + '</g>' + LN('M120 130 q-10 10 0 20 M104 124 q-16 16 0 32', 'var(--accent)', 3), ex: ['활기', '있게', 'The puppy is alive.', '살아 있다는 뜻일 뿐, 활기가 안 나온다.', '활기찬.'] },
+        { v: 'thriving', k: '잘 자라는 · 번창하는', base: 'ALIVE와 이웃', core: '시간에 걸쳐 잘됨', from: 'thrive(번성하다) → -ing', en: 'The garden is thriving.', note: '하루의 활기가 아니라 <b>쭉 잘된다</b>. 사업에도(노트).', pic: () => GRD + [70, 130, 190, 250, 310, 370].map((x, i) => LN('M' + x + ' 240 V' + (150 - i % 2 * 30), 'var(--ok)', 5) + '<ellipse cx="' + (x - 16) + '" cy="' + (180 - i % 2 * 20) + '" rx="18" ry="9" fill="var(--ok)"/><ellipse cx="' + (x + 16) + '" cy="' + (166 - i % 2 * 20) + '" rx="18" ry="9" fill="var(--ok)"/>' + CR(x, 144 - i % 2 * 30, 13, i % 2 ? 'var(--bad)' : 'var(--gold)')).join(''), ex: ['쭉', '잘 자람', 'The garden is alive.', '죽지 않았다는 정도로 줄어든다.', '번성하는.'] },
+      ] },
+      { name: '생명 · 생기 없는', items: [
+        { v: 'dead', k: '죽은', en: 'The plant is dead.', note: '생명이 없다. 배터리가 다 됐을 때도.', from: 'die(죽다) · death(죽음)와 짝', pic: () => POT(LEAFS('#8a7a5c', true)) + [[150, 236], [300, 238]].map(([x, y]) => '<ellipse cx="' + x + '" cy="' + y + '" rx="14" ry="5" fill="#8a7a5c"/>').join(''), ex: ['생명이', '없다', 'The plant died.', '죽은 사건. 지금 상태는 dead.', '죽은 상태.'] },
+        { v: 'lifeless', k: '생기 없는', base: 'DEAD와 이웃', core: '생기가 안 보임', from: 'life(생명) + less', en: 'The room looked lifeless.', note: '꼭 죽음을 말하지 않는다. 움직임이 없다고 죽었다고 정하지 않는다(노트).', pic: () => RC(50, 50, 350, 190, '#3a3f46', 'var(--obj-line)', 6) + RC(90, 90, 80, 70, '#4a5058', '#5a606a') + LN('M260 170 V240 M260 200 h50 V240', '#5a606a', 6) + LN('M200 50 V80', '#5a606a', 3) + CR(200, 90, 10, '#2a2e34'), ex: ['생기', '없음', 'The room looked dead.', '세게 들린다. 생기가 없다는 묘사로는 지나칠 수 있다.', '생기 없는.'] },
+        { v: 'deceased', k: '고인이 된', base: 'DEAD', core: '격식 있는 말', from: 'decease(사망)와 짝', en: 'The document names his deceased father.', note: '<b>사람</b>에게 쓰는 정중하고 격식 있는 말(노트). 동물 · 물건에는 안 쓴다.', pic: () => RC(140, 50, 170, 190, 'var(--card)', 'var(--obj-line)', 4) + RC(196, 80, 58, 66, 'var(--bg)', 'var(--obj-line)') + CR(225, 104, 13, 'var(--fog)') + '<path d="M204 144 q21 -32 42 0 z" fill="var(--fog)"/>' + [0, 1, 2].map((i) => LN('M164 ' + (170 + i * 22) + ' h122', 'var(--fog)', 3)).join(''), ex: ['정중한', '말', 'The document names his dead father.', '뜻은 같지만 직접적이고 거칠게 들릴 수 있다.', '고인이 된.'] },
+      ] },
+    ],
+    q: [['Q1. 생명이?', '있다 → <b>alive</b> / 없다 → <b>dead</b>'], ['Q2. 잘 있는 모습?', '지금 활기 → <b>lively</b> / 쭉 잘됨 → <b>thriving</b>'], ['Q3. 다르게 말하면?', '생기 없어 보임 → <b>lifeless</b> / 정중하게 고인 → <b>deceased</b>']],
+    body: ['<b>LIVELY</b> — 제자리에서 통통 뛰기. <b>THRIVING</b> — 두 손을 모아 위로 쭉 자라기.', '<b>LIFELESS</b> — 어깨를 축 늘어뜨리기.'],
+    check: ['alive를 명사 앞에 안 쓴다는 문법, 배터리의 dead는 노트에 없다.', '노트 식은 lifeless를 "움직임 · 반응의 부재"라 하지만, 생기 없는 묘사에도 쓴다는 앞부분을 따랐다. 사람의 죽음을 완곡하게는 <span class="en">passed away</span>라고 한다(노트에 없음).'],
+  });
+  const SCENES = {
+    phone: { btn: '배터리', place: '휴대폰이 꺼졌을 때', pic: () => MEET(BX(452, 70, 24, 38, '#222')), lines: [['친구', 'Why didn\'t you call?', '왜 전화 안 했어?'], ['나', 'My phone was <b>dead</b>.', '휴대폰이 꺼졌어.', true]], say: '배터리가 다 됨 — <b>dead</b>.' },
+    plant: { btn: '화분', place: '거실 화분', pic: () => MEET('<path d="M448 108 l-4 -22 h40 l-4 22 z" fill="var(--wood)"/>' + LN('M464 86 V60', 'var(--ok)', 4)), lines: [['가족', 'Is it still <b>alive</b>?', '아직 살아 있어?'], ['나', 'Yes, it\'s <b>thriving</b>!', '응, 쑥쑥 자라!', true]], say: '살아 있음 <b>alive</b>, 잘 자람 <b>thriving</b>.' },
+  };
+  const SLOTS = { first: ['alive', 'noun'], slots: { be: 'be 뒤', noun: '명사 앞', keep: '유지할 때' }, verbs: {
+    alive: { be: { ok: [['It', 's'], ['is', 'v'], ['alive', 'a']], say: '살아 있다.' }, noun: { ok: [['a', 'x'], ['living', 'a'], ['thing', 'n']], bad: [['an', 'x'], ['alive', 'a'], ['thing', 'n']], say: 'alive는 명사 앞에 <b>못 온다</b> — living.' }, keep: { ok: [['Keep', 'v'], ['it', 'o'], ['alive', 'a']], say: '살려 둬.' } },
+    lively: { be: { ok: [['He', 's'], ['is', 'v'], ['lively', 'a']], say: '활기차다.' }, noun: { ok: [['a', 'x'], ['lively', 'a'], ['party', 'n']], say: '-ly로 끝나도 <b>형용사</b>.' }, keep: { ok: [['It', 's'], ['got', 'v'], ['lively', 'a']], say: '활기를 띠었다.' } },
+  } };
+</script>

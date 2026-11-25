@@ -1,0 +1,41 @@
+<!-- title: OPEN ↔ CLOSED 개념 -->
+<!-- pron: open=/ˈoʊ.pən/[**오**우픈]*, closed=/kloʊzd/[클**로**우즈드]*, #open/unlocked, #open/wide-open, #closed/shut, #closed/sealed -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="12-full-empty.html">FULL ↔ EMPTY</a> · 다음: <a href="14-fresh-stale.html">FRESH ↔ STALE</a></p>
+  <h1>OPEN ↔ CLOSED — 같은 문, 열기 전과 후</h1>
+  <p class="lead">동사 <b>OPEN · CLOSE 묶음</b>이 만드는 상태다. <b>잠금</b>과 <b>열림</b>은 다르다 — 잠기지 않았지만 닫혀 있을 수 있다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 열리고 닫힌 장면이 바뀌는 그림|열린 쪽은 열린 문, 닫혔지만 안 잠긴 문, 활짝 열린 창이고 닫힌 쪽은 가게의 닫힘 팻말, 그냥 닫힌 회의실 문, 입구를 막은 봉지다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>closed → open: <a href="../concepts/38-open.html">38 OPEN</a> · open → closed: <a href="../concepts/39-close.html">39 CLOSE</a></li><li>자료: english-adjectives 노트의 open · closed 묶음</li></ul>
+</main>
+<script>
+  const FRAME = (x) => RC(x, 60, 110, 180, '#1a1d22', 'var(--obj-line)', 2);
+  const LEAF = (x, w) => '<path d="M' + x + ' 60 l' + w + ' ' + (110 - Math.abs(w)) * .16 + ' v' + (180 - (110 - Math.abs(w)) * .16) + ' l' + -w + ' ' + (110 - Math.abs(w)) * 0 + ' z" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="2"/>';
+  const PLK = (x, y, open) => RC(x - 14, y, 28, 24, 'var(--gold)') + LN('M' + (x - 8) + ' ' + y + ' v-10 a8 8 0 0 1 16 0 ' + (open ? 'v-4' : 'v10'), 'var(--obj-line)', 4);
+  const EXIST = adverbPage({ noun: '형용사', start: 'unlocked',
+    groups: [
+      { name: '열린', items: [
+        { v: 'open', k: '열린', en: 'The door is open.', note: '드나들 수 있다. 가게가 영업 중일 때도.', from: '동사 open과 모양이 같다', pic: () => GRD + FRAME(170) + LEAF(170, -56) + CR(124, 154, 4, 'var(--gold)'), ex: ['드나들', '수 있음', 'I opened the door.', '열었다는 동작. 지금 상태는 말하지 않는다.', '열린 상태.'] },
+        { v: 'unlocked', k: '안 잠긴', base: 'OPEN과 이웃', core: '잠금이 풀림', from: 'un + lock(잠그다) + ed', en: 'The door is unlocked, but it\'s still closed.', note: '<b>닫혀 있어도</b> 열 수 있다(노트). 휴대폰에도.', pic: () => GRD + FRAME(170) + LEAF(170, 110) + CR(266, 158, 5, 'var(--gold)') + PLK(340, 140, true), ex: ['잠금', '풀림', 'The door is open.', '뜻이 바뀐다. 실제로 열려 있다는 말이 된다.', '잠기지 않은.'] },
+        { v: 'wide open', k: '활짝 열린', base: 'OPEN', core: '크게 열림', from: 'wide(넓게) + open', en: 'The window is wide open.', note: '실제로 크게 열려 있다. 눈 · 입에도(노트).', pic: () => RC(160, 60, 130, 150, 'var(--water)', 'var(--obj-line)', 2) + '<path d="M160 60 l-70 -16 v180 l70 -14 z M290 60 l70 -16 v180 l-70 -14 z" fill="var(--card)" stroke="var(--obj-line)" stroke-width="2"/>' + LN('M190 110 h60 q14 0 10 -12 M180 140 h90', '#fff', 4), ex: ['활짝', '열림', 'The window is open.', '조금만 열린 것일 수도 있다.', '활짝 열린.'] },
+      ] },
+      { name: '닫힌', items: [
+        { v: 'closed', k: '닫힌 · 영업 안 함', en: 'The shop is closed.', note: '통로가 막혔다. 가게 · 도로에는 closed.', from: 'close(닫다) → closed', pic: () => GRD + RC(120, 90, 210, 150, 'var(--card)') + '<path d="M110 90 h230 l-16 -34 h-198 z" fill="var(--bad)"/>' + RC(190, 140, 70, 100, 'var(--wood)') + RC(186, 150, 78, 30, 'var(--bg)', 'var(--bad)') + tx(225, 170, 13, 'CLOSED', 'var(--bad)', ' font-weight="700"'), ex: ['막혀', '있음', 'The shop closes.', '닫는 동작 · 시간. 지금 닫힌 상태가 아니다.', '닫힌 상태.'] },
+        { v: 'shut', k: '닫힌', base: 'CLOSED', core: '그냥 닫혀 있음', from: 'shut — shut — shut 모양이 안 변한다', en: 'The door is shut. Please knock.', note: '잠겼다거나 밀폐됐다는 뜻까지는 아니다(노트). 보통 명사 앞에는 안 쓴다.', pic: () => GRD + FRAME(170) + LEAF(170, 110) + CR(266, 158, 5, 'var(--gold)') + MAN(350, { a: 'hip', c: 'var(--ok)' }), ex: ['그냥', '닫힘', 'The door is closed.', '거의 같다. shut이 더 짧고 말하듯 들린다.', '닫혀 있는.'] },
+        { v: 'sealed', k: '입구를 막은', base: 'CLOSED', core: '틈을 막아 보호', from: 'seal(봉하다) → sealed', en: 'The bag is sealed.', note: '틈을 막았다. 공기까지 완벽히 막았다는 뜻은 아닐 수 있다(노트).', pic: () => '<path d="M150 90 h150 l14 130 h-178 z" fill="var(--water)" stroke="var(--obj-line)" stroke-width="2"/>' + RC(144, 74, 162, 18, 'var(--accent)', 'var(--obj-line)') + Array.from({ length: 9 }, (_, i) => LN('M' + (156 + i * 17) + ' 76 v14', 'var(--bg)', 2)).join('') + [[190, 160], [230, 180], [262, 150]].map(([x, y]) => CR(x, y, 13, 'var(--gold)')).join(''), ex: ['틈을', '막음', 'The bag is closed.', '그냥 닫았을 뿐, 새지 않게 막은 것은 모른다.', '밀봉된.'] },
+      ] },
+    ],
+    q: [['Q1. 드나들 수 있나?', '있다 → <b>open</b> / 막힘 → <b>closed</b>'], ['Q2. 잠금인가 열림인가?', '잠금만 풀림 → <b>unlocked</b> / 크게 열림 → <b>wide open</b>'], ['Q3. 닫힌 정도는?', '그냥 → <b>shut</b> / 틈까지 막음 → <b>sealed</b>']],
+    body: ['<b>UNLOCKED</b> — 손목을 돌려 열쇠 풀기(문은 그대로). <b>WIDE OPEN</b> — 두 팔 활짝.', '<b>SEALED</b> — 손가락으로 봉투 입구를 꾹꾹.'],
+    check: ['노트 식은 unlocked를 OPEN의 한 종류로 두지만, 본문은 "실제로 열린 것이 아니다"라고 해 "이웃"으로 적었다.', 'shut을 명사 앞에 잘 안 쓴다는 말은 노트에 없다.'],
+  });
+  const SCENES = {
+    home: { btn: '현관', place: '현관문 앞', pic: () => FL + BX(420, 50, 70, 100, 'var(--wood)') + P(330, 150, 1.4, 'var(--ok)'), lines: [['가족', 'Is the door locked?', '문 잠갔어?'], ['나', 'It\'s closed but <b>unlocked</b>.', '닫혔는데 안 잠겼어.', true]], say: '닫힘과 잠금을 <b>따로</b> 말한다.' },
+    shop: { btn: '가게', place: '가게 앞', pic: () => FL + BX(400, 60, 160, 90) + T(480, 112, 15, 'CLOSED', BAD, ' font-weight="700"') + P(310, 150, 1.4, 'var(--ok)'), lines: [['친구', 'Is it <b>open</b>?', '열었어?'], ['나', 'No, it\'s <b>closed</b> on Mondays.', '아니, 월요일엔 쉬어.', true]], say: '영업은 <b>open ↔ closed</b>. "opened"가 아니다.' },
+  };
+  const SLOTS = { first: ['open', 'be'], slots: { be: 'be 뒤', noun: '명사 앞', keep: '유지할 때' }, verbs: {
+    open: { be: { ok: [['The', 'x'], ['shop', 's'], ['is', 'v'], ['open', 'a']], bad: [['The', 'x'], ['shop', 's'], ['is', 'v'], ['opened', 'a']], say: '영업 중인 상태는 <b>open</b>.' }, noun: { ok: [['an', 'x'], ['open', 'a'], ['window', 'n']], say: '열린 창.' }, keep: { ok: [['Keep', 'v'], ['it', 'o'], ['open', 'a']], say: '열어 둬 — keep + 목적어 + 형용사.' } },
+    closed: { be: { ok: [['The', 'x'], ['shop', 's'], ['is', 'v'], ['closed', 'a']], bad: [['The', 'x'], ['shop', 's'], ['is', 'v'], ['close', 'a']], say: '닫힌 상태는 <b>closed</b>. close(형용사)는 "가까운".' }, noun: { ok: [['a', 'x'], ['closed', 'a'], ['door', 'n']], say: '닫힌 문.' }, keep: { ok: [['Keep', 'v'], ['it', 'o'], ['closed', 'a']], say: '닫아 둬.' } },
+  } };
+</script>

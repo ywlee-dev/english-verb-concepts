@@ -1,0 +1,42 @@
+<!-- title: BRAVE ↔ AFRAID 개념 -->
+<!-- pron: brave=/breɪv/[브**레**이브]*, afraid=/əˈfreɪd/[어프**레**이드]*, #brave/bold, #brave/courageous, #brave/fearless, #afraid/scared, #afraid/terrified, #afraid/panicked -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="24-calm-angry.html">CALM ↔ ANGRY</a> · 다음: <a href="26-confident-doubtful.html">CONFIDENT ↔ DOUBTFUL</a></p>
+  <h1>BRAVE ↔ AFRAID — 같은 어두운 복도</h1>
+  <p class="lead">무서운 복도로 <b>나아가면</b> brave, <b>움츠러들면</b> afraid. 과감한 생각인지, 두려움을 알고도 하는지, 얼마나 무서운지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 용감하고 두려운 장면이 바뀌는 그림|용감한 쪽은 복도로 나서는 사람, 과감한 제안, 잘못을 알리는 사람, 무대 위의 사람이고 두려운 쪽은 물러선 사람, 문 앞의 망설임, 유리 바닥, 가방을 뒤지는 사람이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>두려움과 만나는 동사: <a href="../concepts/27-feel.html">27 FEEL</a> · <a href="../concepts/10-escape.html">10 ESCAPE</a> · <a href="../concepts/17-say.html">17 SAY</a> (speak up)</li><li>자료: english-adjectives 노트의 brave · afraid 묶음</li></ul>
+</main>
+<script>
+  const HALL = () => RC(250, 60, 160, 180, '#1b2028', 'var(--obj-line)') + CR(320, 120, 4, 'var(--gold)', 'none') + CR(346, 120, 4, 'var(--gold)', 'none');
+  const SHAKE = (x, y) => LN('M' + (x - 36) + ' ' + y + ' q-6 8 0 16 q6 8 0 16 M' + (x + 36) + ' ' + y + ' q6 8 0 16 q-6 8 0 16', 'var(--muted)', 3);
+  const EXIST = adverbPage({ noun: '형용사', start: 'courageous',
+    groups: [
+      { name: '용감한', items: [
+        { v: 'brave', k: '용감한', en: 'She is brave.', note: '위험 · 어려움 앞에서 물러서지 않는다.', from: 'bravery(용기)', pic: () => GRD + HALL() + MAN(170, { f: 'smile', a: 'fwd', c: 'var(--ok)' }) + AR(120, 100, 220, 100, 'var(--accent)', 4), ex: ['물러', '서지 않음', 'She is strong.', '힘이 세다는 뜻일 수 있다.', '용감한.'] },
+        { v: 'bold', k: '과감한', base: 'BRAVE', core: '눈에 띄는 시도', from: 'boldly(과감히)', en: 'That\'s a bold idea.', note: '생각 · 계획 · 색 · 디자인이 과감하다(노트).', pic: () => GRD + DESK(60, 330, 190) + [110, 180, 340].map((x) => MAN(x, { s: .7, f: 'shut' })).join('') + MAN(260, { y: 232, s: .95, f: 'smile', a: 'point', c: 'var(--accent2)' }) + SAYB(250, 84, '다 바꿉시다!', 15, 'var(--accent)'), ex: ['과감', '한 시도', 'That\'s a brave idea.', '위험을 무릅쓴다는 뜻이 세진다.', '과감한.'] },
+        { v: 'courageous', k: '두려움을 알고도 하는', base: 'BRAVE', core: '위험을 알면서 행동', from: 'courage(용기) + ous', en: 'It was courageous of her to speak up.', note: '위험 · 어려움을 알면서 한 <b>행동</b>을 높이 본다(노트).', pic: () => GRD + MAN(140, { f: 'o', a: 'point', c: 'var(--ok)' }) + SHAKE(140, 176) + SAYB(170, 84, '그건 잘못이에요', 14, 'var(--accent)') + MAN(330, { s: 1.35, f: 'sad', a: 'hip', c: 'var(--obj)' }), ex: ['알면서', '행동', 'It was nice of her to speak up.', '친절하다는 뜻. 위험을 무릅쓴 것이 빠진다.', '용기 있는.'] },
+        { v: 'fearless', k: '겁 없는 듯한', base: 'BRAVE', core: '두려워하지 않는 모습', from: 'fear(두려움) + less', en: 'She seemed fearless on stage.', note: '그렇게 <b>보인다</b>. 속까지 두려움이 없다는 증명은 아니다(노트).', pic: () => RC(90, 190, 270, 50, 'var(--wood)') + '<path d="M226 20 L130 190 h192 z" fill="var(--gold)" opacity=".25"/>' + MAN(226, { y: 190, f: 'smile', a: 'up', c: 'var(--accent)' }) + Array.from({ length: 10 }, (_, i) => CR(60 + i * 37, 256, 11, 'var(--fog)')).join(''), ex: ['겁 없는', '모습', 'She seemed brave on stage.', '무서운데 참는 것일 수도 있다.', '겁 없는 듯한.'] },
+      ] },
+      { name: '두려운', items: [
+        { v: 'afraid', k: '두려워하는', en: 'I\'m afraid of the dark.', note: '명사 앞에는 안 쓴다. <span class="en">I\'m afraid (that) …</span>는 "유감이지만"이라는 다른 뜻.', from: 'fear(두려움)와 이웃', pic: () => GRD + HALL() + MAN(130, { f: 'sad', a: 'hug', r: -8 }) + AR(180, 100, 110, 100, 'var(--bad)', 3), ex: ['두려', '움', 'I don\'t like the dark.', '싫다는 뜻. 두려움이 안 나온다.', '두려워하는.'] },
+        { v: 'scared', k: '무서워하는', base: 'AFRAID', core: '일상에서 두루', from: 'scare(겁주다) → scared', en: 'I\'m scared to open the door.', note: '가벼운 것부터 큰 것까지 편하게(노트).', pic: () => GRD + DOOR(290) + MAN(170, { f: 'o', a: 'fwd', r: -6 }) + SHAKE(170, 176) + tx(380, 120, 15, '쿵…', 'var(--bad)', ' font-weight="700"'), ex: ['두루', '무서움', 'I\'m afraid to open the door.', '거의 같다. scared가 더 편하게 들린다.', '무서운.'] },
+        { v: 'terrified', k: '몹시 무서운', base: 'AFRAID', core: '공포가 매우 큼', from: 'terrify(겁에 질리게 하다) → -ed', en: 'I was terrified on the glass floor.', note: '아주 큰 공포. 꼭 몸이 얼어붙는 것은 아니다(노트).', pic: () => RC(60, 120, 330, 14, 'var(--water)', 'var(--obj-line)') + MAN(226, { y: 120, s: .72, f: 'o', a: 'up' }) + SHAKE(226, 66) + [90, 150, 290, 350].map((x, i) => RC(x, 206 - i % 2 * 14, 28, 34 + i % 2 * 14, 'var(--fog)')).join('') + LN('M226 140 V230', 'var(--bad)', 2, ' stroke-dasharray="5 5"'), ex: ['매우', '큰 공포', 'I was scared.', '얼마나 컸는지 빠진다.', '몹시 무서운.'] },
+        { v: 'panicked', k: '당황해 허둥대는', base: 'AFRAID', core: '두려워 허둥댐', from: 'panic(당황하다) → panicked(k가 붙는다)', en: 'I felt panicked when I lost my phone.', note: '허둥대는 <b>반응</b>. 동사로는 I panicked(노트).', pic: () => GRD + MAN(170, { f: 'o', a: 'both' }) + '<path d="M230 190 h90 l-8 50 h-74 z" fill="var(--wood)" stroke="var(--obj-line)"/>' + [[250, 150, 20], [300, 130, -30], [340, 170, 60], [270, 100, 10]].map(([x, y, r]) => '<g transform="rotate(' + r + ' ' + x + ' ' + y + ')">' + RC(x, y, 24, 16, 'var(--gold)') + '</g>').join('') + LN('M128 112 l-14 -8 M128 130 h-16 M210 108 l14 -8', 'var(--bad)', 3), ex: ['허둥', '댐', 'I was scared.', '무섭다는 뜻뿐, 허둥대는 반응이 빠진다.', '당황해 허둥대는.'] },
+      ] },
+    ],
+    q: [['Q1. 무서운 것 앞에서?', '나아감 → <b>brave</b> / 움츠림 → <b>afraid</b>'], ['Q2. 어떤 용기?', '과감한 생각 → <b>bold</b> / 알면서 행동 → <b>courageous</b> / 겁 없는 모습 → <b>fearless</b>'], ['Q3. 어떤 두려움?', '두루 → <b>scared</b> / 매우 큼 → <b>terrified</b> / 허둥댐 → <b>panicked</b>']],
+    body: ['<b>BOLD</b> — 손을 번쩍 들고 일어서기. <b>COURAGEOUS</b> — 떨면서 한 발 내딛기.', '<b>PANICKED</b> — 주머니를 마구 뒤지기.'],
+    check: ['노트 예문 <span class="en">I panicked …</span>는 동사라서, 그림 예문은 형용사 <span class="en">I felt panicked …</span>로 바꿨다.', 'afraid를 명사 앞에 안 쓴다는 말과 "유감이지만" 쓰임은 노트에 없다.', '노트 식의 terrified "얼어붙을 만큼"은 필수가 아니라고 해 뺐다.'],
+  });
+  const SCENES = {
+    night: { btn: '한밤중', place: '한밤중 복도', pic: () => FL + BX(440, 40, 70, 110, '#222') + P(320, 150, 1.4, 'var(--ok)'), lines: [['동생', 'I\'m <b>scared</b>. What was that?', '무서워. 무슨 소리야?'], ['나', 'It\'s OK. I\'ll check.', '괜찮아. 내가 볼게.', true]], say: '말할 때 가장 흔한 것은 <b>scared</b>.' },
+    sorry: { btn: '거절', place: '부탁을 거절할 때', pic: () => MEET(''), lines: [['손님', 'Is there a table for four?', '네 명 자리 있나요?'], ['나', 'I\'m <b>afraid</b> we\'re full.', '죄송하지만 자리가 없어요.', true]], say: '여기 afraid는 무섭다가 아니라 <b>정중한 거절</b>.' },
+  };
+  const SLOTS = { first: ['afraid', 'noun'], slots: { be: 'be 뒤', prep: '무엇을', noun: '명사 앞' }, verbs: {
+    afraid: { be: { ok: [['I', 's'], ['am', 'b'], ['afraid', 'a']], bad: [['I', 's'], ['afraid', 'v']], say: 'be가 있어야 한다.' }, prep: { ok: [['afraid', 'a'], ['of', 'x'], ['dogs', 'n']], bad: [['afraid', 'a'], ['to', 'x'], ['dogs', 'n']], say: 'afraid <b>of</b> + 명사.' }, noun: { ok: [['a', 'x'], ['scared', 'a'], ['child', 'n']], bad: [['an', 'x'], ['afraid', 'a'], ['child', 'n']], say: 'afraid는 명사 앞에 <b>못 온다</b>.' } },
+    scared: { be: { ok: [['I', 's'], ['am', 'b'], ['scared', 'a']], bad: [['I', 's'], ['am', 'b'], ['scary', 'a']], say: 'scary는 "무섭게 <b>만드는</b>". 내가 무서우면 scared.' }, prep: { ok: [['scared', 'a'], ['to', 'x'], ['go', 'v']], say: 'to + 동사.' }, noun: { ok: [['a', 'x'], ['scary', 'a'], ['movie', 'n']], say: '무서운 영화.' } },
+  } };
+</script>

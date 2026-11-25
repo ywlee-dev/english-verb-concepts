@@ -1,0 +1,178 @@
+<!-- title: HOT ↔ COLD 개념 -->
+<!-- pron: freezing=/ˈfriː.zɪŋ/[**프**리징], cold=/koʊld/[**콜**드]*, chilly=/ˈtʃɪl.i/[**췰**리], cool=/kuːl/[쿨], warm=/wɔːrm/[웜], hot=/hɑːt/[**핫**]*, boiling=/ˈbɔɪ.lɪŋ/[**보**일링], icy=/ˈaɪ.si/[**아**이시], scorching=/ˈskɔːr.tʃɪŋ/[**스코**r칭], scalding=/ˈskɔːl.dɪŋ/[**스콜**딩] -->
+<style>
+  .dial { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; margin-top: 12px; font-size: 14px; color: var(--muted); }
+  .dial input { width: 100%; min-height: 36px; accent-color: var(--accent); }
+</style>
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 다음: <a href="02-wet-dry.html">WET ↔ DRY</a></p>
+  <h1>HOT ↔ COLD — 같은 바깥, 다른 온도</h1>
+  <p class="lead">미나가 문을 열고 나간다. <b>바깥 온도</b>만 바꾸면 freezing · cold · chilly · cool · warm · hot · boiling으로 갈린다. 그런데 icy · scorching · scalding은 눈금 위의 말이 아니다 — <b>무엇이</b> 차갑고 뜨거운지가 다르다.</p>
+  {{PRON}}
+
+  <div class="card">
+    <div class="fig">
+    <svg width="100%" viewBox="0 0 680 330" role="img" aria-labelledby="t1 d1">
+      <title id="t1">온도 눈금을 밀면 미나의 모습과 형용사가 바뀌는 그림</title>
+      <desc id="d1">눈금을 왼쪽으로 밀면 눈이 오고 미나가 움츠리며, 오른쪽으로 밀면 해가 커지고 땀을 흘린다. 눈금 밖 낱말을 누르면 얼어붙은 길, 햇볕에 달궈진 땅, 뜨거운 커피처럼 다른 대상이 나온다.</desc>
+      <g id="top"></g>
+    </svg>
+    </div>
+    <p class="fig-hint">← 그림을 옆으로 밀어 보기 →</p>
+    <label class="dial"><span>추움</span><input id="dial" type="range" min="0" max="6" step="1" aria-label="바깥 온도"><span>더움</span></label>
+    <div class="buttons" id="onBtns"><span class="cap">눈금 위 (얼마나)</span></div>
+    <div class="buttons" id="offBtns"><span class="cap">눈금 밖 (무엇이)</span></div>
+    <p class="say" id="say" aria-live="polite"></p>
+  </div>
+  <p class="note">설명을 돕기 위한 단순한 그림이다. 눈금 간격은 그림용이고 몇 도라는 뜻이 아니다. 같은 날씨도 사람에 따라 chilly이기도 cool이기도 하다.</p>
+
+  <h2>0. 왜 존재하나 — 이 형용사가 없으면 못 그리는 그림</h2>
+  <p>"춥다 · 덥다" 둘이면 될 것 같다. 그런데 <b>기분 좋은지, 겉옷이 생각나는지, 길이 미끄러운지, 데일지</b>가 빠진다. 하나씩 빼 보세요.</p>
+  {{EXIST|형용사가}}
+
+  {{SCENES|<b>형용사</b>가}}
+
+  <h2>1. 무엇인가 — 온도에 "느낌"이나 "대상"이 붙는다</h2>
+  <div class="formula">
+    <span class="r">COLD</span><span class="op">+</span><span>안전하고 기분 좋음</span><span class="op">=</span><span class="v">COOL</span>
+    <span class="r">COLD</span><span class="op">+</span><span>안전하지만 몸이 움츠러듦</span><span class="op">=</span><span class="v">CHILLY</span>
+    <span class="r">COLD</span><span class="op">+</span><span>몹시 춥게 느껴짐</span><span class="op">=</span><span class="v">FREEZING</span>
+    <span class="r">COLD</span><span class="op">+</span><span>얼음이 있거나 얼음 같음</span><span class="op">=</span><span class="v">ICY</span>
+    <span class="r">HOT</span><span class="op">+</span><span>안전하고 기분 좋음</span><span class="op">=</span><span class="v">WARM</span>
+    <span class="r">HOT</span><span class="op">+</span><span>액체가 끓음 (날씨에는 과장)</span><span class="op">=</span><span class="v">BOILING</span>
+    <span class="r">HOT</span><span class="op">+</span><span>태양 · 건조한 열기</span><span class="op">=</span><span class="v">SCORCHING</span>
+    <span class="r">HOT</span><span class="op">+</span><span>닿으면 데일 액체</span><span class="op">=</span><span class="v">SCALDING</span>
+  </div>
+
+  <h2>2. 무엇이 다른가 — 질문을 따라 고른다</h2>
+  <table>
+    <tr><th>질문</th><th>예</th><th>아니오</th></tr>
+    <tr><td>Q1. 얼마나?</td><td>눈금 위 → Q2</td><td>무엇이 그런지 → Q4</td></tr>
+    <tr><td>Q2. 기분 좋나?</td><td><b>cool · warm</b></td><td>→ Q3</td></tr>
+    <tr><td>Q3. 아주 심한가?</td><td><b>freezing · boiling</b></td><td><b>chilly</b>(겉옷 생각) · <b>cold</b> · <b>hot</b></td></tr>
+    <tr><td>Q4. 무엇이?</td><td colspan="2">길 · 표면의 얼음 → <b>icy</b> / 햇볕 · 땅 → <b>scorching</b> / 닿으면 데일 물 · 커피 → <b>scalding</b></td></tr>
+  </table>
+  <p><b>짝이 안 맞는 자리:</b> HOT 쪽에는 <span class="en">chilly</span>처럼 "불쾌하지만 안전한" 한 낱말이 없다(노트).</p>
+
+  <h2>3. 실제 문장으로 — 형용사 자리</h2>
+  <p>형용사는 <b>be 뒤</b>나 <b>명사 앞</b>에 온다. 날씨는 <span class="en">It's …</span>로 시작하고, 내가 느끼면 <span class="en">I'm …</span>이다.</p>
+  {{SLOTS|형용사와 자리에 따라 문장이 바뀌는 그림|위 줄은 맞는 문장, 아래 줄은 틀린 문장이다.|형용사|자리}}
+
+  <h2>4. 몸으로 해 보기</h2>
+  <ul>
+    <li><b>FREEZING</b> — 온몸을 웅크리고 덜덜. <b>CHILLY</b> — 팔만 문지르며 겉옷을 찾는다.</li>
+    <li><b>COOL · WARM</b> — 어깨를 내리고 편하게 숨을 쉰다.</li>
+    <li><b>BOILING</b> — 손부채질. <b>SCORCHING</b> — 손으로 해를 가린다.</li>
+    <li><b>ICY</b> — 종종걸음. <b>SCALDING</b> — 컵에 입을 댔다가 얼른 뗀다.</li>
+  </ul>
+
+  <div class="check"><b>확인할 것</b>
+    <ul style="margin:6px 0 0; padding-left:20px">
+      <li>0+절 대화와 0절의 △ 판정은 노트에 없는 작문이다.</li>
+      <li>눈금 위 일곱 낱말의 순서는 그림용이다. 노트도 "단순한 강도 순서가 아니다"라고 하며, cold와 chilly는 사람에 따라 겹친다.</li>
+      <li>cold · hot의 예문과 발음(*)은 낱말 노트가 따로 없어 새로 적었다.</li>
+      <li>scorching · scalding의 한글 강세는 노트의 "스"에서 IPA 강세 음절에 맞춰 "스코 · 스콜"로 넓혔다.</li>
+      <li>3절 문장 자리 설명은 노트에 없는 문법 풀이다.</li>
+    </ul>
+  </div>
+
+  <h2>5. 동사와 연결하면</h2>
+  <ul>
+    <li>상태를 <b>만드는</b> 동사: <a href="../concepts/68-freeze.html">68 FREEZE</a> · <a href="../concepts/69-melt.html">69 MELT</a> · <a href="../concepts/71-cook.html">71 COOK</a></li>
+    <li>자료: english-adjectives 노트의 hot · cold 묶음 (공개 저장소 밖)</li>
+  </ul>
+</main>
+<script>
+  ROLE.a = ['형용사', 'var(--accent)', true]; ROLE.n = ['명사', 'var(--line)'];
+  // ── 맨 위 그림: 바닥 y = 226, 눈금 y = 276 (좌표 · 눈금 간격은 그림용) ──
+  const SUN = (x, y, r) => '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="var(--gold)"/>' + Array.from({ length: 8 }, (_, i) => { const a = i * Math.PI / 4, c = Math.cos(a), s = Math.sin(a);
+    return '<path d="M' + (x + c * (r + 5)) + ' ' + (y + s * (r + 5)) + ' L' + (x + c * (r + 14)) + ' ' + (y + s * (r + 14)) + '" stroke="var(--gold)" stroke-width="3" stroke-linecap="round"/>'; }).join('');
+  const FLAKE = (x, y) => '<path d="M' + (x - 6) + ' ' + y + ' h12 M' + (x - 3) + ' ' + (y - 5) + ' l6 10 M' + (x + 3) + ' ' + (y - 5) + ' l-6 10" stroke="var(--water)" stroke-width="2" stroke-linecap="round"/>';
+  const DROP = (x, y) => '<path d="M' + x + ' ' + y + ' q-5 8 0 11 q5 -3 0 -11" fill="var(--water)" stroke="var(--obj-line)" stroke-width=".7"/>';
+  const WIND = (x, y) => '<path d="M' + x + ' ' + y + ' h44 q10 0 8 -8 M' + (x + 8) + ' ' + (y + 11) + ' h50" fill="none" stroke="var(--water)" stroke-width="3" stroke-linecap="round"/>';
+  const STEAM = (x, y, c) => '<path d="M' + x + ' ' + y + ' q-7 -9 0 -18 t0 -18" fill="none" stroke="' + (c || 'var(--fog)') + '" stroke-width="3" stroke-linecap="round"/>';
+  // 미나: 얼굴 · 팔 · 옷이 온도에 따라 다르다
+  const ARM = { in: 'M-19 -62 L10 -46 M19 -62 L-10 -44', pocket: 'M-20 -62 L-24 -30 L-12 -26 M20 -62 L24 -30 L12 -26', rub: 'M-20 -62 L-4 -44 L18 -56 M20 -62 L27 -30', down: 'M-20 -62 L-28 -28 M20 -62 L28 -28', up: 'M-20 -62 L-42 -86 M20 -62 L42 -86', fan: 'M-20 -62 L-28 -28 M20 -62 L38 -88', shade: 'M-20 -62 L-28 -28 M20 -62 L34 -90 L4 -124' };
+  const FACE = { sad: 'M-8 -94 q8 -8 16 0', flat: 'M-7 -96 h14', smile: 'M-9 -99 q9 9 18 0', o: 'M-5 -96 a5 6 0 1 0 10 0 a5 6 0 1 0 -10 0' };
+  const MINA = (x, y, f, a, c, scarf, long) => '<g transform="translate(' + x + ' ' + y + ')"><path d="M-9 -22 V0 M9 -22 V0" stroke="var(--obj-line)" stroke-width="7" stroke-linecap="round"/>' +
+    '<rect x="-22" y="-72" width="44" height="' + (long ? 60 : 50) + '" rx="12" fill="' + c + '"/><circle cx="0" cy="-102" r="25" fill="var(--skin)" stroke="var(--obj-line)"/>' +
+    '<circle cx="-8" cy="-106" r="2.5" fill="#333"/><circle cx="8" cy="-106" r="2.5" fill="#333"/><path d="' + FACE[f] + '" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>' +
+    (scarf ? '<rect x="-21" y="-80" width="42" height="11" rx="5" fill="var(--bad)"/>' : '') +
+    '<path d="' + ARM[a] + '" fill="none" stroke="var(--skin)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></g>';
+  const GROUND = '<line x1="30" y1="226" x2="400" y2="226" stroke="var(--obj-line)"/>';
+  const ON = [
+    { v: 'freezing', k: '몹시 춥다', pic: () => [[70, 70], [120, 110], [85, 165], [300, 65], [345, 120], [310, 175], [375, 80]].map((p) => FLAKE(p[0], p[1])).join('') + MINA(210, 226, 'sad', 'in', 'var(--sleeve)', true, true) + '<path d="M180 122 l-8 4 M240 122 l8 4 M178 150 l-9 0 M242 150 l9 0" stroke="var(--muted)" stroke-width="2"/>', say: '<span class="en">I\'m freezing. Can we go inside?</span> 몹시 춥다고 느낀다. <b>실제로 0°C 아래일 필요는 없다</b>(노트).' },
+    { v: 'cold', k: '춥다', pic: () => WIND(60, 100) + MINA(210, 226, 'sad', 'pocket', 'var(--sleeve)', true) + '<circle cx="252" cy="130" r="8" fill="var(--fog)" opacity=".6"/><circle cx="266" cy="124" r="6" fill="var(--fog)" opacity=".4"/>', say: '<span class="en">It\'s cold outside.</span> 가장 기본이 되는 말. 손을 주머니에 넣는다.' },
+    { v: 'chilly', k: '쌀쌀하다', pic: () => WIND(60, 110) + MINA(210, 226, 'flat', 'rub', 'var(--ok)') + tx(318, 112, 13, '겉옷 어디 있지?', 'var(--muted)'), say: '<span class="en">It\'s chilly. I should grab a jacket.</span> 위험하진 않지만 몸이 움츠러들어 <b>겉옷이 생각난다</b>(노트).' },
+    { v: 'cool', k: '선선하다', pic: () => '<path d="M330 226 V150" stroke="var(--wood)" stroke-width="9"/><circle cx="330" cy="128" r="36" fill="var(--ok)" opacity=".55"/>' + WIND(60, 140) + MINA(210, 226, 'smile', 'down', 'var(--ok)'), say: '<span class="en">It\'s cool outside. Let\'s take a walk.</span> 시원해서 <b>기분 좋다</b>. 같은 온도라도 불편하면 chilly(노트).' },
+    { v: 'warm', k: '따뜻하다', pic: () => SUN(330, 70, 17) + '<path d="M70 226 v-16 M120 226 v-12" stroke="var(--ok)" stroke-width="3"/><circle cx="70" cy="206" r="6" fill="var(--accent)"/><circle cx="120" cy="210" r="5" fill="var(--gold)"/>' + MINA(210, 226, 'smile', 'up', 'var(--gold)'), say: '<span class="en">It\'s warm today.</span> cool의 짝 — 따뜻해서 <b>기분 좋다</b>. 음식에도 쓴다: <span class="en">The milk is warm enough to drink.</span>(노트)' },
+    { v: 'hot', k: '덥다 · 뜨겁다', pic: () => SUN(330, 78, 25) + MINA(210, 226, 'flat', 'fan', 'var(--accent)') + DROP(240, 108), say: '<span class="en">It\'s hot outside.</span> 기본이 되는 말. 날씨 · 물건 · 음식에 두루 쓴다.' },
+    { v: 'boiling', k: '푹푹 찐다', pic: () => SUN(326, 84, 36) + STEAM(90, 220, 'var(--accent)') + STEAM(130, 220, 'var(--accent)') + STEAM(296, 220, 'var(--accent)') + MINA(210, 226, 'o', 'fan', 'var(--accent)') + DROP(240, 104) + DROP(180, 108) + DROP(192, 78) + DROP(228, 82), say: '<span class="en">It\'s boiling in here.</span> 아주 덥다는 <b>과장</b>이다. 물에 쓰면 진짜로 끓는다: <span class="en">The water is boiling.</span>(노트)' },
+  ];
+  const OFF = [
+    { v: 'icy', k: '얼어 미끄럽다', who: '길', pic: () => '<path d="M60 226 q70 -14 140 0 t150 0 l20 12 h-330 z" fill="var(--water)" opacity=".75"/><path d="M100 222 l14 -5 M250 223 l16 -6" stroke="#fff" stroke-width="2"/><g transform="rotate(16 210 222)">' + MINA(210, 222, 'o', 'up', 'var(--sleeve)', true) + '</g>', say: '<span class="en">The sidewalk is icy. Watch your step.</span> 얼마나 추운지가 아니라 <b>길에 얼음이 있다</b>. 기온이 몹시 낮다면 freezing(노트).' },
+    { v: 'scorching', k: '태울 듯하다', who: '햇볕 · 땅', pic: () => SUN(330, 74, 34) + '<path d="M50 226 h330 M100 226 l12 12 l-6 9 M250 226 l-8 12 l10 8" stroke="var(--accent)" stroke-width="3" fill="none"/>' + STEAM(90, 220, 'var(--accent)') + STEAM(130, 220, 'var(--accent)') + MINA(210, 226, 'sad', 'shade', 'var(--gold)'), say: '<span class="en">It\'s scorching outside. Let\'s find some shade.</span> <b>햇볕 · 마른 열기</b>가 태울 듯하다. 실제로 그을렸다는 뜻까지는 아니다(노트).' },
+    { v: 'scalding', k: '데일 만큼 뜨겁다', who: '커피', pic: () => '<rect x="250" y="180" width="130" height="8" rx="2" fill="var(--wood)"/><path d="M268 188 v38 M362 188 v38" stroke="var(--wood)" stroke-width="5"/><path d="M292 142 h44 v30 a8 8 0 0 1 -8 8 h-28 a8 8 0 0 1 -8 -8 z M336 150 h8 a8 8 0 0 1 0 18 h-8" fill="var(--bg)" stroke="var(--obj-line)" stroke-width="2"/><path d="M294 146 h40 v8 h-40z" fill="var(--wood)"/>' + STEAM(302, 136, 'var(--accent)') + STEAM(316, 132, 'var(--accent)') + STEAM(330, 136, 'var(--accent)') + MINA(170, 226, 'o', 'up', 'var(--ok)'), say: '<span class="en">Careful, the coffee is scalding hot.</span> 뜨거운 <b>액체가 닿으면 데인다</b>는 경고. 실제로 데었다는 뜻은 아니다(노트).' },
+  ];
+  const ALL = ON.concat(OFF); let cur = 2;
+  const drawDial = () => {
+    const c = ALL[cur], on = cur < 7, X = (i) => 70 + i * 90;
+    let s = GROUND + c.pic() + '<line x1="424" y1="30" x2="424" y2="226" stroke="var(--line)"/>' +
+      tx(548, 52, 13, on ? '얼마나 — 온도와 느낌' : '무엇이 — ' + c.who, on ? 'var(--muted)' : 'var(--accent2)', ' font-weight="600"') +
+      '<rect x="444" y="70" width="208" height="62" rx="10" fill="var(--bg)" stroke="var(--line)"/>' + tx(548, 108, 17, (cur < 4 || c.v === 'icy' ? 'COLD' : 'HOT') + ' 쪽', 'var(--text)', ' font-weight="600"') +
+      tx(548, 154, 18, '↓', 'var(--muted)') + '<rect x="444" y="164" width="208" height="62" rx="10" fill="var(--chip-on)" stroke="var(--accent)" stroke-width="2"/>' +
+      tx(548, 193, 23, c.v.toUpperCase(), 'var(--accent)', ' font-weight="700"') + tx(548, 215, 13, c.k, 'var(--text)') +
+      '<line x1="70" y1="276" x2="610" y2="276" stroke="var(--line)" stroke-width="4" stroke-linecap="round"/>';
+    ON.forEach((o, i) => { const h = i === cur; s += '<g data-dot="' + i + '" style="cursor:pointer"><circle cx="' + X(i) + '" cy="276" r="' + (h ? 11 : 6) + '" fill="' + (h ? 'var(--accent)' : i < 4 ? 'var(--water)' : 'var(--gold)') + '" stroke="var(--obj-line)"/>' + tx(X(i), 310, 14, o.v, h ? 'var(--accent)' : 'var(--muted)', h ? ' font-weight="700"' : '') + '</g>'; });
+    if (!on) s += tx(340, 260, 13, '이 말은 눈금 위에 없다 — 대상이 다르다', 'var(--accent2)', ' font-weight="600"');
+    $('top').innerHTML = '<g data-word-now="' + c.v + '">' + s + '</g>';
+    if (on) { $('dial').value = cur; $('dial').setAttribute('aria-valuetext', c.v); }
+    $('say').innerHTML = c.say;
+    document.querySelectorAll('button[data-i]').forEach((b) => b.setAttribute('aria-pressed', +b.dataset.i === cur));
+  };
+  ALL.forEach((c, i) => { const b = document.createElement('button'); b.textContent = c.v; b.dataset.i = i; b.addEventListener('click', () => { cur = i; drawDial(); }); $(i < 7 ? 'onBtns' : 'offBtns').appendChild(b); });
+  $('dial').addEventListener('input', () => { cur = +$('dial').value; drawDial(); });
+  $('top').addEventListener('click', (e) => { const g = e.target.closest('[data-dot]'); if (g) { cur = +g.dataset.dot; drawDial(); } });
+  drawDial();
+
+  const EXIST = {
+    noun: '형용사가', color: 'var(--accent)', outColor: 'var(--accent2)',
+    intro: '카드마다 말하고 싶은 그림이 하나씩 있다. <b>chilly</b>를 먼저 빼 보세요. cold로도 말은 통하지만 무엇이 사라지는지 보인다.',
+    cards: [
+      { id: 'cool', t: ['시원해서', '기분 좋음'], v: 'cool', icon: WIND(-28, 0), instead: 'It\'s a little cold. △', lost: '기분 좋다는 느낌이 빠져 불평처럼 들릴 수 있다.', why: '기분 좋은 서늘함.' },
+      { id: 'chilly', t: ['겉옷이', '생각남'], v: 'chilly', icon: '<path d="M-24 -24 l16 -8 h16 l16 8 l8 26 l-12 4 l-4 -12 v34 h-32 v-34 l-4 12 l-12 -4 z" fill="var(--sleeve)" stroke="var(--obj-line)"/>', instead: 'It\'s cold. △', lost: '몸이 움츠러드는 가벼운 불편함이 사라지고 그냥 "춥다"가 된다.', why: '위험하진 않지만 불쾌한 서늘함.' },
+      { id: 'icy', t: ['길에', '얼음'], v: 'icy', icon: '<ellipse cx="0" cy="14" rx="36" ry="12" fill="var(--water)" stroke="var(--obj-line)"/>' + FLAKE(0, -14), instead: 'The sidewalk is freezing. △', lost: '차갑다는 말이지, 얼음이 있어 미끄럽다는 점이 바로 안 보인다.', why: '얼음이 있거나 얼음 같음.' },
+      { id: 'warm', t: ['따뜻해서', '편안함'], v: 'warm', icon: SUN(0, 0, 14), instead: 'The milk is hot. △', lost: '마시기 좋다는 점이 빠지고 조심해야 할 것처럼 들린다.', why: '편안한 온기.' },
+      { id: 'scorching', t: ['햇볕이', '태울 듯'], v: 'scorching', icon: SUN(0, -8, 18) + '<path d="M-32 30 h64" stroke="var(--accent)" stroke-width="4"/>', instead: 'It\'s very hot outside. △', lost: '뜻은 간다. 햇볕이 태울 듯 내리쬐는 그림이 빠진다.', why: '태양 · 마른 열기.' },
+      { id: 'scalding', t: ['닿으면', '데임'], v: 'scalding', icon: '<path d="M-20 -6 h40 v24 a6 6 0 0 1 -6 6 h-28 a6 6 0 0 1 -6 -6 z" fill="var(--bg)" stroke="var(--obj-line)" stroke-width="2"/>' + STEAM(-8, -8, 'var(--accent)') + STEAM(8, -8, 'var(--accent)'), instead: 'The coffee is hot. △', lost: '갓 나온 커피라는 좋은 말일 수도 있다. 데인다는 경고가 약하다.', why: '닿으면 데일 만큼 뜨거움.' },
+    ],
+  };
+  const SCENES = {
+    stop: { btn: '버스 정류장', place: '아침 버스 정류장', pic: () => FL + '<path d="M470 150 V60 h110" stroke="' + OL + '" stroke-width="4" fill="none"/>' + T(526, 84, 13, 'BUS', MU, ' font-weight="700"') + P(290, 150, 1.4, 'var(--sleeve)') + P(380, 150, 1.4, 'var(--ok)') + WIND(170, 80),
+      lines: [['친구', 'It\'s <b>chilly</b> this morning.', '오늘 아침 쌀쌀하네.'], ['나', 'Yeah, I need a jacket.', '그러게, 겉옷이 필요해.', true]], say: '견딜 만하지만 <b>겉옷이 생각나는</b> 추위 — chilly.' },
+    cafe: { btn: '카페', place: '카페 계산대', pic: () => FL + TB(340, 530, 108) + '<path d="M400 80 h28 v28 h-28 z" fill="' + CARD + '" stroke="' + OL + '" stroke-width="2"/>' + STEAM(408, 76, 'var(--accent)') + STEAM(420, 76, 'var(--accent)') + P(290, 150, 1.4, 'var(--ok)') + P(590, 150, 1.4, 'var(--sleeve)'),
+      lines: [['직원', 'Careful, it\'s <b>scalding</b> hot.', '조심하세요, 데일 만큼 뜨거워요.'], ['나', 'Thanks. I\'ll let it <b>cool</b> down.', '고마워요. 좀 식힐게요.', true]], say: '닿으면 데일 <b>액체</b> — scalding. 여기서 cool down은 형용사가 아니라 <b>동사</b>(식다)다.' },
+    road: { btn: '겨울 길', place: '겨울 아침 인도', pic: () => FL + '<path d="M240 146 q100 -12 200 0 t150 0 l10 8 h-370 z" fill="var(--water)" opacity=".8"/>' + P(320, 150, 1.4, 'var(--sleeve)') + P(410, 150, 1.4, 'var(--accent2)') + FLAKE(520, 60) + FLAKE(570, 95),
+      lines: [['나', 'I\'m <b>freezing</b>!', '너무 추워!', true], ['친구', 'And the sidewalk is <b>icy</b>. Watch your step.', '게다가 길이 얼었어. 발밑 조심해.']], say: '몸이 느끼는 추위는 <b>freezing</b>, 길의 얼음은 <b>icy</b> — 한 장면에서 대상이 갈린다.' },
+  };
+  const SLOTS = {
+    first: ['cold', 'feel'], slots: { weather: '날씨', feel: '내가 느낌', noun: '명사 앞' },
+    verbs: {
+      cold: {
+        weather: { ok: [['It', 's'], ['is', 'v'], ['cold', 'a']], bad: [['It', 's'], ['colds', 'v']], say: '형용사 혼자 동사가 못 된다. <b>be</b>가 있어야 한다: <span class="en">It is cold.</span>' },
+        feel: { ok: [['I', 's'], ['am', 'v'], ['cold', 'a']], bad: [['I', 's'], ['have', 'v'], ['cold', 'a']], say: '내가 추우면 <span class="en">I am cold.</span> <span class="en">I have a cold.</span>는 "감기 걸렸다" — 여기서 cold는 명사다.' },
+        noun: { ok: [['cold', 'a'], ['water', 'n']], bad: [['water', 'n'], ['cold', 'a']], say: '명사 <b>앞</b>에 온다. 한국어 "차가운 물"과 순서가 같다.' },
+      },
+      freezing: {
+        weather: { ok: [['It', 's'], ['is', 'v'], ['freezing', 'a']], bad: [['It', 's'], ['is', 'v'], ['very freezing', 'a']], say: 'freezing은 이미 "몹시"가 들어 있어 보통 very를 안 붙인다. 강조는 <span class="en">absolutely freezing</span>.' },
+        feel: { ok: [['I', 's'], ['am', 'v'], ['freezing', 'a']], say: '내가 몹시 추울 때. <span class="en">The lake is frozen.</span>의 frozen은 "다 얼어붙은"이라 다르다(노트).' },
+        noun: { ok: [['freezing', 'a'], ['weather', 'n']], bad: [['weather', 'n'], ['freezing', 'a']], say: '명사 <b>앞</b>에 온다.' },
+      },
+      warm: {
+        weather: { ok: [['It', 's'], ['is', 'v'], ['warm', 'a']], bad: [['It', 's'], ['is', 'v'], ['warmly', 'x']], say: 'be 뒤는 형용사 자리다. -ly를 붙인 부사 warmly는 "따뜻하게(맞이하다)".' },
+        feel: { ok: [['I', 's'], ['feel', 'v'], ['warm', 'a']], bad: [['I', 's'], ['feel', 'v'], ['warmly', 'x']], say: '<span class="en">feel</span> 뒤에도 형용사가 온다.' },
+        noun: { ok: [['a', 'x'], ['warm', 'a'], ['towel', 'n']], bad: [['a', 'x'], ['towel', 'n'], ['warm', 'a']], say: 'a — 형용사 — 명사 순서.' },
+      },
+    },
+  };
+</script>

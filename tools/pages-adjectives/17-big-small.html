@@ -1,0 +1,43 @@
+<!-- title: BIG ↔ SMALL 개념 -->
+<!-- pron: big=/bɪɡ/[**빅**]*, small=/smɔːl/[스**몰**]*, #big/huge, #big/enormous, #big/gigantic, #big/colossal, #small/tiny, #small/miniature, #small/microscopic -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="16-alive-dead.html">ALIVE ↔ DEAD</a> · 다음: <a href="18-long-short.html">LONG ↔ SHORT</a></p>
+  <h1>BIG ↔ SMALL — 미나 옆에 세워 보면</h1>
+  <p class="lead">미나 옆에 세워 <b>크면</b> big, <b>작으면</b> small. 아주 큰 쪽 네 낱말은 <b>엄격한 계단이 아니라 겹쳐 쓴다</b>(노트). 무엇에 어울리는지로 고른다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 크고 작은 장면이 바뀌는 그림|큰 쪽은 큰 개, 아주 큰 집, 엄청난 사람들, 거대한 화면, 막대한 손실이고 작은 쪽은 작은 개, 손바닥 위 고양이, 모형 기차, 현미경 속 생물이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>크기를 바꾸는 동사: <a href="../concepts/65-grow.html">65 GROW</a> · <a href="../concepts/66-increase.html">66 INCREASE</a> · <a href="../concepts/67-decrease.html">67 DECREASE</a></li><li>자료: english-adjectives 노트의 big · small 묶음</li></ul>
+</main>
+<script>
+  const DOG = (x, s) => '<g transform="translate(' + x + ' 240) scale(' + s + ')"><ellipse cx="0" cy="-42" rx="50" ry="24" fill="var(--wood)" stroke="var(--obj-line)"/><circle cx="56" cy="-66" r="22" fill="var(--wood)" stroke="var(--obj-line)"/><circle cx="62" cy="-70" r="3" fill="#333"/><circle cx="78" cy="-62" r="4" fill="#333"/><path d="M-34 -24 V0 M-14 -20 V0 M20 -20 V0 M38 -24 V0 M-48 -50 q-18 -10 -18 -28" stroke="var(--wood)" stroke-width="8" stroke-linecap="round" fill="none"/></g>';
+  const HOUSE = (x, w, h) => RC(x, 240 - h, w, h, 'var(--card)', 'var(--obj-line)') + '<path d="M' + (x - 12) + ' ' + (240 - h) + ' l' + (w / 2 + 12) + ' -' + h * .5 + ' l' + (w / 2 + 12) + ' ' + h * .5 + ' z" fill="var(--bad)" stroke="var(--obj-line)"/>';
+  const EXIST = adverbPage({ noun: '형용사', start: 'huge',
+    groups: [
+      { name: '큰', items: [
+        { v: 'big', k: '큰', en: 'That dog is big.', note: '가장 흔한 말. 중요하다는 뜻도 있다.', from: 'large와 겹친다', pic: () => GRD + MAN(110, { s: .8, f: 'o' }) + DOG(270, 1.5), ex: ['크기가', '크다', 'That dog is strong.', '힘을 말한다. 크기가 안 나온다.', '큰.'] },
+        { v: 'huge', k: '아주 큰', base: 'BIG', core: '편하게 "엄청 커"', from: '네 낱말 중 일상에서 쉽다(노트)', en: 'That house is huge.', note: '일상적인 "아주 크다"(노트).', pic: () => GRD + HOUSE(60, 46, 44) + HOUSE(170, 210, 110) + MAN(140, { s: .4 }), ex: ['엄청', '크다', 'That house is big.', '보통 큰 정도로 줄어든다.', '아주 큰.'] },
+        { v: 'enormous', k: '엄청난 규모의', base: 'BIG', core: '사람 수 · 비용 · 규모', from: '라틴어 enormis(규범을 벗어난)', en: 'The crowd was enormous.', note: '규모가 매우 크다. 꼭 예상 밖일 필요는 없다(노트).', pic: () => Array.from({ length: 60 }, (_, i) => CR(50 + i % 12 * 32, 90 + Math.floor(i / 12) * 34 + i % 2 * 5, 10, ['var(--skin)', 'var(--sleeve)', 'var(--ok)', 'var(--gold)'][i % 4])).join(''), ex: ['규모가', '크다', 'The crowd was big.', '규모의 세기가 빠진다.', '규모가 엄청난.'] },
+        { v: 'gigantic', k: '거대한', base: 'BIG', core: '눈앞의 거대함', from: 'giant(거인)와 짝', en: 'The screen is gigantic.', note: '물리적으로 거대한 <b>모습</b>(노트).', pic: () => GRD + RC(120, 40, 280, 170, '#2a3038', 'var(--obj-line)', 6) + RC(134, 54, 252, 142, 'var(--water)', 'none') + CR(260, 124, 34, 'var(--gold)', 'none') + MAN(78, { s: .42, f: 'o', a: 'up' }) + LN('M260 210 V240', 'var(--obj-line)', 8), ex: ['거대한', '모습', 'The screen is huge.', '많이 겹친다. 거인 같은 그림이 약해진다.', '거대한.'] },
+        { v: 'colossal', k: '압도적인', base: 'BIG', core: '규모를 세게 강조', from: 'Colossus(거상)에서', en: 'The project suffered a colossal loss.', note: '손실 · 실수의 규모를 세게(노트).', pic: () => LN('M60 220 H400 M60 220 V50', 'var(--obj-line)', 2) + LN('M70 80 L170 96 L230 90 L290 210 L390 214', 'var(--bad)', 6) + AR(310, 100, 310, 170, 'var(--bad)', 4), ex: ['압도적', '규모', 'The project had a big loss.', '보통 큰 손실로 줄어든다.', '압도적인.'] },
+      ] },
+      { name: '작은', items: [
+        { v: 'small', k: '작은', en: 'That dog is small.', note: '가장 흔한 말. little에는 귀엽다는 느낌이 섞이기도 한다.', from: 'little과 겹친다', pic: () => GRD + MAN(140, { s: .9, f: 'smile' }) + DOG(270, .45), ex: ['크기가', '작다', 'That dog is young.', '어리다는 뜻. 크기가 안 나온다.', '작은.'] },
+        { v: 'tiny', k: '아주 작은', base: 'SMALL', core: '편하게 "쪼끄매"', from: '일상에서 쉽다', en: 'The kitten is tiny.', note: '아주 작다. 모형이라는 뜻은 아니다(노트).', pic: () => '<path d="M110 190 q10 -24 60 -20 h120 q30 -30 44 -20 q10 10 -20 46 q-20 34 -80 34 h-90 q-40 -4 -34 -40 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="2"/>' + CR(226, 138, 17, 'var(--fog)') + '<ellipse cx="226" cy="162" rx="22" ry="13" fill="var(--fog)" stroke="var(--obj-line)"/><path d="M212 126 l4 -14 l9 10 z M240 126 l-4 -14 l-9 10 z" fill="var(--fog)" stroke="var(--obj-line)"/>' + CR(220, 138, 2, '#333') + CR(232, 138, 2, '#333'), ex: ['아주', '작다', 'The kitten is small.', '보통 작은 정도로 줄어든다.', '아주 작은.'] },
+        { v: 'miniature', k: '축소해 만든', base: 'SMALL', core: '작게 만든 것', from: '소리 [미니어처]', en: 'This is a miniature train.', note: '작게 만든 모형. 모든 세부가 정확할 필요는 없다(노트).', pic: () => DESK(80, 290, 200) + [130, 206, 282].map((x, i) => RC(x, 164, 62, 26, ['var(--bad)', 'var(--ok)', 'var(--gold)'][i]) + CR(x + 14, 194, 7, 'var(--obj-line)') + CR(x + 48, 194, 7, 'var(--obj-line)')).join('') + RC(140, 144, 14, 20, 'var(--obj-line)') + at(350, 160, 30, HAND), ex: ['작게', '만든', 'This is a small train.', '진짜인데 작은 기차일 수도 있다.', '축소해 만든.'] },
+        { v: 'microscopic', k: '현미경으로 볼 만큼', base: 'SMALL', core: '눈으로 보기 어려움', from: 'microscope(현미경) + ic', en: 'These organisms are microscopic.', note: '매우 작다. 작은 집을 과장할 때도(노트).', pic: () => CR(230, 145, 92, 'var(--bg)', 'var(--obj-line)') + [[190, 120], [260, 110], [220, 180], [280, 170]].map(([x, y], i) => '<ellipse cx="' + x + '" cy="' + y + '" rx="20" ry="10" fill="var(--ok)" transform="rotate(' + i * 50 + ' ' + x + ' ' + y + ')"/>' + LN('M' + (x + 18) + ' ' + y + ' q10 -10 18 0', 'var(--ok)', 2)).join('') + LN('M296 212 l50 34', 'var(--obj-line)', 14), ex: ['눈에', '안 보임', 'These organisms are tiny.', '맨눈으로도 보일 것 같다.', '현미경으로 볼 만큼 작은.'] },
+      ] },
+    ],
+    q: [['Q1. 기준보다?', '크다 → <b>big</b> / 작다 → <b>small</b>'], ['Q2. 아주 큰 무엇?', '두루 → <b>huge</b> / 사람 수 · 규모 → <b>enormous</b> / 눈앞의 모습 → <b>gigantic</b> / 손실 강조 → <b>colossal</b>'], ['Q3. 아주 작은 무엇?', '두루 → <b>tiny</b> / 모형 → <b>miniature</b> / 현미경 → <b>microscopic</b>']],
+    body: ['<b>HUGE</b> — 두 팔 활짝. <b>GIGANTIC</b> — 고개를 젖혀 올려다보기.', '<b>TINY</b> — 엄지와 검지 사이. <b>MICROSCOPIC</b> — 한 눈을 감고 들여다보기.'],
+    check: ['big · large · great, small · little의 차이는 노트에 따로 없다.', '노트 식(예상 초과 · 상상 초월 · 기념비적)은 낱말 노트에서 필수가 아니라고 해, 잘 어울리는 대상으로 갈랐다.'],
+  });
+  const SCENES = {
+    house: { btn: '집들이', place: '친구 새집', pic: () => FL + BX(400, 60, 180, 90) + P(310, 150, 1.4, 'var(--ok)'), lines: [['나', 'Wow, your house is <b>huge</b>!', '와, 집 엄청 크다!', true], ['친구', 'But the kitchen is <b>tiny</b>.', '근데 부엌은 쪼끄매.']], say: '일상 짝은 <b>huge ↔ tiny</b>.' },
+    size: { btn: '옷 가게', place: '옷 가게', pic: () => MEET(BX(440, 70, 50, 38, 'var(--sleeve)')), lines: [['점원', 'How is it?', '어떠세요?'], ['나', 'Too <b>big</b>. Do you have a <b>smaller</b> one?', '너무 커요. 더 작은 거 있어요?', true]], say: '비교: big → <b>bigger</b>, small → <b>smaller</b>.' },
+  };
+  const SLOTS = { first: ['huge', 'very'], slots: { be: 'be 뒤', noun: '명사 앞', very: '강조' }, verbs: {
+    big: { be: { ok: [['It', 's'], ['is', 'v'], ['big', 'a']], say: '크다.' }, noun: { ok: [['a', 'x'], ['big', 'a'], ['red', 'a'], ['bag', 'n']], bad: [['a', 'x'], ['red', 'a'], ['big', 'a'], ['bag', 'n']], say: '크기 → 색 순서.' }, very: { ok: [['It', 's'], ['is', 'v'], ['very', 'd'], ['big', 'a']], say: 'very big.' } },
+    huge: { be: { ok: [['It', 's'], ['is', 'v'], ['huge', 'a']], say: '아주 크다.' }, noun: { ok: [['a', 'x'], ['huge', 'a'], ['problem', 'n']], say: '아주 큰 문제.' }, very: { ok: [['It', 's'], ['is', 'v'], ['absolutely', 'd'], ['huge', 'a']], bad: [['It', 's'], ['is', 'v'], ['very', 'd'], ['huge', 'a']], say: '이미 "아주"가 들어 있어 보통 <b>absolutely · really</b>와.' } },
+  } };
+</script>

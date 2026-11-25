@@ -1,0 +1,41 @@
+<!-- title: TALL · HIGH ↔ LOW 개념 -->
+<!-- pron: tall=/tɔːl/[**톨**]*, high=/haɪ/[**하**이]*, low=/loʊ/[**로**우]*, #tall/towering, #tall/soaring, #tall/elevated, #low/sunken, #low/low-lying -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="18-long-short.html">LONG ↔ SHORT</a> · 다음: <a href="20-wide-narrow.html">WIDE ↔ NARROW</a></p>
+  <h1>TALL · HIGH ↔ LOW — 키인가, 자리인가</h1>
+  <p class="lead">아래부터 위까지 <b>키</b>가 크면 tall, 바닥에서 떨어진 <b>자리</b>가 위면 high. 둘 다 반대쪽은 대개 다르다 — tall ↔ short, high ↔ low.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 높고 낮은 장면이 바뀌는 그림|높은 쪽은 키 큰 나무, 높은 선반, 솟은 건물, 날아오르는 새, 땅 위로 놓인 길이고 낮은 쪽은 낮은 선반, 가라앉은 배, 낮은 땅의 마을이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>높이를 바꾸는 동사: <a href="../concepts/66-increase.html">66 INCREASE</a> (raise) · <a href="../concepts/67-decrease.html">67 DECREASE</a> (lower) · <a href="../concepts/65-grow.html">65 GROW</a></li><li>자료: english-adjectives 노트의 tall · low 묶음</li></ul>
+</main>
+<script>
+  const SHELF = (y) => LN('M70 40 V240', 'var(--obj-line)', 4) + RC(70, y, 200, 10, 'var(--wood)') + RC(140, y - 34, 40, 34, 'var(--gold)');
+  const EXIST = adverbPage({ noun: '형용사', start: 'elevated',
+    groups: [
+      { name: '높은', items: [
+        { v: 'tall', k: '키가 큰', en: 'That tree is tall.', note: '<b>아래부터 위까지</b>가 길다. 사람 · 나무 · 건물.', from: '반대는 보통 short', pic: () => GRD + MAN(110, { s: .6 }) + LN('M260 240 V130', 'var(--wood)', 14) + '<path d="M260 30 l60 60 h-24 l44 56 h-160 l44 -56 h-24 z" fill="var(--ok)"/>' + AR(370, 236, 370, 40, 'var(--accent)', 3), ex: ['키가', '크다', 'That tree is high.', '어색하다. 나무의 키는 tall.', '키가 큰.'] },
+        { v: 'high', k: '높이 있는', en: 'The shelf is high.', note: '<b>바닥에서 떨어진 자리</b>가 위다. 값 · 온도에도.', from: 'height(높이) — 반대는 low', pic: () => GRD + SHELF(80) + MAN(330, { s: .8, a: 'up', f: 'o' }) + LN('M284 236 V92', 'var(--accent)', 2, ' stroke-dasharray="5 5"'), ex: ['자리가', '위', 'The shelf is tall.', '선반 전체의 키가 크다는 뜻이 된다.', '높은 곳에 있는.'] },
+        { v: 'towering', k: '우뚝 솟은', base: 'TALL', core: '압도하는 높이', from: 'tower(탑) → -ing', en: 'A towering building stood ahead.', note: '솟아 있는 존재감. 움직이는 것이 아니다(노트).', pic: () => GRD + [[70, 60], [130, 80], [320, 70], [370, 54]].map(([x, h]) => RC(x, 240 - h, 44, h, 'var(--fog)')).join('') + RC(196, 30, 90, 210, 'var(--sleeve)') + Array.from({ length: 14 }, (_, i) => RC(210 + i % 2 * 40, 46 + Math.floor(i / 2) * 26, 22, 14, 'var(--gold)', 'none')).join(''), ex: ['우뚝', '솟음', 'A tall building stood ahead.', '압도하는 존재감이 빠진다.', '우뚝 솟은.'] },
+        { v: 'soaring', k: '날아오르는', base: 'HIGH와 이웃', core: '위로 올라감', from: 'soar(날아오르다) → -ing', en: 'A bird was soaring above us.', note: '<b>움직임</b>. 가격이 치솟을 때도 쓴다(노트).', pic: () => GRD + LN('M60 220 Q200 200 290 90', 'var(--fog)', 2, ' stroke-dasharray="6 6"') + '<path d="M300 84 q-50 -44 -96 -14 q46 0 70 30 q-6 20 10 26 q10 -20 24 -24 q30 -30 78 -30 q-40 -30 -86 12 z" fill="var(--wood)" stroke="var(--obj-line)"/>' + MAN(100, { s: .5, a: 'point', f: 'o' }), ex: ['위로', '오름', 'A bird was high above us.', '자리만 말할 뿐, 오르는 움직임이 빠진다.', '높이 날아오르는.'] },
+        { v: 'elevated', k: '기준보다 올린', base: 'HIGH와 이웃', core: '들어 올려 놓음', from: 'elevate(올리다) → elevated', en: 'We walked on an elevated path.', note: '기준보다 위에 있다. 엄청 높을 필요는 없다. 수치에도(노트).', pic: () => LN('M30 226 q30 -10 60 0 t60 0 t60 0 t60 0 t60 0 t60 0', 'var(--water)', 4) + RC(40, 160, 370, 12, 'var(--wood)') + [80, 180, 280, 380].map((x) => LN('M' + x + ' 172 V232', 'var(--wood)', 6)).join('') + MAN(226, { y: 160, s: .75, f: 'smile', c: 'var(--ok)' }), ex: ['올려', '놓음', 'We walked on a high path.', '산길처럼 높은 곳의 길일 수 있다.', '기준보다 올린.'] },
+      ] },
+      { name: '낮은', items: [
+        { v: 'low', k: '낮은', en: 'The shelf is low.', note: '바닥에서 가깝다. 값 · 소리 · 배터리에도.', from: 'lower(낮추다)와 짝', pic: () => GRD + SHELF(200) + MAN(330, { s: .8, a: 'bow', r: 14 }), ex: ['자리가', '아래', 'The shelf is short.', '선반의 길이가 짧다는 뜻이 된다.', '낮은 곳에 있는.'] },
+        { v: 'sunken', k: '가라앉은', base: 'LOW와 이웃', core: '아래로 내려감', from: 'sink(가라앉다) → sunken', en: 'We found a sunken ship.', note: '<b>원래보다</b> 아래로. 움푹 들어간 눈에도(노트).', pic: () => RC(40, 50, 370, 190, 'var(--water)', 'none', 6) + LN('M40 56 q20 -10 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0', 'var(--bg)', 4) + '<g transform="rotate(14 220 200)"><path d="M120 176 h200 l-30 46 h-140 z" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="2"/>' + LN('M220 176 V100', 'var(--wood)', 6) + '</g>' + [[330, 130], [342, 104]].map(([x, y]) => CR(x, y, 6, 'none', 'var(--bg)')).join(''), ex: ['가라', '앉음', 'We found a low ship.', '어색하다. 가라앉았다는 사건이 안 나온다.', '가라앉은.'] },
+        { v: 'low-lying', k: '지대가 낮은', base: 'LOW', core: '땅 자체가 낮음', from: 'low + lie(놓이다) → -ing', en: 'This is a low-lying area.', note: '가라앉은 사건이 아니라 <b>원래 낮은 땅</b>(노트).', pic: () => '<path d="M30 240 V90 q60 -10 90 60 q20 50 60 50 h90 q40 0 60 -60 q20 -50 80 -50 V240 z" fill="var(--ok)" opacity=".5"/>' + [200, 236].map((x) => RC(x, 178, 24, 22, 'var(--card)') + '<path d="M' + (x - 4) + ' 178 l16 -14 l16 14 z" fill="var(--bad)"/>').join('') + LN('M272 204 q12 -8 24 0', 'var(--water)', 5) },
+      ] },
+    ],
+    q: [['Q1. 무엇을 말하나?', '아래~위의 키 → <b>tall</b> / 떨어진 자리 → <b>high</b> ↔ <b>low</b>'], ['Q2. 높은데?', '우뚝 → <b>towering</b> / 날아오름 → <b>soaring</b> / 올려 놓음 → <b>elevated</b>'], ['Q3. 낮은데?', '가라앉음 → <b>sunken</b> / 원래 낮은 땅 → <b>low-lying</b>']],
+    body: ['<b>TALL</b> — 까치발로 머리 위 재기. <b>HIGH</b> — 손을 머리 위 선반으로. <b>LOW</b> — 무릎 높이에 손.', '<b>SOARING</b> — 두 팔을 펴고 날기.'],
+    check: ['tall과 high의 구별, tall의 반대가 보통 short라는 말은 노트에 없는 풀이다(노트는 TALL/HIGH를 하나로 묶었다).', 'high는 노트 묶음 이름에만 있어 예문을 새로 지었다.'],
+  });
+  const SCENES = {
+    shelf: { btn: '주방', place: '주방 선반', pic: () => FL + BX(420, 44, 120, 14, 'var(--wood)') + BX(460, 18, 26, 26, 'var(--gold)') + P(330, 150, 1.2, 'var(--ok)') + P(580, 150, 1.6, 'var(--sleeve)'), lines: [['나', 'The shelf is too <b>high</b>.', '선반이 너무 높아.', true], ['친구', 'I\'m <b>tall</b>. I\'ll get it.', '내가 키 크니까 꺼내 줄게.']], say: '선반 자리는 <b>high</b>, 사람 키는 <b>tall</b>.' },
+    bat: { btn: '배터리', place: '휴대폰 배터리', pic: () => MEET(BX(452, 70, 24, 38)), lines: [['친구', 'Can I use your phone?', '휴대폰 써도 돼?'], ['나', 'Sorry, my battery is <b>low</b>.', '미안, 배터리가 얼마 없어.', true]], say: '값 · 배터리 · 온도의 짝은 <b>high ↔ low</b>.' },
+  };
+  const SLOTS = { first: ['tall', 'num'], slots: { be: 'be 뒤', num: '수와 함께', noun: '명사 앞' }, verbs: {
+    tall: { be: { ok: [['She', 's'], ['is', 'v'], ['tall', 'a']], bad: [['She', 's'], ['is', 'v'], ['high', 'a']], say: '사람의 키는 <b>tall</b>.' }, num: { ok: [['He', 's'], ['is', 'v'], ['180 cm', 'n'], ['tall', 'a']], bad: [['He', 's'], ['is', 'v'], ['180 cm', 'n'], ['high', 'a']], say: '수 + <b>tall</b>.' }, noun: { ok: [['a', 'x'], ['tall', 'a'], ['building', 'n']], say: '높은 건물.' } },
+    high: { be: { ok: [['Prices', 's'], ['are', 'v'], ['high', 'a']], say: '값이 높다. 물건이면 <span class="en">It\'s expensive.</span>' }, num: { ok: [['How', 'x'], ['high', 'a'], ['is', 'v'], ['it?', 's']], say: '얼마나 높이 있어?' }, noun: { ok: [['a', 'x'], ['high', 'a'], ['mountain', 'n']], say: '높은 산 — 산은 high.' } },
+  } };
+</script>

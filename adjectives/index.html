@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>영어 형용사 개념 그림</title>
+<style>
+  :root { --bg: #fafaf8; --card: #ffffff; --text: #1f1f1d; --muted: #6b6a65; --line: #d8d6ce; --link: #185FA5; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #1c1c1a; --card: #262624; --text: #ecebe6; --muted: #a8a69e; --line: #44443f; --link: #85B7EB; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.7 "Pretendard", "Malgun Gothic", system-ui, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  .lead { color: var(--muted); margin: 0 0 24px; }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  li { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  a { color: var(--link); font-weight: 600; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .desc { color: var(--muted); font-size: 15px; display: block; }
+  /* 출발점: 핵심 질문 */
+  li.start { border: 2px solid #D85A30; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 600; color: #D85A30; margin-right: 6px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 32px 0 8px; }
+  .formula { display: grid; grid-template-columns: max-content 1.2em 1fr 1.2em max-content; gap: 4px 4px; align-items: baseline;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; font-size: 15px; margin-bottom: 16px; }
+  .formula .r { font-weight: 600; } .formula .op { color: var(--muted); text-align: center; } .formula .v { font-weight: 700; color: #D85A30; }
+  .formula .cap { color: var(--muted); font-size: 13px; margin-bottom: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 12px; text-align: left; vertical-align: top; }
+  th { color: var(--muted); font-weight: 500; }
+  .soon { color: var(--muted); }
+  /* 회차: 외울 것은 번호 하나 */
+  #study { background: var(--card); border: 2px solid #D85A30; border-radius: 12px; padding: 16px; margin-bottom: 32px; }
+  #study .pick { display: flex; align-items: center; justify-content: center; gap: 12px; }
+  #study button { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; min-width: 44px; min-height: 44px; cursor: pointer; }
+  #study button:disabled { opacity: .35; cursor: default; }
+  #study input { font: inherit; font-size: 24px; font-weight: 700; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; width: 76px; min-height: 44px; text-align: center; }
+  #study h2 { font-size: 15px; margin: 16px 0 8px; }
+  #study .note, #study .empty { color: var(--muted); font-size: 14px; margin: 12px 0 0; }
+  #study li { background: var(--bg); }
+  #study .rounds { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px; margin-top: 8px; }
+  #study .rounds button { text-align: left; padding: 4px 10px; font-size: 14px; }
+  #study .rounds button[aria-current] { border-color: #D85A30; font-weight: 700; }
+  #study summary { cursor: pointer; margin-top: 16px; min-height: 32px; }
+  .rno { color: var(--muted); font-size: 13px; float: right; margin-left: 8px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>영어 형용사 개념 그림</h1>
+  <p class="lead">물건 · 사람 · 일이 어떤 상태인지를 짝으로 보는 낱말. 동사 방, 부사 방과 회차 번호가 따로다. <a href="../concepts/index.html">동사 목록으로</a></p>
+  <section id="study" hidden>
+    <div class="pick">
+      <button id="prev" aria-label="이전 회차">◀</button>
+      <label><input id="no" type="number" inputmode="numeric" min="1" aria-label="회차 번호"> 회차</label>
+      <button id="next" aria-label="다음 회차">▶</button>
+    </div>
+    <h2>새 것</h2><ul id="new"></ul>
+    <h2 id="oldh">복습</h2><ul id="old"></ul>
+    <p class="note" id="note"></p>
+    <details><summary>전체 회차 보기</summary><div class="rounds" id="rounds"></div></details>
+  </section>
+  <h2>전체 목록</h2>
+  <ul id="all">
+    <li><a href="01-hot-cold.html">HOT ↔ COLD — 같은 바깥, 다른 온도</a>
+      <span class="desc">freezing · cold · chilly · cool · warm · hot · boiling · icy · scorching · scalding</span></li>
+    <li><a href="02-wet-dry.html">WET ↔ DRY — 같은 수건, 다른 물기</a>
+      <span class="desc">wet · dry · damp · soggy · soaked · drenched · parched · arid · dehydrated</span></li>
+    <li><a href="03-heavy-light.html">HEAVY ↔ LIGHT — 같은 상자, 다른 무게</a>
+      <span class="desc">heavy · light · hefty · massive · burdensome · featherlight · weightless</span></li>
+    <li><a href="04-hard-soft.html">HARD ↔ SOFT — 같은 손가락, 다른 눌림</a>
+      <span class="desc">hard · soft · solid · rigid · firm · fluffy · pliable · tender</span></li>
+    <li><a href="05-rough-smooth.html">ROUGH ↔ SMOOTH — 같은 손끝, 다른 겉면</a>
+      <span class="desc">rough · smooth · coarse · jagged · bumpy · silky · sleek · polished</span></li>
+    <li><a href="06-tight-loose.html">TIGHT ↔ LOOSE — 같은 바지, 다른 틈</a>
+      <span class="desc">tight · loose · snug · taut · constricting · baggy · slack</span></li>
+    <li><a href="07-sharp-dull.html">SHARP ↔ DULL — 같은 칼, 다른 날</a>
+      <span class="desc">sharp · dull · keen · piercing · razor-sharp · blunt · faded</span></li>
+    <li><a href="08-bright-dark.html">BRIGHT ↔ DARK — 같은 방, 다른 빛</a>
+      <span class="desc">bright · dark · dazzling · radiant · luminous · dim · gloomy · pitch-black</span></li>
+    <li><a href="09-strong-weak.html">STRONG ↔ WEAK — 같은 줄다리기, 다른 힘</a>
+      <span class="desc">strong · weak · powerful · robust · muscular · feeble · fragile · frail</span></li>
+    <li><a href="10-loud-quiet.html">LOUD ↔ QUIET — 같은 음악, 다른 크기</a>
+      <span class="desc">loud · quiet · deafening · roaring · thunderous · silent · hushed · muted</span></li>
+    <li><a href="11-clean-dirty.html">CLEAN ↔ DIRTY — 같은 셔츠, 닦기 전과 후</a>
+      <span class="desc">clean · dirty · spotless · pristine · sanitary · stained · filthy · greasy</span></li>
+    <li><a href="12-full-empty.html">FULL ↔ EMPTY — 같은 컵, 채우기 전과 후</a>
+      <span class="desc">full · empty · packed · brimming · overflowing · bare · hollow · vacant</span></li>
+    <li><a href="13-open-closed.html">OPEN ↔ CLOSED — 같은 문, 열기 전과 후</a>
+      <span class="desc">open · closed · unlocked · wide-open · shut · sealed</span></li>
+    <li><a href="14-fresh-stale.html">FRESH ↔ STALE — 같은 빵, 오늘과 사흘 뒤</a>
+      <span class="desc">fresh · stale · crisp · raw · spoiled · rotten · decayed</span></li>
+    <li><a href="15-whole-broken.html">WHOLE ↔ BROKEN — 같은 꽃병, 깨지기 전과 후</a>
+      <span class="desc">whole · broken · intact · complete · cracked · shattered · crushed</span></li>
+    <li><a href="16-alive-dead.html">ALIVE ↔ DEAD — 같은 화분, 산 것과 죽은 것</a>
+      <span class="desc">alive · dead · lively · thriving · lifeless · deceased</span></li>
+    <li><a href="17-big-small.html">BIG ↔ SMALL — 미나 옆에 세워 보면</a>
+      <span class="desc">big · small · huge · enormous · gigantic · colossal · tiny · miniature · microscopic</span></li>
+    <li><a href="18-long-short.html">LONG ↔ SHORT — 같은 줄, 같은 회의</a>
+      <span class="desc">long · short · lengthy · extended · brief</span></li>
+    <li><a href="19-tall-low.html">TALL · HIGH ↔ LOW — 키인가, 자리인가</a>
+      <span class="desc">tall · high · low · towering · soaring · elevated · sunken · low-lying</span></li>
+    <li><a href="20-wide-narrow.html">WIDE ↔ NARROW — 같은 길, 다른 폭</a>
+      <span class="desc">wide · narrow · broad · spacious · vast · cramped · confined</span></li>
+    <li><a href="21-thick-thin.html">THICK ↔ THIN — 같은 책, 다른 두께</a>
+      <span class="desc">thick · thin · chunky · dense · slim · sheer · skinny</span></li>
+    <li><a href="22-deep-shallow.html">DEEP ↔ SHALLOW — 같은 물, 다른 바닥</a>
+      <span class="desc">deep · shallow · bottomless · profound · superficial · surface</span></li>
+    <li><a href="23-happy-sad.html">HAPPY ↔ SAD — 같은 미나, 다른 소식</a>
+      <span class="desc">happy · sad · cheerful · overjoyed · ecstatic · downcast · heartbroken · depressed</span></li>
+    <li><a href="24-calm-angry.html">CALM ↔ ANGRY — 같은 소음, 다른 반응</a>
+      <span class="desc">calm · angry · peaceful · serene · tranquil · irritated · furious · livid</span></li>
+    <li><a href="25-brave-afraid.html">BRAVE ↔ AFRAID — 같은 어두운 복도</a>
+      <span class="desc">brave · afraid · bold · courageous · fearless · scared · terrified · panicked</span></li>
+    <li><a href="26-confident-doubtful.html">CONFIDENT · SURE ↔ DOUBTFUL — 같은 "3시"</a>
+      <span class="desc">confident · sure · doubtful · certain · convinced · skeptical · unsure</span></li>
+    <li><a href="27-interested-bored.html">INTERESTED ↔ BORED — 같은 공연, 다른 자리</a>
+      <span class="desc">interested · bored · fascinated · captivated · weary · indifferent</span></li>
+    <li><a href="28-kind-rude.html">KIND · POLITE ↔ RUDE — 같은 문 앞, 다른 태도</a>
+      <span class="desc">kind · polite · rude · courteous · generous · gentle · impolite · harsh · mean</span></li>
+    <li><a href="29-rich-poor.html">RICH ↔ POOR — 같은 지갑, 다른 두께</a>
+      <span class="desc">rich · poor · wealthy · affluent · abundant · penniless · scarce · lacking</span></li>
+    <li><a href="30-honest-dishonest.html">HONEST ↔ DISHONEST — 깨진 꽃병 앞에서</a>
+      <span class="desc">honest · dishonest · truthful · sincere · candid · lying · deceitful · corrupt</span></li>
+    <li><a href="31-good-bad.html">GOOD ↔ BAD — 같은 식당, 다른 별점</a>
+      <span class="desc">good · bad · excellent · superb · virtuous · terrible · awful · wicked</span></li>
+    <li><a href="32-real-fake.html">REAL · TRUE ↔ FAKE · FALSE — 진짜 꽃, 맞는 말</a>
+      <span class="desc">real · true · fake · false · genuine · authentic · artificial · counterfeit · bogus</span></li>
+    <li><a href="33-important-trivial.html">IMPORTANT ↔ TRIVIAL — 같은 배낭, 무엇을 뺄까</a>
+      <span class="desc">important · trivial · crucial · essential · vital · minor · negligible · petty</span></li>
+    <li><a href="34-safe-dangerous.html">SAFE ↔ DANGEROUS — 같은 다리, 건너도 될까</a>
+      <span class="desc">safe · dangerous · secure · harmless · risky · hazardous · perilous</span></li>
+    <li><a href="35-easy-difficult.html">EASY ↔ DIFFICULT — 같은 계단, 다른 높이</a>
+      <span class="desc">easy · difficult · straightforward · effortless · tough · challenging · arduous</span></li>
+    <li><a href="36-clear-vague.html">CLEAR ↔ VAGUE — 같은 안내문, 다른 또렷함</a>
+      <span class="desc">clear · vague · obvious · crystal-clear · distinct · ambiguous · blurry</span></li>
+    <li><a href="37-simple-complex.html">SIMPLE ↔ COMPLEX — 같은 지도, 다른 길 수</a>
+      <span class="desc">simple · complex · plain · basic · minimalist · complicated · intricate</span></li>
+    <li><a href="38-correct-wrong.html">CORRECT · RIGHT ↔ WRONG — 같은 과녁, 다른 자리</a>
+      <span class="desc">correct · right · wrong · accurate · precise · incorrect · mistaken · faulty</span></li>
+    <li><a href="39-new-old.html">NEW · YOUNG ↔ OLD — 물건과 사람의 시간</a>
+      <span class="desc">new · young · old · brand-new · youthful · antique · ancient · elderly</span></li>
+    <li><a href="40-early-late.html">EARLY · FAST ↔ LATE · SLOW — 때와 빠르기는 다르다</a>
+      <span class="desc">early · fast · late · slow · premature · swift · rapid · overdue · gradual · sluggish</span></li>
+  </ul>
+</main>
+<script>
+// 회차 순서(하루 두 장). 이미 정한 회차는 바꾸지 않는다 — 번호를 외워서 쓰기 때문. 새 페이지는 맨 뒤에 붙인다.
+const ROUNDS = `01 02,03 04,05 06,07 08,09 10,11 12,13 14,15 16,17 18,19 20,21 22,23 24,25 26,27 28,29 30,31 32,33 34,35 36,37 38,39 40`.split(',').map(r => r.trim().split(' '));
+const GAP = 3;                        // 복습은 3회차 전 것
+const LAST = ROUNDS.length + GAP;     // 마지막 세 번은 복습만
+const $ = id => document.getElementById(id);
+const items = {};
+document.querySelectorAll('#all > li').forEach(li => { items[li.querySelector('a').getAttribute('href').slice(0, 2)] = li; });
+const short = k => items[k].querySelector('a').textContent.split(' — ')[0].replace(' 묶음', '');
+const label = r => r <= ROUNDS.length ? ROUNDS[r - 1].map(short).join(' · ') : '복습만';
+
+function fill(ul, r) {
+  ul.replaceChildren(...(ROUNDS[r - 1] || []).map(k => items[k].cloneNode(true)));
+  ul.querySelectorAll('.rno').forEach(e => e.remove());
+}
+function show(n) {
+  n = Math.min(LAST, Math.max(1, Math.round(n) || 1));
+  $('no').value = n;
+  fill($('new'), n); fill($('old'), n - GAP);
+  if (n > ROUNDS.length) $('new').innerHTML = '<li class="empty">새 것은 다 봤다. 복습만 한다.</li>';
+  if (n <= GAP) $('old').innerHTML = '<li class="empty">' + (GAP + 1) + '회차부터 복습이 나온다.</li>';
+  $('oldh').textContent = n > GAP ? '복습 (' + (n - GAP) + '회차에 본 것)' : '복습';
+  $('note').textContent = n < LAST ? '다 봤으면 외울 것은 하나 — 다음은 ' + (n + 1) + '회차.' : '마지막 회차.';
+  $('prev').disabled = n === 1; $('next').disabled = n === LAST;
+  [...$('rounds').children].forEach((b, i) => i + 1 === n ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current'));
+  history.replaceState(null, '', '#' + n);   // 페이지를 보고 뒤로 와도 같은 회차
+}
+for (let r = 1; r <= LAST; r++) {
+  const b = document.createElement('button');
+  b.textContent = r + '회차  ' + label(r);
+  b.onclick = () => { show(r); $('study').scrollIntoView(); };
+  $('rounds').append(b);
+}
+ROUNDS.forEach((ks, i) => ks.forEach(k => items[k].insertAdjacentHTML('afterbegin', '<span class="rno">' + (i + 1) + '회차</span>')));
+$('prev').onclick = () => show(+$('no').value - 1);
+$('next').onclick = () => show(+$('no').value + 1);
+$('no').onchange = () => show(+$('no').value);
+window.onhashchange = () => show(+location.hash.slice(1));
+$('study').hidden = false;
+show(+location.hash.slice(1));
+</script>
+</body>
+</html>

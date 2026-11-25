@@ -1,0 +1,43 @@
+<!-- title: SHARP ↔ DULL 개념 -->
+<!-- pron: sharp=/ʃɑːrp/[**샤**r프]*, dull=/dʌl/[**덜**]*, #sharp/keen, #sharp/piercing, #sharp/razor-sharp, #dull/blunt, #dull/faded -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="06-tight-loose.html">TIGHT ↔ LOOSE</a> · 다음: <a href="08-bright-dark.html">BRIGHT ↔ DARK</a></p>
+  <h1>SHARP ↔ DULL — 같은 칼, 다른 날</h1>
+  <p class="lead">잘 <b>베이면</b> sharp, <b>안 베이면</b> dull. 칼날 말고도 <b>눈썰미 · 소리 · 색</b>이 예리하거나 흐릿할 때 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 날카롭거나 무딘 장면이 바뀌는 그림|날카로운 쪽은 잘 드는 칼, 작은 차이를 찾는 눈, 귀를 찌르는 비명, 면도날이고 무딘 쪽은 안 드는 칼, 뭉툭한 연필, 바랜 사진이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>상태가 드러나는 동사: <a href="../concepts/64-cut.html">64 CUT</a> · <a href="../concepts/21-see.html">21 SEE</a> (spot · notice) · <a href="../concepts/52-hear.html">52 HEAR</a></li><li>자료: english-adjectives 노트의 sharp · dull 묶음</li></ul>
+</main>
+<script>
+  const KNIFE = (pt) => RC(270, 126, 110, 28, 'var(--wood)', 'var(--obj-line)', 8) + '<path d="M270 126 H' + (pt ? 90 : 110) + (pt ? ' L70 156' : ' q-30 4 -26 30') + ' H270 z" fill="var(--obj)" stroke="var(--obj-line)" stroke-width="2"/>';
+  const TOM = (x, cut) => CR(x, 206, 28, 'var(--bad)') + (cut ? LN('M' + x + ' 176 V236', 'var(--bg)', 5) : LN('M' + (x - 14) + ' 190 q14 12 28 0', 'var(--obj-line)', 2));
+  const PHOTO = (x, op) => RC(x, 80, 120, 120, 'var(--card)') + '<g opacity="' + op + '">' + RC(x + 10, 90, 100, 84, 'var(--water)', 'none') + CR(x + 84, 112, 12, 'var(--gold)', 'none') + '<path d="M' + (x + 10) + ' 174 l34 -44 l26 30 l16 -16 l24 30 z" fill="var(--ok)"/></g>';
+  const EXIST = adverbPage({ noun: '형용사',
+    start: 'keen',
+    groups: [
+      { name: '날카로운', items: [
+        { v: 'sharp', k: '날카로운', en: 'The knife is sharp.', note: '잘 베인다. 통증 · 말 · 화면이 또렷할 때도 쓴다.', from: 'sharpen(갈다)과 짝', pic: () => KNIFE(true) + TOM(170, true), ex: ['잘', '베인다', 'The knife is good.', '좋다는 뜻뿐, 날이 선 것이 안 나온다.', '날이 선.'] },
+        { v: 'keen', k: '예리한 (눈 · 감각)', base: 'SHARP', core: '감각 · 관찰력', from: 'be keen on(아주 좋아하다)도 있다', en: 'She has a keen eye for detail.', note: '작은 차이를 알아챈다. 실제 칼날이 아니다(노트).', pic: () => [100, 270].map((x, k) => RC(x, 70, 110, 110, 'var(--card)') + CR(x + 34, 110, 14, 'var(--gold)') + RC(x + 60, 96, 30, 30, 'var(--ok)') + LN('M' + (x + 20) + ' 156 h70', 'var(--fog)', 4) + (k ? CR(x + 84, 152, 5, 'var(--bad)') : '')).join('') + CR(354, 152, 20, 'none', 'var(--accent)') + LN('M368 168 l18 20', 'var(--accent)', 5), ex: ['눈썰미', '예리', 'She has good eyes.', '시력이 좋다는 뜻이 된다.', '감각이 예리한.'] },
+        { v: 'piercing', k: '찌르는 듯한', base: 'SHARP', core: '소리 · 추위 · 눈빛', from: 'pierce(꿰뚫다) → -ing', en: 'I heard a piercing scream.', note: '감각을 <b>찌르듯</b> 강하다(노트).', pic: () => GRD + MAN(330, { f: 'sad', a: 'up' }) + '<path d="M70 112 L294 138 L70 164 L112 138 z" fill="var(--bad)"/>' + tx(96, 90, 22, '꺄!', 'var(--bad)', ' font-weight="700"'), ex: ['귀를', '찌름', 'I heard a loud scream.', '크다는 뜻뿐, 파고드는 느낌이 빠진다.', '찌르듯 강한.'] },
+        { v: 'razor-sharp', k: '면도날 같은', base: 'SHARP', core: '매우 예리함', from: 'razor(면도날) + sharp', en: 'This blade is razor-sharp.', note: '극도로 예리하다. 기억력에도 쓴다(노트).', pic: () => RC(120, 110, 210, 70, 'var(--obj)', 'var(--obj-line)', 4) + RC(160, 134, 130, 22, 'var(--bg)', 'var(--obj-line)', 10) + LN('M120 110 h210 M120 180 h210', 'var(--bad)', 3) + LN('M350 100 l14 -14 M356 122 l18 -6', 'var(--gold)', 3), ex: ['극도로', '예리', 'This blade is very sharp.', '뜻은 간다. 면도날 같은 그림이 빠진다.', '극도로 예리한.'] },
+      ] },
+      { name: '무딘', items: [
+        { v: 'dull', k: '무딘 · 흐릿한', en: 'The knife is dull.', note: '날카로움이 없다. 지루하다 · 흐리다는 뜻도 있다.', from: 'dull(무디게 하다)과 모양이 같다', pic: () => KNIFE(false) + TOM(170, false), ex: ['안', '베인다', 'The knife is bad.', '나쁘다는 뜻뿐, 무딘 것이 안 나온다.', '무딘.'] },
+        { v: 'blunt', k: '날 · 끝이 뭉툭한', base: 'DULL', core: '날 · 끝이 무딤', from: '말이 직설적일 때도 쓴다', en: 'This knife is blunt. I need to sharpen it.', note: '칼 · 가위 · 연필 끝이 무디다(노트).', pic: () => [[90, true], [170, false]].map(([y, s]) => RC(150, y, 200, 36, s ? 'var(--fog)' : 'var(--gold)', 'var(--obj-line)') + '<path d="M150 ' + y + ' L' + (s ? '88 ' + (y + 18) : '116 ' + (y + 8) + ' q-10 10 0 20') + ' L150 ' + (y + 36) + ' z" fill="var(--wood)" stroke="var(--obj-line)"/>').join('') + tx(376, 114, 12, '뾰족', 'var(--muted)') + tx(376, 194, 12, '뭉툭', 'var(--accent)'), ex: ['끝이', '뭉툭', 'This knife is dull.', '많이 겹친다. 미국에서는 칼에 dull도 흔하다.', '날 · 끝이 무딘.'] },
+        { v: 'faded', k: '색이 바랜', base: 'DULL', core: '선명함이 옅어짐', from: 'fade(바래다) → faded', en: 'The colors in this photo are faded.', note: '색 · 기억이 옅어졌다. 꼭 오래되어야만 하는 것은 아니다(노트).', pic: () => PHOTO(80, 1) + AR(212, 140, 244, 140, 'var(--muted)', 3) + PHOTO(256, .25), ex: ['색이', '바램', 'The colors are dull.', '원래 칙칙한 색일 수도 있다.', '전보다 옅어진.'] },
+      ] },
+    ],
+    q: [['Q1. 날이?', '섰다 → <b>sharp</b> / 무디다 → <b>dull</b>'], ['Q2. 무엇이 예리한가?', '눈 · 감각 → <b>keen</b> / 소리 · 추위 → <b>piercing</b> / 극도의 날 → <b>razor-sharp</b>'], ['Q3. 무엇이 무딘가?', '날 · 끝 → <b>blunt</b> / 색 · 기억 → <b>faded</b>']],
+    body: ['<b>KEEN</b> — 눈을 가늘게 뜨고 찾기. <b>PIERCING</b> — 귀를 막기.', '<b>BLUNT</b> — 손가락 끝을 눌러 봐도 안 아픔. <b>FADED</b> — 사진을 들고 "옛날엔 선명했는데".'],
+    check: ['blunt와 dull의 지역 차이(미국에서 칼에 dull도 흔함)는 노트에 없다.', '노트 짝 piercing ↔ faded는 기억을 돕는 비교로만 보고 반대말로 적지 않았다.'],
+  });
+  const SCENES = {
+    cook: { btn: '부엌', place: '요리하는 부엌', pic: () => MEET(CR(450, 94, 14, BAD) + BX(480, 96, 50, 8)), lines: [['나', 'This knife is so <b>dull</b>.', '이 칼 너무 안 들어.', true], ['가족', 'Use this one. It\'s really <b>sharp</b>.', '이거 써. 아주 잘 들어.']], say: '칼의 짝은 <b>sharp ↔ dull · blunt</b>.' },
+    photo: { btn: '앨범', place: '옛 앨범', pic: () => MEET(BX(430, 70, 76, 38)), lines: [['친구', 'Is this you?', '이거 너야?'], ['나', 'Yes, but the colors have <b>faded</b>.', '응, 근데 색이 바랬어.', true]], say: '여기 have faded는 <b>동사</b>(바랬다), <span class="en">a faded photo</span>는 형용사.' },
+  };
+  const SLOTS = { first: ['sharp', 'be'], slots: { be: 'be 뒤', noun: '명사 앞', time: '시각 · 변할 때' }, verbs: {
+    sharp: { be: { ok: [['It', 's'], ['is', 'v'], ['sharp', 'a']], say: '날카롭다.' }, noun: { ok: [['a', 'x'], ['sharp', 'a'], ['pain', 'n']], say: '날카로운 통증.' }, time: { ok: [['at', 'x'], ['six', 'n'], ['sharp', 'd']], bad: [['at', 'x'], ['sharp', 'a'], ['six', 'n']], say: '"6시 정각" — 시각 <b>뒤</b>.' } },
+    dull: { be: { ok: [['The', 'x'], ['movie', 's'], ['was', 'v'], ['dull', 'a']], say: '지루했다.' }, noun: { ok: [['a', 'x'], ['dull', 'a'], ['knife', 'n']], bad: [['a', 'x'], ['knife', 'n'], ['dull', 'a']], say: '명사 앞.' }, time: { ok: [['It', 's'], ['got', 'v'], ['dull', 'a']], say: '무뎌졌다.' } },
+  } };
+</script>

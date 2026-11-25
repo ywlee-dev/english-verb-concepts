@@ -1,0 +1,42 @@
+<!-- title: STRONG ↔ WEAK 개념 -->
+<!-- pron: strong=/strɔːŋ/[스트**롱**]*, weak=/wiːk/[**위**크]*, #strong/powerful, #strong/robust, #strong/muscular, #weak/feeble, #weak/fragile, #weak/frail -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="08-bright-dark.html">BRIGHT ↔ DARK</a> · 다음: <a href="10-loud-quiet.html">LOUD ↔ QUIET</a></p>
+  <h1>STRONG ↔ WEAK — 같은 줄다리기, 다른 힘</h1>
+  <p class="lead">힘이 <b>세면</b> strong, <b>약하면</b> weak. 내는 힘인지, 버티는 힘인지, 몸인지에 따라 짝이 셋으로 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 강하거나 약한 장면이 바뀌는 그림|강한 쪽은 줄을 당기는 사람, 짐을 끄는 트럭, 바람을 견디는 다리, 근육 있는 팔이고 약한 쪽은 끌려가는 사람, 힘없는 목소리, 깨지기 쉬운 장식, 지팡이를 짚은 사람이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>힘이 드러나는 동사: <a href="../concepts/63-pull.html">63 PULL</a> · <a href="../concepts/06-nudge.html">06 PUSH 묶음</a> · <a href="../concepts/01-break.html">01 BREAK</a> (fragile하면 잘 깨진다)</li><li>자료: english-adjectives 노트의 strong · weak 묶음</li></ul>
+</main>
+<script>
+  const ROPE = (x1, x2) => LN('M' + x1 + ' 186 H' + x2, 'var(--wood)', 6);
+  const EXIST = adverbPage({ noun: '형용사',
+    start: 'robust',
+    groups: [
+      { name: '강한', items: [
+        { v: 'strong', k: '강한', en: 'Mina is strong.', note: '힘이 세거나 잘 버틴다. 커피 · 냄새 · 의견에도 쓴다.', from: 'strengthen(강하게 하다)과 짝', pic: () => GRD + ROPE(150, 340) + MAN(120, { f: 'smile', a: 'both', r: -12, c: 'var(--ok)' }) + MAN(360, { f: 'sad', a: 'down', r: -20, s: .9 }) + AR(250, 160, 200, 160, 'var(--accent)', 3), ex: ['힘이', '세다', 'Mina is big.', '크다는 뜻. 힘이 센지는 모른다.', '힘이 센.'] },
+        { v: 'powerful', k: '힘을 크게 내는', base: 'STRONG', core: '내는 힘 · 영향력', from: 'power(힘) + ful', en: 'This truck has a powerful engine.', note: '내는 힘이 크다. 연설 · 사람의 영향력에도(노트).', pic: () => GRD + RC(60, 130, 110, 90, 'var(--fog)') + LN('M170 190 H220', 'var(--wood)', 5) + RC(220, 150, 90, 70, 'var(--accent)', 'var(--obj-line)', 6) + '<path d="M310 170 h40 l24 28 v22 h-64 z" fill="var(--accent)" stroke="var(--obj-line)"/>' + CR(250, 226, 14, 'var(--obj-line)') + CR(346, 226, 14, 'var(--obj-line)') + CR(90, 226, 12, 'var(--obj-line)') + CR(146, 226, 12, 'var(--obj-line)') + AR(330, 130, 400, 130, 'var(--accent)', 4), ex: ['내는', '힘', 'This truck is strong.', '튼튼하다는 뜻일 수도 있다.', '큰 힘을 내는.'] },
+        { v: 'robust', k: '튼튼히 버티는', base: 'STRONG', core: '어려운 조건을 견딤', from: '라틴어 robustus(참나무 같은)', en: 'The bridge has a robust design.', note: '나쁜 조건에서도 잘 버틴다. 설계 · 시스템에도(노트).', pic: () => LN('M40 160 H410', 'var(--obj-line)', 9) + LN('M90 160 V230 M225 160 V230 M360 160 V230 M40 160 Q225 40 410 160', 'var(--obj-line)', 6) + LN('M50 76 h70 q16 0 12 -12 M60 96 h100', 'var(--water)', 4) + '<path d="M30 238 q30 -16 60 0 t60 0 t60 0 t60 0 t60 0 t60 0" fill="none" stroke="var(--water)" stroke-width="4"/>', ex: ['견디는', '힘', 'The bridge is powerful.', '틀리다. 다리는 힘을 내지 않고 버틴다.', '튼튼히 견디는.'] },
+        { v: 'muscular', k: '근육이 발달한', base: 'STRONG', core: '눈에 보이는 근육', from: 'muscle(근육) + ar', en: 'He has muscular arms.', note: '근육이 도드라진 <b>모습</b>(노트).', pic: () => '<path d="M80 220 q-4 -70 60 -84 q50 -40 92 4 q24 20 6 56 q-30 22 -70 10 q-30 34 -88 14 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="2"/><path d="M232 150 l30 -70 q20 -16 34 4 l-34 100 z" fill="var(--skin)" stroke="var(--obj-line)" stroke-width="2"/>' + CR(282, 74, 22, 'var(--skin)') + LN('M150 154 q26 -20 52 0', 'var(--obj-line)', 2), ex: ['근육', '모습', 'He has strong arms.', '많이 겹친다. 눈에 보이는 근육이 흐려진다.', '근육이 발달한.'] },
+      ] },
+      { name: '약한', items: [
+        { v: 'weak', k: '약한', en: 'Tom is weak.', note: '힘이 없거나 잘 못 버틴다. 커피 · 신호에도 쓴다.', from: 'weaken(약하게 하다)과 짝 · week(주)와 소리가 같다', pic: () => GRD + ROPE(150, 300) + MAN(110, { f: 'smile', a: 'both', c: 'var(--ok)' }) + '<g transform="rotate(-34 320 240)">' + MAN(320, { f: 'o', a: 'up' }) + '</g>', ex: ['힘이', '없다', 'Tom is small.', '작다는 뜻. 약한지는 모른다.', '힘이 약한.'] },
+        { v: 'feeble', k: '힘없는', base: 'WEAK', core: '낼 힘이 거의 없음', from: 'powerful의 반대쪽', en: 'I heard a feeble voice.', note: '목소리 · 시도에 힘이 없다(노트).', pic: () => GRD + MAN(150, { f: 'o', a: 'hug', r: 8 }) + SAYB(220, 124, '저기…', 10, 'var(--muted)') + SOUND(252, 160, 1, 'var(--fog)') + MAN(360, { f: 'flat', a: 'hip', c: 'var(--ok)' }), ex: ['낼 힘이', '없다', 'I heard a quiet voice.', '작다는 뜻. 힘이 없다는 느낌이 빠진다.', '힘없는.'] },
+        { v: 'fragile', k: '깨지기 쉬운', base: 'WEAK', core: '쉽게 손상됨', from: 'robust의 반대쪽', en: 'Be careful. This ornament is fragile.', note: '물건 · 관계가 손상되기 쉽다(노트).', pic: () => DESK(120, 210, 200) + '<path d="M196 200 q-10 -40 24 -60 q-30 -40 5 -60 q36 20 6 60 q34 20 24 60 z" fill="var(--water)" stroke="var(--obj-line)" stroke-width="1.5"/>' + LN('M226 150 l-6 14 l10 10 l-6 14', 'var(--bad)', 2) + RC(300, 70, 90, 46, 'var(--card)', 'var(--bad)') + tx(345, 98, 13, '취급 주의', 'var(--bad)', ' font-weight="600"'), ex: ['쉽게', '깨짐', 'This ornament is weak.', '어색하다. 깨지기 쉽다는 경고가 안 나온다.', '깨지기 쉬운.'] },
+        { v: 'frail', k: '몸이 연약한', base: 'WEAK', core: '사람의 몸이 여림', from: 'frailty(허약함)', en: 'He looked frail after his illness.', note: '사람 · 몸에 쓴다. 병 · 나이 뒤의 여린 몸(노트).', pic: () => GRD + MAN(210, { f: 'flat', a: 'fwd', r: 10, c: 'var(--fog)', s: .95 }) + LN('M262 178 V240', 'var(--wood)', 5) + LN('M256 178 q8 -10 16 0', 'var(--wood)', 5) },
+      ] },
+    ],
+    q: [['Q1. 힘이?', '세다 → <b>strong</b> / 약하다 → <b>weak</b>'], ['Q2. 내는 힘', '크다 → <b>powerful</b> ↔ 거의 없다 → <b>feeble</b>'], ['Q3. 버티는 힘', '견딘다 → <b>robust</b> ↔ 쉽게 깨진다 → <b>fragile</b>'], ['Q4. 사람의 몸', '근육 → <b>muscular</b> ↔ 연약 → <b>frail</b>']],
+    body: ['<b>POWERFUL</b> — 앞으로 힘껏 밀기. <b>ROBUST</b> — 다리를 벌리고 버티기. <b>MUSCULAR</b> — 알통 만들기.', '<b>FRAGILE</b> — 두 손으로 살살 받치기.'],
+    check: ['노트의 3×3 짝을 질문 표로 옮겼다. frail의 병 · 나이는 흔한 장면일 뿐 필수 원인으로 적지 않았다.'],
+  });
+  const SCENES = {
+    pack: { btn: '택배', place: '택배 상자', pic: () => MEET(BX(430, 64, 70, 44, 'var(--wood)')), lines: [['직원', 'What\'s inside?', '안에 뭐가 들었어요?'], ['나', 'Glass. It\'s <b>fragile</b>.', '유리예요. 깨지기 쉬워요.', true]], say: '상자 스티커의 FRAGILE = 취급 주의.' },
+    cafe: { btn: '카페', place: '카페', pic: () => MEET(BX(448, 78, 30, 30)), lines: [['친구', 'How\'s the coffee?', '커피 어때?'], ['나', 'Too <b>strong</b>. I like it <b>weak</b>.', '너무 진해. 난 연한 게 좋아.', true]], say: '커피의 진함도 <b>strong ↔ weak</b>.' },
+  };
+  const SLOTS = { first: ['strong', 'be'], slots: { be: 'be 뒤', noun: '명사 앞', make: '만들 때' }, verbs: {
+    strong: { be: { ok: [['She', 's'], ['is', 'v'], ['strong', 'a']], say: '강하다.' }, noun: { ok: [['a', 'x'], ['strong', 'a'], ['wind', 'n']], bad: [['a', 'x'], ['strong', 'a'], ['rain', 'n']], say: '바람은 strong, 비는 보통 <b>heavy</b>.' }, make: { ok: [['It', 's'], ['makes', 'v'], ['you', 'o'], ['strong', 'a']], bad: [['It', 's'], ['makes', 'v'], ['you', 'o'], ['strongly', 'd']], say: 'make + 목적어 + <b>형용사</b>.' } },
+    fragile: { be: { ok: [['It', 's'], ['is', 'v'], ['fragile', 'a']], say: '깨지기 쉽다.' }, noun: { ok: [['a', 'x'], ['fragile', 'a'], ['vase', 'n']], bad: [['a', 'x'], ['vase', 'n'], ['fragile', 'a']], say: '명사 앞.' }, make: { ok: [['Handle', 'v'], ['it', 'o'], ['carefully', 'd']], say: '다루는 방식은 <b>부사</b> carefully.' } },
+  } };
+</script>

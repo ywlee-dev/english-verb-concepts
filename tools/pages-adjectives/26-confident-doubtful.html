@@ -1,0 +1,40 @@
+<!-- title: CONFIDENT · SURE ↔ DOUBTFUL 개념 -->
+<!-- pron: confident=/ˈkɑːn.fə.dənt/[**칸**피던트]*, sure=/ʃʊr/[**슈**어]*, doubtful=/ˈdaʊt.fəl/[**다**우트펄]*, #confident/certain, #confident/convinced, #doubtful/skeptical, #doubtful/unsure -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="25-brave-afraid.html">BRAVE ↔ AFRAID</a> · 다음: <a href="27-interested-bored.html">INTERESTED ↔ BORED</a></p>
+  <h1>CONFIDENT · SURE ↔ DOUBTFUL — 같은 "3시"</h1>
+  <p class="lead">약속이 3시인지 <b>믿으면</b> sure, <b>못 믿으면</b> doubtful. 나를 믿는지, 설명을 듣고 믿게 됐는지, 주장을 의심하는지, 내가 못 정했는지에 따라 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 확신과 의심의 장면이 바뀌는 그림|확신 쪽은 발표하는 사람, 고개를 끄덕이는 사람, 달력을 확인한 사람, 시연을 본 사람이고 의심 쪽은 갸웃한 사람, 광고를 보는 사람, 갈림길의 사람이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>믿음과 만나는 동사: <a href="../concepts/22-know.html">22 KNOW</a> · <a href="../concepts/23-think.html">23 THINK</a> · <a href="../concepts/58-agree.html">58 AGREE</a></li><li>자료: english-adjectives 노트의 confident · doubtful 묶음</li></ul>
+</main>
+<script>
+  const QM = (x, y, s, c) => tx(x, y, s || 30, '?', c || 'var(--bad)', ' font-weight="700"');
+  const EXIST = adverbPage({ noun: '형용사', start: 'convinced',
+    groups: [
+      { name: '확신', items: [
+        { v: 'confident', k: '자신 있는', en: 'I\'m confident about the presentation.', note: '잘될 거라 믿는다. 나 자신을 믿을 때 많이 쓴다.', from: 'confidence(자신감)', pic: () => GRD + RC(220, 50, 180, 110, 'var(--card)') + LN('M240 140 l34 -30 l30 16 l60 -50', 'var(--accent)', 4) + MAN(140, { f: 'smile', a: 'point', c: 'var(--ok)', s: 1.1 }), ex: ['잘될', '거라 믿음', 'I like the presentation.', '좋아한다는 뜻. 자신이 안 나온다.', '자신 있는.'] },
+        { v: 'sure', k: '확실히 믿는', en: 'I\'m sure it\'s at three.', note: '가장 편한 말. 대답 "Sure!"는 "그럼요".', from: 'surely · make sure(확인하다)', pic: () => GRD + MAN(150, { f: 'smile', a: 'hip', s: 1.1 }) + CLOCK(310, 120, 46, 0) + tick(360, 160), ex: ['그렇게', '믿음', 'I think it\'s at three.', '아닐 수도 있다는 느낌이 남는다.', '확실히 믿는.'] },
+        { v: 'certain', k: '의심 없이 확신하는', base: 'SURE', core: '지금 의심이 없음', from: 'certainty(확실함)와 짝', en: 'I\'m certain we agreed on three.', note: 'sure보다 조금 세고 격식 있다. <b>실제로 맞는지는 다른 문제</b>(노트).', pic: () => GRD + MAN(130, { f: 'smile', a: 'point', c: 'var(--ok)' }) + RC(220, 70, 170, 140, 'var(--card)') + RC(220, 70, 170, 28, 'var(--accent)', 'none') + CR(305, 154, 34, 'none', 'var(--bad)') + tx(305, 162, 22, '3시', 'var(--text)', ' font-weight="700"'), ex: ['의심', '없음', 'I\'m sure we agreed on three.', '거의 같다. certain이 조금 더 단단하다.', '의심 없이 믿는.'] },
+        { v: 'convinced', k: '믿게 된 · 납득한', base: 'SURE', core: '그 판단이 맞다고 믿음', from: 'convince(납득시키다) → -d', en: 'I\'m convinced this plan will work.', note: '근거를 보고 믿게 됨. <b>처음에 반대했을 필요는 없다</b>(노트).', pic: () => GRD + RC(190, 66, 90, 60, 'var(--card)') + LN('M200 116 l20 -16 l18 8 l30 -30', 'var(--ok)', 4) + MAN(235, { s: .8, a: 'point' }) + AR(292, 150, 322, 150, 'var(--muted)', 2) + MAN(366, { f: 'smile', c: 'var(--ok)', s: .9 }) + MAN(90, { f: 'flat', s: .9 }) + QM(90, 112, 24) + tick(360, 116), ex: ['믿게', '됨', 'I hope this plan will work.', '바란다는 뜻. 믿음이 안 나온다.', '맞다고 믿는.'] },
+      ] },
+      { name: '의심', items: [
+        { v: 'doubtful', k: '의심스러운', en: 'I\'m doubtful about the plan.', note: '잘될지 의심한다. 일이 <b>불확실할 때도</b> 쓴다. b는 소리 나지 않는다.', from: 'doubt(의심) + ful', pic: () => GRD + MAN(150, { f: 'flat', a: 'hug', r: -6, s: 1.1 }) + QM(206, 104, 36) + PAPER(280, 90, 100, 120, 7), ex: ['잘될지', '의심', 'I don\'t like the plan.', '싫다는 뜻. 의심이 안 나온다.', '의심스러운.'] },
+        { v: 'skeptical', k: '쉽게 안 믿는', base: 'DOUBTFUL', core: '주장에 근거를 요구', from: 'skepticism(회의)과 짝', en: 'I\'m skeptical of that claim.', note: '<b>남의 주장</b>을 확인 전엔 안 믿는다. 거짓이라 단정하는 것은 아니다(노트).', pic: () => GRD + RC(220, 60, 180, 120, 'var(--gold)') + tx(310, 106, 17, '일주일 만에', '#333', ' font-weight="700"') + tx(310, 142, 22, '실력 2배!', '#333', ' font-weight="700"') + MAN(130, { f: 'flat', a: 'hip' }) + QM(174, 112, 26), ex: ['주장을', '안 믿음', 'I\'m unsure about that claim.', '내가 모르겠다는 뜻. 주장을 따져 보는 태도가 빠진다.', '쉽게 안 믿는.'] },
+        { v: 'unsure', k: '못 정한', base: 'DOUBTFUL', core: '내 판단이 안 섬', from: 'un + sure', en: 'I\'m unsure which option to choose.', note: '<b>내 선택</b>에 확신이 없다(노트).', pic: () => LN('M226 240 V170 L110 80 M226 170 L340 80', 'var(--fog)', 22) + MAN(226, { y: 236, s: .7, f: 'flat', a: 'up' }) + QM(90, 74, 26, 'var(--accent)') + QM(362, 74, 26, 'var(--accent)') },
+      ] },
+    ],
+    q: [['Q1. 믿나?', '믿음 → <b>sure · confident</b> / 의심 → <b>doubtful</b>'], ['Q2. 어떤 확신?', '나 · 잘될 일 → <b>confident</b> / 의심 없음 → <b>certain</b> / 근거로 믿게 됨 → <b>convinced</b>'], ['Q3. 어떤 의심?', '남의 주장 → <b>skeptical</b> / 내 선택 → <b>unsure</b>']],
+    body: ['<b>CONFIDENT</b> — 가슴 펴기. <b>CONVINCED</b> — 갸웃하다 크게 끄덕이기.', '<b>SKEPTICAL</b> — 한쪽 눈썹 올리기. <b>UNSURE</b> — 양손 번갈아 들기.'],
+    check: ['노트 식은 certain을 "객관적 근거", convinced를 "설득 과정"이라 하지만, 같은 노트 앞부분이 둘 다 필수가 아니라고 해 그쪽을 따랐다.', 'confident와 sure를 "나를 믿음 / 사실을 믿음"으로 나눈 것은 노트에 없는 풀이다(둘은 겹친다).'],
+  });
+  const SCENES = {
+    meet: { btn: '약속', place: '약속 시간 확인', pic: () => MEET(CLOCK(465, 80, 22, 0)), lines: [['친구', 'Are you <b>sure</b> it\'s at three?', '3시 맞아 확실해?'], ['나', 'Yes, I\'m <b>certain</b>.', '응, 확실해.', true]], say: '물을 때는 <b>Are you sure?</b>가 가장 흔하다.' },
+    ad: { btn: '광고', place: '광고를 보며', pic: () => MEET(BX(440, 70, 50, 38, 'var(--gold)')), lines: [['친구', 'This app doubles your score!', '이 앱이면 점수가 두 배래!'], ['나', 'I\'m <b>skeptical</b>.', '글쎄, 못 믿겠는데.', true]], say: '주장을 의심 — <b>skeptical</b>.' },
+  };
+  const SLOTS = { first: ['sure', 'prep'], slots: { be: '문장과 함께', prep: '명사와 함께', noun: '명사 앞' }, verbs: {
+    sure: { be: { ok: [['I', 's'], ['am', 'b'], ['sure', 'a'], ['(that)', 'x'], ['he', 's'], ['left', 'v']], say: 'sure + 문장.' }, prep: { ok: [['I', 's'], ['am', 'b'], ['sure', 'a'], ['of', 'x'], ['it', 'o']], bad: [['I', 's'], ['am', 'b'], ['sure', 'a'], ['it', 'o']], say: 'sure <b>of · about</b>.' }, noun: { ok: [['a', 'x'], ['sure', 'a'], ['sign', 'n']], say: '확실한 신호.' } },
+    convinced: { be: { ok: [['I', 's'], ['am', 'b'], ['convinced', 'a']], bad: [['I', 's'], ['am', 'b'], ['convincing', 'a']], say: '내가 믿으면 <b>-ed</b>.' }, prep: { ok: [['convinced', 'a'], ['of', 'x'], ['it', 'o']], say: 'convinced <b>of</b>.' }, noun: { ok: [['a', 'x'], ['convincing', 'a'], ['reason', 'n']], say: '믿게 <b>만들면</b> -ing.' } },
+  } };
+</script>

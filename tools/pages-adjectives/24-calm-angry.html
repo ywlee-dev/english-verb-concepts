@@ -1,0 +1,42 @@
+<!-- title: CALM ↔ ANGRY 개념 -->
+<!-- pron: calm=/kɑːm/[**캄**]*, angry=/ˈæŋ.ɡri/[**앵**그리]*, #calm/peaceful, #calm/serene, #calm/tranquil, #angry/irritated, #angry/furious, #angry/livid -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="23-happy-sad.html">HAPPY ↔ SAD</a> · 다음: <a href="25-brave-afraid.html">BRAVE ↔ AFRAID</a></p>
+  <h1>CALM ↔ ANGRY — 같은 소음, 다른 반응</h1>
+  <p class="lead">같은 일 앞에서 <b>가라앉아 있으면</b> calm, <b>끓어오르면</b> angry. 잔잔한 것이 장소인지 사람인지, 화가 짜증인지 격분인지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 차분하고 화난 장면이 바뀌는 그림|차분한 쪽은 숨을 고르는 사람, 조용한 공원, 평온한 얼굴, 새벽 호수이고 화난 쪽은 화난 사람, 딸깍대는 펜, 깨진 약속, 몰래 내려진 결정이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>마음이 움직이는 동사: <a href="../concepts/27-feel.html">27 FEEL</a> · <a href="../concepts/16-keep.html">16 KEEP</a> (keep calm) · <a href="../concepts/11-get.html">11 GET</a> (get angry)</li><li>자료: english-adjectives 노트의 calm · angry 묶음</li></ul>
+</main>
+<script>
+  const BROW = (x, y, s) => LN('M' + (x - 14 * s) + ' ' + (y - 6 * s) + ' l10 ' + 6 * s + ' M' + (x + 14 * s) + ' ' + (y - 6 * s) + ' l-10 ' + 6 * s, '#333', 3);
+  const STEAM = (x, y, c) => LN('M' + (x - 34) + ' ' + y + ' q-10 -8 0 -16 t0 -16 M' + (x + 34) + ' ' + y + ' q10 -8 0 -16 t0 -16', c || 'var(--bad)', 4);
+  const EXIST = adverbPage({ noun: '형용사', start: 'irritated',
+    groups: [
+      { name: '차분한', items: [
+        { v: 'calm', k: '차분한', en: 'He stayed calm.', note: '동요하지 않는다. 바다 · 날씨에도 쓴다. <b>l은 소리 나지 않는다.</b>', from: 'calm down(진정하다)', pic: () => GRD + MAN(226, { f: 'smile', a: 'hug', s: 1.2, c: 'var(--ok)' }) + LN('M120 90 h40 M110 110 h30 M300 90 h40 M312 110 h30', 'var(--water)', 3), ex: ['동요', '없음', 'He was not angry.', '화가 없다는 뜻뿐, 차분함이 안 나온다.', '차분한.'] },
+        { v: 'peaceful', k: '평화로운', base: 'CALM', core: '소란 · 다툼이 없음', from: 'peace(평화) + ful', en: 'It\'s peaceful here.', note: '장소 · 시간이 조용하고 편하다. 다툼이 <b>먼저 있어야 하는 것은 아니다</b>(노트).', pic: () => GRD + TREE(90) + TREE(370) + RC(170, 196, 120, 8, 'var(--wood)') + LN('M184 204 V240 M276 204 V240', 'var(--wood)', 6) + MAN(230, { y: 212, s: .8, f: 'smile', c: 'var(--ok)' }) + LN('M200 70 q8 -8 16 0 q8 -8 16 0', 'var(--obj-line)', 2), ex: ['소란', '없음', 'It\'s quiet here.', '소리만 말한다. 마음 편함이 빠진다.', '평화로운.'] },
+        { v: 'serene', k: '평온한', base: 'CALM', core: '고요한 얼굴 · 모습', from: 'serenity(평온)와 짝', en: 'She looked serene despite the delay.', note: '얼굴 · 태도 · 장소가 고요하다. 훈련이 원인일 필요는 없다(노트). 글에 많다.', pic: () => GRD + MAN(150, { f: 'smile', s: 1.15, a: 'hug', c: 'var(--sleeve)' }) + RC(250, 70, 140, 60, '#222831') + tx(320, 106, 18, '지연 40분', 'var(--gold)', ' font-weight="700"') + MAN(330, { s: .7, f: 'sad', a: 'up', c: 'var(--fog)' }), ex: ['고요한', '얼굴', 'She looked calm.', '많이 겹친다. 맑고 고요한 인상이 약해진다.', '평온한.'] },
+        { v: 'tranquil', k: '잔잔한', base: 'CALM', core: '풍경이 고요함', from: 'tranquility(고요)와 짝', en: 'The lake was tranquil at dawn.', note: '주로 풍경 · 분위기. 움직임이 완전히 없을 필요는 없다(노트).', pic: () => CR(225, 130, 34, 'var(--gold)', 'none') + '<path d="M30 130 l70 -50 l60 50 M290 130 l60 -60 l70 60" fill="none" stroke="var(--obj-line)" stroke-width="2"/>' + RC(30, 130, 390, 110, 'var(--water)', 'none', 0) + LN('M195 160 h60 M180 184 h90 M200 208 h50', 'var(--gold)', 3), ex: ['풍경이', '고요', 'The lake was quiet.', '소리만 말한다. 잔잔한 물결이 빠진다.', '잔잔한.'] },
+      ] },
+      { name: '화난', items: [
+        { v: 'angry', k: '화난', en: 'He is angry.', note: '가장 넓은 말. 미국 말에서는 mad도 많이 쓴다.', from: 'anger(화)와 짝', pic: () => GRD + MAN(226, { f: 'sad', a: 'hip', s: 1.2, c: 'var(--bad)' }) + BROW(226, 112, 1), ex: ['화가', '남', 'He is upset.', '속상하다는 뜻일 수도 있다.', '화난.'] },
+        { v: 'irritated', k: '짜증 난', base: 'ANGRY', core: '거슬려서 신경 쓰임', from: 'irritate(짜증 나게 하다) → -d', en: 'I\'m getting irritated by that noise.', note: '작은 짜증. 오래 쌓여야만 하는 것은 아니다. 피부에도 쓴다(노트).', pic: () => GRD + DESK(60, 330, 190) + MAN(140, { s: .95, f: 'flat', a: 'hug' }) + BROW(140, 142, .8) + MAN(310, { s: .95, f: 'smile', a: 'fwd', c: 'var(--ok)' }) + LN('M276 178 l-12 -16', 'var(--accent)', 5) + tx(232, 116, 14, '딸깍 딸깍', 'var(--accent)', ' font-weight="700"'), ex: ['거슬려', '짜증', 'I\'m angry about that noise.', '큰 화로 들린다.', '짜증 난.'] },
+        { v: 'furious', k: '몹시 화난', base: 'ANGRY', core: '매우 큰 분노', from: 'fury(격노) + ous', en: 'She was furious about the broken promise.', note: '분노가 매우 크다. 소리를 안 질러도 된다(노트).', pic: () => GRD + MAN(170, { f: 'o', a: 'up', s: 1.1, c: 'var(--bad)' }) + BROW(170, 122, 1) + STEAM(170, 130) + PAPER(290, 110, 44, 90, 5) + PAPER(346, 122, 44, 90, 5) + LN('M336 104 l6 22 l-8 18 l8 20 l-6 30', 'var(--bad)', 3), ex: ['매우 큰', '화', 'She was angry.', '얼마나 큰 화인지 빠진다.', '몹시 화난.'] },
+        { v: 'livid', k: '격분한', base: 'ANGRY', core: '격한 분노', from: '라틴어 lividus(납빛의)', en: 'He was livid when he found out.', note: '<b>furious와 크게 겹친다.</b> 얼굴빛이 꼭 변하는 것은 아니다(노트).', pic: () => GRD + MAN(130, { f: 'shut', a: 'hip', s: 1.1, c: 'var(--sleeve)' }) + BROW(130, 122, 1) + STEAM(130, 130, 'var(--accent2)') + DESK(230, 170, 190) + [264, 315, 366].map((x) => MAN(x, { s: .6, f: 'smile' })).join('') + RC(270, 60, 90, 40, 'var(--card)') + tx(315, 85, 13, '이미 결정', 'var(--bad)', ' font-weight="600"'), ex: ['격한', '화', 'He was irritated.', '작은 짜증이 되어 버린다.', '격분한.'] },
+      ] },
+    ],
+    q: [['Q1. 마음이?', '가라앉음 → <b>calm</b> / 끓음 → <b>angry</b>'], ['Q2. 고요한 무엇?', '장소 · 시간 → <b>peaceful</b> / 얼굴 · 태도 → <b>serene</b> / 풍경 → <b>tranquil</b>'], ['Q3. 얼마나 화났나?', '짜증 → <b>irritated</b> / 매우 큼 → <b>furious · livid</b>']],
+    body: ['<b>CALM</b> — 천천히 숨 내쉬기. <b>TRANQUIL</b> — 손바닥으로 잔잔한 물결.', '<b>IRRITATED</b> — 관자놀이 누르기. <b>FURIOUS</b> — 두 주먹 꽉.'],
+    check: ['노트 식의 livid "안색까지 변하는"은 같은 노트 앞부분이 필수가 아니라고 해 뺐다. furious와 livid를 순서로 줄 세우지 않았다.', 'serene · peaceful · tranquil은 서로 겹친다고 노트가 적었다. mad는 노트에 없다.'],
+  });
+  const SCENES = {
+    noise: { btn: '소음', place: '공부하는 방', pic: () => MEET(BX(430, 92, 70, 16)), lines: [['나', 'That noise is <b>irritating</b> me.', '저 소리 거슬려.', true], ['친구', '<b>Calm</b> down. I\'ll close the window.', '진정해. 창문 닫을게.']], say: '여기 irritating · calm down은 <b>동사</b> 쓰임. 상태면 <span class="en">I\'m irritated.</span>' },
+    park: { btn: '공원', place: '아침 공원', pic: () => FL + P(380, 150, 1.4, 'var(--ok)') + P(460, 150, 1.4, 'var(--sleeve)'), lines: [['친구', 'I love it here.', '여기 좋다.'], ['나', 'Yeah, it\'s so <b>peaceful</b>.', '응, 참 평화롭다.', true]], say: '장소의 느낌은 <b>It\'s peaceful.</b>' },
+  };
+  const SLOTS = { first: ['calm', 'stay'], slots: { be: 'be 뒤', stay: '유지 · 변할 때', prep: '누구에게' }, verbs: {
+    calm: { be: { ok: [['The', 'x'], ['sea', 's'], ['is', 'v'], ['calm', 'a']], say: '바다가 잔잔하다.' }, stay: { ok: [['Stay', 'v'], ['calm', 'a']], bad: [['Stay', 'v'], ['calmly', 'd']], say: 'stay · keep 뒤는 <b>형용사</b>.' }, prep: { ok: [['He', 's'], ['answered', 'v'], ['calmly', 'd']], say: '대답하는 방식은 <b>부사</b>.' } },
+    angry: { be: { ok: [['I', 's'], ['am', 'b'], ['angry', 'a']], say: '화났다.' }, stay: { ok: [['Don\'t', 'x'], ['get', 'v'], ['angry', 'a']], say: '화내지 마 — get + 형용사.' }, prep: { ok: [['I', 's'], ['am', 'b'], ['angry', 'a'], ['with', 'x'], ['him', 'o']], bad: [['I', 's'], ['am', 'b'], ['angry', 'a'], ['to', 'x'], ['him', 'o']], say: '사람에게는 <b>with · at</b>.' } },
+  } };
+</script>

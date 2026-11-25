@@ -1,0 +1,43 @@
+<!-- title: REAL · TRUE ↔ FAKE · FALSE 개념 -->
+<!-- pron: real=/ˈriː.əl/[**리**얼]*, true=/truː/[**트루**]*, fake=/feɪk/[**페**이크]*, false=/fɔːls/[**폴**스]*, #real/genuine, #real/authentic, #fake/artificial, #fake/counterfeit, #fake/bogus -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="31-good-bad.html">GOOD ↔ BAD</a> · 다음: <a href="33-important-trivial.html">IMPORTANT ↔ TRIVIAL</a></p>
+  <h1>REAL · TRUE ↔ FAKE · FALSE — 진짜 꽃, 맞는 말</h1>
+  <p class="lead"><b>물건</b>이 진짜면 real ↔ fake, <b>말</b>이 맞으면 true ↔ false. 가짜 쪽은 사람이 만든 것, 베낀 것, 꾸며 낸 말이 서로 다르다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 진짜와 가짜의 장면이 바뀌는 그림|진짜 쪽은 진짜 꽃, 맞는 말, 진심 어린 걱정, 진품 서명이고 가짜 쪽은 가짜 꽃, 틀린 말, 플라스틱 식물, 위조 가방, 꾸며 낸 구인 광고다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>진짜를 가리는 동사: <a href="../concepts/26-find.html">26 FIND</a> (check · verify) · <a href="../concepts/22-know.html">22 KNOW</a> · <a href="../concepts/13-make.html">13 MAKE</a> (made of)</li><li>자료: english-adjectives 노트의 real · fake 묶음</li></ul>
+</main>
+<script>
+  const FLW = (x, c, live) => LN('M' + x + ' 240 V130', live ? 'var(--ok)' : 'var(--fog)', 6) + [0, 1, 2, 3, 4].map((i) => { const a = i * 1.2566; return CR(x + 22 * Math.cos(a), 108 + 22 * Math.sin(a), 15, c); }).join('') + CR(x, 108, 12, 'var(--gold)');
+  const BAG = (x, t, c) => '<path d="M' + x + ' 140 h110 l12 90 h-134 z" fill="' + c + '" stroke="var(--obj-line)" stroke-width="2"/>' + LN('M' + (x + 26) + ' 140 q29 -60 58 0', 'var(--obj-line)', 4) + tx(x + 55, 196, 18, t, '#fff', ' font-weight="700"');
+  const EXIST = adverbPage({ noun: '형용사', start: 'counterfeit',
+    groups: [
+      { name: '진짜', items: [
+        { v: 'real', k: '진짜인', en: 'These flowers are real.', note: '물건 · 사람 · 일이 진짜다. really는 "정말로".', from: 'reality(현실)', pic: () => GRD + FLW(225, 'var(--bad)', true) + '<ellipse cx="250" cy="180" rx="22" ry="9" fill="var(--ok)"/>' + '<g transform="translate(300 84)"><ellipse cx="0" cy="0" rx="13" ry="8" fill="var(--gold)" stroke="#333"/><path d="M-4 -8 v16 M4 -8 v16" stroke="#333" stroke-width="3"/><ellipse cx="0" cy="-11" rx="8" ry="6" fill="#fff" stroke="#333"/></g>', ex: ['진짜', '', 'These flowers are fresh.', '싱싱하다는 뜻이 된다.', '진짜인.'] },
+        { v: 'true', k: '사실인', en: 'The story is true.', note: '<b>말 · 이야기</b>가 사실과 맞다.', from: 'truth(사실) · truly(정말로)', pic: () => GRD + MAN(120, { f: 'o', a: 'point' }) + SAYB(170, 80, '눈이 와', 14) + RC(280, 70, 110, 110, 'var(--water)') + [300, 330, 362, 316, 350].map((x, i) => CR(x, 92 + i * 17, 5, '#fff', 'none')).join('') + tick(336, 212), ex: ['사실과', '맞음', 'The story is real.', '뜻은 통한다. 말의 참거짓은 보통 true.', '사실인.'] },
+        { v: 'genuine', k: '가식 없는 · 진짜인', base: 'REAL', core: '속까지 진짜', from: 'genuinely(진심으로)', en: 'Her concern was genuine.', note: '감정 · 태도에 가식이 없다. 가죽 같은 물건에도(노트).', pic: () => GRD + MAN(160, { f: 'sad', a: 'both', c: 'var(--ok)' }) + HEART(160, 180) + MAN(280, { f: 'flat', a: 'hug', s: .9 }) + tx(226, 78, 13, '아무도 안 볼 때도', 'var(--muted)'), ex: ['가식', '없음', 'Her concern was true.', '어색하다. 마음은 genuine · sincere.', '가식 없는.'] },
+        { v: 'authentic', k: '진품인 · 정통인', base: 'REAL', core: '출처가 진짜', from: 'authenticity(진위)와 짝', en: 'Is this signature authentic?', note: '서명 · 작품 · 음식의 <b>출처</b>가 진짜다. genuine과 겹친다(노트).', pic: () => RC(110, 60, 190, 140, 'var(--card)', 'var(--wood)', 2) + CR(170, 116, 24, 'var(--gold)') + '<path d="M120 190 l60 -50 l40 30 l30 -24 l44 44 z" fill="var(--ok)"/>' + LN('M240 186 q8 -14 14 0 t14 -4 t14 2', 'var(--bad)', 3) + CR(266, 182, 30, 'none', 'var(--accent)') + LN('M288 204 l40 36', 'var(--accent)', 6) + tick(340, 100), ex: ['출처', '진짜', 'Is this signature good?', '잘 썼느냐는 뜻이 된다.', '진품인.'] },
+      ] },
+      { name: '가짜', items: [
+        { v: 'fake', k: '가짜인', en: 'These flowers are fake.', note: '진짜처럼 보이지만 아니다. 두루 쓴다.', from: 'fake(가짜 · 꾸미다)', pic: () => GRD + FLW(225, 'var(--bad)', false) + LN('M225 160 l34 16', 'var(--fog)', 2) + RC(258, 168, 92, 28, 'var(--bg)', 'var(--bad)') + tx(304, 187, 13, '플라스틱', 'var(--bad)'), ex: ['진짜', '아님', 'These flowers are old.', '오래됐다는 뜻이 된다.', '가짜인.'] },
+        { v: 'false', k: '거짓인', en: 'The story is false.', note: '<b>말 · 정보</b>가 사실과 다르다. 시험의 True / False.', from: 'falsely(거짓으로)', pic: () => GRD + MAN(120, { f: 'o', a: 'point' }) + SAYB(170, 80, '눈이 와', 14) + RC(280, 70, 110, 110, 'var(--water)') + CR(336, 116, 24, 'var(--gold)', 'none') + CROSS(336, 212, 10), ex: ['사실과', '다름', 'The story is fake.', '지어냈다는 비난이 세진다.', '거짓인.'] },
+        { v: 'artificial', k: '인공의', base: 'FAKE와 이웃', core: '사람이 만듦', from: 'AI = artificial intelligence', en: 'These plants are artificial.', note: '자연물이 아니라 만든 것. <b>꼭 속임수는 아니다</b>(노트).', pic: () => DESK(110, 230, 200) + RC(190, 160, 70, 40, 'var(--wood)') + [200, 215, 225, 235, 250].map((x, i) => LN('M225 160 Q' + x + ' 110 ' + (150 + i * 38) + ' 90', 'var(--ok)', 7)).join('') + RC(296, 170, 44, 20, 'var(--card)') + tx(318, 184, 11, '₩9,900', 'var(--text)'), ex: ['사람이', '만듦', 'These plants are counterfeit.', '틀리다. 위조품이라는 뜻이 된다.', '인공의.'] },
+        { v: 'counterfeit', k: '위조된', base: 'FAKE', core: '진품을 베낌', from: '동사 counterfeit(위조하다)와 모양이 같다', en: 'They sold counterfeit bags.', note: '돈 · 상표 · 물건을 <b>베껴</b> 만든 위조품(노트).', pic: () => BAG(66, 'LUMO', 'var(--obj)') + BAG(264, 'LUNO', '#4a5a6a') + tx(121, 262, 12, '진품', 'var(--ok)') + tx(319, 262, 12, '위조', 'var(--bad)') + CR(330, 190, 14, 'none', 'var(--bad)'), ex: ['진품을', '베낌', 'They sold artificial bags.', '인공 재료라는 뜻처럼 들린다.', '위조된.'] },
+        { v: 'bogus', k: '꾸며 낸', base: 'FAKE', core: '주장 · 내용이 가짜', from: '말하듯 쓰는 낱말', en: 'The job posting was bogus.', note: '주장 · 자격 · 광고의 <b>내용</b>이 가짜(노트).', pic: () => RC(120, 50, 210, 180, 'var(--card)') + tx(225, 90, 18, '구인', 'var(--text)', ' font-weight="700"') + tx(225, 124, 14, '하루 1시간', 'var(--text)') + tx(225, 150, 14, '월 1,000만 원', 'var(--accent)', ' font-weight="700"') + tx(225, 180, 12, '회사: 없는 주소', 'var(--bad)') },
+      ] },
+    ],
+    q: [['Q1. 물건인가 말인가?', '물건 → <b>real ↔ fake</b> / 말 → <b>true ↔ false</b>'], ['Q2. 어떻게 진짜인가?', '마음 · 속까지 → <b>genuine</b> / 출처 → <b>authentic</b>'], ['Q3. 어떻게 가짜인가?', '사람이 만듦 → <b>artificial</b> / 베낌 → <b>counterfeit</b> / 꾸며 낸 내용 → <b>bogus</b>']],
+    body: ['<b>REAL</b> — 꽃향기 맡기. <b>AUTHENTIC</b> — 돋보기로 보기.', '<b>BOGUS</b> — 고개를 저으며 종이 구기기.'],
+    check: ['real ↔ fake를 물건, true ↔ false를 말로 나눈 것은 노트가 하나로 묶은 것을 나눈 풀이다.', '그림 속 상표 LUMO는 지어낸 것이다.'],
+  });
+  const SCENES = {
+    plant: { btn: '화분', place: '친구 집 화분', pic: () => MEET('<path d="M448 108 l-4 -22 h40 l-4 22 z" fill="var(--wood)"/>'), lines: [['나', 'Is this plant <b>real</b>?', '이 식물 진짜야?', true], ['친구', 'No, it\'s <b>fake</b>.', '아니, 가짜야.']], say: '말할 때는 artificial보다 <b>fake</b>가 흔하다.' },
+    news: { btn: '소문', place: '소문을 들은 날', pic: () => MEET(''), lines: [['친구', 'Is it <b>true</b> that you\'re moving?', '이사 간다는 거 사실이야?'], ['나', 'No, that\'s not <b>true</b>.', '아니, 사실 아니야.', true]], say: '소문 · 말은 <b>true</b>.' },
+  };
+  const SLOTS = { first: ['true', 'that'], slots: { be: 'be 뒤', that: '문장과 함께', noun: '명사 앞' }, verbs: {
+    true: { be: { ok: [['That', 's'], ['\'s', 'v'], ['true', 'a']], say: '맞아.' }, that: { ok: [['Is', 'v'], ['it', 's'], ['true', 'a'], ['that', 'x'], ['he', 's'], ['left?', 'v']], bad: [['Is', 'v'], ['it', 's'], ['real', 'a'], ['that', 'x'], ['he', 's'], ['left?', 'v']], say: '말의 참거짓은 <b>true</b>.' }, noun: { ok: [['a', 'x'], ['true', 'a'], ['story', 'n']], say: '실화.' } },
+    real: { be: { ok: [['Is', 'v'], ['it', 's'], ['real?', 'a']], say: '진짜야?' }, that: { ok: [['It', 's'], ['\'s', 'v'], ['really', 'd'], ['good', 'a']], say: '"정말 좋다"는 부사 <b>really</b>.' }, noun: { ok: [['real', 'a'], ['gold', 'n']], bad: [['true', 'a'], ['gold', 'n']], say: '진짜 금은 보통 <b>real</b> gold.' } },
+  } };
+</script>

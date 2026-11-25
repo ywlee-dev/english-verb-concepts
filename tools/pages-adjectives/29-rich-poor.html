@@ -1,0 +1,42 @@
+<!-- title: RICH ↔ POOR 개념 -->
+<!-- pron: rich=/rɪtʃ/[**리**치]*, poor=/pʊr/[**푸**어]*, #rich/wealthy, #rich/affluent, #rich/abundant, #poor/penniless, #poor/scarce, #poor/lacking -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="28-kind-rude.html">KIND ↔ RUDE</a> · 다음: <a href="30-honest-dishonest.html">HONEST ↔ DISHONEST</a></p>
+  <h1>RICH ↔ POOR — 같은 지갑, 다른 두께</h1>
+  <p class="lead">가진 것이 <b>많으면</b> rich, <b>적으면</b> poor. 사람의 돈인지, 동네의 생활인지, 과일 · 물 같은 <b>물자</b>인지, 빠진 요소인지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 많고 적은 장면이 바뀌는 그림|많은 쪽은 두둑한 지갑, 재산 많은 가족, 부유한 동네, 풍성한 사과이고 적은 쪽은 얇은 지갑, 빈 주머니, 마른 물통, 증거 빠진 보고서다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>돈 · 물자와 만나는 동사: <a href="../concepts/40-pay.html">40 PAY</a> · <a href="../concepts/41-buy.html">41 BUY</a> · <a href="../concepts/55-borrow.html">55 BORROW</a></li><li>자료: english-adjectives 노트의 rich · poor 묶음</li></ul>
+</main>
+<script>
+  const WALLET = (n) => Array.from({ length: n }, (_, i) => RC(160 + i * 3, 128 - i * 9, 130, 50, 'var(--ok)')).join('') + RC(130, 130, 190, 100, 'var(--wood)', 'var(--obj-line)', 10) + CR(296, 180, 9, 'var(--gold)');
+  const VILLA = (x, w, h) => RC(x, 240 - h, w, h, 'var(--card)') + '<path d="M' + (x - 8) + ' ' + (240 - h) + ' l' + (w / 2 + 8) + ' -34 l' + (w / 2 + 8) + ' 34 z" fill="var(--bad)" stroke="var(--obj-line)"/>' + RC(x + 12, 256 - h, 20, 18, 'var(--gold)') + RC(x + w - 32, 256 - h, 20, 18, 'var(--gold)');
+  const EXIST = adverbPage({ noun: '형용사', start: 'abundant',
+    groups: [
+      { name: '많은', items: [
+        { v: 'rich', k: '부유한', en: 'She is rich.', note: '돈이 많다. 맛 · 색 · 영양이 진할 때도 쓴다.', from: 'riches(부) · enrich(풍부하게 하다)', pic: () => WALLET(6), ex: ['돈이', '많다', 'She has money.', '얼마쯤 있다는 뜻일 뿐이다.', '돈이 많은.'] },
+        { v: 'wealthy', k: '재산이 많은', base: 'RICH', core: '많은 재산', from: 'wealth(재산) + y', en: 'They are a wealthy family.', note: '재산에 초점. rich보다 점잖게 들린다.', pic: () => GRD + VILLA(180, 200, 100) + [70, 110, 146].map((x, i) => MAN(x, { s: i === 2 ? .5 : .75, f: 'smile', c: ['var(--obj)', 'var(--accent2)', 'var(--ok)'][i] })).join(''), ex: ['재산이', '많다', 'They are a rich family.', '거의 같다. wealthy가 더 점잖다.', '재산이 많은.'] },
+        { v: 'affluent', k: '생활이 부유한', base: 'RICH', core: '동네 · 생활 수준', from: 'affluence(풍요)와 짝', en: 'It\'s an affluent neighborhood.', note: '지역 · 사람의 <b>생활 수준</b>. wealthy와 겹친다(노트). 글 · 뉴스에 많다.', pic: () => GRD + [50, 170, 290].map((x, i) => VILLA(x, 96, 70 + i % 2 * 16)).join('') + [160, 282, 402].map((x) => LN('M' + x + ' 240 V206', 'var(--wood)', 5) + CR(x, 194, 17, 'var(--ok)')).join(''), ex: ['생활', '수준', 'It\'s a big neighborhood.', '크다는 뜻. 부유함이 안 나온다.', '부유한.'] },
+        { v: 'abundant', k: '풍부한', base: 'RICH와 이웃', core: '물자 · 자원이 넉넉', from: 'abundance(풍부)와 짝', en: 'Apples are abundant this year.', note: '사람의 돈이 아니라 <b>수량</b>이 넉넉하다(노트).', pic: () => GRD + [70, 190, 310].map((x) => RC(x, 190, 96, 50, 'var(--wood)') + [0, 1, 2, 3].map((i) => CR(x + 16 + i * 21, 186, 12, 'var(--bad)') + (i < 3 ? CR(x + 26 + i * 21, 166, 12, 'var(--bad)') : '')).join('')).join(''), ex: ['수량이', '넉넉', 'Apples are rich this year.', '어색하다. 사과가 부자라는 말처럼 들린다.', '풍부한.'] },
+      ] },
+      { name: '적은', items: [
+        { v: 'poor', k: '가난한', en: 'He was poor as a child.', note: '돈이 적다. "불쌍한" · "질이 나쁜"이라는 뜻도 있다.', from: 'poverty(가난)와 짝', pic: () => WALLET(0) + tx(225, 110, 14, '얇은 지갑', 'var(--muted)'), ex: ['돈이', '적다', 'He had a little money.', '조금 있었다는 뜻이 된다.', '가난한.'] },
+        { v: 'penniless', k: '무일푼인', base: 'POOR', core: '돈이 거의 없음', from: 'penny(동전) + less', en: 'He was left penniless.', note: '극단적인 상황(노트). 이야기 · 글에 많다.', pic: () => GRD + MAN(226, { f: 'sad', a: 'hip', s: 1.15 }) + '<path d="M196 186 l-26 10 l8 26 l22 -10 z M256 186 l26 10 l-8 26 l-22 -10 z" fill="var(--card)" stroke="var(--obj-line)"/>' + LN('M160 240 l-6 -4 m140 4 l6 -4', 'var(--muted)'), ex: ['돈이', '바닥', 'He was poor.', '얼마나 없는지 빠진다.', '무일푼인.'] },
+        { v: 'scarce', k: '부족해 드문', base: 'POOR와 이웃', core: '공급이 모자람', from: 'scarcity(부족) · scarcely(거의 ~않다)', en: 'Clean water is scarce here.', note: '<b>물 · 자원</b>이 모자란다(노트). 사람에게는 안 쓴다.', pic: () => GRD + RC(250, 110, 80, 130, 'var(--card)') + RC(252, 224, 76, 14, 'var(--water)', 'none') + [60, 110, 160, 210].map((x) => MAN(x, { s: .65, f: 'sad' }) + RC(x - 8, 222, 16, 18, 'var(--fog)')).join('') + LN('M290 110 V92 h30 v12', 'var(--obj-line)', 6), ex: ['공급', '부족', 'Clean water is poor here.', '틀리다. 물의 질이 나쁘다는 말처럼 된다.', '부족한.'] },
+        { v: 'lacking', k: '빠진 · 모자란', base: 'POOR와 이웃', core: '필요한 요소가 빠짐', from: 'lack(없다) → -ing', en: 'The report is lacking in evidence.', note: '있어야 할 것이 빠졌다. 보통 <b>be lacking in</b>(노트 예문).', pic: () => PAPER(120, 56, 130, 170, 4) + RC(132, 128, 106, 40, 'none', 'var(--bad)') + tx(185, 153, 14, '증거 ?', 'var(--bad)', ' font-weight="700"') + LN('M132 190 h90 M132 206 h70', 'var(--fog)', 2) + MAN(330, { y: 240, f: 'flat', a: 'hip' }) },
+      ] },
+    ],
+    q: [['Q1. 가진 것이?', '많다 → <b>rich</b> / 적다 → <b>poor</b>'], ['Q2. 무엇이 많은가?', '재산 → <b>wealthy</b> / 생활 수준 → <b>affluent</b> / 물자 → <b>abundant</b>'], ['Q3. 무엇이 모자라나?', '돈 → <b>penniless</b> / 자원 → <b>scarce</b> / 필요한 요소 → <b>lacking</b>']],
+    body: ['<b>ABUNDANT</b> — 두 팔 가득 안기. <b>SCARCE</b> — 빈 컵을 흔들어 보기.', '<b>PENNILESS</b> — 주머니 뒤집기.'],
+    check: ['노트 식의 wealthy "대대로 축적한"은 앞부분 설명에 없어 뺐다.', 'rich보다 wealthy가 점잖다는 어감은 노트에 없다.'],
+  });
+  const SCENES = {
+    trip: { btn: '여행', place: '지갑을 잃은 여행', pic: () => MEET(''), lines: [['친구', 'What\'s wrong?', '왜 그래?'], ['나', 'I lost my wallet. I\'m <b>broke</b>.', '지갑 잃어버렸어. 빈털터리야.', true]], say: '말할 때는 penniless보다 <b>broke</b>가 흔하다.' },
+    food: { btn: '맛', place: '디저트 가게', pic: () => MEET(BX(440, 84, 50, 24, 'var(--wood)')), lines: [['친구', 'How\'s the cake?', '케이크 어때?'], ['나', 'It\'s very <b>rich</b>.', '아주 진해.', true]], say: '맛이 진하고 묵직할 때도 <b>rich</b>.' },
+  };
+  const SLOTS = { first: ['rich', 'prep'], slots: { be: 'be 뒤', prep: '무엇이', noun: '명사 앞' }, verbs: {
+    rich: { be: { ok: [['They', 's'], ['are', 'b'], ['rich', 'a']], say: '부유하다.' }, prep: { ok: [['rich', 'a'], ['in', 'x'], ['vitamins', 'n']], bad: [['rich', 'a'], ['of', 'x'], ['vitamins', 'n']], say: 'rich <b>in</b>.' }, noun: { ok: [['the', 'x'], ['rich', 'a']], say: 'the rich — 부유한 사람들.' } },
+    scarce: { be: { ok: [['Water', 's'], ['is', 'v'], ['scarce', 'a']], bad: [['Water', 's'], ['is', 'v'], ['scarcely', 'd']], say: 'scarcely는 "거의 ~않다"라는 부사.' }, prep: { ok: [['lacking', 'a'], ['in', 'x'], ['detail', 'n']], say: 'lacking <b>in</b>.' }, noun: { ok: [['scarce', 'a'], ['resources', 'n']], say: '부족한 자원.' } },
+  } };
+</script>

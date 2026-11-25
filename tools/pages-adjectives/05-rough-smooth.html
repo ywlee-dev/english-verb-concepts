@@ -1,0 +1,41 @@
+<!-- title: ROUGH ↔ SMOOTH 개념 -->
+<!-- pron: rough=/rʌf/[**러**프]*, smooth=/smuːð/[스**무**드]*, #rough/coarse, #rough/jagged, #rough/bumpy, #smooth/silky, #smooth/sleek, #smooth/polished -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="04-hard-soft.html">HARD ↔ SOFT</a> · 다음: <a href="06-tight-loose.html">TIGHT ↔ LOOSE</a></p>
+  <h1>ROUGH ↔ SMOOTH — 같은 손끝, 다른 겉면</h1>
+  <p class="lead">손끝에 <b>걸리면</b> rough, <b>미끄러지면</b> smooth. 알갱이 때문인지, 가장자리인지, 울퉁불퉁한 길인지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 거칠고 매끄러운 겉면이 바뀌는 그림|거친 쪽은 거친 판, 굵은 소금, 깨진 유리, 울퉁불퉁한 길이고 매끄러운 쪽은 매끈한 판, 비단 같은 머리카락, 날렵한 자동차, 윤나는 구두다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>상태를 만드는 동사: <a href="../concepts/72-clean.html">72 CLEAN</a> (wipe · scrub) · <a href="../concepts/01-break.html">01 BREAK</a> (깨지면 jagged)</li><li>자료: english-adjectives 노트의 rough · smooth 묶음</li></ul>
+</main>
+<script>
+  const EXIST = adverbPage({ noun: '형용사',
+    start: 'jagged',
+    groups: [
+      { name: '거친', items: [
+        { v: 'rough', k: '거친', en: 'The wall feels rough.', note: '겉이 고르지 않다. "대략의 · 힘든"이라는 다른 뜻도 있다.', from: 'roughen(거칠게 하다)과 짝', pic: () => LN('M60 190 l16 -14 l14 16 l18 -20 l14 18 l20 -10 l16 14 l18 -22 l16 18 l20 -12 l18 16 l16 -18 l20 18 l18 -14 l16 14 l20 -16 l18 14', 'var(--obj-line)', 4) + at(240, 168, 180, POINTER), ex: ['손에', '걸림', 'The wall is not smooth.', '뜻은 간다. 거칠다고 바로 짚지 못한다.', '고르지 않은.'] },
+        { v: 'coarse', k: '알갱이가 굵은', base: 'ROUGH', core: '굵은 입자 · 섬유', from: 'course(과정)와 소리가 같다', en: 'This salt is coarse.', note: '재료의 <b>알갱이</b>가 굵다. 모래 · 천에도(노트).', pic: () => Array.from({ length: 26 }, (_, i) => RC(84 + i % 9 * 32 + (i * 7) % 11, 118 + Math.floor(i / 9) * 32 + (i * 5) % 9, 17, 15, 'var(--card)', 'var(--obj-line)', 2)).join(''), ex: ['굵은', '알갱이', 'This salt is rough.', '어색하다. 알갱이 크기가 안 나온다.', '입자가 굵은.'] },
+        { v: 'jagged', k: '들쭉날쭉 뾰족한', base: 'ROUGH', core: '가장자리가 뾰족', from: 'jag(뾰족한 것) + ed', en: 'The broken glass has jagged edges.', note: '<b>윤곽</b>이 불규칙하게 뾰족하다(노트).', pic: () => '<path d="M150 60 h150 l-14 60 l-22 -16 l-10 34 l-26 -22 l-16 40 l-22 -38 l-20 24 z" fill="var(--water)" stroke="var(--obj-line)" stroke-width="2"/>' + LN('M170 220 l20 -26 l14 18 l22 -30 l18 24 l20 -20 l16 34', 'var(--bad)', 3), ex: ['가장자리', '뾰족', 'The glass has rough edges.', '거칠다는 것뿐, 베일 듯 뾰족한 그림이 빠진다.', '들쭉날쭉 뾰족한.'] },
+        { v: 'bumpy', k: '울퉁불퉁한', base: 'ROUGH', core: '표면의 높낮이', from: 'bump(혹) + y', en: 'The road is bumpy.', note: '지나가면 덜컹거린다(노트).', pic: () => LN('M30 210 q26 -34 52 0 t52 0 t52 0 t52 0 t52 0 t52 0 t52 0', 'var(--obj-line)', 4) + '<g transform="rotate(-10 225 160)">' + CR(190, 178, 22, 'none') + CR(270, 178, 22, 'none') + LN('M190 178 l26 -40 h36 l18 40 M216 138 l20 40 h-46 M236 178 l16 -40 v-12 h14', 'var(--accent)', 4) + '</g>' + LN('M150 120 l-10 -12 M300 116 l12 -10', 'var(--bad)', 3), ex: ['울퉁', '불퉁', 'The road is rough.', '많이 겹친다. 덜컹거리는 그림이 약해진다.', '높낮이가 있는.'] },
+      ] },
+      { name: '매끄러운', items: [
+        { v: 'smooth', k: '매끄러운', en: 'The wall feels smooth.', note: '걸리는 것 없이 고르다. 일이 순조로울 때도 쓴다.', from: '소리 조심 — 끝이 [ð]', pic: () => LN('M60 190 H400', 'var(--obj-line)', 4) + at(240, 186, 180, POINTER) + AR(270, 150, 340, 150, 'var(--accent)', 3), ex: ['걸림', '없음', 'The wall is not rough.', '뜻은 간다. 매끈함을 바로 짚지 못한다.', '고르고 매끈한.'] },
+        { v: 'silky', k: '비단 같은', base: 'SMOOTH', core: '부드럽게 흐르는 촉감', from: 'silk(비단) + y', en: 'My hair feels silky.', note: '촉감이 비단 같다. 실제 비단일 필요는 없다(노트).', pic: () => [0, 1, 2, 3, 4, 5, 6].map((i) => LN('M' + (150 + i * 18) + ' 50 q30 60 0 110 t10 80', i % 2 ? 'var(--wood)' : 'var(--gold)', 5)).join('') + at(330, 150, 90, HAND), ex: ['비단', '촉감', 'My hair feels smooth.', '많이 겹친다. 스르륵 흐르는 느낌이 약해진다.', '비단처럼 매끈한.'] },
+        { v: 'sleek', k: '날렵하게 매끈한', base: 'SMOOTH', core: '겉모습이 세련됨', from: '겉모습에 자주 쓴다', en: 'The new car looks sleek.', note: '촉감보다 <b>보이는 모양</b>(노트).', pic: () => '<path d="M60 206 q10 -34 70 -40 q50 -50 130 -46 q60 4 90 44 q44 6 50 42 z" fill="var(--accent)" stroke="var(--obj-line)" stroke-width="2"/><path d="M150 164 q40 -30 100 -30 q34 4 56 30 z" fill="var(--water)"/>' + CR(130, 208, 22, 'var(--obj-line)') + CR(330, 208, 22, 'var(--obj-line)') + LN('M40 120 h60 M30 140 h50', 'var(--fog)', 3), ex: ['보기에', '매끈', 'The new car looks smooth.', '어색하다. 세련된 겉모습이 안 나온다.', '날렵하고 세련된.'] },
+        { v: 'polished', k: '윤나게 닦인', base: 'SMOOTH', core: '닦아서 빛남', from: 'polish(닦다) → polished', en: 'His shoes look polished.', note: '손질한 <b>결과</b>. 잘 다듬은 발표에도(노트).', pic: () => '<path d="M110 150 h80 q20 40 90 44 q60 6 64 36 h-234 z" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="2"/>' + RC(108, 228, 238, 12, 'var(--obj-line)') + LN('M260 206 q30 2 46 12', '#fff', 4) + LN('M300 120 v28 M286 134 h28 M340 160 v16 M332 168 h16', 'var(--gold)', 3), ex: ['닦아서', '윤남', 'His shoes look clean.', '깨끗하다는 뜻. 윤이 나게 다듬은 결과가 빠진다.', '닦고 다듬은.'] },
+      ] },
+    ],
+    q: [['Q1. 손끝에?', '걸린다 → <b>rough</b> / 미끄러진다 → <b>smooth</b>'], ['Q2. 왜 거친가?', '알갱이 → <b>coarse</b> / 뾰족한 가장자리 → <b>jagged</b> / 높낮이 → <b>bumpy</b>'], ['Q3. 매끈한 무엇?', '촉감 → <b>silky</b> / 겉모습 → <b>sleek</b> / 닦은 결과 → <b>polished</b>']],
+    body: ['<b>COARSE</b> — 손가락을 비벼 알갱이 느끼기. <b>JAGGED</b> — 손날로 지그재그. <b>BUMPY</b> — 앉아서 덜컹덜컹.', '<b>SILKY</b> — 머리카락 쓸기.'],
+    check: ['노트의 3×3 짝은 그림 순서로만 두었다. 서로 정확한 반대말은 아니다.'],
+  });
+  const SCENES = {
+    car: { btn: '시골길', place: '차를 타고 가는 길', pic: () => FL + CAR(400) + P(310, 150, 1.4, 'var(--ok)'), lines: [['친구', 'This road is really <b>bumpy</b>.', '이 길 진짜 울퉁불퉁하다.'], ['나', 'The next part is <b>smooth</b>.', '다음은 매끈해.', true]], say: '길의 높낮이 — <b>bumpy</b>.' },
+    glass: { btn: '부엌', place: '유리가 깨진 부엌', pic: () => MEET('<path d="M430 108 l14 -26 l10 14 l12 -20 l12 32 z" fill="var(--water)" stroke="' + OL + '"/>'), lines: [['가족', 'Careful! The edges are <b>jagged</b>.', '조심해! 가장자리가 뾰족해.'], ['나', 'I\'ll get some gloves.', '장갑 가져올게.', true]], say: '베일 듯한 가장자리 — <b>jagged</b>.' },
+  };
+  const SLOTS = { first: ['smooth', 'feel'], slots: { feel: 'feel 뒤', look: 'look 뒤', noun: '명사 앞' }, verbs: {
+    smooth: { feel: { ok: [['It', 's'], ['feels', 'v'], ['smooth', 'a']], bad: [['It', 's'], ['feels', 'v'], ['smoothly', 'd']], say: 'feel 뒤는 <b>형용사</b>.' }, look: { ok: [['It', 's'], ['looks', 'v'], ['smooth', 'a']], say: '매끈해 보인다.' }, noun: { ok: [['smooth', 'a'], ['skin', 'n']], say: '매끈한 피부.' } },
+    sleek: { feel: { ok: [['It', 's'], ['looks', 'v'], ['sleek', 'a']], say: 'sleek은 보통 feel보다 <b>look</b>과 쓴다.' }, look: { ok: [['The', 'x'], ['car', 's'], ['looks', 'v'], ['sleek', 'a']], bad: [['The', 'x'], ['car', 's'], ['looks', 'v'], ['sleekly', 'd']], say: 'look 뒤도 <b>형용사</b>.' }, noun: { ok: [['a', 'x'], ['sleek', 'a'], ['design', 'n']], say: '날렵한 디자인.' } },
+  } };
+</script>

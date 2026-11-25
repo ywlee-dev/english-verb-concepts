@@ -1,0 +1,41 @@
+<!-- title: SIMPLE ↔ COMPLEX 개념 -->
+<!-- pron: simple=/ˈsɪm.pəl/[**심**플]*, complex=/kəmˈpleks/[컴플**렉**스]*, #simple/plain, #simple/basic, #simple/minimalist, #complex/complicated, #complex/intricate -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="36-clear-vague.html">CLEAR ↔ VAGUE</a> · 다음: <a href="38-correct-wrong.html">CORRECT ↔ WRONG</a></p>
+  <h1>SIMPLE ↔ COMPLEX — 같은 지도, 다른 길 수</h1>
+  <p class="lead">부분이 <b>적으면</b> simple, <b>많이 이어져 있으면</b> complex. 무늬가 없는지, 기본만인지, 일부러 줄였는지, 번거로운지 정교한지에 따라 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 단순하고 복잡한 장면이 바뀌는 그림|단순한 쪽은 길 하나인 지도, 무늬 없는 티셔츠, 기본 요금제, 가구 몇 개인 방이고 복잡한 쪽은 길이 많은 지도, 헷갈리는 서류, 정교한 무늬다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>단순하게 · 복잡하게: <a href="../concepts/53-change.html">53 CHANGE</a> · <a href="../concepts/80-build.html">80 BUILD</a> · <a href="../concepts/75-connect.html">75 CONNECT</a></li><li>자료: english-adjectives 노트의 simple · complex 묶음</li></ul>
+</main>
+<script>
+  const DOT = (x, y, c) => CR(x, y, 11, c || 'var(--accent)');
+  const TEE = '<path d="M170 80 l36 -16 q20 16 40 0 l36 16 l22 44 l-28 12 l-10 -18 v96 h-80 v-96 l-10 18 l-28 -12 z" fill="#f4f2ea" stroke="var(--obj-line)" stroke-width="2"/>';
+  const EXIST = adverbPage({ noun: '형용사', start: 'intricate',
+    groups: [
+      { name: '단순한', items: [
+        { v: 'simple', k: '단순한', en: 'The map is simple.', note: '부분이 적다. 쉬운 것과 겹치지만 초점은 <b>구조</b>.', from: 'simplify(단순하게 하다) · simply', pic: () => RC(60, 50, 330, 180, 'var(--card)') + LN('M110 140 H340', 'var(--fog)', 8) + DOT(110, 140) + DOT(340, 140, 'var(--ok)'), ex: ['부분이', '적음', 'The map is small.', '작다는 뜻. 단순한지는 모른다.', '단순한.'] },
+        { v: 'plain', k: '무늬 없는', base: 'SIMPLE', core: '장식이 없음', from: 'plane(비행기)과 소리가 같다', en: 'I\'d like a plain white shirt.', note: '겉에 장식이 없다. 소박하다 · 밋밋하다 둘 다 된다(노트).', pic: () => TEE, ex: ['장식', '없음', 'I\'d like a simple white shirt.', '많이 겹친다. 무늬 없음을 콕 집지 않는다.', '무늬 없는.'] },
+        { v: 'basic', k: '기본만 있는', base: 'SIMPLE', core: '핵심 기능 · 수준', from: 'basis(기초) + ic', en: 'This is the basic plan.', note: '겉보다 <b>구성 · 수준</b>이 기본(노트).', pic: () => [['기본', 2, 90], ['고급', 5, 260]].map(([t, n, x], k) => RC(x, 50, 110, 190, 'var(--card)', k ? 'var(--fog)' : 'var(--accent)', 8) + tx(x + 55, 80, 16, t, k ? 'var(--muted)' : 'var(--accent)', ' font-weight="700"') + Array.from({ length: n }, (_, i) => CR(x + 22, 106 + i * 26, 5, k ? 'var(--fog)' : 'var(--ok)') + LN('M' + (x + 36) + ' ' + (106 + i * 26) + ' h54', 'var(--fog)', 4)).join('')).join(''), ex: ['핵심', '만', 'This is the plain plan.', '어색하다. plain은 겉모습.', '기본만 있는.'] },
+        { v: 'minimalist', k: '일부러 덜어 낸', base: 'SIMPLE', core: '의도한 간결함', from: 'minimal(최소의) + ist', en: 'The room has a minimalist design.', note: '물건이 모자란 게 아니라 <b>의도한 스타일</b>(노트).', pic: () => RC(50, 50, 350, 190, 'var(--card)', 'var(--line)') + DESK(120, 150, 180) + LN('M196 180 V150', 'var(--obj-line)', 3) + CR(196, 140, 12, 'var(--gold)') + RC(310, 190, 44, 50, 'var(--sleeve)', 'var(--obj-line)', 6), ex: ['일부러', '덜어 냄', 'The room has an empty design.', '어색하다. 비었다는 뜻이 된다.', '일부러 덜어 낸.'] },
+      ] },
+      { name: '복잡한', items: [
+        { v: 'complex', k: '복잡한', en: 'The map is complex.', note: '부분이 많고 서로 이어져 있다. 좋고 나쁨은 말하지 않는다.', from: 'complexity(복잡성)', pic: () => { const p = [[100, 90], [180, 70], [270, 90], [350, 80], [120, 160], [220, 140], [320, 160], [90, 210], [190, 215], [290, 212], [360, 220]], e = [[0, 1], [1, 2], [2, 3], [0, 4], [1, 5], [2, 5], [3, 6], [4, 5], [5, 6], [4, 7], [4, 8], [5, 8], [5, 9], [6, 9], [6, 10], [8, 9], [2, 6]]; return RC(60, 50, 330, 180, 'var(--card)') + e.map(([a, b]) => LN('M' + p[a] + ' L' + p[b], 'var(--fog)', 4)).join('') + p.map(([x, y], i) => DOT(x, y, i === 10 ? 'var(--ok)' : 'var(--accent)')).join(''); }, ex: ['부분이', '많이 이어짐', 'The map is big.', '크다는 뜻이 된다.', '복잡한.'] },
+        { v: 'complicated', k: '얽혀 번거로운', base: 'COMPLEX', core: '이해 · 처리가 어려움', from: 'complicate(복잡하게 하다) → -d', en: 'The form is complicated.', note: '얽혀서 <b>하기 어렵다</b>(노트).', pic: () => GRD + PAPER(60, 56, 70, 90, 5) + PAPER(140, 110, 70, 90, 5) + PAPER(60, 160, 60, 70, 4) + LN('M130 90 q40 -20 50 20 M130 190 q30 10 40 -10 M100 146 v14', 'var(--bad)', 3) + MAN(320, { f: 'sad', a: 'up' }) + tx(320, 84, 22, '?!', 'var(--bad)', ' font-weight="700"'), ex: ['얽혀', '번거로움', 'The form is intricate.', '어색하다. 정교하다는 말이 된다.', '얽혀 번거로운.'] },
+        { v: 'intricate', k: '세밀하게 정교한', base: 'COMPLEX', core: '작은 부분이 촘촘', from: '라틴어 intricare(뒤엉키게 하다)', en: 'The pattern is intricate.', note: '세부가 정교하다. <b>감탄</b>에도 어울린다(노트).', pic: () => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => '<g transform="rotate(' + i * 30 + ' 225 145)"><path d="M225 145 q26 -46 0 -86 q-26 40 0 86" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="M225 120 q12 -20 0 -40 q-12 20 0 40" fill="none" stroke="var(--gold)" stroke-width="2"/><circle cx="225" cy="52" r="5" fill="var(--ok)"/><circle cx="246" cy="66" r="3" fill="var(--sleeve)"/></g>').join('') + CR(225, 145, 100, 'none', 'var(--obj-line)') + CR(225, 145, 14, 'var(--gold)') },
+      ] },
+    ],
+    q: [['Q1. 부분이?', '적다 → <b>simple</b> / 많이 이어짐 → <b>complex</b>'], ['Q2. 어떻게 단순한가?', '겉에 장식 없음 → <b>plain</b> / 기본 구성 → <b>basic</b> / 일부러 → <b>minimalist</b>'], ['Q3. 복잡해서 어떤가?', '번거로움 → <b>complicated</b> / 정교함 → <b>intricate</b>']],
+    body: ['<b>PLAIN</b> — 손바닥으로 매끈하게 쓸기. <b>COMPLICATED</b> — 머리 긁적이기.', '<b>INTRICATE</b> — 얼굴을 가까이 대고 감탄.'],
+    check: ['complex가 좋고 나쁨을 말하지 않는다는 풀이와 지도 예문은 새로 지었다.'],
+  });
+  const SCENES = {
+    shirt: { btn: '옷 가게', place: '옷 가게', pic: () => MEET(BX(440, 70, 50, 38, '#f4f2ea')), lines: [['점원', 'Can I help you?', '도와드릴까요?'], ['나', 'Do you have a <b>plain</b> white T-shirt?', '무늬 없는 흰 티 있어요?', true]], say: '무늬 없음 — <b>plain</b>.' },
+    form: { btn: '서류', place: '서류를 쓰며', pic: () => MEET(BX(430, 88, 70, 20)), lines: [['친구', 'Did you finish the form?', '서류 다 썼어?'], ['나', 'No, it\'s too <b>complicated</b>.', '아니, 너무 복잡해.', true]], say: '불평할 때는 <b>complicated</b>.' },
+  };
+  const SLOTS = { first: ['simple', 'keep'], slots: { be: 'be 뒤', keep: '유지할 때', noun: '명사 앞' }, verbs: {
+    simple: { be: { ok: [['It', 's'], ['is', 'v'], ['simple', 'a']], say: '단순하다.' }, keep: { ok: [['Keep', 'v'], ['it', 'o'], ['simple', 'a']], bad: [['Keep', 'v'], ['it', 'o'], ['simply', 'd']], say: '단순하게 해 — keep + 목적어 + <b>형용사</b>.' }, noun: { ok: [['a', 'x'], ['simple', 'a'], ['question', 'n']], say: '간단한 질문.' } },
+    complicated: { be: { ok: [['It', 's'], ['\'s', 'v'], ['complicated', 'a']], say: '좀 복잡해(사정이).' }, keep: { ok: [['Don\'t', 'x'], ['make', 'v'], ['it', 'o'], ['complicated', 'a']], say: '복잡하게 만들지 마.' }, noun: { ok: [['a', 'x'], ['complicated', 'a'], ['problem', 'n']], bad: [['a', 'x'], ['complicate', 'v'], ['problem', 'n']], say: 'complicate는 동사.' } },
+  } };
+</script>

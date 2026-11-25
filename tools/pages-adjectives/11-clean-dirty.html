@@ -1,0 +1,43 @@
+<!-- title: CLEAN ↔ DIRTY 개념 -->
+<!-- pron: clean=/kliːn/[클**린**]*, dirty=/ˈdɝː.t̬i/[**더**r티]*, #clean/spotless, #clean/pristine, #clean/sanitary, #dirty/stained, #dirty/filthy, #dirty/greasy -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="10-loud-quiet.html">LOUD ↔ QUIET</a> · 다음: <a href="12-full-empty.html">FULL ↔ EMPTY</a></p>
+  <h1>CLEAN ↔ DIRTY — 같은 셔츠, 닦기 전과 후</h1>
+  <p class="lead">동사 <b>CLEAN 묶음</b>이 바꾸는 상태다. 닦기 <b>전</b>이 dirty, <b>후</b>가 clean. 눈에 깨끗한지, 새것 같은지, 위생인지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 깨끗하고 더러운 장면이 바뀌는 그림|깨끗한 쪽은 흰 셔츠, 자국 없는 거울, 새것 같은 만화책, 위생적인 조리대이고 더러운 쪽은 얼룩덜룩한 셔츠, 커피 자국, 진흙 신발, 기름 묻은 프라이팬이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>dirty → clean으로 바꾸는 동사: <a href="../concepts/72-clean.html">72 CLEAN</a> (wash · wipe · scrub · sweep)</li><li>자료: english-adjectives 노트의 clean · dirty 묶음</li></ul>
+</main>
+<script>
+  const SHIRT = (c, b) => '<path d="M170 80 l36 -16 q20 16 40 0 l36 16 l22 44 l-28 12 l-10 -18 v96 h-80 v-96 l-10 18 l-28 -12 z" fill="' + c + '" stroke="var(--obj-line)" stroke-width="2"/>' + (b || '');
+  const SPOT = (x, y, r, c) => '<ellipse cx="' + x + '" cy="' + y + '" rx="' + r + '" ry="' + r * .75 + '" fill="' + c + '"/>';
+  const GLINT = (x, y) => LN('M' + x + ' ' + (y - 14) + ' v28 M' + (x - 14) + ' ' + y + ' h28', 'var(--gold)', 3);
+  const EXIST = adverbPage({ noun: '형용사', start: 'stained',
+    groups: [
+      { name: '깨끗한', items: [
+        { v: 'clean', k: '깨끗한', en: 'My shirt is clean.', note: '오염이 없다. 동사 clean(닦다)의 결과.', from: '동사 clean과 모양이 같다', pic: () => SHIRT('#f4f2ea'), ex: ['오염', '없음', 'I washed my shirt.', '빨았다는 동작. 지금 상태는 말하지 않는다.', '깨끗한 상태.'] },
+        { v: 'spotless', k: '얼룩 하나 없는', base: 'CLEAN', core: '눈에 자국이 없음', from: 'spot(얼룩) + less', en: 'The mirror is spotless.', note: '눈에 보이는 얼룩이 없다. <b>위생을 보증하지는 않는다</b>(노트).', pic: () => RC(150, 56, 150, 160, 'var(--water)', 'var(--wood)', 12) + LN('M180 180 L260 90 M210 196 L276 122', '#fff', 4) + GLINT(318, 70), ex: ['자국', '없음', 'The mirror is clean.', '흠 하나 없다는 세기가 빠진다.', '얼룩 하나 없는.'] },
+        { v: 'pristine', k: '새것 그대로인', base: 'CLEAN', core: '처음 상태가 유지됨', from: '라틴어 pristinus(원래의)', en: 'The comic book is in pristine condition.', note: '처음 모습이 잘 남았다. 자연에도 쓴다(노트).', pic: () => RC(150, 60, 120, 160, 'var(--accent)', 'var(--obj-line)', 3) + CR(210, 120, 28, 'var(--gold)') + RC(164, 170, 92, 14, 'var(--card)') + RC(136, 46, 148, 188, 'none', 'var(--water)', 6) + GLINT(310, 80), ex: ['처음', '그대로', 'The comic book is clean.', '닦아서 깨끗한 것일 수도 있다.', '원래 상태 그대로인.'] },
+        { v: 'sanitary', k: '위생적인', base: 'CLEAN', core: '위생에 알맞음', from: 'sanitation(위생)과 짝', en: 'The kitchen must be kept sanitary.', note: '<b>건강 · 위생</b> 기준. 겉보기와 다른 이야기다(노트).', pic: () => GRD + DESK(90, 270, 170) + RC(200, 110, 44, 60, 'var(--ok)', 'var(--obj-line)', 6) + LN('M222 110 V94 h20', 'var(--obj-line)', 5) + LN('M222 128 v24 M210 140 h24', '#fff', 5) + '<ellipse cx="310" cy="168" rx="30" ry="6" fill="var(--card)" stroke="var(--obj-line)"/>', ex: ['위생', '기준', 'The kitchen is spotless.', '눈에 깨끗하다는 뜻. 위생까지는 모른다.', '위생에 알맞은.'] },
+      ] },
+      { name: '더러운', items: [
+        { v: 'dirty', k: '더러운', en: 'My shirt is dirty.', note: '오염이 있다. 무엇이 묻었는지는 말하지 않는다.', from: 'dirt(흙 · 때) + y', pic: () => SHIRT('#f4f2ea', SPOT(206, 130, 14, '#8a7a5c') + SPOT(246, 170, 18, '#9a8a6a') + SPOT(212, 190, 10, '#7a6a4c')), ex: ['오염', '있음', 'My shirt is not clean.', '뜻은 간다. 더럽다고 바로 짚지 못한다.', '더러운 상태.'] },
+        { v: 'stained', k: '얼룩진', base: 'DIRTY', core: '자국이 남음', from: 'stain(얼룩지게 하다) → stained', en: 'My shirt is stained with coffee.', note: '한 곳에 자국이 남았다. 전체가 더러울 필요는 없다(노트).', pic: () => SHIRT('#f4f2ea', SPOT(232, 150, 22, '#7a4a22')) + RC(330, 120, 34, 40, 'var(--card)') + LN('M324 170 q-26 6 -50 -10', '#7a4a22', 4), ex: ['자국', '남음', 'My shirt is dirty.', '전체가 더러운 것처럼 들린다.', '자국이 남은.'] },
+        { v: 'filthy', k: '아주 더러운', base: 'DIRTY', core: '심하게 더러움', from: 'filth(오물) + y', en: 'My shoes are filthy.', note: '아주 더럽다. 원래 색을 못 알아볼 필요까지는 없다(노트).', pic: () => '<path d="M110 150 h80 q20 40 90 44 q60 6 64 36 h-234 z" fill="#6b5132" stroke="var(--obj-line)" stroke-width="2"/>' + [[140, 190], [190, 214], [250, 208], [310, 222], [160, 226]].map(([x, y]) => SPOT(x, y, 15, '#4a3820')).join('') + LN('M120 240 h230', '#4a3820', 8), ex: ['심하게', '더럽다', 'My shoes are dirty.', '얼마나 심한지 빠진다.', '아주 더러운.'] },
+        { v: 'greasy', k: '기름기 있는', base: 'DIRTY와 이웃', core: '기름기 · 미끈함', from: 'grease(기름) + y', en: 'The handle feels greasy.', note: '기름기 특유의 촉감. 기름진 음식처럼 <b>더럽지 않은</b> 것에도 쓴다(노트).', pic: () => '<ellipse cx="160" cy="180" rx="90" ry="30" fill="#3a3f46" stroke="var(--obj-line)" stroke-width="2"/>' + RC(248, 172, 140, 16, '#3a3f46', 'var(--obj-line)', 8) + [[280, 178], [320, 184], [356, 178]].map(([x, y]) => SPOT(x, y, 9, 'var(--gold)')).join('') + at(330, 166, 180, HAND) },
+      ] },
+    ],
+    q: [['Q1. 묻었나?', '아니다 → <b>clean</b> / 묻었다 → <b>dirty</b>'], ['Q2. 깨끗한 무엇?', '보기에 → <b>spotless</b> / 처음 그대로 → <b>pristine</b> / 위생 → <b>sanitary</b>'], ['Q3. 더러운 무엇?', '자국 → <b>stained</b> / 심함 → <b>filthy</b> / 기름기 → <b>greasy</b>']],
+    body: ['<b>SPOTLESS</b> — 거울을 이리저리 비춰 보기. <b>SANITARY</b> — 손 소독하는 시늉.', '<b>GREASY</b> — 손가락을 비비며 미끌.'],
+    check: ['greasy는 기름진 음식처럼 더럽지 않은 것에도 쓰므로 DIRTY의 "이웃"으로 적었다.', '노트 식의 filthy "원형을 알아볼 수 없는"보다, 그럴 필요는 없다는 낱말 노트를 따랐다.'],
+  });
+  const SCENES = {
+    shirt: { btn: '커피', place: '커피를 쏟은 아침', pic: () => MEET(BX(448, 78, 30, 30)), lines: [['동료', 'What happened to your shirt?', '셔츠 왜 그래?'], ['나', 'It\'s <b>stained</b> with coffee.', '커피 얼룩이 졌어.', true]], say: '자국이 남음 — stained <b>with</b>.' },
+    hotel: { btn: '호텔', place: '호텔 방', pic: () => FL + BX(400, 100, 170, 50, 'var(--card)') + P(310, 150, 1.4, 'var(--ok)'), lines: [['친구', 'How\'s the room?', '방 어때?'], ['나', '<b>Spotless</b>! Even the mirror.', '얼룩 하나 없어! 거울까지.', true]], say: '칭찬할 때 <b>spotless</b>.' },
+  };
+  const SLOTS = { first: ['clean', 'res'], slots: { be: 'be 뒤', noun: '명사 앞', res: '동사의 결과' }, verbs: {
+    clean: { be: { ok: [['It', 's'], ['is', 'v'], ['clean', 'a']], say: '깨끗하다.' }, noun: { ok: [['a', 'x'], ['clean', 'a'], ['shirt', 'n']], say: '깨끗한 셔츠.' }, res: { ok: [['I', 's'], ['wiped', 'v'], ['it', 'o'], ['clean', 'a']], bad: [['I', 's'], ['wiped', 'v'], ['it', 'o'], ['cleanly', 'd']], say: '닦아서 <b>깨끗해졌다</b> — 동사 + 목적어 + 결과 형용사.' } },
+    dirty: { be: { ok: [['It', 's'], ['is', 'v'], ['dirty', 'a']], say: '더럽다.' }, noun: { ok: [['dirty', 'a'], ['dishes', 'n']], say: '설거지거리.' }, res: { ok: [['It', 's'], ['got', 'v'], ['dirty', 'a']], say: '더러워졌다 — get + 형용사.' } },
+  } };
+</script>

@@ -1,0 +1,42 @@
+<!-- title: FULL ↔ EMPTY 개념 -->
+<!-- pron: full=/fʊl/[**풀**]*, empty=/ˈemp.ti/[**엠**프티]*, #full/packed, #full/brimming, #full/overflowing, #empty/bare, #empty/hollow, #empty/vacant -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="11-clean-dirty.html">CLEAN ↔ DIRTY</a> · 다음: <a href="13-open-closed.html">OPEN ↔ CLOSED</a></p>
+  <h1>FULL ↔ EMPTY — 같은 컵, 채우기 전과 후</h1>
+  <p class="lead">동사 <b>FILL · EMPTY 묶음</b>이 만드는 상태다. 가득이면 full, 비면 empty. 빽빽한지, 넘치는지, 어디가 비었는지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 차고 빈 장면이 바뀌는 그림|찬 쪽은 찬 컵, 빽빽한 지하철, 찰랑이는 커피, 넘치는 싱크대이고 빈 쪽은 빈 컵, 휑한 벽, 속 빈 나무, 사람 없는 아파트다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>empty → full: <a href="../concepts/73-fill.html">73 FILL</a> (fill · pack · stuff)</li><li>full → empty: <a href="../concepts/82-empty.html">82 EMPTY</a> (pour out · drain)</li><li>자료: english-adjectives 노트의 full · empty 묶음</li></ul>
+</main>
+<script>
+  // 컵: lv = 물 높이(0~1, 그림용)
+  const CUP = (lv, extra) => (lv ? '<path d="M' + (160 + 18 * (1 - lv)) + ' ' + (210 - 130 * lv) + ' H' + (290 - 18 * (1 - lv)) + ' L274 214 H176 z" fill="var(--water)"/>' : '') + LN('M158 76 L176 216 H274 L292 76', 'var(--obj-line)', 4) + (extra || '');
+  const EXIST = adverbPage({ noun: '형용사', start: 'packed',
+    groups: [
+      { name: '가득한', items: [
+        { v: 'full', k: '가득 찬', en: 'The cup is full.', note: '더 들어갈 자리가 없다. 배부르다는 뜻도 있다.', from: '동사 fill의 결과', pic: () => CUP(1), ex: ['자리', '없음', 'I filled the cup.', '채웠다는 동작. 지금 상태는 말하지 않는다.', '가득한 상태.'] },
+        { v: 'packed', k: '빽빽한', base: 'FULL', core: '사람 · 물건이 밀집', from: 'pack(싸다 · 채우다) → packed', en: 'The train is packed.', note: '빽빽하다. 빈 공간이 꼭 0일 필요는 없다(노트).', pic: () => RC(40, 70, 370, 150, 'var(--obj)', 'var(--obj-line)', 14) + Array.from({ length: 18 }, (_, i) => CR(64 + i % 9 * 40, 110 + Math.floor(i / 9) * 52 + i % 2 * 8, 17, 'var(--skin)')).join('') + CR(100, 228, 12, 'var(--obj-line)') + CR(350, 228, 12, 'var(--obj-line)'), ex: ['사람이', '빽빽', 'The train is full.', '많이 겹친다. 끼어 있는 느낌이 약해진다.', '빽빽한.'] },
+        { v: 'brimming', k: '찰랑찰랑한', base: 'FULL', core: '가장자리까지', from: 'brim(가장자리) → -ing', en: 'The cup is brimming with coffee.', note: '가장자리까지. 감정이 가득할 때도 쓴다(노트).', pic: () => CUP(1, '<path d="M158 80 q67 -20 134 0" fill="var(--water)"/>' + LN('M140 66 h-14 M310 66 h14', 'var(--accent)', 3)), ex: ['끝까지', '찰랑', 'The cup is full.', '찰랑거리는 그림이 빠진다.', '가장자리까지 찬.'] },
+        { v: 'overflowing', k: '넘치는', base: 'FULL', core: '경계를 넘음', from: 'over + flow(흐르다) → -ing', en: 'The sink is overflowing.', note: '밖으로 흐른다. 메일함에도 쓴다(노트).', pic: () => RC(110, 110, 230, 80, 'var(--card)', 'var(--obj-line)', 14) + '<path d="M116 116 h218 v20 h-218 z" fill="var(--water)"/><path d="M110 116 q-18 40 -10 110 h26 q-10 -60 -2 -110 z M340 116 q18 40 10 110 h-26 q10 -60 2 -110 z" fill="var(--water)"/><ellipse cx="226" cy="236" rx="160" ry="10" fill="var(--water)"/>' + LN('M226 108 V70 h30', 'var(--obj-line)', 8), ex: ['밖으로', '흐름', 'The sink is full.', '아직 안 넘친 것처럼 들린다.', '넘쳐흐르는.'] },
+      ] },
+      { name: '빈', items: [
+        { v: 'empty', k: '빈', en: 'The cup is empty.', note: '안에 든 것이 없다.', from: '동사 empty(비우다)와 모양이 같다', pic: () => CUP(0), ex: ['든 것', '없음', 'I emptied the cup.', '비웠다는 동작. 지금 상태는 말하지 않는다.', '빈 상태.'] },
+        { v: 'bare', k: '휑한', base: 'EMPTY', core: '겉에 아무것도 없음', from: 'bear(곰)와 소리가 같다', en: 'The walls are bare.', note: '벽 · 선반 · 가지의 <b>겉</b>에 있을 것이 없다(노트).', pic: () => RC(50, 56, 350, 150, 'var(--card)', 'var(--line)') + LN('M50 206 H400', 'var(--obj-line)', 3) + [[120, 90], [270, 90]].map(([x, y]) => RC(x, y, 70, 60, 'none', 'var(--fog)') + CR(x + 35, y - 10, 3, 'var(--obj-line)')).join(''), ex: ['겉이', '휑함', 'The walls are empty.', '뜻은 간다. 겉에 아무것도 없다는 그림이 약하다.', '겉에 아무것도 없는.'] },
+        { v: 'hollow', k: '속이 빈', base: 'EMPTY', core: '겉은 있고 안이 빔', from: 'hollow out(속을 파내다)', en: 'The tree trunk is hollow.', note: '겉모양은 있는데 <b>안</b>이 비었다(노트).', pic: () => RC(90, 100, 270, 100, 'var(--wood)', 'var(--obj-line)', 10) + '<ellipse cx="350" cy="150" rx="34" ry="50" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="2"/><ellipse cx="350" cy="150" rx="24" ry="38" fill="#1a1510"/>' + LN('M110 130 h190 M110 170 h190', 'var(--obj-line)', 1.5), ex: ['속이', '빔', 'The trunk is empty.', '어색하다. 겉은 있고 속이 빈 그림이 안 나온다.', '속이 빈.'] },
+        { v: 'vacant', k: '사람이 없는', base: 'EMPTY', core: '쓰는 사람이 없음', from: 'vacate(비우고 나가다)와 짝', en: 'The apartment is vacant.', note: '자리 · 집 · 직위에 <b>쓰는 사람</b>이 없다. 가구는 있을 수 있다(노트).', pic: () => RC(110, 50, 230, 190, 'var(--card)', 'var(--obj-line)') + Array.from({ length: 9 }, (_, i) => RC(136 + i % 3 * 66, 70 + Math.floor(i / 3) * 52, 44, 34, i === 4 ? '#1a1d22' : 'var(--gold)')).join('') + RC(196, 160, 58, 22, 'var(--bg)', 'var(--bad)') + tx(225, 176, 12, '임대', 'var(--bad)', ' font-weight="700"') },
+      ] },
+    ],
+    q: [['Q1. 안에?', '가득 → <b>full</b> / 없음 → <b>empty</b>'], ['Q2. 어떻게 가득?', '빽빽 → <b>packed</b> / 끝까지 → <b>brimming</b> / 넘침 → <b>overflowing</b>'], ['Q3. 어디가 비었나?', '겉 → <b>bare</b> / 속 → <b>hollow</b> / 자리 · 집 → <b>vacant</b>']],
+    body: ['<b>PACKED</b> — 어깨를 움츠리고 까치발. <b>BRIMMING</b> — 찰랑이는 컵을 조심조심.', '<b>HOLLOW</b> — 두드려 통통 소리 듣기.'],
+    check: ['노트 식의 brimming "표면장력", packed "빈틈없이"는 낱말 노트에서 필수가 아니라고 해 뺐다.'],
+  });
+  const SCENES = {
+    train: { btn: '지하철', place: '퇴근길 지하철', pic: () => FL + BX(380, 50, 230, 100) + P(310, 150, 1.4, 'var(--ok)') + P(430, 150, 1.2, 'var(--sleeve)') + P(480, 150, 1.2, 'var(--accent2)') + P(530, 150, 1.2, 'var(--ok)'), lines: [['친구', 'How was the train?', '지하철 어땠어?'], ['나', 'It was <b>packed</b>.', '빽빽했어.', true]], say: '사람이 빽빽 — <b>packed · crowded</b>.' },
+    seat: { btn: '자리', place: '카페 자리', pic: () => MEET(''), lines: [['나', 'Is this seat <b>taken</b>?', '이 자리 주인 있나요?', true], ['손님', 'No, it\'s <b>empty</b>.', '아뇨, 비었어요.']], say: '자리를 물을 때는 vacant보다 <b>taken</b>이 자연스럽다.' },
+  };
+  const SLOTS = { first: ['full', 'of'], slots: { be: 'be 뒤', of: '무엇으로', noun: '명사 앞' }, verbs: {
+    full: { be: { ok: [['I', 's'], ['am', 'v'], ['full', 'a']], say: '배불러.' }, of: { ok: [['It', 's'], ['is', 'v'], ['full', 'a'], ['of', 'x'], ['water', 'n']], bad: [['It', 's'], ['is', 'v'], ['full', 'a'], ['with', 'x'], ['water', 'n']], say: 'full <b>of</b>. (filled <b>with</b>와 다르다.)' }, noun: { ok: [['a', 'x'], ['full', 'a'], ['glass', 'n']], say: '가득 찬 잔.' } },
+    packed: { be: { ok: [['The', 'x'], ['bus', 's'], ['is', 'v'], ['packed', 'a']], bad: [['The', 'x'], ['bus', 's'], ['is', 'v'], ['packing', 'a']], say: '빽빽한 <b>상태</b>는 packed.' }, of: { ok: [['packed', 'a'], ['with', 'x'], ['people', 'n']], say: 'packed <b>with</b>.' }, noun: { ok: [['a', 'x'], ['packed', 'a'], ['lunch', 'n']], say: '도시락 — 싸 둔 점심.' } },
+  } };
+</script>

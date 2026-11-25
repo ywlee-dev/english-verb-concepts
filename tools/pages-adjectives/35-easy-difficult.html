@@ -1,0 +1,40 @@
+<!-- title: EASY ↔ DIFFICULT 개념 -->
+<!-- pron: easy=/ˈiː.zi/[**이**지]*, difficult=/ˈdɪf.ɪ.kəlt/[**디**피컬트]*, #easy/straightforward, #easy/effortless, #difficult/tough, #difficult/challenging, #difficult/arduous -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="34-safe-dangerous.html">SAFE ↔ DANGEROUS</a> · 다음: <a href="36-clear-vague.html">CLEAR ↔ VAGUE</a></p>
+  <h1>EASY ↔ DIFFICULT — 같은 계단, 다른 높이</h1>
+  <p class="lead">힘이 <b>덜 들면</b> easy, <b>많이 들면</b> difficult(말할 때는 hard). 방법이 분명한지, 수월해 보이는지, 버거운 시기인지, 도전인지에 따라 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 쉽고 어려운 장면이 바뀌는 그림|쉬운 쪽은 낮은 계단, 짧은 설명서, 부드러운 동작이고 어려운 쪽은 높은 계단, 버거운 한 주, 퍼즐, 며칠의 산길이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>풀고 해내는 동사: <a href="../concepts/03-solve.html">03 SOLVE</a> · <a href="../concepts/48-learn.html">48 LEARN</a> · <a href="../concepts/74-achieve.html">74 ACHIEVE</a></li><li>부사: <a href="../adverbs/12-barely-hardly.html">BARELY · HARDLY</a> — hardly는 "어렵게"가 아니다</li><li>자료: english-adjectives 노트의 easy · difficult 묶음</li></ul>
+</main>
+<script>
+  const STEP = (h) => '<path d="M120 240 ' + [0, 1, 2].map((i) => 'v-' + h + ' h80').join(' ') + ' V240 z" fill="var(--fog)" stroke="var(--obj-line)" stroke-width="2"/>';
+  const EXIST = adverbPage({ noun: '형용사', start: 'challenging',
+    groups: [
+      { name: '쉬운', items: [
+        { v: 'easy', k: '쉬운', en: 'This question is easy.', note: '힘이 덜 든다.', from: 'ease(쉬움) · easily(쉽게)', pic: () => GRD + STEP(16) + MAN(160, { y: 224, s: .85, f: 'smile', c: 'var(--ok)' }), ex: ['힘', '덜 듦', 'This question is short.', '짧다는 뜻. 쉬운지는 모른다.', '쉬운.'] },
+        { v: 'straightforward', k: '방법이 분명한', base: 'EASY', core: '절차 · 설명이 명료', from: 'straight(곧게) + forward(앞으로)', en: 'The instructions are straightforward.', note: '무엇을 해야 할지 <b>바로 보인다</b>(노트).', pic: () => [1, 2, 3].map((n, i) => CR(90 + i * 135, 120, 34, 'var(--card)') + tx(90 + i * 135, 130, 26, n, 'var(--accent)', ' font-weight="700"') + (i < 2 ? AR(130 + i * 135, 120, 184 + i * 135, 120, 'var(--accent)', 4) : '')).join('') + tick(350, 196), ex: ['방법', '분명', 'The instructions are short.', '짧다는 뜻. 분명한지는 모른다.', '방법이 분명한.'] },
+        { v: 'effortless', k: '힘 안 드는 듯한', base: 'EASY', core: '수월해 보임', from: 'effort(노력) + less', en: 'She made it look effortless.', note: '그렇게 <b>보인다</b>. 연습이 적었다는 뜻이 아니다(노트).', pic: () => GRD + '<g transform="rotate(-14 226 240)">' + MAN(226, { f: 'smile', a: 'up', c: 'var(--accent2)', s: 1.1 }) + '</g>' + LN('M120 190 q60 -120 190 -90', 'var(--fog)', 3, ' stroke-dasharray="7 7"') + NOTE(310, 120, 22) + NOTE(340, 150, 16), ex: ['수월해', '보임', 'She made it look easy.', '많이 겹친다. 부드러운 느낌이 약해진다.', '힘 안 드는 듯한.'] },
+      ] },
+      { name: '어려운', items: [
+        { v: 'difficult', k: '어려운', en: 'This question is difficult.', note: '말할 때는 <b>hard</b>가 더 흔하다(뜻은 같다).', from: 'difficulty(어려움)', pic: () => GRD + STEP(54).replace('M120 240', 'M140 240') + MAN(96, { f: 'sad', a: 'up', s: .85 }), ex: ['힘', '많이 듦', 'This question is long.', '길다는 뜻. 어려운지는 모른다.', '어려운.'] },
+        { v: 'tough', k: '버거운 · 힘든', base: 'DIFFICULT', core: '견디기 힘듦', from: 'toughen(강하게 하다) — gh는 [f]', en: 'It\'s been a tough week.', note: '문제뿐 아니라 <b>시기 · 상황</b>에도(노트).', pic: () => GRD + MAN(226, { f: 'sad', a: 'bow', r: 8 }) + [['시험', 130, 70], ['일', 226, 56], ['이사', 320, 74]].map(([t, x, y]) => RC(x - 34, y - 20, 68, 40, 'var(--fog)') + tx(x, y + 5, 14, t, '#333', ' font-weight="600"')).join('') + LN('M150 96 l40 30 M226 82 v20 M302 100 l-40 26', 'var(--bad)', 3), ex: ['견디기', '힘듦', 'It\'s been a long week.', '많이 겹쳐 쓰지만 버거움이 덜 또렷하다.', '버거운.'] },
+        { v: 'challenging', k: '도전이 되는', base: 'DIFFICULT', core: '능력을 시험함', from: 'challenge(도전) → -ing', en: 'This puzzle is challenging.', note: '해 볼 만한 어려움. <b>늘 즐겁다는 뜻은 아니다</b>(노트).', pic: () => GRD + MAN(120, { f: 'smile', a: 'hug' }) + [0, 1, 2].map((r) => [0, 1, 2].map((c) => (r === 1 && c === 2 ? RC(220 + c * 54, 70 + r * 54, 50, 50, 'none', 'var(--accent)') + tx(245 + c * 54, 104 + r * 54, 24, '?', 'var(--accent)', ' font-weight="700"') : RC(220 + c * 54, 70 + r * 54, 50, 50, ['var(--sleeve)', 'var(--ok)', 'var(--gold)'][(r + c) % 3]))).join('')).join(''), ex: ['능력', '시험', 'This puzzle is difficult.', '해 보고 싶은 느낌이 빠진다.', '도전이 되는.'] },
+        { v: 'arduous', k: '오래 고된', base: 'DIFFICULT', core: '긴 힘과 시간', from: '라틴어 arduus(가파른)', en: 'It was an arduous hike.', note: '시간과 힘을 많이 요구. 격식 있는 말(노트).', pic: () => '<path d="M30 240 L160 170 L210 190 L350 60 L420 110 V250 H30 z" fill="var(--wood)" stroke="var(--obj-line)"/>' + MAN(264, { y: 142, s: .55, f: 'sad', a: 'bow', r: 18 }) + LN('M60 222 L160 166 L212 186 L262 140', 'var(--gold)', 3, ' stroke-dasharray="6 6"') + CR(80, 70, 18, 'var(--gold)', 'none') + tx(120, 120, 13, '사흘째…', 'var(--muted)') },
+      ] },
+    ],
+    q: [['Q1. 힘이?', '덜 듦 → <b>easy</b> / 많이 듦 → <b>difficult · hard</b>'], ['Q2. 어떻게 쉬운가?', '방법이 분명 → <b>straightforward</b> / 수월해 보임 → <b>effortless</b>'], ['Q3. 어떻게 어려운가?', '견디기 힘든 시기 → <b>tough</b> / 해 볼 도전 → <b>challenging</b> / 길고 고됨 → <b>arduous</b>']],
+    body: ['<b>STRAIGHTFORWARD</b> — 손끝으로 곧게 앞으로. <b>TOUGH</b> — 이마 닦기.', '<b>CHALLENGING</b> — 소매 걷고 달려들기.'],
+    check: ['노트의 difficult/hard 중 폴더 이름대로 difficult를 대표로 두었다. hard는 04에서 "단단한"으로도 다룬다.', '노트 식의 effortless "오랜 숙련"은 흔한 배경일 뿐이라 필수로 적지 않았다.'],
+  });
+  const SCENES = {
+    test: { btn: '시험', place: '시험을 마치고', pic: () => MEET(BX(440, 84, 50, 24)), lines: [['친구', 'How was the test?', '시험 어땠어?'], ['나', 'It was really <b>hard</b>.', '정말 어려웠어.', true]], say: '말할 때는 <b>easy ↔ hard</b>.' },
+    week: { btn: '한 주', place: '금요일 저녁', pic: () => MEET(''), lines: [['친구', 'You look tired.', '피곤해 보여.'], ['나', 'It\'s been a <b>tough</b> week.', '힘든 한 주였어.', true]], say: '시기에는 <b>tough</b>.' },
+  };
+  const SLOTS = { first: ['easy', 'to'], slots: { be: 'be 뒤', to: 'to와 함께', verb: '동사를 꾸밀 때' }, verbs: {
+    easy: { be: { ok: [['It', 's'], ['is', 'v'], ['easy', 'a']], say: '쉽다.' }, to: { ok: [['It', 's'], ['is', 'v'], ['easy', 'a'], ['to', 'x'], ['use', 'v']], bad: [['I', 's'], ['am', 'b'], ['easy', 'a'], ['to', 'x'], ['use', 'v'], ['it', 'o']], say: '사람이 아니라 <b>It</b>으로 말한다.' }, verb: { ok: [['I', 's'], ['solved', 'v'], ['it', 'o'], ['easily', 'd']], bad: [['I', 's'], ['solved', 'v'], ['it', 'o'], ['easy', 'a']], say: '동사를 꾸미면 <b>easily</b>.' } },
+    hard: { be: { ok: [['It', 's'], ['is', 'v'], ['hard', 'a']], say: '어렵다.' }, to: { ok: [['It', 's'], ['is', 'v'], ['hard', 'a'], ['for', 'x'], ['me', 'o']], bad: [['I', 's'], ['am', 'b'], ['difficult', 'a']], say: 'I\'m difficult는 "나는 까다로운 사람".' }, verb: { ok: [['I', 's'], ['worked', 'v'], ['hard', 'd']], bad: [['I', 's'], ['worked', 'v'], ['hardly', 'd']], say: '열심히는 hard. hardly는 "거의 ~않다".' } },
+  } };
+</script>

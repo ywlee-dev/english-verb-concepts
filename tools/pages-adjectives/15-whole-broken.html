@@ -1,0 +1,41 @@
+<!-- title: WHOLE ↔ BROKEN 개념 -->
+<!-- pron: whole=/hoʊl/[**호**울]*, broken=/ˈbroʊ.kən/[브**로**우큰]*, #whole/intact, #whole/complete, #broken/cracked, #broken/shattered, #broken/crushed -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="14-fresh-stale.html">FRESH ↔ STALE</a> · 다음: <a href="16-alive-dead.html">ALIVE ↔ DEAD</a></p>
+  <h1>WHOLE ↔ BROKEN — 같은 꽃병, 깨지기 전과 후</h1>
+  <p class="lead">동사 <b>BREAK 묶음</b>의 앞과 뒤다. crack하면 cracked, shatter하면 shattered, crush하면 crushed — 동사의 <b>결과 모양</b>이 그대로 형용사가 된다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 온전하거나 깨진 장면이 바뀌는 그림|온전한 쪽은 통째 케이크, 무사히 온 꽃병, 빠짐없는 전집이고 깨진 쪽은 깨진 꽃병, 금 간 화면, 산산조각 난 접시, 눌린 캔이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>whole → broken: <a href="../concepts/01-break.html">01 BREAK</a> (crack · smash · shatter · crush)</li><li>broken → whole: <a href="../concepts/54-fix.html">54 FIX</a></li><li>자료: english-adjectives 노트의 whole · broken 묶음</li></ul>
+</main>
+<script>
+  const VASE = (x, extra) => '<path d="M' + (x - 22) + ' 70 h44 v20 q50 40 30 110 q-8 34 -52 34 t-52 -34 q-20 -70 30 -110 z" fill="var(--sleeve)" stroke="var(--obj-line)" stroke-width="2"/>' + (extra || '');
+  const SHARD = (pts, dx, dy, r) => '<g transform="translate(' + dx + ' ' + dy + ') rotate(' + r + ')"><path d="' + pts + '" fill="var(--card)" stroke="var(--obj-line)" stroke-width="1.5"/></g>';
+  const EXIST = adverbPage({ noun: '형용사', start: 'cracked',
+    groups: [
+      { name: '온전한', items: [
+        { v: 'whole', k: '통째의 · 온전한', en: 'I ate the whole cake.', note: '빠진 데 없이 하나 전부. hole(구멍)과 소리가 같다.', from: 'w는 소리 나지 않는다', pic: () => '<ellipse cx="225" cy="200" rx="130" ry="20" fill="var(--card)" stroke="var(--obj-line)"/>' + RC(125, 120, 200, 78, 'var(--gold)', 'var(--obj-line)', 8) + '<path d="M125 130 q25 24 50 0 t50 0 t50 0 t50 0 v-14 h-200 z" fill="var(--bg)" stroke="var(--obj-line)"/>' + CR(225, 106, 12, 'var(--bad)'), ex: ['하나', '전부', 'I ate the cake.', '조금 먹었을 수도 있다.', '통째의.'] },
+        { v: 'intact', k: '손상 없는', base: 'WHOLE', core: '깨진 데 없음', from: '라틴어 intactus(손대지 않은)', en: 'The vase arrived intact.', note: '<b>손상</b>이 없다(노트).', pic: () => RC(120, 90, 210, 150, 'var(--wood)', 'var(--obj-line)', 4) + '<g transform="translate(90 34) scale(.6)">' + VASE(226) + '</g>' + tick(350, 110), ex: ['손상', '없음', 'The vase arrived.', '깨졌는지 아닌지 모른다.', '손상 없이 그대로인.'] },
+        { v: 'complete', k: '빠짐없는', base: 'WHOLE', core: '구성이 다 있음', from: '동사 complete(끝내다)와 모양이 같다', en: 'The collection is complete.', note: '<b>빠진 것</b>이 없다. 하나하나가 손상됐는지는 다른 이야기(노트).', pic: () => LN('M60 222 H390', 'var(--wood)', 10) + Array.from({ length: 8 }, (_, i) => RC(80 + i * 36, 96, 30, 120, ['var(--accent)', 'var(--ok)', 'var(--sleeve)', 'var(--gold)'][i % 4]) + tx(95 + i * 36, 160, 14, i + 1, 'var(--bg)', ' font-weight="700"')).join(''), ex: ['빠진 것', '없음', 'The collection is intact.', '손상이 없다는 뜻. 다 모았는지는 모른다.', '다 갖춰진.'] },
+      ] },
+      { name: '깨진', items: [
+        { v: 'broken', k: '깨진 · 고장 난', en: 'The vase is broken.', note: '모양이나 기능을 잃었다. 기계가 고장일 때도.', from: 'break — broke — broken', pic: () => GRD + '<path d="M170 240 q-20 -60 10 -96 l24 22 l20 -30 l22 34 l26 -20 q24 40 4 90 z" fill="var(--sleeve)" stroke="var(--obj-line)" stroke-width="2"/>' + [[120, 226, 20], [330, 222, 70], [356, 232, 140]].map(([x, y, r]) => SHARD('M0 0 l22 -8 l4 18 z', x, y, r).replace('var(--card)', 'var(--sleeve)')).join(''), ex: ['모양 ·', '기능 잃음', 'Someone broke the vase.', '깨는 동작. 지금 상태는 덜 보인다.', '깨진 상태.'] },
+        { v: 'cracked', k: '금이 간', base: 'BROKEN', core: '금만 감', from: 'crack(금 가다) → cracked', en: 'My phone screen is cracked.', note: '갈라졌지만 <b>아직 붙어 있다</b>(노트).', pic: () => RC(170, 46, 112, 190, '#2a3038', 'var(--obj-line)', 14) + RC(180, 64, 92, 150, 'var(--water)', 'none') + LN('M200 64 l16 40 l-14 24 l30 30 l-8 56 M216 104 l34 -20 M232 158 l36 10', '#fff', 2.5), ex: ['금만', '감', 'My screen is broken.', '아예 망가진 것처럼 들린다.', '금이 간.'] },
+        { v: 'shattered', k: '산산조각 난', base: 'BROKEN', core: '여러 조각', from: 'shatter(산산이 깨다) → shattered', en: 'The plate is shattered.', note: '여러 조각으로 깨졌다. 꿈 · 기대에도(노트).', pic: () => GRD + [[90, 210, 10], [140, 190, 60], [190, 214, 120], [226, 180, 200], [270, 210, 260], [320, 190, 310], [360, 216, 30], [160, 226, 340], [300, 228, 80], [226, 226, 150]].map(([x, y, r], i) => SHARD(i % 2 ? 'M-14 8 L2 -14 L16 6 z' : 'M-18 6 L-4 -14 L14 -6 L10 12 z', x, y, r)).join(''), ex: ['여러', '조각', 'The plate is broken.', '두 동강일 수도 있다.', '산산조각 난.'] },
+        { v: 'crushed', k: '눌려 찌그러진', base: 'BROKEN', core: '압력으로 눌림', from: 'crush(눌러 찌그러뜨리다) → crushed', en: 'The can is crushed.', note: '조각이 아니라 <b>눌린 모양</b>(노트).', pic: () => GRD + '<path d="M170 240 l-10 -30 l20 -16 l-14 -22 l24 -14 h72 l24 14 l-14 22 l20 16 l-10 30 z" fill="var(--fog)" stroke="var(--obj-line)" stroke-width="2"/>' + LN('M180 194 h92 M166 210 h118', 'var(--obj-line)', 2) + AR(226, 76, 226, 140, 'var(--accent)', 5), ex: ['눌려', '찌그러짐', 'The can is broken.', '어색하다. 눌린 모양이 안 나온다.', '눌린.'] },
+      ] },
+    ],
+    q: [['Q1. 온전한가?', '하나 전부 → <b>whole</b> / 깨짐 → <b>broken</b>'], ['Q2. 온전한 무엇?', '손상 없음 → <b>intact</b> / 빠짐 없음 → <b>complete</b>'], ['Q3. 어떤 모양으로?', '금 → <b>cracked</b> / 조각 → <b>shattered</b> / 눌림 → <b>crushed</b>']],
+    body: ['<b>CRACKED</b> — 손날로 금 긋기. <b>SHATTERED</b> — 두 손을 확 펼치기. <b>CRUSHED</b> — 두 손바닥으로 꾹.', '<b>COMPLETE</b> — 손가락으로 1부터 다 세기.'],
+    check: ['whole은 "손상 없음"보다 "통째의"로 더 흔히 쓰인다. 예문은 새로 지었다.', '동사 01 BREAK의 crack · shatter · crush와 같은 그림이 되게 맞췄다.'],
+  });
+  const SCENES = {
+    phone: { btn: '휴대폰', place: '휴대폰을 떨어뜨린 날', pic: () => MEET(BX(452, 70, 24, 38)), lines: [['친구', 'Is your phone <b>broken</b>?', '휴대폰 고장 났어?'], ['나', 'The screen is <b>cracked</b>, but it works.', '화면에 금 갔는데 작동은 해.', true]], say: '금(cracked)과 고장(broken)을 <b>따로</b> 말한다.' },
+    box: { btn: '택배', place: '택배를 연 날', pic: () => MEET(BX(430, 64, 70, 44, 'var(--wood)')), lines: [['가족', 'The box is <b>crushed</b>!', '상자가 찌그러졌어!'], ['나', 'But the vase is <b>intact</b>.', '그래도 꽃병은 멀쩡해.', true]], say: '상자는 <b>crushed</b>, 안은 <b>intact</b>.' },
+  };
+  const SLOTS = { first: ['broken', 'be'], slots: { be: 'be 뒤', noun: '명사 앞', arrive: '동사 뒤 상태' }, verbs: {
+    broken: { be: { ok: [['It', 's'], ['is', 'v'], ['broken', 'a']], bad: [['It', 's'], ['is', 'v'], ['broke', 'a']], say: '상태는 <b>broken</b>. (It\'s broke는 표준이 아니다.)' }, noun: { ok: [['a', 'x'], ['broken', 'a'], ['chair', 'n']], bad: [['a', 'x'], ['breaking', 'a'], ['chair', 'n']], say: '이미 부서진 의자.' }, arrive: { ok: [['It', 's'], ['arrived', 'v'], ['broken', 'a']], say: '부서진 채 도착했다.' } },
+    whole: { be: { ok: [['It', 's'], ['is', 'v'], ['still', 'x'], ['whole', 'a']], say: '아직 온전하다.' }, noun: { ok: [['the', 'x'], ['whole', 'a'], ['cake', 'n']], bad: [['whole', 'a'], ['the', 'x'], ['cake', 'n']], say: '<b>the whole</b> 케이크. (all the cake와 순서가 다르다.)' }, arrive: { ok: [['He', 's'], ['ate', 'v'], ['it', 'o'], ['whole', 'a']], say: '통째로 먹었다.' } },
+  } };
+</script>

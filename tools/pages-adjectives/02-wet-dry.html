@@ -1,0 +1,45 @@
+<!-- title: WET ↔ DRY 개념 -->
+<!-- pron: wet=/wet/[**웻**]*, dry=/draɪ/[드**라**이]*, #wet/damp, #wet/soggy, #wet/soaked, #wet/drenched, #dry/parched, #dry/arid, #dry/dehydrated -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="01-hot-cold.html">HOT ↔ COLD</a> · 다음: <a href="03-heavy-light.html">HEAVY ↔ LIGHT</a></p>
+  <h1>WET ↔ DRY — 같은 수건, 다른 물기</h1>
+  <p class="lead">같은 수건에 물기가 <b>있으면</b> wet, <b>없으면</b> dry. 조금인지, 물러졌는지, 흠뻑인지, 또 <b>무엇이</b> 말랐는지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 물기가 다른 장면이 바뀌는 그림|젖은 쪽은 젖은 수건, 축축한 셔츠, 불어난 시리얼, 흠뻑 젖은 양말, 비 맞은 사람이고 마른 쪽은 마른 수건, 목마른 사람, 메마른 땅, 지친 달리기다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>상태를 만드는 동사: <a href="../concepts/72-clean.html">72 CLEAN</a> (wash · wipe) · <a href="../concepts/73-fill.html">73 FILL</a></li><li>자료: english-adjectives 노트의 wet · dry 묶음</li></ul>
+</main>
+<script>
+  const DRP = (x, y, s) => '<path d="M' + x + ' ' + y + ' q' + -7 * (s || 1) + ' ' + 12 * (s || 1) + ' 0 ' + 17 * (s || 1) + ' q' + 7 * (s || 1) + ' ' + -5 * (s || 1) + ' 0 ' + -17 * (s || 1) + '" fill="var(--water)" stroke="var(--obj-line)" stroke-width=".8"/>';
+  const TOWEL = (c) => LN('M100 70 H350', 'var(--wood)', 6) + RC(160, 70, 130, 110, c, 'var(--obj-line)', 4) + LN('M160 160 H290', 'var(--bg)', 4);
+  const SHIRT = (c) => '<path d="M170 80 l36 -16 q20 16 40 0 l36 16 l22 44 l-28 12 l-10 -18 v86 h-80 v-86 l-10 18 l-28 -12 z" fill="' + c + '" stroke="var(--obj-line)" stroke-width="2"/>';
+  const EXIST = adverbPage({ noun: '형용사',
+    start: 'damp',
+    groups: [
+      { name: '젖은', items: [
+        { v: 'wet', k: '젖은', en: 'The towel is wet.', note: '물기가 있다. 얼마나인지는 말하지 않는다.', from: '동사 wet(적시다)와 모양이 같다', pic: () => TOWEL('var(--water)') + DRP(190, 190) + DRP(250, 196), ex: ['물기가', '있다', 'There is water on the towel.', '뜻은 간다. 길고, 젖은 상태가 한 낱말로 안 나온다.', '젖은 상태.'] },
+        { v: 'damp', k: '축축한', base: 'WET', core: '약간, 겉에', from: 'dampen(축축하게 하다)과 짝', en: 'The shirt is still damp.', note: '거의 말랐는데 아직 약간 축축하다(노트).', pic: () => SHIRT('var(--sleeve)') + [[206, 130], [250, 160], [222, 190]].map(([x, y]) => DRP(x, y, .6)).join(''), ex: ['약간', '축축', 'The shirt is still wet.', '많이 젖은 것처럼 들린다.', '살짝 젖은.'] },
+        { v: 'soggy', k: '눅눅하고 물러진', base: 'WET', core: '물을 먹어 물러짐', from: 'sog + y', en: 'The cereal is soggy.', note: '물기보다 <b>질감이 물러졌다</b>는 말(노트).', pic: () => '<path d="M120 130 h210 q-10 80 -105 80 t-105 -80 z" fill="var(--card)" stroke="var(--obj-line)" stroke-width="2"/><ellipse cx="225" cy="130" rx="105" ry="22" fill="var(--bg)" stroke="var(--obj-line)"/>' + [170, 205, 245, 280].map((x, i) => '<ellipse cx="' + x + '" cy="' + (130 + i % 2 * 8) + '" rx="17" ry="8" fill="var(--wood)"/>' + LN('M' + (x - 10) + ' ' + (134 + i % 2 * 8) + ' q10 12 20 0', 'var(--wood)', 3)).join(''), ex: ['물러', '졌다', 'The cereal is wet.', '물러져서 맛없다는 점이 빠진다.', '물기를 먹어 물러진.'] },
+        { v: 'soaked', k: '흠뻑 젖은', base: 'WET', core: '아주 많이 스며듦', from: 'soak(담그다 · 적시다) → soaked', en: 'My socks are soaked.', note: '물이 많이 스며들었다. 꼭 물이 뚝뚝 떨어질 필요는 없다(노트).', pic: () => '<path d="M190 60 h60 v100 l60 34 q10 26 -24 26 h-56 q-40 0 -40 -40 z" fill="var(--water)" stroke="var(--obj-line)" stroke-width="2"/>' + LN('M190 80 h60', 'var(--bg)', 4) + '<ellipse cx="240" cy="232" rx="100" ry="10" fill="var(--water)"/>', ex: ['흠뻑', '스며듦', 'My socks are damp.', '조금 축축한 정도로 줄어든다.', '아주 많이 젖은.'] },
+        { v: 'drenched', k: '온몸이 흠뻑', base: 'WET', core: '물을 뒤집어씀', from: 'drench(흠뻑 적시다) → drenched', en: 'We got drenched in the rain.', note: '머리부터 발끝까지. 갑작스러운 사고가 꼭 있어야 하지는 않는다(노트).', pic: () => GRD + MAN(226, { f: 'sad', a: 'up', c: 'var(--water)' }) + [80, 120, 160, 290, 330, 370].map((x, i) => LN('M' + x + ' ' + (60 + i % 2 * 40) + ' l-12 34 M' + (x + 10) + ' ' + (140 + i % 2 * 30) + ' l-12 34', 'var(--water)', 4)).join('') + '<ellipse cx="226" cy="240" rx="70" ry="8" fill="var(--water)"/>' },
+      ] },
+      { name: '마른', items: [
+        { v: 'dry', k: '마른', en: 'The towel is dry now.', note: '물기가 없다.', from: '동사 dry(말리다)와 모양이 같다', pic: () => TOWEL('var(--gold)'), ex: ['물기', '없음', 'The towel is not wet.', '뜻은 간다. 다 말랐다는 깔끔한 말이 못 된다.', '물기 없는.'] },
+        { v: 'parched', k: '목이 바싹 마른', base: 'DRY', core: '몹시 목마르거나 바싹', from: 'parch(바싹 말리다) → parched', en: 'I\'m parched. Can I have some water?', note: '목이 타거나 땅이 바싹 말랐다. 열 · 균열이 필수는 아니다(노트).', pic: () => GRD + MAN(180, { f: 'o', a: 'fwd', c: 'var(--accent2)' }) + DESK(250, 130) + GLASS(310, 180) + LN('M300 100 l20 20 m0 -20 l-20 20', 'var(--muted)', 2), ex: ['목이', '탄다', 'I\'m thirsty.', '많이 겹친다. 바싹 탄다는 세기가 약해진다.', '바싹 마른.'] },
+        { v: 'arid', k: '메마른 (땅 · 기후)', base: 'DRY', core: '비가 적은 곳', from: '라틴어 aridus', en: 'This region has an arid climate.', note: '지역 · 기후에 쓴다(노트). 수건에는 안 쓴다.', pic: () => GRD + CR(350, 80, 26, 'var(--gold)', 'none') + '<path d="M30 240 q90 -70 180 -10 t210 0 v10 z" fill="var(--gold)" opacity=".5"/>' + LN('M140 206 V130 M140 170 h-24 v-24 M140 160 h24 v-30', 'var(--ok)', 9), ex: ['비가', '적은 곳', 'This region is dry.', '지금 잠깐 마른 것처럼 들릴 수 있다.', '늘 건조한 지역 · 기후.'] },
+        { v: 'dehydrated', k: '수분이 부족한', base: 'DRY', core: '필요한 수분 부족', from: 'dehydrate(수분을 빼다) → -d', en: 'I feel dehydrated after the long run.', note: '몸 · 식품의 수분 부족. 의학적 판단은 아니다(노트).', pic: () => GRD + MAN(200, { f: 'sad', a: 'hip', r: 8, c: 'var(--accent)' }) + DRP(226, 96, .7) + DRP(176, 110, .7) + RC(300, 120, 40, 90, 'var(--bg)', 'var(--obj-line)', 8) + RC(304, 190, 32, 16, 'var(--water)', 'none') + RC(312, 106, 16, 14, 'var(--fog)') },
+      ] },
+    ],
+    q: [['Q1. 물기가?', '있다 → <b>wet</b> / 없다 → <b>dry</b>'], ['Q2. 젖었는데?', '약간 → <b>damp</b> / 물러짐 → <b>soggy</b> / 흠뻑 → <b>soaked</b> / 온몸 → <b>drenched</b>'], ['Q3. 무엇이 말랐나?', '목 · 땅이 바싹 → <b>parched</b> / 지역 · 기후 → <b>arid</b> / 몸의 수분 → <b>dehydrated</b>']],
+    body: ['<b>DAMP</b> — 손등을 대고 갸웃. <b>DRENCHED</b> — 양팔을 벌리고 물 털기.', '<b>PARCHED</b> — 목을 잡고 침 삼키기.'],
+    check: ['WET 노트의 식은 drenched를 "갑작스러운 사건"이라 하지만, 같은 노트 앞부분은 "갑작스러운 사고가 없어도 쓴다"고 해 앞부분을 따랐다.', '노트는 젖음 · 마름을 억지로 일대일로 맞추지 말라고 한다.'],
+  });
+  const SCENES = {
+    home: { btn: '빨래', place: '빨래 걷는 베란다', pic: () => FL + LN('M360 60 H600', OL, 3) + BX(400, 60, 60, 60, 'var(--sleeve)') + BX(490, 60, 60, 60, 'var(--ok)') + P(300, 150, 1.4, 'var(--ok)'), lines: [['가족', 'Is the laundry <b>dry</b>?', '빨래 말랐어?'], ['나', 'Not yet. It\'s still <b>damp</b>.', '아직. 좀 축축해.', true]], say: '거의 말랐는데 남은 물기 — <b>damp</b>.' },
+    rain: { btn: '비 온 날', place: '비를 맞고 온 날', pic: () => MEET('') + [200, 240, 280].map((x) => LN('M' + x + ' 40 l-8 22', 'var(--water)', 3)).join(''), lines: [['친구', 'You\'re <b>soaked</b>!', '흠뻑 젖었네!'], ['나', 'I ran all the way. I\'m <b>parched</b>, too.', '내내 뛰었어. 목도 타.', true]], say: '젖은 것은 옷, 마른 것은 목 — <b>대상이 다르다</b>.' },
+  };
+  const SLOTS = { first: ['wet', 'be'], slots: { be: 'be 뒤', noun: '명사 앞', get: '변할 때' }, verbs: {
+    wet: { be: { ok: [['The', 'x'], ['floor', 's'], ['is', 'v'], ['wet', 'a']], bad: [['The', 'x'], ['floor', 's'], ['is', 'v'], ['wetly', 'x']], say: 'be 뒤는 형용사.' }, noun: { ok: [['a', 'x'], ['wet', 'a'], ['towel', 'n']], bad: [['a', 'x'], ['towel', 'n'], ['wet', 'a']], say: '명사 <b>앞</b>.' }, get: { ok: [['I', 's'], ['got', 'v'], ['wet', 'a']], say: '젖게 됐다 — <b>get + 형용사</b>.' } },
+    soaked: { be: { ok: [['I', 's'], ['am', 'v'], ['soaked', 'a']], bad: [['I', 's'], ['am', 'v'], ['soaking', 'a']], say: '"나는 흠뻑 젖었다"는 <b>soaked</b>. (soaking wet이라는 말은 있다.)' }, noun: { ok: [['soaked', 'a'], ['socks', 'n']], say: '흠뻑 젖은 양말.' }, get: { ok: [['We', 's'], ['got', 'v'], ['soaked', 'a']], say: '흠뻑 젖게 됐다.' } },
+  } };
+</script>

@@ -34,6 +34,7 @@
   const MEET = (b) => FL + TB(370, 560, 108) + b + P(310, 150, 1.4, 'var(--ok)') + P(610, 150, 1.4, 'var(--sleeve)');
 
   function adverbPage(PG) {
+    if (PG.noun === '형용사') { ROLE.a = ['형용사', 'var(--accent)', true]; ROLE.n = ['명사', 'var(--line)']; ROLE.d = ['부사', 'var(--line)']; }
     const all = PG.groups.flatMap((g, gi) => g.items.map((it) => Object.assign({ g, gi }, it)));
     let cur = Math.max(0, all.findIndex((w) => w.v === PG.start));
     const n0 = PG.groups[0].items.length;
@@ -66,6 +67,6 @@
     $('bodyBox').innerHTML = PG.body.map((b) => '<li>' + b + '</li>').join('');
     $('checkBox').innerHTML = ['0+절 대화와 0절의 △ 판정은 노트에 없는 작문이다.', '*가 붙은 기본 낱말은 낱말 노트가 따로 없어 발음을 사전식으로 적었다. 기본 낱말 예문과 3절 자리 설명도 노트에 없다.'].concat(PG.check || []).map((b) => '<li>' + b + '</li>').join('');
     // 0절 카드: ex가 있는 낱말. 그림은 위 장면을 줄여 쓴다
-    return { noun: '부사가', color: 'var(--accent)', outColor: 'var(--accent2)', intro: '카드마다 말하고 싶은 그림이 하나씩 있다. 하나를 빼고 다른 말로 대신하면 무엇이 사라지는지 보인다.',
+    return { noun: (PG.noun || '부사') + '가', color: 'var(--accent)', outColor: 'var(--accent2)', intro: '카드마다 말하고 싶은 그림이 하나씩 있다. 하나를 빼고 다른 말로 대신하면 무엇이 사라지는지 보인다.',
       cards: all.filter((w) => w.ex).slice(0, 6).map((w) => ({ id: w.v, v: w.v, t: [w.ex[0], w.ex[1]], instead: w.ex[2] + ' △', lost: w.ex[3], why: w.ex[4], icon: '<g transform="scale(.22) translate(-225 -150)">' + w.pic().replace(/<text[\s\S]*?<\/text>/g, '') + '</g>' })) };
   }

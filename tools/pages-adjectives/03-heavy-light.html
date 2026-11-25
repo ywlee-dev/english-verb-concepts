@@ -1,0 +1,42 @@
+<!-- title: HEAVY ↔ LIGHT 개념 -->
+<!-- pron: heavy=/ˈhev.i/[**헤**비]*, light=/laɪt/[**라**잇]*, #heavy/hefty, #heavy/massive, #heavy/burdensome, #light/featherlight, #light/weightless -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="02-wet-dry.html">WET ↔ DRY</a> · 다음: <a href="04-hard-soft.html">HARD ↔ SOFT</a></p>
+  <h1>HEAVY ↔ LIGHT — 같은 상자, 다른 무게</h1>
+  <p class="lead">같은 상자를 들어 <b>무거우면</b> heavy, <b>가벼우면</b> light. 손에 묵직한지, 덩치가 큰지, 계속 짐이 되는지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 무게가 다른 장면이 바뀌는 그림|무거운 쪽은 상자를 겨우 드는 사람, 묵직한 책 상자, 거대한 조각상, 쌓인 일이고 가벼운 쪽은 한 손에 든 상자, 깃털 같은 재킷, 우주선의 볼펜이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>상태를 느끼는 동사: <a href="../concepts/30-move.html">30 MOVE</a> (lift · carry) · <a href="../concepts/79-measure.html">79 MEASURE</a> (weigh)</li><li>자료: english-adjectives 노트의 heavy · light 묶음</li></ul>
+</main>
+<script>
+  const BOX = (x, y, w, h, c) => RC(x, y, w, h, c || 'var(--wood)', 'var(--obj-line)', 4) + LN('M' + (x + w / 2) + ' ' + y + ' v' + h, 'var(--obj-line)', 1.5);
+  const SWT = (x, y) => '<path d="M' + x + ' ' + y + ' q-6 9 0 13 q6 -4 0 -13" fill="var(--water)"/>';
+  const EXIST = adverbPage({ noun: '형용사',
+    start: 'hefty',
+    groups: [
+      { name: '무거운', items: [
+        { v: 'heavy', k: '무거운', en: 'This box is heavy.', note: '무게가 많이 나간다.', from: 'heaviness(무거움)', pic: () => GRD + MAN(160, { f: 'sad', a: 'both', r: 12 }) + BOX(206, 186, 90, 54) + SWT(196, 112), ex: ['무게가', '크다', 'This box is big.', '크기를 말할 뿐, 무거운지는 모른다.', '무게가 큰.'] },
+        { v: 'hefty', k: '묵직한', base: 'HEAVY', core: '들어 보니 상당함', from: 'heft(들어 무게를 재다) + y', en: 'This box is hefty.', note: '들어 본 <b>느낌</b>이 묵직하다. 금액에도 쓴다(노트).', pic: () => GRD + MAN(150, { f: 'o', a: 'both' }) + BOX(196, 168, 70, 44) + [0, 1, 2].map((i) => RC(300 + i * 24, 190, 20, 50, ['var(--bad)', 'var(--ok)', 'var(--sleeve)'][i])).join('') + LN('M232 218 v14 m-7 -8 l7 8 l7 -8', 'var(--accent)', 3), ex: ['들면', '묵직', 'This box is heavy.', '많이 겹친다. 들어 보고 "제법인데" 하는 느낌이 약해진다.', '상당히 묵직한.'] },
+        { v: 'massive', k: '거대한', base: 'HEAVY와 이웃', core: '덩치 · 규모가 큼', from: 'mass(덩어리) + ive', en: 'That statue is massive.', note: '무겁기보다 <b>규모</b>가 초점. 무게는 문맥에 따른다(노트).', pic: () => GRD + '<path d="M200 240 v-40 h20 l-10 -90 q40 -60 80 0 l-10 90 h20 v40 z" fill="var(--fog)" stroke="var(--obj-line)" stroke-width="2"/>' + CR(250, 60, 28, 'var(--fog)') + MAN(110, { s: .55, f: 'o', a: 'point' }), ex: ['규모가', '크다', 'That statue is heavy.', '무게를 말할 뿐, 덩치가 안 그려진다.', '규모가 거대한.'] },
+        { v: 'burdensome', k: '짐스러운', base: 'HEAVY와 이웃', core: '감당할 부담', from: 'burden(짐) + some', en: 'These extra tasks are burdensome.', note: '몸의 짐뿐 아니라 일 · 규칙의 <b>부담</b>(노트).', pic: () => GRD + MAN(226, { f: 'sad', a: 'bow' }) + [0, 1, 2, 3].map((i) => RC(182 + i % 2 * 6, 98 - i * 17, 84, 15, 'var(--card)')).join('') + CLOCK(350, 110, 26, 3), ex: ['계속', '부담', 'These tasks are hard.', '어렵다는 뜻이 되어, 계속 짐이 된다는 점이 빠진다.', '부담스러운.'] },
+      ] },
+      { name: '가벼운', items: [
+        { v: 'light', k: '가벼운', en: 'This box is light.', note: '무게가 적다. "빛 · 밝은"이라는 다른 뜻도 있다.', from: 'lighten(가볍게 하다)과 짝', pic: () => GRD + MAN(200, { f: 'smile', a: 'up', c: 'var(--ok)' }) + BOX(206, 104, 64, 40), ex: ['무게가', '적다', 'This box is small.', '크기를 말할 뿐, 가벼운지는 모른다.', '무게가 적은.'] },
+        { v: 'featherlight', k: '깃털처럼 가벼운', base: 'LIGHT', core: '거의 안 느껴짐', from: 'feather(깃털) + light', en: 'This jacket is featherlight.', note: '실제 물건인데 놀랄 만큼 가볍다(노트).', pic: () => '<path d="M120 190 q40 -110 190 -120 q-20 90 -150 110 z" fill="var(--card)" stroke="var(--obj-line)" stroke-width="2"/>' + LN('M104 210 L300 78', 'var(--obj-line)', 2) + LN('M160 178 l34 -4 M190 156 l40 -6 M220 134 l42 -10', 'var(--fog)', 2) + LN('M110 228 q50 10 100 0', 'var(--fog)', 2), ex: ['깃털', '처럼', 'This jacket is light.', '놀랄 만큼이라는 점이 빠진다.', '거의 무게가 안 느껴지는.'] },
+        { v: 'weightless', k: '무게가 안 느껴지는', base: 'LIGHT와 이웃', core: '떠 있는 상태', from: 'weight(무게) + less', en: 'The pen seems weightless in the spacecraft.', note: '무게가 <b>느껴지지 않는</b> 상태. 질량이 없어진 것은 아니다(노트).', pic: () => RC(50, 50, 350, 180, 'var(--obj)', 'var(--line)', 40) + CR(120, 110, 28, 'var(--bg)') + '<g transform="rotate(-24 250 170)">' + MAN(250, { y: 200, f: 'smile', a: 'up', s: .8, c: 'var(--card)' }) + '</g>' + LN('M330 92 l34 -14', 'var(--accent)', 6), ex: ['떠', '있다', 'The pen is light.', '가볍다는 뜻일 뿐, 떠 있는 상태가 안 나온다.', '무게가 느껴지지 않는.'] },
+      ] },
+    ],
+    q: [['Q1. 들면?', '무겁다 → <b>heavy</b> / 가볍다 → <b>light</b>'], ['Q2. 무거운 무엇?', '들어 본 느낌 → <b>hefty</b> / 규모 → <b>massive</b> / 부담 → <b>burdensome</b>'], ['Q3. 가벼운 무엇?', '놀랄 만큼 → <b>featherlight</b> / 떠 있음 → <b>weightless</b>']],
+    body: ['<b>HEFTY</b> — 두 손으로 들며 "오, 제법". <b>MASSIVE</b> — 두 팔을 크게 벌려 올려다보기.', '<b>BURDENSOME</b> — 어깨를 축. <b>FEATHERLIGHT</b> — 손가락 하나로 살랑.'],
+    check: ['노트 식은 massive를 "압도적인 질량", burdensome을 "오래 짊어진 짐"이라 하지만, 같은 노트 설명은 크기와 부담에 초점이 있다고 해 설명을 따랐다.', 'burdensome은 격식 있게 들린다. 일상에서는 <span class="en">It\'s a burden.</span>도 흔하다(노트에 없음).'],
+  });
+  const SCENES = {
+    move: { btn: '이사', place: '이삿날', pic: () => FL + BX(420, 110, 70, 40, 'var(--wood)') + P(310, 150, 1.4, 'var(--ok)') + P(590, 150, 1.4, 'var(--sleeve)'), lines: [['나', 'This box is <b>hefty</b>. Can you help me?', '이 상자 묵직하네. 도와줄래?', true], ['친구', 'Sure. This one is <b>light</b>.', '그래. 이건 가볍네.']], say: '들어 본 느낌 — <b>hefty</b>.' },
+    work: { btn: '회사', place: '일이 늘어난 회사', pic: () => MEET(BX(430, 60, 60, 48)), lines: [['동료', 'You look tired.', '피곤해 보여.'], ['나', 'My workload is too <b>heavy</b>.', '일이 너무 많아.', true]], say: 'heavy는 짐뿐 아니라 <b>일 · 비 · 교통</b>에도 쓴다(heavy rain · heavy traffic).' },
+  };
+  const SLOTS = { first: ['heavy', 'be'], slots: { be: 'be 뒤', noun: '명사 앞', deg: '얼마나' }, verbs: {
+    heavy: { be: { ok: [['It', 's'], ['is', 'v'], ['heavy', 'a']], bad: [['It', 's'], ['heavies', 'v']], say: 'be가 있어야 한다.' }, noun: { ok: [['heavy', 'a'], ['rain', 'n']], bad: [['strong', 'a'], ['rain', 'n']], say: '폭우는 보통 <b>heavy</b> rain.' }, deg: { ok: [['How', 'x'], ['heavy', 'a'], ['is', 'v'], ['it?', 's']], say: '무게를 물을 때.' } },
+    light: { be: { ok: [['It', 's'], ['is', 'v'], ['light', 'a']], say: '가볍다. 문맥에 따라 "밝다".' }, noun: { ok: [['a', 'x'], ['light', 'a'], ['lunch', 'n']], say: '가벼운 점심 — 양이 적은.' }, deg: { ok: [['It', 's'], ['is', 'v'], ['as', 'x'], ['light', 'a'], ['as', 'x'], ['air', 'n']], say: '공기처럼 가볍다.' } },
+  } };
+</script>

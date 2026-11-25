@@ -1,0 +1,40 @@
+<!-- title: HAPPY ↔ SAD 개념 -->
+<!-- pron: happy=/ˈhæp.i/[**해**피]*, sad=/sæd/[**새**드]*, #happy/cheerful, #happy/overjoyed, #happy/ecstatic, #sad/downcast, #sad/heartbroken, #sad/depressed -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="22-deep-shallow.html">DEEP ↔ SHALLOW</a> · 다음: <a href="24-calm-angry.html">CALM ↔ ANGRY</a></p>
+  <h1>HAPPY ↔ SAD — 같은 미나, 다른 소식</h1>
+  <p class="lead">좋은 일 앞에서 <b>happy</b>, 나쁜 일 앞에서 <b>sad</b>. 평소의 밝음인지, 소식에 기쁜지, 풀이 죽었는지, 소중한 것을 잃었는지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 기쁘고 슬픈 장면이 바뀌는 그림|기쁜 쪽은 웃는 미나, 인사하는 아침, 합격 소식, 결승골의 관중이고 슬픈 쪽은 슬픈 미나, 어깨를 늘어뜨린 친구, 빈 개집 앞, 오래 가라앉은 날들이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>느낌의 동사: <a href="../concepts/27-feel.html">27 FEEL</a> (feel happy) · <a href="../concepts/13-make.html">13 MAKE</a> (make me happy) · <a href="../concepts/21-see.html">21 SEE</a> (look sad)</li><li>자료: english-adjectives 노트의 happy · sad 묶음</li></ul>
+</main>
+<script>
+  const EXIST = adverbPage({ noun: '형용사', start: 'overjoyed',
+    groups: [
+      { name: '기쁜', items: [
+        { v: 'happy', k: '기쁜 · 행복한', en: 'I\'m happy today.', note: '가장 넓은 말. 만족한다는 뜻도 있다(happy with).', from: 'happiness(행복)', pic: () => GRD + MAN(226, { f: 'smile', a: 'up', c: 'var(--ok)', s: 1.25 }), ex: ['기분이', '좋다', 'I\'m fine today.', '괜찮다는 정도. 기쁨이 안 나온다.', '기쁜.'] },
+        { v: 'cheerful', k: '밝고 명랑한', base: 'HAPPY', core: '겉에 드러나는 밝음', from: 'cheer(밝은 기운) + ful', en: 'She seems cheerful today.', note: '행동 · 분위기가 밝다. 큰 사건이 없어도 된다(노트).', pic: () => GRD + MAN(150, { f: 'smile', a: 'point', c: 'var(--gold)' }) + NOTE(196, 90, 20) + NOTE(226, 112, 16) + SAYB(260, 60, '좋은 아침!', 13, 'var(--accent)') + MAN(350, { f: 'smile' }), ex: ['겉으로', '밝음', 'She seems happy today.', '많이 겹친다. 주변까지 밝히는 태도가 약해진다.', '밝고 명랑한.'] },
+        { v: 'overjoyed', k: '소식에 매우 기쁜', base: 'HAPPY', core: '좋은 소식 · 바라던 일', from: 'over(넘치게) + joy(기쁨) + ed', en: 'I was overjoyed to hear the news.', note: '바라던 일이 이루어져 매우 기쁘다. 뜻밖일 필요는 없다(노트).', pic: () => GRD + MAN(150, { f: 'smile', a: 'up', c: 'var(--ok)' }) + RC(250, 70, 130, 100, 'var(--card)') + LN('M250 74 l65 50 l65 -50', 'var(--obj-line)', 2) + tx(315, 152, 18, '합격', 'var(--accent)', ' font-weight="700"') + HEART(150, 60), ex: ['소식에', '큰 기쁨', 'I was happy to hear the news.', '얼마나 컸는지 빠진다.', '매우 기쁜.'] },
+        { v: 'ecstatic', k: '몹시 들뜬', base: 'HAPPY', core: '매우 강한 기쁨', from: 'ecstasy(황홀)와 짝', en: 'The fans were ecstatic.', note: '기쁨이 아주 크다. <b>overjoyed와 크게 겹친다</b>(노트).', pic: () => GRD + [80, 150, 226, 300, 370].map((x, i) => MAN(x, { y: 240 - (i % 2) * 22, f: 'smile', a: 'up', s: .8, c: ['var(--bad)', 'var(--gold)'][i % 2] })).join('') + SAYB(226, 70, '골!!!', 24, 'var(--accent)'), ex: ['강한', '기쁨', 'The fans were happy.', '세기가 빠진다.', '몹시 기쁜.'] },
+      ] },
+      { name: '슬픈', items: [
+        { v: 'sad', k: '슬픈', en: 'I\'m sad today.', note: '가장 넓은 말. 영화 · 이야기가 슬플 때도 쓴다.', from: 'sadness(슬픔)', pic: () => GRD + MAN(226, { f: 'sad', s: 1.25 }) + '<path d="M240 108 q-6 10 0 15 q6 -5 0 -15" fill="var(--water)"/>', ex: ['기분이', '슬픔', 'I\'m not happy today.', '불만이라는 뜻일 수도 있다.', '슬픈.'] },
+        { v: 'downcast', k: '풀이 죽은', base: 'SAD', core: '축 처진 모습', from: 'down(아래로) + cast(던지다)', en: 'He looked downcast after the interview.', note: '<b>눈에 보이게</b> 풀이 죽었다(노트). 글에서 더 자주 본다.', pic: () => GRD + MAN(226, { f: 'sad', a: 'bow', r: 14, s: 1.15 }) + LN('M276 120 v40 m-8 -10 l8 10 l8 -10', 'var(--muted)', 3), ex: ['축', '처짐', 'He looked sad.', '많이 겹친다. 고개 숙인 모습이 약해진다.', '풀이 죽은.'] },
+        { v: 'heartbroken', k: '가슴 아픈', base: 'SAD', core: '소중한 것을 잃음', from: 'heart(마음) + broken(깨진)', en: 'She was heartbroken when her dog died.', note: '깊은 상실감. 실망보다 훨씬 크다(노트).', pic: () => GRD + MAN(130, { f: 'sad', a: 'hug' }) + RC(260, 160, 110, 80, 'var(--wood)') + '<path d="M250 160 l65 -50 l65 50 z" fill="var(--bad)" stroke="var(--obj-line)"/><path d="M292 240 v-36 q23 -26 46 0 v36 z" fill="#1a1510"/>' + HEART(180, 100) + LN('M180 78 l-4 8 l7 5 l-4 9', 'var(--bg)', 3), ex: ['깊은', '상실', 'She was sad when her dog died.', '상실의 크기가 줄어든다.', '가슴이 무너진.'] },
+        { v: 'depressed', k: '오래 가라앉은', base: 'SAD', core: '저조함이 이어짐', from: 'depress(가라앉히다) → depressed', en: 'I\'ve been feeling depressed lately.', note: '<b>내 기분</b>을 말할 때. 남을 진단하듯 단정하지 않는다(노트).', pic: () => [0, 1, 2, 3].map((i) => RC(44 + i * 94, 66, 84, 150, 'var(--card)', 'var(--line)', 6) + MAN(86 + i * 94, { y: 206, s: .62, f: i === 0 ? 'flat' : 'sad', a: 'bow', r: 4 + i * 2, c: 'var(--fog)' })).join('') + LN('M60 50 H390', 'var(--muted)', 2, ' stroke-dasharray="5 5"'), ex: ['오래', '가라앉음', 'I\'ve been sad lately.', '많이 겹친다. 가라앉아 흥미가 없다는 느낌이 약해진다.', '오래 저조한.'] },
+      ] },
+    ],
+    q: [['Q1. 기분이?', '기쁨 → <b>happy</b> / 슬픔 → <b>sad</b>'], ['Q2. 어떻게 기쁜가?', '평소 밝음 → <b>cheerful</b> / 좋은 소식 → <b>overjoyed</b> / 아주 강함 → <b>ecstatic</b>'], ['Q3. 어떻게 슬픈가?', '풀 죽은 모습 → <b>downcast</b> / 잃음 → <b>heartbroken</b> / 오래 → <b>depressed</b>']],
+    body: ['<b>CHEERFUL</b> — 웃으며 손 흔들기. <b>OVERJOYED</b> — 두 손을 번쩍.', '<b>DOWNCAST</b> — 고개와 어깨를 떨구기.'],
+    check: ['노트 식의 ecstatic "이성을 잊을 만큼", overjoyed "예상치 못한"은 낱말 노트에서 필수가 아니라고 해 뺐다.', 'depressed는 진단명이 아니라 기분을 말하는 쓰임만 다뤘다.', 'downcast가 글에서 더 자주 보인다는 말은 노트에 없다.'],
+  });
+  const SCENES = {
+    news: { btn: '합격 소식', place: '합격 전화', pic: () => MEET(BX(452, 70, 24, 38)), lines: [['가족', 'Did you pass?', '붙었어?'], ['나', 'Yes! I\'m so <b>happy</b>!', '응! 너무 기뻐!', true]], say: '말할 때는 <b>so happy</b>가 가장 흔하다. overjoyed는 이야기 · 글에서 많이.' },
+    friend: { btn: '친구', place: '풀 죽은 친구', pic: () => MEET(''), lines: [['나', 'You look <b>sad</b>. Are you OK?', '슬퍼 보여. 괜찮아?', true], ['친구', 'I didn\'t get the job.', '면접 떨어졌어.']], say: '남에게는 depressed 대신 <b>You look sad / down</b>.' },
+  };
+  const SLOTS = { first: ['happy', 'look'], slots: { be: 'be · feel 뒤', look: 'look 뒤', make: '만들 때' }, verbs: {
+    happy: { be: { ok: [['I', 's'], ['am', 'b'], ['happy', 'a'], ['for', 'x'], ['you', 'o']], say: '네 일이라 기뻐.' }, look: { ok: [['You', 's'], ['look', 'v'], ['happy', 'a']], bad: [['You', 's'], ['look', 'v'], ['happily', 'd']], say: 'look 뒤는 <b>형용사</b>.' }, make: { ok: [['It', 's'], ['makes', 'v'], ['me', 'o'], ['happy', 'a']], bad: [['It', 's'], ['makes', 'v'], ['me', 'o'], ['happily', 'd']], say: 'make + 사람 + <b>형용사</b>.' } },
+    depressed: { be: { ok: [['I', 's'], ['feel', 'v'], ['depressed', 'a']], bad: [['I', 's'], ['feel', 'v'], ['depressing', 'a']], say: '<b>내가 느끼면 -ed</b>.' }, look: { ok: [['The', 'x'], ['news', 's'], ['is', 'v'], ['depressing', 'a']], say: '<b>그렇게 만들면 -ing</b>.' }, make: { ok: [['It', 's'], ['made', 'v'], ['me', 'o'], ['sad', 'a']], say: '편하게는 sad.' } },
+  } };
+</script>

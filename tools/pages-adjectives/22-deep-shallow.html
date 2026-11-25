@@ -1,0 +1,40 @@
+<!-- title: DEEP ↔ SHALLOW 개념 -->
+<!-- pron: deep=/diːp/[**디**프]*, shallow=/ˈʃæl.oʊ/[**섈**로우]*, #deep/bottomless, #deep/profound, #shallow/superficial, #shallow/surface -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="21-thick-thin.html">THICK ↔ THIN</a> · 다음: <a href="23-happy-sad.html">HAPPY ↔ SAD</a></p>
+  <h1>DEEP ↔ SHALLOW — 같은 물, 다른 바닥</h1>
+  <p class="lead">겉에서 바닥까지 <b>멀면</b> deep, <b>가까우면</b> shallow. 물뿐 아니라 <b>생각 · 이해 · 흠집</b>의 깊이에도 쓴다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 깊고 얕은 장면이 바뀌는 그림|깊은 쪽은 깊은 물, 바닥이 안 보이는 구덩이, 마음에 남은 말이고 얕은 쪽은 발목 물, 제목만 읽은 사람, 겉면의 흠집이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>깊이와 만나는 동사: <a href="../concepts/22-know.html">22 KNOW</a> · <a href="../concepts/23-think.html">23 THINK</a> · <a href="../concepts/48-learn.html">48 LEARN</a> · <a href="../concepts/79-measure.html">79 MEASURE</a></li><li>자료: english-adjectives 노트의 deep · shallow 묶음</li></ul>
+</main>
+<script>
+  // 물: top = 물 높이, 사람은 바닥(y 240)에 선다
+  const WAT = (top) => '<path d="M60 ' + top + ' q20 -8 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 V240 H60 z" fill="var(--water)" opacity=".75"/>' + LN('M60 50 V240 H380 V50', 'var(--obj-line)', 3);
+  const EXIST = adverbPage({ noun: '형용사', start: 'profound',
+    groups: [
+      { name: '깊은', items: [
+        { v: 'deep', k: '깊은', en: 'The water is deep.', note: '겉에서 바닥까지 멀다. 잠 · 목소리 · 생각에도 쓴다.', from: 'depth(깊이) · deepen(깊게 하다)', pic: () => WAT(80) + MAN(220, { y: 150, s: .6, f: 'o', a: 'up' }) + AR(320, 160, 320, 234, 'var(--bg)', 3), ex: ['바닥이', '멀다', 'There is a lot of water.', '양을 말한다. 바닥까지의 거리는 모른다.', '깊은.'] },
+        { v: 'bottomless', k: '바닥이 안 보이는', base: 'DEEP', core: '끝이 없어 보임', from: 'bottom(바닥) + less', en: 'The pit looked bottomless.', note: '정말 바닥이 없다는 말이 아니라 <b>그렇게 보인다</b>(노트).', pic: () => '<path d="M40 100 H150 V240 H40 z M300 100 H410 V240 H300 z" fill="var(--wood)" stroke="var(--obj-line)"/>' + RC(150, 100, 150, 140, '#1b2028', 'none') + RC(150, 150, 150, 90, '#0a0c10', 'none') + MAN(110, { y: 100, s: .5, f: 'o', a: 'fwd' }) + LN('M134 72 L210 220', 'var(--gold)', 3, ' stroke-dasharray="6 6"'), ex: ['바닥이', '안 보임', 'The pit looked deep.', '끝이 안 보일 만큼이라는 세기가 빠진다.', '끝없이 깊어 보이는.'] },
+        { v: 'profound', k: '뜻깊은 · 심오한', base: 'DEEP', core: '생각 · 마음의 깊이', from: 'profundity(심오함)와 짝', en: 'That was a profound insight.', note: '생각이나 마음을 깊이 건드린다. <b>어렵다는 뜻이 아니다</b>(노트). 물에는 안 쓴다.', pic: () => GRD + MAN(330, { f: 'smile', a: 'hug', c: 'var(--ok)' }) + MAN(110, { f: 'smile', a: 'fwd' }) + SAYB(140, 96, '너답게 해', 13) + CR(330, 70, 3, 'var(--accent)') + [14, 26, 38].map((r) => CR(330, 70, r, 'none', 'var(--accent)')).join('') + HEART(330, 190), ex: ['마음', '깊이', 'That was a good insight.', '좋다는 뜻뿐, 깊이 남는 느낌이 빠진다.', '뜻깊은.'] },
+      ] },
+      { name: '얕은', items: [
+        { v: 'shallow', k: '얕은', en: 'The water is shallow.', note: '겉에서 바닥까지 가깝다. 사람 · 생각이 얕다는 말은 흉이 된다.', from: 'shallow end(수영장 얕은 쪽)', pic: () => WAT(206) + MAN(220, { f: 'smile', c: 'var(--ok)' }), ex: ['바닥이', '가깝다', 'There is little water.', '양을 말한다. 깊이는 모른다.', '얕은.'] },
+        { v: 'superficial', k: '겉핥기의', base: 'SHALLOW', core: '이해 · 관계가 겉에만', from: '라틴어 superficies(표면)', en: 'My understanding is still superficial.', note: '겉에 머문 이해. <b>짧다고 다 superficial은 아니다</b>(노트).', pic: () => GRD + MAN(110, { f: 'flat', a: 'point' }) + RC(210, 60, 170, 170, 'var(--card)') + RC(224, 74, 142, 26, 'var(--accent)', 'none') + '<g opacity=".3">' + [0, 1, 2, 3, 4, 5].map((i) => LN('M228 ' + (122 + i * 17) + ' h' + (130 - i % 3 * 18), 'var(--obj-line)', 3)).join('') + '</g>' + tx(295, 92, 12, '제목만 봄', 'var(--bg)', ' font-weight="700"'), ex: ['겉만', '앎', 'My understanding is short.', '어색하다. 얕은 이해가 안 나온다.', '겉에 머문.'] },
+        { v: 'surface', k: '겉면의', base: 'SHALLOW', core: '겉에만 있음', from: '명사 surface(표면)와 모양이 같다', en: 'It\'s only surface damage.', note: '흠이 겉에만 있다. <b>명사 앞</b>에 쓴다(노트).', pic: () => RC(70, 96, 310, 26, 'var(--accent)', 'var(--obj-line)') + RC(70, 122, 310, 100, 'var(--fog)', 'var(--obj-line)') + LN('M180 96 l12 18 l14 -10 l14 12 l12 -20', 'var(--bg)', 6) + tx(225, 80, 12, '겉(칠)', 'var(--accent)') + tx(225, 178, 12, '안쪽은 멀쩡', '#333'), ex: ['겉', '에만', 'It\'s only small damage.', '크기를 말한다. 안쪽이 멀쩡한지는 모른다.', '겉에만 있는.'] },
+      ] },
+    ],
+    q: [['Q1. 바닥까지?', '멀다 → <b>deep</b> / 가깝다 → <b>shallow</b>'], ['Q2. 깊은 무엇?', '끝없어 보임 → <b>bottomless</b> / 생각 · 마음 → <b>profound</b>'], ['Q3. 얕은 무엇?', '이해 · 관계 → <b>superficial</b> / 겉면의 흠 → <b>surface</b>']],
+    body: ['<b>DEEP</b> — 손을 아래로 쭉 내리기. <b>SHALLOW</b> — 발목에 손 대기.', '<b>PROFOUND</b> — 가슴에 손을 얹고 천천히 끄덕이기.'],
+    check: ['수영장 예와 사람에게 쓰는 shallow는 노트에 없다.', 'surface는 혼자 서술하지 않고 surface damage · surface-level처럼 쓴다고 노트가 적었다.'],
+  });
+  const SCENES = {
+    pool: { btn: '수영장', place: '수영장', pic: () => FL + BX(400, 110, 200, 40, 'var(--water)') + P(310, 150, 1.4, 'var(--ok)'), lines: [['아이', 'Is it <b>deep</b> here?', '여기 깊어요?'], ['나', 'No, this is the <b>shallow</b> end.', '아니, 여긴 얕은 쪽이야.', true]], say: '수영장은 <b>deep end ↔ shallow end</b>.' },
+    car: { btn: '자동차', place: '차에 난 흠집', pic: () => FL + CAR(400) + P(310, 150, 1.4, 'var(--ok)'), lines: [['친구', 'Is the scratch bad?', '흠집 심해?'], ['나', 'No, it\'s only <b>surface</b> damage.', '아니, 겉만 긁혔어.', true]], say: '겉에만 — <b>surface</b> + 명사.' },
+  };
+  const SLOTS = { first: ['deep', 'num'], slots: { be: 'be 뒤', num: '수와 함께', noun: '명사 앞' }, verbs: {
+    deep: { be: { ok: [['The', 'x'], ['lake', 's'], ['is', 'v'], ['deep', 'a']], say: '호수가 깊다.' }, num: { ok: [['It', 's'], ['is', 'v'], ['2 m', 'n'], ['deep', 'a']], bad: [['It', 's'], ['is', 'v'], ['deep', 'a'], ['2 m', 'n']], say: '수 + <b>deep</b>.' }, noun: { ok: [['a', 'x'], ['deep', 'a'], ['breath', 'n']], say: '깊은 숨 — take a deep breath.' } },
+    surface: { be: { ok: [['The', 'x'], ['scratch', 's'], ['is', 'v'], ['superficial', 'a']], bad: [['The', 'x'], ['scratch', 's'], ['is', 'v'], ['surface', 'a']], say: 'surface는 be 뒤에 혼자 잘 안 온다.' }, num: { ok: [['It', 's'], ['is', 'v'], ['1 mm', 'n'], ['deep', 'a']], say: '얕아도 잴 때는 <b>deep</b>.' }, noun: { ok: [['surface', 'a'], ['damage', 'n']], say: '명사 앞에서.' } },
+  } };
+</script>

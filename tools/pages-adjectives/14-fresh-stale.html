@@ -1,0 +1,42 @@
+<!-- title: FRESH ↔ STALE 개념 -->
+<!-- pron: fresh=/freʃ/[프**레**쉬]*, stale=/steɪl/[스**테**일]*, #fresh/crisp, #fresh/raw, #stale/spoiled, #stale/rotten, #stale/decayed -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="13-open-closed.html">OPEN ↔ CLOSED</a> · 다음: <a href="15-whole-broken.html">WHOLE ↔ BROKEN</a></p>
+  <h1>FRESH ↔ STALE — 같은 빵, 오늘과 사흘 뒤</h1>
+  <p class="lead">갓 만든 빵은 fresh, 시간이 지나 맛과 질감이 떨어지면 stale. <b>stale은 썩었다는 뜻이 아니다</b> — 마르고 맛이 없어졌을 뿐일 수 있다(노트).</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 음식의 상태가 바뀌는 그림|신선한 쪽은 갓 구운 빵, 아삭한 상추, 익히지 않은 당근이고 나빠진 쪽은 마른 빵, 변질된 우유, 썩은 사과, 삭은 나무 기둥이다.}}
+  <p class="note">음식을 먹어도 되는지는 이 낱말만으로 정하지 않는다.</p>
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>상태를 바꾸는 동사: <a href="../concepts/71-cook.html">71 COOK</a> (raw → cooked) · <a href="../concepts/16-keep.html">16 KEEP</a> (preserve) · <a href="../concepts/68-freeze.html">68 FREEZE</a></li><li>자료: english-adjectives 노트의 fresh · stale 묶음</li></ul>
+</main>
+<script>
+  const BREAD = (c, s) => '<path d="M110 200 v-60 q0 -50 60 -50 h110 q60 0 60 50 v60 z" fill="' + c + '" stroke="var(--obj-line)" stroke-width="2"/>' + LN('M160 106 l20 34 M215 102 l20 34 M270 104 l20 34', 'var(--obj-line)', 3) + (s || '');
+  const STM = (x) => LN('M' + x + ' 76 q-8 -11 0 -22 t0 -22', 'var(--fog)', 3);
+  const EXIST = adverbPage({ noun: '형용사', start: 'stale',
+    groups: [
+      { name: '신선', items: [
+        { v: 'fresh', k: '신선한 · 갓 만든', en: 'The bread is fresh.', note: '만든 · 딴 지 얼마 안 됐다. 새 공기 · 생각에도.', from: 'freshen(신선하게 하다)과 짝', pic: () => BREAD('var(--gold)', STM(190) + STM(226) + STM(262)), ex: ['갓', '만든', 'The bread is new.', '어색하다. 음식의 신선함이 안 나온다.', '신선한.'] },
+        { v: 'crisp', k: '아삭한 · 바삭한', base: 'FRESH와 이웃', core: '경쾌한 질감', from: 'crisp up(바삭해지다)', en: 'The lettuce is crisp.', note: '<b>질감</b>을 말한다. 감자칩도 crisp하다 — 갓 딴 것과는 다른 이야기(노트).', pic: () => '<path d="M226 220 q-100 -10 -100 -90 q10 -50 50 -40 q20 -50 60 -30 q60 -16 70 40 q40 20 10 70 q-30 50 -90 50 z" fill="var(--ok)" stroke="var(--obj-line)" stroke-width="2"/>' + LN('M226 214 V110 M226 170 l-46 -40 M226 150 l46 -40', 'var(--bg)', 3) + LN('M340 90 l14 -14 M350 112 l18 -4', 'var(--accent)', 3) + tx(380, 80, 15, '아삭', 'var(--accent)', ' font-weight="700"'), ex: ['아삭', '질감', 'The lettuce is fresh.', '신선하다는 뜻. 아삭한 질감은 안 나온다.', '아삭 · 바삭한.'] },
+        { v: 'raw', k: '익히지 않은', base: 'FRESH와 이웃', core: '조리 안 함', from: '반대는 cooked(익힌)', en: 'I added raw carrots to the salad.', note: '<b>조리 여부</b>만 말한다. 신선함을 보장하지 않는다(노트).', pic: () => '<g transform="rotate(-30 225 150)"><path d="M130 130 h150 l70 20 l-70 20 h-150 q-20 -20 0 -40 z" fill="var(--accent)" stroke="var(--obj-line)" stroke-width="2"/>' + LN('M124 150 l-40 -20 M120 150 h-44 M124 152 l-38 22', 'var(--ok)', 6) + LN('M180 136 l6 12 M230 138 l6 12', 'var(--obj-line)', 2) + '</g>' + '<path d="M350 200 q-18 -28 4 -46 q4 18 14 12 q12 20 -4 34 z" fill="var(--bad)"/>' + CROSS(356, 180, 20), ex: ['안', '익힘', 'I added fresh carrots.', '신선하다는 뜻. 익혔는지는 모른다.', '익히지 않은.'] },
+      ] },
+      { name: '나빠진', items: [
+        { v: 'stale', k: '오래돼 맛없는', en: 'The bread is stale.', note: '마르고 맛이 떨어졌다. <b>썩은 것은 아니다</b>(노트).', from: '빵 · 과자 · 공기 · 소식에', pic: () => BREAD('#b9a98a', LN('M140 180 l30 -10 l20 14 l34 -16 M260 176 l26 10 l20 -14', 'var(--obj-line)', 2)) + tx(225, 70, 13, '딱딱 · 퍽퍽', 'var(--muted)'), ex: ['오래돼', '퍽퍽', 'The bread is rotten.', '틀리다. 썩었다는 뜻이 된다.', '오래돼 맛이 떨어진.'] },
+        { v: 'spoiled', k: '변질된', base: 'STALE과 이웃', core: '음식이 상함', from: 'spoil(망치다) → spoiled', en: 'The milk seems spoiled.', note: '음식이 변질됐다. 계획을 망쳤을 때, 버릇없는 아이에게도(노트 · 흔한 쓰임).', pic: () => '<path d="M170 100 l28 -36 h56 l28 36 v130 h-112 z" fill="var(--card)" stroke="var(--obj-line)" stroke-width="2"/>' + RC(190, 140, 72, 46, 'var(--water)', 'none') + tx(226, 169, 15, '우유') + LN('M310 120 q12 -10 0 -24 t0 -24 M334 124 q12 -10 0 -24 t0 -24', '#8a9a3a', 4), ex: ['음식이', '상함', 'The milk is old.', '오래됐다는 뜻. 상했는지는 모른다.', '변질된.'] },
+        { v: 'rotten', k: '썩은', base: 'STALE과 이웃', core: '부패함', from: 'rot(썩다)과 짝', en: 'The fruit smells rotten.', note: '과일 · 나무 같은 것이 <b>썩었다</b>(노트).', pic: () => '<path d="M226 110 q-80 -30 -84 50 q0 70 84 62 q84 8 84 -62 q-4 -80 -84 -50 z" fill="#7a5a32" stroke="var(--obj-line)" stroke-width="2"/>' + [[180, 170, 18], [250, 150, 14], [270, 190, 20]].map(([x, y, r]) => CR(x, y, r, '#4a3820', 'none')).join('') + LN('M226 110 V84', 'var(--wood)', 5) + [[330, 100], [360, 130], [130, 100]].map(([x, y]) => CR(x, y, 3, 'var(--obj-line)')).join('') + LN('M320 90 q10 8 20 0', 'var(--obj-line)', 1.5), ex: ['썩음', '', 'The fruit smells stale.', '오래된 냄새 정도로 줄어든다.', '썩은.'] },
+        { v: 'decayed', k: '서서히 삭은', base: 'STALE과 이웃', core: '오래 걸쳐 약해짐', from: 'decay(썩어 가다) → decayed', en: 'The wood is decayed.', note: '나무 · 이 · 건물이 시간이 지나 약해졌다(노트).', pic: () => GRD + '<path d="M170 240 V80 l16 10 l14 -16 l18 14 l16 -10 l20 16 l18 -8 V240 z" fill="var(--wood)" stroke="var(--obj-line)" stroke-width="2"/>' + [[200, 130, 12], [246, 170, 16], [196, 200, 10]].map(([x, y, r]) => CR(x, y, r, '#2a2018', 'none')).join('') + [300, 330, 350].map((x, i) => RC(x, 228 - i * 3, 14, 10, 'var(--wood)')).join('') },
+      ] },
+    ],
+    q: [['Q1. 갓 만든 것?', '그렇다 → <b>fresh</b> / 오래돼 맛이 떨어짐 → <b>stale</b>'], ['Q2. 다른 이야기', '질감 → <b>crisp</b> / 조리 여부 → <b>raw</b>'], ['Q3. 상했다면?', '음식 변질 → <b>spoiled</b> / 썩음 → <b>rotten</b> / 서서히 삭음 → <b>decayed</b>']],
+    body: ['<b>CRISP</b> — 아삭 베어 무는 시늉. <b>STALE</b> — 빵을 두드려 딱딱 소리.', '<b>ROTTEN</b> — 코를 막고 얼굴 돌리기.'],
+    check: ['노트의 기본 뜻이 "STALE(상한)"으로 적힌 곳이 있으나, 같은 노트가 "반드시 부패는 아니다"라고 해 그쪽을 따랐다.', 'crisp · raw · spoiled · rotten · decayed는 질문이 달라 모두 "이웃"으로 적었다.'],
+  });
+  const SCENES = {
+    bake: { btn: '빵집', place: '빵집', pic: () => MEET('<path d="M430 108 v-18 q0 -16 20 -16 h36 q20 0 20 16 v18 z" fill="var(--gold)" stroke="' + OL + '"/>'), lines: [['나', 'Is this bread <b>fresh</b>?', '이 빵 갓 나온 거예요?', true], ['점원', 'Yes. Yesterday\'s is <b>stale</b>.', '네. 어제 것은 퍽퍽해요.']], say: '빵의 짝은 <b>fresh ↔ stale</b>.' },
+    milk: { btn: '냉장고', place: '냉장고 앞', pic: () => FL + BX(420, 40, 80, 110) + P(330, 150, 1.4, 'var(--ok)'), lines: [['가족', 'Is the milk OK?', '우유 괜찮아?'], ['나', 'It smells <b>spoiled</b>.', '상한 냄새가 나.', true]], say: 'smell + <b>형용사</b>. 편하게는 <span class="en">It went bad.</span>' },
+  };
+  const SLOTS = { first: ['fresh', 'smell'], slots: { be: 'be 뒤', smell: 'smell · taste 뒤', noun: '명사 앞' }, verbs: {
+    fresh: { be: { ok: [['It', 's'], ['is', 'v'], ['fresh', 'a']], say: '신선하다.' }, smell: { ok: [['It', 's'], ['smells', 'v'], ['fresh', 'a']], bad: [['It', 's'], ['smells', 'v'], ['freshly', 'd']], say: 'smell · taste 뒤도 <b>형용사</b>.' }, noun: { ok: [['freshly', 'd'], ['baked', 'a'], ['bread', 'n']], say: '"갓 구운"에서는 baked를 꾸미는 부사 freshly.' } },
+    raw: { be: { ok: [['It', 's'], ['is', 'v'], ['raw', 'a']], say: '안 익었다.' }, smell: { ok: [['I', 's'], ['eat', 'v'], ['it', 'o'], ['raw', 'a']], say: '날로 먹는다.' }, noun: { ok: [['raw', 'a'], ['fish', 'n']], say: '날생선.' } },
+  } };
+</script>

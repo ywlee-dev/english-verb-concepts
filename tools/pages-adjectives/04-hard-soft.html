@@ -1,0 +1,42 @@
+<!-- title: HARD ↔ SOFT 개념 -->
+<!-- pron: hard=/hɑːrd/[**하**r드]*, soft=/sɔːft/[**소**프트]*, #hard/solid, #hard/rigid, #hard/firm, #soft/fluffy, #soft/pliable, #soft/tender -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="03-heavy-light.html">HEAVY ↔ LIGHT</a> · 다음: <a href="05-rough-smooth.html">ROUGH ↔ SMOOTH</a></p>
+  <h1>HARD ↔ SOFT — 같은 손가락, 다른 눌림</h1>
+  <p class="lead">눌러서 <b>안 들어가면</b> hard, <b>들어가면</b> soft. 속이 찼는지, 안 휘는지, 눌러 본 느낌인지에 따라 짝이 셋으로 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 단단함과 부드러움의 장면이 바뀌는 그림|단단한 쪽은 눌리지 않는 돌, 속이 찬 탁자, 휘지 않는 판, 덜 익은 복숭아이고 부드러운 쪽은 눌린 쿠션, 폭신한 베개, 휘는 가죽, 연한 고기다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>상태를 확인하는 동사: <a href="../concepts/62-touch.html">62 TOUCH</a> · <a href="../concepts/06-nudge.html">06 PUSH 묶음</a> (press) · <a href="../concepts/71-cook.html">71 COOK</a></li><li>자료: english-adjectives 노트의 hard · soft 묶음</li></ul>
+</main>
+<script>
+  const FING = (x, y) => at(x, y, 180, POINTER);
+  const EXIST = adverbPage({ noun: '형용사',
+    start: 'firm',
+    groups: [
+      { name: '단단한', items: [
+        { v: 'hard', k: '단단한', en: 'The bed is hard.', note: '눌러도 쉽게 안 들어간다. "어려운"이라는 다른 뜻도 있다.', from: 'harden(단단하게 하다)과 짝', pic: () => RC(110, 160, 230, 60, 'var(--fog)', 'var(--obj-line)', 10) + FING(225, 158) + LN('M196 150 l-12 -8 M254 150 l12 -8', 'var(--bad)', 3), ex: ['안', '들어감', 'The bed is not soft.', '뜻은 간다. 단단하다고 바로 짚지 못한다.', '눌러도 안 들어가는.'] },
+        { v: 'solid', k: '속이 꽉 찬', base: 'HARD', core: '속이 차고 튼튼', from: 'solidify(굳다)와 짝', en: 'This table feels solid.', note: '빈 곳이 없거나 튼튼한 느낌(노트).', pic: () => RC(90, 110, 100, 100, 'var(--wood)', 'var(--obj-line)') + [0, 1, 2, 3].map((i) => LN('M96 ' + (128 + i * 22) + ' h88', 'var(--obj-line)', 1)).join('') + RC(260, 110, 100, 100, 'var(--bg)', 'var(--fog)') + RC(272, 122, 76, 76, 'none', 'var(--fog)') + tx(140, 232, 12, '꽉 참', 'var(--accent)') + tx(310, 232, 12, '속이 빔', 'var(--muted)'), ex: ['속이', '찼다', 'This table is hard.', '겉이 딱딱하다는 뜻. 튼튼한 느낌이 빠진다.', '속이 차고 튼튼한.'] },
+        { v: 'rigid', k: '안 휘는', base: 'HARD', core: '모양이 그대로', from: '라틴어 rigidus(뻣뻣한)', en: 'The panel is rigid.', note: '구부려도 <b>모양이 그대로</b>. 규칙에도 쓴다(노트).', pic: () => RC(90, 140, 270, 16, 'var(--obj)', 'var(--obj-line)') + at(80, 150, -90, HAND) + at(370, 150, 90, HAND) + LN('M140 190 q85 40 170 0', 'var(--fog)', 2, ' stroke-dasharray="5 5"') + CROSS(225, 208, 8), ex: ['안', '휜다', 'The panel is hard.', '딱딱하다는 뜻. 휘지 않는다는 점이 빠진다.', '휘지 않는.'] },
+        { v: 'firm', k: '탄탄한', base: 'HARD', core: '눌러 본 저항감', from: 'firm up(단단해지다)', en: 'The peach is still firm.', note: '눌렀을 때 버티는 느낌. 나쁘지 않은 말 — 악수 · 매트리스에도(노트).', pic: () => CR(225, 170, 60, 'var(--gold)') + LN('M225 112 q12 30 0 60', 'var(--accent)', 2) + '<path d="M225 112 q26 -30 44 -6 q-24 16 -44 6" fill="var(--ok)"/>' + at(160, 166, 90, POINTER), ex: ['눌러', '버팀', 'The peach is hard.', '돌처럼 딱딱하다는 말로 들린다.', '눌러 보면 버티는.'] },
+      ] },
+      { name: '부드러운', items: [
+        { v: 'soft', k: '부드러운', en: 'The bed is soft.', note: '누르면 쉽게 들어간다. 소리 · 빛에도 쓴다.', from: 'soften(부드럽게 하다)과 짝', pic: () => '<path d="M110 160 h70 q45 50 90 0 h70 v60 h-230 z" fill="var(--sleeve)" stroke="var(--obj-line)" stroke-width="2"/>' + FING(225, 180), ex: ['쑥', '들어감', 'The bed is not hard.', '뜻은 간다. 부드러움을 바로 짚지 못한다.', '쉽게 들어가는.'] },
+        { v: 'fluffy', k: '폭신한', base: 'SOFT', core: '공기를 머금음', from: 'fluff(솜털) + y', en: 'This pillow is fluffy.', note: '부풀고 폭신하다. 수건 · 케이크에도(노트).', pic: () => '<path d="M110 190 q-30 -40 20 -60 q10 -50 70 -36 q50 -30 86 10 q60 4 46 50 q16 40 -40 46 h-140 q-30 10 -42 -10 z" fill="var(--card)" stroke="var(--obj-line)" stroke-width="2"/>' + [[170, 150], [230, 136], [280, 170], [210, 182]].map(([x, y]) => CR(x, y, 9, 'none', 'var(--fog)')).join(''), ex: ['폭신', '부풂', 'This pillow is soft.', '공기를 머금고 부푼 그림이 빠진다.', '폭신한.'] },
+        { v: 'pliable', k: '잘 휘는', base: 'SOFT', core: '부러지지 않고 휨', from: 'ply(구부리다) + able', en: 'The leather is pliable.', note: '부러지지 않고 모양이 바뀐다(노트).', pic: () => LN('M90 110 q135 170 270 0', 'var(--wood)', 18) + at(84, 100, -60, HAND) + at(366, 100, 60, HAND), ex: ['잘', '휜다', 'The leather is soft.', '촉감을 말할 뿐, 휜다는 점이 빠진다.', '잘 휘는.'] },
+        { v: 'tender', k: '연한', base: 'SOFT', core: '쉽게 잘리고 씹힘', from: 'tenderize(연하게 하다)와 짝', en: 'The meat is tender.', note: '고기 · 채소가 연하다. "다정한 · 아픈"이라는 뜻도 있다(노트).', pic: () => '<ellipse cx="225" cy="200" rx="120" ry="24" fill="var(--card)" stroke="var(--obj-line)"/><path d="M140 190 q10 -60 78 -56 v60 q-40 10 -78 -4 z M236 134 q72 2 74 56 q-40 14 -74 4 z" fill="var(--wood)" stroke="var(--obj-line)"/>' + LN('M227 60 V130 M217 60 v24 q10 14 20 0 v-24', 'var(--obj-line)', 4) },
+      ] },
+    ],
+    q: [['Q1. 누르면?', '안 들어감 → <b>hard</b> / 들어감 → <b>soft</b>'], ['Q2. 속은?', '꽉 참 → <b>solid</b> ↔ 공기 → <b>fluffy</b>'], ['Q3. 구부리면?', '안 휨 → <b>rigid</b> ↔ 잘 휨 → <b>pliable</b>'], ['Q4. 눌러 보면?', '버팀 → <b>firm</b> ↔ 연함 → <b>tender</b>']],
+    body: ['<b>SOLID</b> — 주먹으로 책상 똑똑. <b>RIGID</b> — 자를 휘어 보다 포기. <b>FIRM</b> — 엄지로 지그시.', '<b>FLUFFY</b> — 베개 팡팡. <b>PLIABLE</b> — 철사 구부리기.'],
+    check: ['노트의 3×3 짝(속 · 휨 · 눌림)을 질문 표로 옮겼다. 노트는 "완벽한 대칭"이라 하지만 여기서는 기억을 돕는 짝으로만 적었다.'],
+  });
+  const SCENES = {
+    shop: { btn: '과일 가게', place: '과일 가게', pic: () => MEET(CR(430, 94, 14, 'var(--gold)') + CR(464, 94, 14, 'var(--gold)') + CR(498, 94, 14, 'var(--gold)')), lines: [['나', 'Is this peach ripe?', '이 복숭아 익었어요?', true], ['주인', 'Not yet. It\'s still <b>firm</b>.', '아직요. 아직 단단해요.']], say: '눌러 본 느낌 — <b>firm</b>.' },
+    bed: { btn: '침대', place: '새 침대', pic: () => FL + BX(380, 110, 200, 40, 'var(--sleeve)') + P(310, 150, 1.4, 'var(--ok)'), lines: [['친구', 'How\'s the new bed?', '새 침대 어때?'], ['나', 'Too <b>hard</b>, but the pillow is <b>fluffy</b>.', '너무 딱딱한데 베개는 폭신해.', true]], say: '매트리스는 <b>hard · soft · firm</b>, 베개는 <b>fluffy</b>.' },
+  };
+  const SLOTS = { first: ['soft', 'be'], slots: { be: 'be · feel 뒤', noun: '명사 앞', make: '만들 때' }, verbs: {
+    soft: { be: { ok: [['It', 's'], ['feels', 'v'], ['soft', 'a']], bad: [['It', 's'], ['feels', 'v'], ['softly', 'd']], say: '<b>feel 뒤도 형용사</b>. softly는 동사를 꾸미는 부사.' }, noun: { ok: [['a', 'x'], ['soft', 'a'], ['voice', 'n']], say: '부드러운 목소리.' }, make: { ok: [['Make', 'v'], ['it', 'o'], ['soft', 'a']], bad: [['Make', 'v'], ['it', 'o'], ['softly', 'd']], say: 'make + 목적어 + <b>형용사</b>.' } },
+    hard: { be: { ok: [['It', 's'], ['feels', 'v'], ['hard', 'a']], bad: [['It', 's'], ['feels', 'v'], ['hardly', 'd']], say: 'hardly는 "거의 ~않다"라는 다른 말.' }, noun: { ok: [['a', 'x'], ['hard', 'a'], ['bed', 'n']], say: '딱딱한 침대. <span class="en">a hard question</span>이면 어려운 질문.' }, make: { ok: [['It', 's'], ['got', 'v'], ['hard', 'a']], say: '굳었다.' } },
+  } };
+</script>

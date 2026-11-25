@@ -1,0 +1,40 @@
+<!-- title: CLEAR ↔ VAGUE 개념 -->
+<!-- pron: clear=/klɪr/[클**리**어]*, vague=/veɪɡ/[**베**이그]*, #clear/obvious, #clear/crystal-clear, #clear/distinct, #vague/ambiguous, #vague/blurry -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="35-easy-difficult.html">EASY ↔ DIFFICULT</a> · 다음: <a href="37-simple-complex.html">SIMPLE ↔ COMPLEX</a></p>
+  <h1>CLEAR ↔ VAGUE — 같은 안내문, 다른 또렷함</h1>
+  <p class="lead">바로 알 수 있으면 clear, <b>정보가 모자라 흐릿하면</b> vague. 보기에 흐린 것(blurry)과 뜻이 둘인 것(ambiguous)은 다르다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 또렷하고 흐릿한 장면이 바뀌는 그림|또렷한 쪽은 시간과 장소가 적힌 안내, 하나뿐인 버튼, 맑은 호수, 서로 다른 두 향이고 흐릿한 쪽은 곧 봐요라는 안내, 두 뜻의 메시지, 흔들린 사진이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>알아보는 동사: <a href="../concepts/21-see.html">21 SEE</a> · <a href="../concepts/22-know.html">22 KNOW</a> (understand) · <a href="../concepts/18-tell.html">18 TELL</a> (explain)</li><li>자료: english-adjectives 노트의 clear · vague 묶음</li></ul>
+</main>
+<script>
+  const SIGN = (lines) => RC(90, 60, 270, 140, 'var(--card)', 'var(--obj-line)', 6) + lines.map(([t, c], i) => tx(225, 112 + i * 40, 20, t, c || 'var(--text)', ' font-weight="700"')).join('') + LN('M130 200 V240 M320 200 V240', 'var(--wood)', 8);
+  const EXIST = adverbPage({ noun: '형용사', start: 'ambiguous',
+    groups: [
+      { name: '또렷한', items: [
+        { v: 'clear', k: '분명한 · 맑은', en: 'The notice is clear.', note: '뜻이 분명하다. 하늘 · 물이 맑을 때도.', from: 'clearly(분명히) — 동사 clear(치우다)', pic: () => SIGN([['토요일 3시'], ['2층 회의실']]), ex: ['바로', '알 수 있음', 'The notice is short.', '짧다는 뜻. 분명한지는 모른다.', '분명한.'] },
+        { v: 'obvious', k: '누가 봐도 뻔한', base: 'CLEAR', core: '설명 없이 앎', from: 'obviously(분명히)', en: 'The next step is obvious.', note: '<span class="en">Isn\'t it obvious?</span>는 몰아붙이듯 들릴 수 있다(노트).', pic: () => RC(90, 60, 270, 160, 'var(--card)', 'var(--obj-line)', 12) + CR(225, 140, 52, 'var(--bad)') + tx(225, 148, 22, '시작', '#fff', ' font-weight="700"') + at(225, 190, 0, '') + AR(340, 60, 272, 108, 'var(--accent)', 5), ex: ['설명', '없이 앎', 'The next step is clear.', '많이 겹친다. "뻔하다"는 세기가 약하다.', '누가 봐도 뻔한.'] },
+        { v: 'crystal-clear', k: '아주 맑은 · 아주 명료한', base: 'CLEAR', core: '흐림이 없음', from: 'crystal(수정) + clear', en: 'The water is crystal-clear.', note: '물이 아주 맑거나 설명이 아주 명료하다(노트).', pic: () => RC(40, 90, 370, 150, 'var(--water)', 'none', 0) + '<g opacity=".9">' + [[90, 216, 22], [150, 224, 16], [210, 212, 26], [280, 222, 18], [350, 214, 24]].map(([x, y, r]) => '<ellipse cx="' + x + '" cy="' + y + '" rx="' + r + '" ry="' + r * .6 + '" fill="var(--fog)" stroke="var(--obj-line)"/>').join('') + '</g><path d="M230 150 q30 -22 60 0 q-30 22 -60 0 z m60 0 l18 -12 v24 z" fill="var(--gold)" stroke="var(--obj-line)"/>' + LN('M60 104 h40 M170 108 h50 M300 102 h60', '#fff', 3), ex: ['아주', '맑음', 'The water is clear.', '맑다는 뜻은 같다. 바닥까지 보이는 세기가 빠진다.', '아주 맑은.'] },
+        { v: 'distinct', k: '뚜렷이 다른', base: 'CLEAR와 이웃', core: '서로 구별됨', from: 'distinguish(구별하다)와 짝', en: 'The two flavors are distinct.', note: '<b>서로</b> 분명히 다르다(노트).', pic: () => CR(150, 150, 64, 'var(--bad)') + CR(310, 150, 64, 'var(--ok)') + tx(150, 156, 18, '딸기', '#fff', ' font-weight="700"') + tx(310, 156, 18, '민트', '#fff', ' font-weight="700"') + LN('M230 70 V230', 'var(--accent)', 3, ' stroke-dasharray="6 6"'), ex: ['서로', '구별', 'The two flavors are clear.', '어색하다. 서로 다르다는 점이 안 나온다.', '뚜렷이 다른.'] },
+      ] },
+      { name: '흐릿한', items: [
+        { v: 'vague', k: '막연한', en: 'The notice is vague.', note: '<b>정보가 모자라</b> 분명하지 않다.', from: 'vaguely(어렴풋이) — gue는 [g]', pic: () => SIGN([['조만간'], ['어딘가에서', 'var(--muted)']]), ex: ['정보', '부족', 'The notice is difficult.', '어렵다는 뜻이 된다.', '막연한.'] },
+        { v: 'ambiguous', k: '뜻이 둘로 읽히는', base: 'VAGUE와 이웃', core: '해석이 갈림', from: 'ambiguity(중의성)와 짝', en: 'The message is ambiguous.', note: '글씨가 안 보이는 게 아니라 <b>뜻이 여러 갈래</b>다(노트).', pic: () => SAYB(225, 66, '조금 있다 봐', 16, 'var(--accent)') + AR(190, 96, 130, 138, 'var(--muted)', 3) + AR(260, 96, 320, 138, 'var(--muted)', 3) + CLOCK(120, 182, 34, 0) + tx(120, 240, 13, '10분 뒤?', 'var(--text)') + RC(286, 148, 70, 68, '#20242c') + '<path d="M332 162 a18 18 0 1 0 8 34 a14 14 0 1 1 -8 -34" fill="var(--gold)"/>' + tx(321, 240, 13, '저녁에?', 'var(--text)'), ex: ['해석이', '갈림', 'The message is blurry.', '글자가 흐려 안 보인다는 뜻이 된다.', '뜻이 둘로 읽히는.'] },
+        { v: 'blurry', k: '흐려 보이는', base: 'VAGUE와 이웃', core: '눈에 선명하지 않음', from: 'blur(흐리게 하다) + y', en: 'The photo is blurry.', note: '사진 · 시야 · 기억이 선명하지 않다(노트).', pic: () => RC(120, 50, 210, 180, 'var(--card)') + [-18, -9, 0, 9, 18].map((d, i) => '<g opacity="' + (i === 2 ? .45 : .22) + '">' + MAN(225 + d, { y: 216, f: 'smile', a: 'up', c: 'var(--accent2)' }) + '</g>').join('') },
+      ] },
+    ],
+    q: [['Q1. 바로 알 수 있나?', '그렇다 → <b>clear</b> / 정보 부족 → <b>vague</b>'], ['Q2. 어떻게 또렷한가?', '뻔함 → <b>obvious</b> / 흐림 없음 → <b>crystal-clear</b> / 서로 구별 → <b>distinct</b>'], ['Q3. 어떻게 흐린가?', '눈에 → <b>blurry</b> / 뜻이 둘 → <b>ambiguous</b>']],
+    body: ['<b>CRYSTAL-CLEAR</b> — 손바닥으로 물속 가리키기. <b>DISTINCT</b> — 양손을 따로 벌리기.', '<b>AMBIGUOUS</b> — 엄지를 왼쪽 오른쪽. <b>BLURRY</b> — 눈 비비기.'],
+    check: ['노트 묶음 이름의 CONFUSING은 식구 설명이 없어 대표는 vague만 두었다.', 'clear · vague 예문(안내문)은 새로 지었다.'],
+  });
+  const SCENES = {
+    photo: { btn: '사진', place: '사진을 보며', pic: () => MEET(BX(440, 70, 50, 38)), lines: [['친구', 'Let me see the photo.', '사진 보여 줘.'], ['나', 'Sorry, it\'s <b>blurry</b>.', '미안, 흔들렸어.', true]], say: '사진은 <b>clear ↔ blurry</b>.' },
+    plan: { btn: '약속', place: '약속을 잡으며', pic: () => MEET(''), lines: [['친구', 'Let\'s meet sometime soon.', '조만간 보자.'], ['나', 'That\'s a bit <b>vague</b>. How about Friday?', '좀 막연한데. 금요일 어때?', true]], say: '정보가 모자람 — <b>vague</b>.' },
+  };
+  const SLOTS = { first: ['clear', 'make'], slots: { be: 'be 뒤', make: '분명히 할 때', noun: '명사 앞' }, verbs: {
+    clear: { be: { ok: [['Is', 'v'], ['that', 's'], ['clear?', 'a']], say: '이해됐어요? (조금 엄하게 들릴 수 있다.)' }, make: { ok: [['Let', 'v'], ['me', 'o'], ['make', 'v'], ['it', 'o'], ['clear', 'a']], bad: [['Let', 'v'], ['me', 'o'], ['make', 'v'], ['it', 'o'], ['clearly', 'd']], say: 'make + 목적어 + <b>형용사</b>.' }, noun: { ok: [['a', 'x'], ['clear', 'a'], ['answer', 'n']], say: '분명한 대답.' } },
+    vague: { be: { ok: [['It', 's'], ['is', 'v'], ['vague', 'a']], say: '막연하다.' }, make: { ok: [['I', 's'], ['vaguely', 'd'], ['remember', 'v'], ['it', 'o']], say: '동사를 꾸미면 <b>vaguely</b>.' }, noun: { ok: [['a', 'x'], ['vague', 'a'], ['idea', 'n']], say: '어렴풋한 생각.' } },
+  } };
+</script>

@@ -1,0 +1,41 @@
+<!-- title: NEW · YOUNG ↔ OLD 개념 -->
+<!-- pron: new=/nuː/[**뉴**]*, young=/jʌŋ/[**영**]*, old=/oʊld/[**오**울드]*, #new/brand-new, #new/youthful, #old/antique, #old/ancient, #old/elderly -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="38-correct-wrong.html">CORRECT ↔ WRONG</a> · 다음: <a href="40-early-late.html">EARLY · FAST ↔ LATE · SLOW</a></p>
+  <h1>NEW · YOUNG ↔ OLD — 물건과 사람의 시간</h1>
+  <p class="lead">물건이면 <b>new ↔ old</b>, 사람이면 <b>young ↔ old</b>. 막 산 것인지, 젊은 느낌인지, 골동품인지, 먼 옛날인지에 따라 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 새롭고 오래된 장면이 바뀌는 그림|새로운 쪽은 새 신발, 어린 나무와 아이, 방금 산 노트북, 활기찬 사람이고 오래된 쪽은 낡은 신발, 골동품 시계, 옛 유적, 노년층 안내문이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>시간이 흐르는 동사: <a href="../concepts/65-grow.html">65 GROW</a> (grow old) · <a href="../concepts/41-buy.html">41 BUY</a> · <a href="../concepts/53-change.html">53 CHANGE</a></li><li>자료: english-adjectives 노트의 new · old 묶음</li></ul>
+</main>
+<script>
+  const SHOE = (c, worn) => '<path d="M110 150 h80 q20 40 90 44 q60 6 64 36 h-234 z" fill="' + c + '" stroke="var(--obj-line)" stroke-width="2"/>' + RC(108, 226, 238, 14, '#f4f2ea') + LN('M196 168 l20 -10 M212 180 l20 -10 M230 188 l20 -8', '#f4f2ea', 4) + (worn ? LN('M130 200 l20 14 l-10 10 M300 210 l14 10 M246 206 l10 12', '#333', 3) + CR(150, 182, 8, '#6b5132', 'none') : LN('M340 110 v24 M328 122 h24', 'var(--gold)', 3));
+  const EXIST = adverbPage({ noun: '형용사', start: 'brand-new',
+    groups: [
+      { name: '새 · 젊은', items: [
+        { v: 'new', k: '새로운', en: 'These shoes are new.', note: '만든 · 산 지 얼마 안 됐다. 나에게 처음인 것에도.', from: 'newly(새로) · knew와 소리가 같다', pic: () => SHOE('var(--ok)'), ex: ['얼마', '안 됨', 'These shoes are good.', '좋다는 뜻. 새것인지는 모른다.', '새로운.'] },
+        { v: 'young', k: '젊은 · 어린', en: 'The tree is still young.', note: '사람 · 동물 · 나무가 태어난 지 얼마 안 됐다.', from: 'youth(젊음)와 짝', pic: () => GRD + MAN(130, { s: .6, f: 'smile', c: 'var(--gold)' }) + LN('M226 240 V196', 'var(--wood)', 5) + CR(226, 184, 18, 'var(--ok)') + TREE(340), ex: ['나이가', '적음', 'The tree is small.', '작다는 뜻. 나이는 모른다.', '어린.'] },
+        { v: 'brand-new', k: '완전 새것인', base: 'NEW', core: '막 산 · 막 만든', from: 'brand(낙인 · 갓 만든 표시) + new', en: 'This laptop is brand-new.', note: '포장을 뜯었거나 한 번 켰어도 된다(노트).', pic: () => RC(70, 170, 130, 70, 'var(--wood)') + '<path d="M70 170 l-24 -26 M200 170 l24 -26" stroke="var(--wood)" stroke-width="10"/>' + '<path d="M260 216 h130 l12 12 h-154 z" fill="var(--fog)" stroke="var(--obj-line)"/><path d="M272 212 l8 -96 h96 l8 96 z" fill="var(--obj)" stroke="var(--obj-line)"/>' + RC(290, 126, 76, 72, 'var(--water)', 'none') + LN('M410 90 v22 M399 101 h22', 'var(--gold)', 3) + tx(135, 212, 14, 'NEW', '#fff', ' font-weight="700"'), ex: ['막 산', '것', 'This laptop is new.', '산 지 조금 됐을 수도 있다.', '완전 새것인.'] },
+        { v: 'youthful', k: '젊은 기운의', base: 'YOUNG과 이웃', core: '젊게 느껴짐', from: 'youth(젊음) + ful', en: 'She has a youthful energy.', note: '실제 나이는 말하지 않는다(노트). 나이 든 사람에게 자주 쓴다.', pic: () => GRD + MAN(226, { f: 'smile', a: 'up', r: 8, run: 1, c: 'var(--accent)', s: 1.1 }) + '<path d="M200 112 q26 -34 54 2" fill="none" stroke="#ddd" stroke-width="8"/>' + FAST(140, 170), ex: ['젊게', '느껴짐', 'She has a young energy.', '어색하다. 젊은 기운은 youthful.', '젊은 기운의.'] },
+      ] },
+      { name: '오래된', items: [
+        { v: 'old', k: '오래된 · 나이 든', en: 'These shoes are old.', note: '물건 · 사람 모두. 나이를 말할 때 <b>어려도</b> old(He is two years old).', from: 'older — oldest', pic: () => SHOE('#7a6a54', true), ex: ['오래', '됨', 'These shoes are bad.', '나쁘다는 뜻. 오래됐는지는 모른다.', '오래된.'] },
+        { v: 'antique', k: '골동품인', base: 'OLD', core: '오래된 물건 · 골동품', from: '라틴어 antiquus(옛)', en: 'It\'s an antique clock.', note: '골동품 맥락. <b>꼭 비싸거나 진품이라는 보장은 아니다</b>(노트).', pic: () => RC(180, 60, 90, 180, 'var(--wood)', 'var(--obj-line)', 6) + '<path d="M172 62 q53 -50 106 0 z" fill="var(--wood)" stroke="var(--obj-line)"/>' + CLOCK(225, 106, 32, 1) + LN('M225 146 V200', 'var(--gold)', 3) + CR(225, 206, 12, 'var(--gold)'), ex: ['골동품', '', 'It\'s an ancient clock.', '먼 옛날 문명의 시계처럼 들린다.', '골동품인.'] },
+        { v: 'ancient', k: '먼 옛날의', base: 'OLD', core: '역사 속 오래됨', from: '라틴어 ante(이전)에서', en: 'These are ancient ruins.', note: '역사적으로 아주 오래됐다. 정해진 햇수는 없다(노트).', pic: () => GRD + [90, 160, 230, 300].map((x, i) => RC(x, [90, 90, 140, 90][i], 30, [150, 150, 100, 150][i], 'var(--fog)') + LN('M' + (x + 10) + ' ' + [96, 96, 146, 96][i] + ' V236 M' + (x + 20) + ' ' + [96, 96, 146, 96][i] + ' V236', 'var(--obj-line)', 1)).join('') + '<path d="M80 90 h120 l-10 -20 h-100 z" fill="var(--fog)" stroke="var(--obj-line)"/>' + RC(340, 222, 50, 18, 'var(--fog)') + MAN(390, { s: .4, f: 'o' }), ex: ['먼', '옛날', 'These are old ruins.', '얼마나 먼 옛날인지 빠진다.', '먼 옛날의.'] },
+        { v: 'elderly', k: '나이가 지긋한', base: 'OLD', core: '사람 · 노년층', from: 'elder(연장자) + ly지만 <b>형용사</b>', en: 'The program supports elderly residents.', note: '노년층을 가리키는 격식 있는 말. 상황에 따라 <span class="en">older adults</span>가 더 자연스럽다(노트).', pic: () => RC(60, 56, 150, 170, 'var(--card)') + tx(135, 96, 15, '어르신 이동 지원', 'var(--accent)', ' font-weight="700"') + [0, 1, 2, 3].map((i) => LN('M80 ' + (124 + i * 24) + ' h110', 'var(--fog)', 3)).join('') + GRD + MAN(320, { f: 'smile', a: 'fwd', c: 'var(--accent2)' }) + '<path d="M298 136 q22 -30 46 0" fill="none" stroke="#eee" stroke-width="8"/>' + LN('M368 184 V240', 'var(--wood)', 5) },
+      ] },
+    ],
+    q: [['Q1. 물건인가 사람인가?', '물건 → <b>new ↔ old</b> / 사람 → <b>young ↔ old</b>'], ['Q2. 새 · 젊은 쪽', '막 산 것 → <b>brand-new</b> / 젊은 기운 → <b>youthful</b>'], ['Q3. 오래된 쪽', '골동품 → <b>antique</b> / 먼 옛날 → <b>ancient</b> / 노년층 → <b>elderly</b>']],
+    body: ['<b>BRAND-NEW</b> — 상자를 여는 시늉. <b>YOUTHFUL</b> — 가볍게 뛰기.', '<b>ANCIENT</b> — 손을 뒤로 멀리 넘기기.'],
+    check: ['노트 식의 brand-new "포장도 안 뜯은", antique "가치 있는"은 낱말 노트에서 필수가 아니라고 해 뺐다.', 'ancient의 동근 설명(ante)은 노트를 따랐고 따로 확인하지 않았다.'],
+  });
+  const SCENES = {
+    phone: { btn: '휴대폰', place: '새 휴대폰', pic: () => MEET(BX(452, 70, 24, 38)), lines: [['친구', 'Is that a <b>new</b> phone?', '새 휴대폰이야?'], ['나', 'Yes, it\'s <b>brand-new</b>!', '응, 완전 새거야!', true]], say: '갓 산 것 — <b>brand-new</b>.' },
+    age: { btn: '나이', place: '아이를 만나서', pic: () => FL + P(330, 150, 1.4, 'var(--ok)') + P(560, 150, .9, 'var(--gold)'), lines: [['나', 'How <b>old</b> are you?', '몇 살이야?', true], ['아이', 'I\'m five years <b>old</b>.', '다섯 살이에요.']], say: '어려도 나이는 <b>old</b>.' },
+  };
+  const SLOTS = { first: ['old', 'num'], slots: { be: 'be 뒤', num: '나이', noun: '명사 앞' }, verbs: {
+    old: { be: { ok: [['It', 's'], ['is', 'v'], ['old', 'a']], say: '오래됐다.' }, num: { ok: [['I', 's'], ['am', 'b'], ['ten', 'x'], ['years', 'n'], ['old', 'a']], bad: [['I', 's'], ['am', 'b'], ['ten', 'x'], ['years', 'n'], ['young', 'a']], say: '나이는 보통 <b>old</b>.' }, noun: { ok: [['a', 'x'], ['ten-year-old', 'a'], ['boy', 'n']], bad: [['a', 'x'], ['ten-years-old', 'a'], ['boy', 'n']], say: '명사 앞에서는 <b>year</b>에 s가 없다.' } },
+    elderly: { be: { ok: [['They', 's'], ['are', 'b'], ['elderly', 'a']], say: '나이가 지긋하다.' }, num: { ok: [['older', 'a'], ['adults', 'n']], say: '안내문에서 자연스러운 말.' }, noun: { ok: [['elderly', 'a'], ['people', 'n']], say: '-ly로 끝나도 <b>형용사</b>.' } },
+  } };
+</script>

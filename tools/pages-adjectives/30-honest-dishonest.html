@@ -1,0 +1,42 @@
+<!-- title: HONEST ↔ DISHONEST 개념 -->
+<!-- pron: honest=/ˈɑː.nɪst/[**아**니스트]*, dishonest=/dɪsˈɑː.nɪst/[디스**아**니스트]*, #honest/truthful, #honest/sincere, #honest/candid, #dishonest/lying, #dishonest/deceitful, #dishonest/corrupt -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="29-rich-poor.html">RICH ↔ POOR</a> · 다음: <a href="31-good-bad.html">GOOD ↔ BAD</a></p>
+  <h1>HONEST ↔ DISHONEST — 깨진 꽃병 앞에서</h1>
+  <p class="lead">"제가 깼어요"라면 honest, 숨기면 dishonest. <b>사실</b>인지 <b>진심</b>인지 <b>거리낌 없는 말</b>인지, 속이는 쪽은 말 · 속임수 · 권한 중 무엇인지에 따라 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 정직하고 부정직한 장면이 바뀌는 그림|정직한 쪽은 꽃병을 깼다고 말하는 사람, 본 대로 말하는 증인, 진심 어린 사과, 약점을 짚어 주는 동료이고 부정직한 쪽은 꽃병을 숨긴 사람, 다른 곳에 있었다는 말, 비용을 숨긴 광고, 뇌물 받는 공직자다.}}
+  <p class="note">부정직 쪽 낱말은 상대를 강하게 비난한다. 근거가 있을 때만 쓴다(노트).</p>
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>말 · 숨김의 동사: <a href="../concepts/18-tell.html">18 TELL</a> (tell the truth · a lie) · <a href="../concepts/78-hide.html">78 HIDE</a> · <a href="../concepts/37-show.html">37 SHOW</a></li><li>자료: english-adjectives 노트의 honest · dishonest 묶음</li></ul>
+</main>
+<script>
+  const SHARDS = (x) => [0, 1, 2, 3].map((i) => '<path d="M' + (x + i * 20) + ' 238 l8 -16 l10 14 z" fill="var(--sleeve)" stroke="var(--obj-line)"/>').join('');
+  const EXIST = adverbPage({ noun: '형용사', start: 'candid',
+    groups: [
+      { name: '정직한', items: [
+        { v: 'honest', k: '정직한', en: 'She was honest about the vase.', note: '속이지 않는다. <b>h는 소리 나지 않아 an honest</b>.', from: 'honesty(정직) · honestly(솔직히)', pic: () => GRD + MAN(150, { f: 'flat', a: 'point', c: 'var(--ok)' }) + SHARDS(240) + SAYB(220, 80, '제가 깼어요', 14, 'var(--accent)'), ex: ['속임', '없음', 'She was nice about the vase.', '상냥했다는 뜻. 정직함이 안 나온다.', '정직한.'] },
+        { v: 'truthful', k: '사실대로의', base: 'HONEST', core: '말이 사실에 맞음', from: 'truth(사실) + ful', en: 'He gave a truthful account.', note: '불리해도 <b>사실대로</b> 말한다(노트).', pic: () => GRD + MAN(120, { f: 'o', a: 'point' }) + RC(210, 60, 70, 60, 'var(--card)') + RC(320, 60, 70, 60, 'var(--card)') + [245, 355].map((x) => CR(x, 90, 16, 'var(--bad)') + LN('M' + (x - 22) + ' 112 h44', 'var(--obj-line)', 3)).join('') + tx(245, 140, 12, '말한 것', 'var(--muted)') + tx(355, 140, 12, '있던 일', 'var(--muted)') + tx(300, 98, 22, '=', 'var(--ok)', ' font-weight="700"'), ex: ['사실에', '맞음', 'He gave a sincere account.', '진심이라는 뜻. 사실에 맞는지는 다르다.', '사실대로의.'] },
+        { v: 'sincere', k: '진심 어린', base: 'HONEST', core: '마음이 진짜', from: 'sincerity(진심) · sincerely(진심으로)', en: 'Her apology sounded sincere.', note: '<b>마음</b>에서 우러났다. 사실 검증과는 다르다(노트).', pic: () => GRD + MAN(160, { f: 'sad', a: 'bow', r: 16 }) + HEART(160, 176) + SAYB(150, 74, '정말 미안해', 13) + MAN(320, { f: 'flat', c: 'var(--ok)' }), ex: ['진심', '어림', 'Her apology sounded truthful.', '어색하다. 사과의 마음은 sincere.', '진심 어린.'] },
+        { v: 'candid', k: '거리낌 없이 솔직한', base: 'HONEST', core: '불편한 말도 숨김없이', from: 'candor(솔직함)와 짝', en: 'I appreciate your candid feedback.', note: '돌려 말하지 않는다. <b>무례하다는 뜻은 아니다</b>(노트).', pic: () => GRD + PAPER(60, 80, 90, 120, 7) + CR(106, 142, 22, 'none', 'var(--bad)') + MAN(200, { f: 'flat', a: 'bow' }) + MAN(330, { f: 'smile', a: 'hip', c: 'var(--ok)' }) + SAYB(310, 74, '여기가 약해요', 14, 'var(--accent)'), ex: ['숨김', '없이', 'I appreciate your rude feedback.', '무례하다는 비난이 된다.', '거리낌 없이 솔직한.'] },
+      ] },
+      { name: '부정직한', items: [
+        { v: 'dishonest', k: '부정직한', en: 'It was dishonest to hide it.', note: '속이거나 숨긴다. 두루 쓴다.', from: 'dis(아닌) + honest', pic: () => GRD + MAN(150, { f: 'shut', a: 'hip' }) + SHARDS(250) + '<path d="M236 240 q50 -46 110 0 z" fill="var(--bad)" opacity=".75"/>' + SAYB(170, 80, '몰라요', 14), ex: ['속이거나', '숨김', 'It was bad to hide it.', '나쁘다는 뜻뿐이다.', '부정직한.'] },
+        { v: 'lying', k: '거짓말하는', base: 'DISHONEST', core: '거짓을 말함', from: 'lie(거짓말하다) → lying', en: 'He\'s lying about where he was.', note: '이 문장의 lying은 <b>진행형 동사</b>. 형용사로는 a lying witness(노트).', pic: () => GRD + MAN(110, { f: 'o', a: 'point' }) + SAYB(140, 74, '도서관에 있었어', 13, 'var(--bad)') + RC(270, 80, 130, 120, 'var(--card)') + '<path d="M260 80 l75 -44 l75 44 z" fill="var(--bad)" stroke="var(--obj-line)"/>' + MAN(335, { y: 200, s: .7, f: 'smile' }) + tx(335, 222, 12, '실제', 'var(--muted)'), ex: ['거짓', '말', 'He\'s wrong about where he was.', '착각일 수도 있다.', '거짓말하는.'] },
+        { v: 'deceitful', k: '속이려는', base: 'DISHONEST', core: '일부러 오해하게 함', from: 'deceit(속임) + ful', en: 'The advertisement was deceitful.', note: '단순한 착오가 아니라 <b>의도</b>가 있다(노트).', pic: () => RC(100, 50, 250, 170, 'var(--gold)') + tx(225, 116, 30, '공짜!', '#333', ' font-weight="700"') + tx(225, 206, 7, '(배송비 · 가입비 별도)', '#333') + CR(225, 203, 40, 'none', 'var(--bad)') + LN('M254 230 l26 22', 'var(--bad)', 5), ex: ['속이려는', '의도', 'The advertisement was mistaken.', '실수라는 뜻이 된다.', '속이려는.'] },
+        { v: 'corrupt', k: '부패한', base: 'DISHONEST', core: '권한을 부정하게 씀', from: '동사 corrupt(부패시키다)와 모양이 같다', en: 'The official was corrupt.', note: '지위 · 권한을 부정하게 쓴다. 강한 말(노트).', pic: () => GRD + DESK(140, 170, 190) + MAN(226, { y: 236, s: .95, f: 'smile', a: 'both', c: 'var(--obj)' }) + MAN(380, { s: .95, f: 'smile', c: 'var(--fog)' }) + RC(280, 170, 50, 26, 'var(--card)') + LN('M280 172 l25 14 l25 -14', 'var(--obj-line)') + tx(305, 162, 12, '뇌물', 'var(--bad)', ' font-weight="700"') },
+      ] },
+    ],
+    q: [['Q1. 속이나?', '아니다 → <b>honest</b> / 속인다 → <b>dishonest</b>'], ['Q2. 무엇이 정직한가?', '사실 → <b>truthful</b> / 마음 → <b>sincere</b> / 거리낌 없는 말 → <b>candid</b>'], ['Q3. 어떻게 속이나?', '거짓말 → <b>lying</b> / 꾸민 속임 → <b>deceitful</b> / 권한 → <b>corrupt</b>']],
+    body: ['<b>SINCERE</b> — 가슴에 손. <b>CANDID</b> — 손바닥을 펴 보이기.', '<b>DECEITFUL</b> — 등 뒤에 감추기.'],
+    check: ['lying은 노트가 예문에서 진행형 동사라고 밝혀 그대로 적었다. 형용사로는 명사 앞에서만 드물게 쓴다.', '꽃병 장면은 새로 지었다.'],
+  });
+  const SCENES = {
+    work: { btn: '피드백', place: '기획안을 보여 주며', pic: () => MEET(BX(440, 80, 50, 28)), lines: [['나', 'Please be <b>honest</b>.', '솔직하게 말해 줘요.', true], ['동료', 'To be <b>honest</b>, it\'s too long.', '솔직히 너무 길어요.']], say: '부탁은 <b>Be honest.</b> 말머리는 <b>To be honest</b>.' },
+    sorry: { btn: '사과', place: '사과를 받은 뒤', pic: () => MEET(''), lines: [['친구', 'Do you believe the apology?', '그 사과 믿어?'], ['나', 'Yes, it sounded <b>sincere</b>.', '응, 진심 같았어.', true]], say: '마음의 진짜 — <b>sincere</b>.' },
+  };
+  const SLOTS = { first: ['honest', 'noun'], slots: { be: 'be 뒤', noun: '명사 앞', with: '누구에게' }, verbs: {
+    honest: { be: { ok: [['He', 's'], ['is', 'b'], ['honest', 'a']], say: '정직하다.' }, noun: { ok: [['an', 'x'], ['honest', 'a'], ['man', 'n']], bad: [['a', 'x'], ['honest', 'a'], ['man', 'n']], say: 'h가 소리 나지 않아 <b>an</b>.' }, with: { ok: [['Be', 'v'], ['honest', 'a'], ['with', 'x'], ['me', 'o']], bad: [['Be', 'v'], ['honest', 'a'], ['me', 'o']], say: 'honest <b>with</b> + 사람.' } },
+    sincere: { be: { ok: [['It', 's'], ['sounds', 'v'], ['sincere', 'a']], bad: [['It', 's'], ['sounds', 'v'], ['sincerely', 'd']], say: 'sound 뒤는 <b>형용사</b>.' }, noun: { ok: [['a', 'x'], ['sincere', 'a'], ['apology', 'n']], say: '진심 어린 사과.' }, with: { ok: [['Sincerely', 'd'], ['yours', 'x']], say: '편지 끝인사에는 <b>부사</b>.' } },
+  } };
+</script>

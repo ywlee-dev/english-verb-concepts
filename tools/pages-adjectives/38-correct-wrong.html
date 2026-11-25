@@ -1,0 +1,41 @@
+<!-- title: CORRECT · RIGHT ↔ WRONG 개념 -->
+<!-- pron: correct=/kəˈrekt/[커**렉**트]*, right=/raɪt/[**라**잇]*, wrong=/rɔːŋ/[**롱**]*, #correct/accurate, #correct/precise, #wrong/incorrect, #wrong/mistaken, #wrong/faulty -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="37-simple-complex.html">SIMPLE ↔ COMPLEX</a> · 다음: <a href="39-new-old.html">NEW ↔ OLD</a></p>
+  <h1>CORRECT · RIGHT ↔ WRONG — 같은 과녁, 다른 자리</h1>
+  <p class="lead">맞으면 correct · right, 틀리면 wrong. 틀린 것이 <b>정보</b>인지 <b>사람의 생각</b>인지 <b>물건</b>인지에 따라 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 맞고 틀린 장면이 바뀌는 그림|맞은 쪽은 맞은 답, 맞는 길, 실제와 같은 도착 시간, 눈금까지 잰 부품이고 틀린 쪽은 틀린 답, 다른 번지, 사람을 잘못 본 것, 깜빡이는 전등이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>맞히고 고치는 동사: <a href="../concepts/54-fix.html">54 FIX</a> (correct) · <a href="../concepts/79-measure.html">79 MEASURE</a> · <a href="../concepts/76-count.html">76 COUNT</a></li><li>자료: english-adjectives 노트의 correct · wrong 묶음</li></ul>
+</main>
+<script>
+  const QA = (ok) => RC(110, 70, 230, 140, 'var(--card)') + tx(225, 130, 30, ok ? '2 + 3 = 5' : '2 + 3 = 6', 'var(--text)', ' font-weight="700"') + (ok ? tick(214, 180) : CROSS(225, 178, 12));
+  const EXIST = adverbPage({ noun: '형용사', start: 'accurate',
+    groups: [
+      { name: '맞는', items: [
+        { v: 'correct', k: '맞는', en: 'Your answer is correct.', note: '정답 · 사실과 맞다. right보다 조금 격식 있다.', from: '동사 correct(바로잡다)와 모양이 같다', pic: () => QA(true), ex: ['답이', '맞음', 'Your answer is good.', '좋다는 뜻. 맞는지는 모른다.', '맞는.'] },
+        { v: 'right', k: '맞는 · 알맞은', en: 'This is the right way.', note: '말할 때 가장 흔하다. "오른쪽"이라는 다른 뜻도 있다.', from: 'write(쓰다)와 소리가 같다', pic: () => GRD + LN('M226 240 V170 L110 90 M226 170 L340 90', 'var(--fog)', 18) + MAN(226, { y: 236, s: .55 }) + tx(340, 74, 14, '역', 'var(--text)', ' font-weight="700"') + tick(366, 96) + CROSS(90, 84, 8), ex: ['알맞', '음', 'This is the good way.', '좋은 길이라는 뜻. 맞는 길인지는 모른다.', '맞는.'] },
+        { v: 'accurate', k: '실제와 맞는', base: 'CORRECT', core: '사실 · 실제 값과 일치', from: 'accuracy(정확성)와 짝', en: 'The estimate was accurate.', note: '예측 · 정보가 <b>실제와</b> 맞다(노트).', pic: () => RC(60, 70, 140, 130, 'var(--card)') + tx(130, 110, 13, '예상', 'var(--muted)') + tx(130, 160, 30, '20분', 'var(--accent)', ' font-weight="700"') + tx(225, 146, 30, '=', 'var(--ok)', ' font-weight="700"') + RC(250, 70, 140, 130, 'var(--card)') + tx(320, 110, 13, '실제', 'var(--muted)') + tx(320, 160, 30, '20분', 'var(--ok)', ' font-weight="700"'), ex: ['실제와', '맞음', 'The estimate was precise.', '세밀했다는 뜻. 실제와 맞았는지는 다르다.', '실제와 맞는.'] },
+        { v: 'precise', k: '세밀한', base: 'CORRECT와 이웃', core: '수치 · 표현이 정밀', from: 'precision(정밀)과 짝', en: 'The measurements must be precise.', note: '세밀하다. <b>세밀해도 틀릴 수 있다</b>(노트).', pic: () => RC(50, 150, 350, 60, 'var(--gold)') + Array.from({ length: 33 }, (_, i) => LN('M' + (62 + i * 10.2) + ' 150 v' + (i % 10 ? (i % 5 ? 12 : 20) : 30), '#333', 1.5)).join('') + RC(62, 100, 214, 44, 'var(--fog)') + LN('M276 92 V190', 'var(--accent)', 2) + tx(310, 124, 17, '21.0 mm', 'var(--accent)', ' font-weight="700"', 'start'), ex: ['아주', '세밀', 'The measurements must be big.', '크다는 뜻이 된다.', '세밀한.'] },
+      ] },
+      { name: '틀린', items: [
+        { v: 'wrong', k: '틀린 · 잘못된', en: 'Your answer is wrong.', note: '두루 쓴다. 옳지 않다(도덕)는 뜻도 있다. w는 소리 나지 않는다.', from: 'wrongly(잘못)', pic: () => QA(false), ex: ['답이', '틀림', 'Your answer is bad.', '나쁘다는 뜻이 된다.', '틀린.'] },
+        { v: 'incorrect', k: '맞지 않는', base: 'WRONG', core: '정보 · 답이 다름', from: 'in(아닌) + correct', en: 'The address is incorrect.', note: '비교적 중립적이고 격식 있다(노트).', pic: () => RC(50, 80, 150, 100, 'var(--wood)') + RC(70, 106, 110, 48, 'var(--card)') + tx(125, 136, 17, '12번지', 'var(--text)', ' font-weight="700"') + RC(270, 100, 110, 130, 'var(--card)') + '<path d="M260 100 l65 -46 l65 46 z" fill="var(--bad)" stroke="var(--obj-line)"/>' + tx(325, 160, 17, '21번지', 'var(--text)', ' font-weight="700"') + tx(235, 150, 24, '≠', 'var(--bad)', ' font-weight="700"'), ex: ['정보가', '다름', 'The address is mistaken.', '어색하다. 생각을 잘못한 것은 사람.', '맞지 않는.'] },
+        { v: 'mistaken', k: '잘못 안', base: 'WRONG', core: '사람이 착각함', from: 'mistake(착각하다) → mistaken', en: 'I was mistaken about who he was.', note: '<b>사람</b>이 잘못 알았다(노트). 조금 격식 있다.', pic: () => GRD + MAN(120, { f: 'o', a: 'up', c: 'var(--ok)' }) + SAYB(140, 74, '민수야!', 14) + MAN(330, { f: 'flat', a: 'hip', c: 'var(--accent2)' }) + tx(330, 100, 22, '?', 'var(--bad)', ' font-weight="700"'), ex: ['사람이', '착각', 'I was incorrect about who he was.', '뜻은 간다. 착각했다는 느낌이 덜하다.', '잘못 안.'] },
+        { v: 'faulty', k: '결함 있는', base: 'WRONG과 이웃', core: '물건이 제대로 안 됨', from: 'fault(결함) + y', en: 'The wiring is faulty.', note: '장치 · 설계에 <b>결함</b>이 있다(노트).', pic: () => LN('M225 30 V70', 'var(--obj-line)', 4) + CR(225, 110, 40, 'var(--gold)') + RC(210, 64, 30, 22, 'var(--fog)') + LN('M214 118 l11 -14 l11 14', '#333', 3) + LN('M160 100 h-20 M166 140 l-18 10 M290 100 h20 M284 140 l18 10', 'var(--gold)', 4, ' stroke-dasharray="5 6"') + LN('M60 220 H180 M270 220 H400', 'var(--obj-line)', 5) + LN('M180 220 l14 -12 M270 220 l-14 -12 M212 214 l8 -12 l8 12 l8 -12', 'var(--bad)', 3), ex: ['물건', '결함', 'The wiring is incorrect.', '잘못 연결했다는 뜻이 된다.', '결함 있는.'] },
+      ] },
+    ],
+    q: [['Q1. 맞나?', '맞음 → <b>correct · right</b> / 틀림 → <b>wrong</b>'], ['Q2. 어떻게 맞나?', '실제와 → <b>accurate</b> / 세밀하게 → <b>precise</b>'], ['Q3. 무엇이 틀렸나?', '정보 → <b>incorrect</b> / 사람의 생각 → <b>mistaken</b> / 물건 → <b>faulty</b>']],
+    body: ['<b>ACCURATE</b> — 과녁 한가운데 가리키기. <b>PRECISE</b> — 엄지와 검지로 눈금 재기.', '<b>MISTAKEN</b> — 이마를 탁 치기.'],
+    check: ['right · correct의 격식 차이는 노트에 없다. 수치는 그림용이다.'],
+  });
+  const SCENES = {
+    road: { btn: '길', place: '길을 찾으며', pic: () => FL + P(330, 150, 1.4, 'var(--ok)') + P(560, 150, 1.4, 'var(--sleeve)'), lines: [['친구', 'Is this the <b>right</b> bus?', '이 버스 맞아?'], ['나', 'No, we\'re on the <b>wrong</b> one!', '아니, 잘못 탔어!', true]], say: '짝은 <b>the right ↔ the wrong</b> + 명사.' },
+    sorry: { btn: '사과', place: '착각했을 때', pic: () => MEET(''), lines: [['친구', 'The party is on Friday, not Saturday.', '파티는 토요일 아니고 금요일이야.'], ['나', 'You\'re <b>right</b>. I was <b>wrong</b>.', '네 말이 맞아. 내가 틀렸어.', true]], say: '말할 때는 mistaken보다 <b>I was wrong</b>.' },
+  };
+  const SLOTS = { first: ['right', 'noun'], slots: { be: 'be 뒤', noun: '명사 앞', verb: '동사 뒤' }, verbs: {
+    right: { be: { ok: [['You', 's'], ['are', 'b'], ['right', 'a']], say: '네 말이 맞아.' }, noun: { ok: [['the', 'x'], ['right', 'a'], ['answer', 'n']], bad: [['a', 'x'], ['right', 'a'], ['answer', 'n']], say: '정답이 하나일 때 보통 <b>the</b>.' }, verb: { ok: [['You', 's'], ['did', 'v'], ['it', 'o'], ['right', 'd']], say: '제대로 했다 — 여기서는 부사처럼.' } },
+    wrong: { be: { ok: [['What', 's'], ['\'s', 'v'], ['wrong?', 'a']], say: '무슨 일이야?' }, noun: { ok: [['the', 'x'], ['wrong', 'a'], ['number', 'n']], say: '잘못 건 번호.' }, verb: { ok: [['It', 's'], ['went', 'v'], ['wrong', 'd']], say: '잘못됐다 — go wrong.' } },
+  } };
+</script>

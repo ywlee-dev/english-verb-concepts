@@ -1,0 +1,43 @@
+<!-- title: TIGHT ↔ LOOSE 개념 -->
+<!-- pron: tight=/taɪt/[**타**잇]*, loose=/luːs/[**루**스]*, #tight/snug, #tight/taut, #tight/constricting, #loose/baggy, #loose/slack -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="05-rough-smooth.html">ROUGH ↔ SMOOTH</a> · 다음: <a href="07-sharp-dull.html">SHARP ↔ DULL</a></p>
+  <h1>TIGHT ↔ LOOSE — 같은 바지, 다른 틈</h1>
+  <p class="lead">몸과 옷 사이에 <b>틈이 없으면</b> tight, <b>남으면</b> loose. 편한지 답답한지, 옷인지 줄인지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 조이거나 헐렁한 장면이 바뀌는 그림|조이는 쪽은 꽉 끼는 바지, 딱 맞는 장갑, 팽팽한 텐트 줄, 목을 조이는 깃이고 헐렁한 쪽은 남는 바지, 자루 같은 청바지, 처진 빨랫줄이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>상태를 만드는 동사: <a href="../concepts/63-pull.html">63 PULL</a> (당기면 taut) · <a href="../concepts/35-hold.html">35 HOLD</a></li><li>자료: english-adjectives 노트의 tight · loose 묶음</li></ul>
+</main>
+<script>
+  // 바지: w = 다리 너비, 다리는 살색 점선
+  const JEANS = (w) => [185, 265].map((x) => '<path d="M' + (x - w) + ' 100 L' + (x - w * .85) + ' 230 h' + w * 1.7 + ' L' + (x + w) + ' 100 z" fill="var(--sleeve)" stroke="var(--obj-line)" stroke-width="2"/>').join('') + RC(185 - w, 80, 80 + w * 2, 26, 'var(--sleeve)') + [185, 265].map((x) => LN('M' + (x - 22) + ' 112 V238 M' + (x + 22) + ' 112 V238', 'var(--skin)', 3, ' stroke-dasharray="5 5"')).join('');
+  const POLE = (x) => LN('M' + x + ' 70 V240', 'var(--wood)', 7);
+  const EXIST = adverbPage({ noun: '형용사',
+    start: 'snug',
+    groups: [
+      { name: '꽉', items: [
+        { v: 'tight', k: '꽉 끼는 · 팽팽한', en: 'These jeans are tight.', note: '틈이 없다. 시간 · 돈이 빠듯할 때도 쓴다.', from: 'tighten(조이다)과 짝', pic: () => JEANS(24), ex: ['틈이', '없다', 'These jeans are small.', '작다는 뜻. 꽉 낀다는 느낌이 빠진다.', '꽉 끼는.'] },
+        { v: 'snug', k: '딱 맞고 편한', base: 'TIGHT', core: '틈 없이 편안함', from: 'snuggle(파고들다)과 짝', en: 'These gloves are snug.', note: '꼭 맞는데 <b>편하다</b>. 아늑한 방에도(노트).', pic: () => '<path d="M170 220 v-80 q-30 -10 -34 -40 q18 -8 34 22 v-70 q14 -16 24 0 v54 v-70 q14 -16 26 0 v70 v-62 q14 -14 24 0 v64 v-44 q14 -12 22 2 v134 z" fill="var(--ok)" stroke="var(--obj-line)" stroke-width="2"/>' + HEART(340, 130), ex: ['맞고', '편하다', 'These gloves are tight.', '답답하다는 불평처럼 들린다.', '딱 맞고 편한.'] },
+        { v: 'taut', k: '팽팽한', base: 'TIGHT', core: '당겨서 늘어짐 없음', from: 'taught(가르쳤다)와 소리가 같다', en: 'The rope is taut now.', note: '줄 · 천이 당겨져 처지지 않는다. 옷을 칭찬하는 말이 아니다(노트).', pic: () => GRD + POLE(80) + POLE(370) + LN('M80 110 H370', 'var(--accent)', 5) + AR(140, 92, 100, 92, 'var(--muted)', 2) + AR(310, 92, 350, 92, 'var(--muted)', 2), ex: ['당겨서', '팽팽', 'The rope is tight.', '묶인 게 단단하다는 뜻일 수도 있다.', '처짐 없이 당겨진.'] },
+        { v: 'constricting', k: '조여서 답답한', base: 'TIGHT', core: '불편하게 압박', from: 'constrict(조이다) → -ing', en: 'This collar feels constricting.', note: '조여서 움직이기 불편하다. 규칙이 옥죌 때도(노트).', pic: () => MAN(226, { y: 290, s: 1.6, f: 'sad', a: 'up' }) + RC(196, 168, 60, 18, 'var(--bad)') + LN('M180 170 l-14 -8 M180 184 l-14 6 M272 170 l14 -8 M272 184 l14 6', 'var(--bad)', 3), ex: ['조여서', '답답', 'This collar is tight.', '많이 겹친다. 압박해 불편한 느낌이 약해진다.', '조여서 불편한.'] },
+      ] },
+      { name: '헐렁', items: [
+        { v: 'loose', k: '헐렁한 · 느슨한', en: 'These jeans are loose.', note: '틈이 남는다. <b>lose(잃다)</b>와 철자 · 소리가 다르다.', from: 'loosen(느슨하게 하다)과 짝', pic: () => JEANS(30), ex: ['틈이', '남는다', 'These jeans are big.', '크다는 뜻. 헐렁하다는 느낌이 빠진다.', '여유가 남는.'] },
+        { v: 'baggy', k: '자루처럼 헐렁한', base: 'LOOSE', core: '옷에 천이 남음', from: 'bag(자루) + y', en: 'These jeans are baggy on me.', note: '<b>옷</b>에 쓴다. 원래 그런 디자인일 수도 있다(노트).', pic: () => JEANS(40) + LN('M150 150 q20 10 34 0 M232 180 q20 10 40 0 M152 200 q18 10 34 0', 'var(--obj-line)', 2), ex: ['천이', '남는다', 'These jeans are loose.', '많이 겹친다. 자루처럼 남는 그림이 약해진다.', '자루처럼 헐렁한.'] },
+        { v: 'slack', k: '축 처진', base: 'LOOSE', core: '줄의 당김이 부족', from: 'slacken(늦추다)과 짝', en: 'The clothesline is slack.', note: '<b>줄</b>이 팽팽하지 않고 처졌다(노트).', pic: () => GRD + POLE(80) + POLE(370) + LN('M80 100 Q225 250 370 100', 'var(--accent)', 5), ex: ['줄이', '처짐', 'The clothesline is loose.', '많이 겹친다. 끈이 풀렸다는 뜻일 수도 있다.', '당김이 부족해 처진.'] },
+      ] },
+    ],
+    q: [['Q1. 틈이?', '없다 → <b>tight</b> / 남는다 → <b>loose</b>'], ['Q2. 몸에 닿는 것이면', '편하다 → <b>snug</b> / 답답하다 → <b>constricting</b> / 천이 남는다 → <b>baggy</b>'], ['Q3. 줄이면', '팽팽 → <b>taut</b> ↔ 처짐 → <b>slack</b>']],
+    body: ['<b>SNUG</b> — 이불을 감싸고 미소. <b>CONSTRICTING</b> — 목깃을 잡아당기기.', '<b>TAUT ↔ SLACK</b> — 두 손으로 끈을 당겼다 놓기.'],
+    check: ['노트 예문 <span class="en">These gloves fit snugly.</span>는 부사라서, 그림 예문은 형용사 <span class="en">These gloves are snug.</span>로 바꿨다.'],
+  });
+  const SCENES = {
+    shop: { btn: '옷 가게', place: '옷 가게 탈의실', pic: () => FL + BX(420, 50, 80, 100) + P(330, 150, 1.4, 'var(--ok)') + P(590, 150, 1.4, 'var(--sleeve)'), lines: [['점원', 'How do they fit?', '잘 맞으세요?'], ['나', 'A little <b>tight</b>. Do you have a <b>looser</b> pair?', '조금 끼네요. 더 넉넉한 것 있나요?', true]], say: '옷의 맞음새는 <b>tight ↔ loose</b>.' },
+    tent: { btn: '캠핑', place: '텐트 치기', pic: () => FL + '<path d="M400 150 l70 -90 l70 90 z" fill="var(--ok)" stroke="' + OL + '"/>' + LN('M470 60 L610 150', OL, 2) + P(310, 150, 1.4, 'var(--sleeve)'), lines: [['친구', 'The rope is <b>slack</b>. Pull it.', '줄이 처졌어. 당겨.'], ['나', 'OK, it\'s <b>taut</b> now.', '됐다, 이제 팽팽해.', true]], say: '줄에는 <b>taut ↔ slack</b>. 말할 때는 tight · loose도 많이 쓴다.' },
+  };
+  const SLOTS = { first: ['loose', 'be'], slots: { be: 'be 뒤', noun: '명사 앞', get: '변할 때' }, verbs: {
+    loose: { be: { ok: [['It', 's'], ['is', 'v'], ['loose', 'a']], bad: [['It', 's'], ['is', 'v'], ['lose', 'x']], say: '<b>loose</b>(헐렁한)와 <b>lose</b>(잃다)를 헷갈리지 말 것.' }, noun: { ok: [['a', 'x'], ['loose', 'a'], ['tooth', 'n']], say: '흔들리는 이.' }, get: { ok: [['It', 's'], ['came', 'v'], ['loose', 'a']], say: '느슨해졌다 — come loose.' } },
+    tight: { be: { ok: [['They', 's'], ['are', 'v'], ['tight', 'a']], say: '꽉 낀다.' }, noun: { ok: [['a', 'x'], ['tight', 'a'], ['schedule', 'n']], say: '빠듯한 일정.' }, get: { ok: [['Hold', 'v'], ['on', 'x'], ['tight', 'd']], say: '여기서는 부사처럼 "꽉 잡아". tightly도 된다.' } },
+  } };
+</script>

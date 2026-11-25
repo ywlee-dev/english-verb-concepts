@@ -1,0 +1,43 @@
+<!-- title: LOUD ↔ QUIET 개념 -->
+<!-- pron: loud=/laʊd/[**라**우드]*, quiet=/ˈkwaɪ.ət/[**콰**이엇]*, #loud/deafening, #loud/roaring, #loud/thunderous, #quiet/silent, #quiet/hushed, #quiet/muted -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="09-strong-weak.html">STRONG ↔ WEAK</a> · 다음: <a href="11-clean-dirty.html">CLEAN ↔ DIRTY</a></p>
+  <h1>LOUD ↔ QUIET — 같은 음악, 다른 크기</h1>
+  <p class="lead">같은 음악이 <b>크면</b> loud, <b>작으면</b> quiet. 귀가 먹먹한지, 우렁차게 이어지는지, 아예 멎었는지, 벽 너머인지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 소리 크기와 장면이 바뀌는 그림|큰 쪽은 큰 스피커, 귀를 막은 사람, 함성, 울리는 박수이고 작은 쪽은 작은 스피커, 멎은 교실, 소곤대는 관객, 문 너머의 음악이다.}}
+  <h2>5. 동사 · 부사와 연결하면</h2>
+  <ul><li>동사: <a href="../concepts/52-hear.html">52 HEAR</a> · <a href="../concepts/17-say.html">17 SAY</a></li><li>부사 짝: <a href="../adverbs/06-quietly-loudly.html">QUIETLY ↔ LOUDLY</a> — 형용사는 <b>소리가</b> 크다, 부사는 <b>크게 하다</b></li><li>자료: english-adjectives 노트의 loud · quiet 묶음</li></ul>
+</main>
+<script>
+  const SPK = (x, s) => RC(x, 240 - 130 * s, 80 * s, 130 * s, 'var(--obj)', 'var(--obj-line)', 6) + CR(x + 40 * s, 240 - 92 * s, 18 * s, 'var(--fog)') + CR(x + 40 * s, 240 - 40 * s, 28 * s, 'var(--fog)');
+  const HEADS = (y, n, up) => Array.from({ length: n }, (_, i) => CR(56 + i * 34, y + i % 2 * 12, 14, 'var(--skin)') + (up ? LN('M' + (48 + i * 34) + ' ' + (y - 10 + i % 2 * 12) + ' l-6 -24 M' + (64 + i * 34) + ' ' + (y - 10 + i % 2 * 12) + ' l6 -24', 'var(--skin)', 5) : '')).join('');
+  const EXIST = adverbPage({ noun: '형용사',
+    start: 'muted',
+    groups: [
+      { name: '시끄러운', items: [
+        { v: 'loud', k: '소리가 큰', en: 'The music is loud.', note: '소리가 크다. 옷 색이 야할 때도 쓴다.', from: '부사 loudly · aloud(소리 내어)', pic: () => GRD + SPK(60, 1) + SOUND(156, 160, 4) + MAN(330, { f: 'flat' }), ex: ['소리가', '크다', 'I can hear the music.', '들린다는 뜻. 얼마나 큰지 모른다.', '소리가 큰.'] },
+        { v: 'deafening', k: '귀가 먹먹한', base: 'LOUD', core: '압도적으로 큼', from: 'deafen(귀를 먹먹하게 하다) → -ing', en: 'The music is deafening.', note: '다른 말이 안 들릴 만큼. 실제로 귀가 멀었다는 뜻은 아니다(노트).', pic: () => GRD + SPK(50, 1.2) + SOUND(160, 150, 4, 'var(--bad)') + MAN(340, { f: 'sad', a: 'up' }) + LN('M312 138 q-8 8 0 16 M368 138 q8 8 0 16', 'var(--bad)', 4), ex: ['귀가', '먹먹', 'The music is very loud.', '뜻은 간다. 압도되는 느낌이 약해진다.', '압도적으로 큰.'] },
+        { v: 'roaring', k: '우렁차게 이어지는', base: 'LOUD', core: '포효하듯 크게', from: 'roar(으르렁거리다) → -ing', en: 'A roaring crowd filled the stadium.', note: '관중 · 엔진 · 바람이 포효하듯(노트).', pic: () => HEADS(200, 11, true) + SAYB(226, 100, '와아아아아아', 26, 'var(--accent)'), ex: ['우렁차게', '이어짐', 'A loud crowd filled it.', '포효하듯 이어지는 그림이 빠진다.', '우렁차게 울리는.'] },
+        { v: 'thunderous', k: '천둥처럼 울리는', base: 'LOUD', core: '웅장하게 울림', from: 'thunder(천둥) + ous', en: 'They gave her thunderous applause.', note: '박수 · 환호가 천둥처럼. 바닥이 실제로 흔들릴 필요는 없다(노트).', pic: () => GRD + MAN(226, { f: 'smile', a: 'bow', c: 'var(--accent2)', s: .85 }) + [[90, 110], [150, 70], [300, 70], [360, 110]].map(([x, y]) => at(x - 10, y + 20, 20, HAND.replace(/<rect[^>]*>/, '')) + at(x + 10, y + 20, -20, HAND.replace(/<rect[^>]*>/, ''))).join('') + LN('M60 150 q20 14 0 30 M80 146 q26 18 0 40 M392 150 q-20 14 0 30 M372 146 q-26 18 0 40', 'var(--accent)', 3), ex: ['천둥', '처럼', 'They gave her loud applause.', '웅장하게 울리는 그림이 빠진다.', '천둥처럼 큰.'] },
+      ] },
+      { name: '조용한', items: [
+        { v: 'quiet', k: '조용한', en: 'The music is quiet.', note: '소리가 작다. <b>quite(꽤)</b>와 철자를 헷갈리지 말 것.', from: '부사 quietly', pic: () => GRD + SPK(100, .6) + SOUND(160, 200, 1) + MAN(330, { f: 'smile', c: 'var(--ok)' }), ex: ['소리가', '작다', 'The music is not loud.', '뜻은 간다. 조용하다고 바로 짚지 못한다.', '소리가 작은.'] },
+        { v: 'silent', k: '소리가 멎은', base: 'QUIET', core: '말 · 소리가 없음', from: 'silence(침묵)', en: 'The room went silent.', note: '말이나 주요 소리가 멎었다. 물리적 완전 무음일 필요는 없다(노트).', pic: () => GRD + [80, 160, 240, 320, 390].map((x, i) => MAN(x, { f: 'shut', s: .75, c: ['var(--sleeve)', 'var(--ok)', 'var(--accent2)', 'var(--sleeve)', 'var(--ok)'][i] })).join('') + CR(226, 80, 26) + CROSS(226, 80, 10), ex: ['소리', '없음', 'The room went quiet.', '작은 소리는 남았을 수 있다.', '말 · 소리가 없는.'] },
+        { v: 'hushed', k: '낮춘 · 소곤대는', base: 'QUIET', core: '일부러 낮춘 소리', from: 'hush(쉿 하게 하다) → -ed', en: 'They spoke in hushed voices.', note: '조심스럽게 낮춘 목소리 · 분위기(노트).', pic: () => GRD + MAN(180, { f: 'o', a: 'fwd', r: 8, c: 'var(--ok)' }) + MAN(280, { f: 'shut', a: 'hug', r: -6 }) + SAYB(236, 100, '소곤소곤', 10, 'var(--muted)'), ex: ['일부러', '낮춤', 'They spoke in quiet voices.', '많이 겹친다. 조심스럽게 낮춘 느낌이 약해진다.', '조심스럽게 낮춘.'] },
+        { v: 'muted', k: '눌려 약해진', base: 'QUIET', core: '가려져 약하게 들림', from: 'mute(소리를 줄이다) → -d', en: 'The music sounded muted through the door.', note: '원래 있던 소리가 약해졌다. 색 · 반응에도(노트).', pic: () => GRD + SPK(40, .8) + SOUND(112, 180, 3) + RC(200, 70, 24, 170, 'var(--wood)') + NOTE(258, 170, 16, .4) + NOTE(284, 150, 12, .3) + MAN(350, { f: 'flat', a: 'hip', c: 'var(--ok)' }) },
+      ] },
+    ],
+    q: [['Q1. 소리가?', '크다 → <b>loud</b> / 작다 → <b>quiet</b>'], ['Q2. 큰데?', '압도 → <b>deafening</b> / 우렁차게 → <b>roaring</b> / 웅장하게 → <b>thunderous</b>'], ['Q3. 작은데?', '멎음 → <b>silent</b> / 일부러 낮춤 → <b>hushed</b> / 가려짐 → <b>muted</b>']],
+    body: ['<b>DEAFENING</b> — 귀 막기. <b>THUNDEROUS</b> — 크게 손뼉. ', '<b>HUSHED</b> — 손을 입 옆에 대고 소곤. <b>MUTED</b> — 손으로 입을 덮고 말하기.'],
+    check: ['노트 식은 silent를 "소리가 전혀 없는 물리적 극단"이라 하지만, 낱말 노트는 다른 물리적 소리까지 없다는 뜻이 아니라고 해 낱말 노트를 따랐다.', 'IPA가 다른 표기(ɛ · e)로 섞여 있는 것은 노트 그대로다.'],
+  });
+  const SCENES = {
+    con: { btn: '공연장', place: '공연장 앞줄', pic: () => FL + BX(400, 60, 60, 90) + P(310, 150, 1.4, 'var(--ok)') + P(560, 150, 1.4, 'var(--sleeve)'), lines: [['친구', 'What? I can\'t hear you!', '뭐? 안 들려!'], ['나', 'The music is <b>deafening</b>!', '음악이 귀가 먹먹해!', true]], say: '압도되는 크기 — <b>deafening</b>.' },
+    lib: { btn: '도서관', place: '도서관', pic: () => MEET(BX(430, 92, 70, 16)), lines: [['나', 'It\'s so <b>quiet</b> here.', '여기 정말 조용하다.', true], ['친구', 'Put your phone on <b>silent</b>.', '휴대폰 무음으로 해.']], say: '휴대폰 무음은 <b>on silent</b>.' },
+  };
+  const SLOTS = { first: ['quiet', 'be'], slots: { be: 'be 뒤', noun: '명사 앞', keep: '유지 · 변할 때' }, verbs: {
+    quiet: { be: { ok: [['Be', 'v'], ['quiet', 'a']], bad: [['Be', 'v'], ['quietly', 'd']], say: 'be 뒤는 <b>형용사</b>.' }, noun: { ok: [['a', 'x'], ['quiet', 'a'], ['street', 'n']], bad: [['a', 'x'], ['quite', 'd'], ['street', 'n']], say: 'quiet(조용한) ≠ quite(꽤).' }, keep: { ok: [['Keep', 'v'], ['quiet', 'a']], say: '조용히 있어 — keep + 형용사.' } },
+    silent: { be: { ok: [['He', 's'], ['was', 'v'], ['silent', 'a']], say: '말이 없었다.' }, noun: { ok: [['a', 'x'], ['silent', 'a'], ['letter', 'n']], say: '소리 안 나는 글자(knife의 k).' }, keep: { ok: [['The', 'x'], ['room', 's'], ['went', 'v'], ['silent', 'a']], say: '조용해졌다 — go + 형용사.' } },
+  } };
+</script>

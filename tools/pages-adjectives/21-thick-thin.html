@@ -1,0 +1,40 @@
+<!-- title: THICK ↔ THIN 개념 -->
+<!-- pron: thick=/θɪk/[**씩**]*, thin=/θɪn/[**씬**]*, #thick/chunky, #thick/dense, #thin/slim, #thin/sheer, #thin/skinny -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="20-wide-narrow.html">WIDE ↔ NARROW</a> · 다음: <a href="22-deep-shallow.html">DEEP ↔ SHALLOW</a></p>
+  <h1>THICK ↔ THIN — 같은 책, 다른 두께</h1>
+  <p class="lead">앞면에서 뒷면까지 <b>멀면</b> thick, <b>가까우면</b> thin. 도톰한지, 촘촘한지, 비치는지, 날렵한지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 두껍고 얇은 장면이 바뀌는 그림|두꺼운 쪽은 두꺼운 책, 도톰한 스웨터, 빽빽한 숲이고 얇은 쪽은 얇은 책, 날렵한 노트북, 비치는 커튼, 몸에 붙는 바지다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>두께가 바뀌는 동사: <a href="../concepts/64-cut.html">64 CUT</a> (slice thin) · <a href="../concepts/69-melt.html">69 MELT</a> · <a href="../concepts/79-measure.html">79 MEASURE</a></li><li>자료: english-adjectives 노트의 thick · thin 묶음</li></ul>
+</main>
+<script>
+  const BOOK = (h) => DESK(110, 230, 200) + RC(150, 200 - h, 150, h, 'var(--card)', 'var(--obj-line)') + RC(146, 200 - h, 158, 7, 'var(--accent)') + RC(146, 194, 158, 6, 'var(--accent)') + (h > 40 ? Array.from({ length: Math.floor(h / 10) - 1 }, (_, i) => LN('M154 ' + (194 - i * 9) + ' h142', 'var(--fog)', 1)).join('') : '') + AR(336, 200 - h / 2, 336, 200 - h - 4, 'var(--accent)', 3) + AR(336, 200 - h / 2, 336, 204, 'var(--accent)', 3);
+  const EXIST = adverbPage({ noun: '형용사', start: 'dense',
+    groups: [
+      { name: '두꺼운', items: [
+        { v: 'thick', k: '두꺼운', en: 'This book is thick.', note: '앞뒤 사이가 멀다. 국물이 걸쭉하거나 안개가 짙을 때도 쓴다.', from: 'thickness(두께) · thicken(두껍게 하다)', pic: () => BOOK(100), ex: ['두께가', '있다', 'This book is big.', '가로세로가 큰 것일 수도 있다.', '두꺼운.'] },
+        { v: 'chunky', k: '도톰한', base: 'THICK', core: '굵고 덩어리진 느낌', from: 'chunk(덩어리) + y', en: 'I love this chunky sweater.', note: '실 · 덩어리가 큼직해 도톰하다. 무겁다는 뜻은 아니다(노트).', pic: () => '<path d="M160 80 l40 -16 q26 16 52 0 l40 16 l36 100 l-34 12 l-22 -60 v98 h-92 v-98 l-22 60 l-34 -12 z" fill="var(--gold)" stroke="var(--obj-line)" stroke-width="2"/>' + [0, 1, 2, 3, 4].map((i) => [194, 226, 258].map((x) => LN('M' + (x - 11) + ' ' + (104 + i * 26) + ' q11 14 22 0', 'var(--wood)', 6)).join('')).join(''), ex: ['도톰', '한 덩어리', 'I love this thick sweater.', '많이 겹친다. 굵은 짜임의 느낌이 약해진다.', '굵직하고 도톰한.'] },
+        { v: 'dense', k: '빽빽한', base: 'THICK와 이웃', core: '촘촘하게 들어참', from: 'density(밀도)와 짝', en: 'The forest is dense.', note: '두께보다 <b>촘촘함</b>. 안개 · 인파에도(노트).', pic: () => GRD + Array.from({ length: 13 }, (_, i) => LN('M' + (48 + i * 29) + ' 240 V' + (150 - i % 3 * 8), 'var(--wood)', 7) + CR(48 + i * 29, 122 - i % 3 * 16, 28, 'var(--ok)', 'var(--bg)')).join(''), ex: ['촘촘', '빽빽', 'There are many trees.', '많다는 뜻. 촘촘해서 안 보이는 그림이 빠진다.', '빽빽한.'] },
+      ] },
+      { name: '얇은', items: [
+        { v: 'thin', k: '얇은', en: 'This book is thin.', note: '앞뒤 사이가 가깝다. 사람이 말랐을 때 · 국물이 묽을 때도 쓴다.', from: 'th 소리 [θ] — 혀끝을 물고', pic: () => BOOK(18), ex: ['두께가', '얇다', 'This book is small.', '작다는 뜻. 두께가 안 나온다.', '얇은.'] },
+        { v: 'slim', k: '날렵한', base: 'THIN', core: '군더더기 없이 가늚', from: 'slim down(날씬해지다)', en: 'This laptop is slim.', note: '제품 · 몸매가 가늘고 날렵하다. 대체로 좋은 말(노트).', pic: () => '<path d="M110 206 h230 l16 12 h-262 z" fill="var(--fog)" stroke="var(--obj-line)" stroke-width="2"/><path d="M136 200 l14 -124 h150 l14 124 z" fill="var(--obj)" stroke="var(--obj-line)" stroke-width="2"/>' + RC(162, 88, 126, 100, 'var(--water)', 'none') + LN('M380 120 v22 M369 131 h22', 'var(--gold)', 3), ex: ['날렵', '하다', 'This laptop is thin.', '많이 겹친다. 칭찬하는 느낌이 약해진다.', '날렵한.'] },
+        { v: 'sheer', k: '비칠 만큼 얇은', base: 'THIN', core: '천이 비침', from: 'shear(털을 깎다)와 소리가 같다', en: 'These curtains are sheer.', note: '옷감 · 커튼이 <b>비친다</b>(노트).', pic: () => RC(120, 60, 210, 160, 'var(--water)', 'var(--obj-line)') + CR(286, 96, 18, 'var(--gold)', 'none') + LN('M120 140 H330', 'var(--obj-line)', 2) + MAN(200, { y: 218, s: .9 }) + '<g opacity=".45">' + RC(112, 52, 226, 176, '#fff', 'none') + '</g>' + [140, 175, 210, 245, 280, 315].map((x) => LN('M' + x + ' 56 V224', '#fff', 2)).join('') + LN('M100 52 H350', 'var(--wood)', 6), ex: ['비칠', '만큼', 'These curtains are thin.', '얇다는 뜻뿐, 비친다는 점이 빠진다.', '비칠 만큼 얇은.'] },
+        { v: 'skinny', k: '가늘게 붙는 · 마른', base: 'THIN', core: '가는 실루엣', from: 'skin(피부) + y', en: 'I\'m looking for skinny jeans.', note: '바지에는 편하게. <b>사람 몸에는 지나치게 말랐다는 평가로 들릴 수 있어 조심</b>(노트).', pic: () => '<path d="M170 70 h110 v34 l-10 130 h-24 l-21 -110 l-21 110 h-24 l-10 -130 z" fill="var(--sleeve)" stroke="var(--obj-line)" stroke-width="2"/>' + LN('M170 90 h110 M225 90 v30', 'var(--obj-line)', 2) },
+      ] },
+    ],
+    q: [['Q1. 앞뒤 사이가?', '멀다 → <b>thick</b> / 가깝다 → <b>thin</b>'], ['Q2. 두꺼운 쪽', '굵고 도톰 → <b>chunky</b> / 촘촘 → <b>dense</b>'], ['Q3. 얇은 쪽', '날렵 → <b>slim</b> / 비침 → <b>sheer</b> / 가는 바지 → <b>skinny</b>']],
+    body: ['<b>THICK ↔ THIN</b> — 엄지와 검지 사이를 벌렸다 좁히기.', '<b>SHEER</b> — 손가락 사이로 비쳐 보기.'],
+    check: ['노트 식의 skinny "뼈만 남을 만큼"은 낱말 노트가 "반드시 그런 뜻은 아니다"라고 해 뺐다.', '국물 · 안개의 thick, 묽은 thin은 노트에 없는 흔한 쓰임이다.'],
+  });
+  const SCENES = {
+    book: { btn: '책', place: '서점', pic: () => MEET(BX(430, 70, 60, 38, 'var(--accent)')), lines: [['친구', 'Wow, that book is <b>thick</b>!', '와, 그 책 두껍다!'], ['나', 'The other one is <b>thin</b>.', '다른 건 얇아.', true]], say: '책 두께는 <b>thick ↔ thin</b>.' },
+    shop: { btn: '가전 매장', place: '노트북 매장', pic: () => MEET(BX(440, 70, 60, 38)), lines: [['나', 'I want something <b>slim</b> and light.', '날렵하고 가벼운 걸 원해요.', true], ['점원', 'How about this one?', '이건 어떠세요?']], say: '제품 칭찬은 <b>slim</b>.' },
+  };
+  const SLOTS = { first: ['thick', 'num'], slots: { be: 'be 뒤', num: '수와 함께', noun: '명사 앞' }, verbs: {
+    thick: { be: { ok: [['The', 'x'], ['fog', 's'], ['is', 'v'], ['thick', 'a']], say: '안개가 짙다.' }, num: { ok: [['It', 's'], ['is', 'v'], ['3 cm', 'n'], ['thick', 'a']], bad: [['It', 's'], ['is', 'v'], ['thick', 'a'], ['3 cm', 'n']], say: '수 + <b>thick</b>.' }, noun: { ok: [['a', 'x'], ['thick', 'a'], ['coat', 'n']], say: '두꺼운 코트.' } },
+    thin: { be: { ok: [['The', 'x'], ['ice', 's'], ['is', 'v'], ['thin', 'a']], say: '얼음이 얇다.' }, num: { ok: [['It', 's'], ['is', 'v'], ['1 mm', 'n'], ['thick', 'a']], bad: [['It', 's'], ['is', 'v'], ['1 mm', 'n'], ['thin', 'a']], say: '얇아도 잴 때는 보통 <b>thick</b>.' }, noun: { ok: [['a', 'x'], ['thin', 'a'], ['slice', 'n']], say: '얇은 한 조각.' } },
+  } };
+</script>

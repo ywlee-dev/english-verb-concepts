@@ -1,0 +1,44 @@
+<!-- title: BRIGHT ↔ DARK 개념 -->
+<!-- pron: bright=/braɪt/[브**라**잇]*, dark=/dɑːrk/[**다**r크]*, #bright/dazzling, #bright/radiant, #bright/luminous, #dark/dim, #dark/gloomy, #dark/pitch-black -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="07-sharp-dull.html">SHARP ↔ DULL</a> · 다음: <a href="09-strong-weak.html">STRONG ↔ WEAK</a></p>
+  <h1>BRIGHT ↔ DARK — 같은 방, 다른 빛</h1>
+  <p class="lead">같은 방에 <b>빛이 많으면</b> bright, <b>없으면</b> dark. 눈부신지, 생기 있는지, 침침한지, 아무것도 안 보이는지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 빛이 다른 장면이 바뀌는 그림|밝은 쪽은 환한 방, 눈부신 햇빛, 환한 미소, 빛나는 시계이고 어두운 쪽은 불 꺼진 방, 낮은 조명, 먹구름 낀 거리, 캄캄한 동굴이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>빛을 바꾸는 동사: <a href="../concepts/34-turn.html">34 TURN</a> (turn on · off) · <a href="../concepts/21-see.html">21 SEE</a></li><li>자료: english-adjectives 노트의 bright · dark 묶음</li></ul>
+</main>
+<script>
+  // 방: 벽 색으로 밝기를 보인다(그림용 고정 색 — 어두운 화면에서도 같은 밝기로 보이게)
+  const ROOM = (wall, lamp, sh) => RC(50, 50, 350, 190, wall, 'var(--obj-line)', 6) + LN('M225 50 V84', sh, 3) + '<path d="M195 112 l16 -28 h28 l16 28 z" fill="' + lamp + '" stroke="' + sh + '"/>' + RC(100, 196, 110, 10, sh, 'none') + LN('M112 206 V240 M198 206 V240', sh, 5) + RC(280, 150, 70, 90, 'none', sh, 4);
+  const RAYS = (x, y, r, n, c, len) => Array.from({ length: n }, (_, i) => { const a = i * 2 * Math.PI / n; return LN('M' + (x + r * Math.cos(a)) + ' ' + (y + r * Math.sin(a)) + ' L' + (x + (r + len) * Math.cos(a)) + ' ' + (y + (r + len) * Math.sin(a)), c, 4); }).join('');
+  const EXIST = adverbPage({ noun: '형용사',
+    start: 'dim',
+    groups: [
+      { name: '밝은', items: [
+        { v: 'bright', k: '밝은', en: 'The room is bright.', note: '빛이 많다. 똑똑하다 · 색이 선명하다는 뜻도 있다.', from: 'brighten(밝게 하다)과 짝', pic: () => ROOM('#fff3c4', '#ffd84d', '#6b5a2b'), ex: ['빛이', '많다', 'The room has a light.', '전등이 있다는 뜻. 환한지는 모른다.', '빛이 많은.'] },
+        { v: 'dazzling', k: '눈부신', base: 'BRIGHT', core: '눈을 압도함', from: 'dazzle(눈부시게 하다) → -ing', en: 'The glare is dazzling.', note: '눈을 찡그릴 만큼 강하다. 멋진 공연에도(노트).', pic: () => GRD + CR(120, 100, 40, 'var(--gold)', 'none') + RAYS(120, 100, 48, 12, 'var(--gold)', 34) + MAN(320, { f: 'flat', a: 'up', c: 'var(--sleeve)' }) + LN('M296 112 l28 -4', 'var(--obj-line)', 3), ex: ['눈을', '못 뜸', 'The glare is bright.', '눈을 찡그릴 만큼이라는 세기가 빠진다.', '눈부신.'] },
+        { v: 'radiant', k: '환하고 생기 있는', base: 'BRIGHT', core: '생기 있게 밝음', from: 'radiance(환한 빛)', en: 'She has a radiant smile.', note: '빛을 내는 게 아니라 <b>밝고 생기 있는 인상</b>(노트).', pic: () => MAN(226, { y: 270, s: 1.5, f: 'smile', c: 'var(--ok)' }) + RAYS(226, 120, 50, 10, 'var(--gold)', 22), ex: ['생기', '있게', 'She has a bright smile.', '많이 겹친다. 온기와 생기가 조금 약해진다.', '환하고 생기 있는.'] },
+        { v: 'luminous', k: '어둠 속에 빛나는', base: 'BRIGHT', core: '빛나는 성질', from: '라틴어 lumen(빛)', en: 'The watch has a luminous dial.', note: '강하다기보다 <b>빛을 낸다</b>는 성질(노트).', pic: () => RC(50, 50, 350, 190, '#20242c', 'var(--obj-line)', 6) + CR(225, 145, 66, '#2a3038', '#4a5058') + Array.from({ length: 12 }, (_, i) => { const a = i * Math.PI / 6; return CR(225 + 52 * Math.cos(a), 145 + 52 * Math.sin(a), 5, '#8dffb0', 'none'); }).join('') + LN('M225 145 V108 M225 145 L252 156', '#8dffb0', 5), ex: ['어둠 속', '빛남', 'The watch has a bright dial.', '밝다는 뜻. 어둠에서 빛나는 성질이 흐려진다.', '빛을 내는.'] },
+      ] },
+      { name: '어두운', items: [
+        { v: 'dark', k: '어두운', en: 'The room is dark.', note: '빛이 없거나 적다. 색이 짙을 때도 쓴다.', from: 'darken(어둡게 하다)과 짝', pic: () => ROOM('#2b2f38', '#3a3f49', '#5a606c'), ex: ['빛이', '없다', 'The room has no light.', '전등이 없다는 뜻일 수도 있다.', '빛이 적은.'] },
+        { v: 'dim', k: '빛이 약한', base: 'DARK', core: '흐릿하게 보임', from: 'dim(어둡게 하다)과 모양이 같다', en: 'The lights are dim. I can\'t read the menu.', note: '빛이 약하다. 우울하다는 뜻이 아니다(노트).', pic: () => ROOM('#5c5440', '#c9a54a', '#8a7f62'), ex: ['흐릿', '보임', 'The room is dark.', '안 보일 만큼 어둡다는 말로 들린다.', '빛이 약한.'] },
+        { v: 'gloomy', k: '침침하고 우울한', base: 'DARK', core: '분위기까지 침울', from: 'gloom(어둠 · 우울) + y', en: 'It looks gloomy outside.', note: '어두움에 <b>침울한 분위기</b>가 더해진다(노트).', pic: () => RC(50, 50, 350, 190, '#4a505c', 'var(--obj-line)', 6) + [[110, 90], [220, 80], [330, 92]].map(([x, y]) => '<path d="M' + (x - 44) + ' ' + (y + 16) + ' a22 22 0 0 1 14 -38 a30 30 0 0 1 56 -2 a24 24 0 0 1 14 40 z" fill="#6f7684"/>').join('') + [80, 140, 200, 260, 320, 370].map((x) => LN('M' + x + ' 126 l-7 22', '#9aa4b4', 2)).join('') + MAN(226, { f: 'sad', s: .8, a: 'hug', c: '#5d6a7d' }), ex: ['침울', '분위기', 'It looks dark outside.', '밤이라는 뜻일 수도 있다. 분위기가 빠진다.', '어둡고 침울한.'] },
+        { v: 'pitch-black', k: '칠흑 같은', base: 'DARK', core: '아무것도 안 보임', from: 'pitch(검은 역청) + black', en: 'The cave is pitch-black.', note: '아무것도 구별하기 어렵다. 과장으로도 쓴다(노트).', pic: () => RC(50, 50, 350, 190, '#050607', 'var(--obj-line)', 6) + CR(214, 140, 5, '#fff', 'none') + CR(236, 140, 5, '#fff', 'none') },
+      ] },
+    ],
+    q: [['Q1. 빛이?', '많다 → <b>bright</b> / 적다 → <b>dark</b>'], ['Q2. 밝은데?', '눈부심 → <b>dazzling</b> / 생기 → <b>radiant</b> / 빛나는 성질 → <b>luminous</b>'], ['Q3. 어두운데?', '흐릿 → <b>dim</b> / 침울 → <b>gloomy</b> / 캄캄 → <b>pitch-black</b>']],
+    body: ['<b>DAZZLING</b> — 손으로 눈 가리기. <b>RADIANT</b> — 활짝 웃기.', '<b>DIM</b> — 메뉴판을 눈앞에 대기. <b>PITCH-BLACK</b> — 두 손을 뻗어 더듬기.'],
+    check: ['DARK의 dim → gloomy → pitch-black은 노트 Memory Scene에서 "세 단계"라 하지만, gloomy는 분위기라 한 줄 순서로 그리지 않았다.', '달은 빛을 반사하지만 노트는 "빛을 받아 밝게 보이는 것"도 luminous로 든다.'],
+  });
+  const SCENES = {
+    rest: { btn: '식당', place: '조명이 낮은 식당', pic: () => MEET(BX(440, 80, 46, 28)), lines: [['나', 'It\'s too <b>dim</b> to read the menu.', '너무 침침해서 메뉴를 못 읽겠어.', true], ['친구', 'Use your phone light.', '휴대폰 불 켜 봐.']], say: '빛이 약함 — <b>dim</b>.' },
+    out: { btn: '날씨', place: '창밖을 보며', pic: () => FL + BX(420, 50, 90, 70, '#6f7684') + P(330, 150, 1.4, 'var(--ok)'), lines: [['가족', 'It looks <b>gloomy</b> today.', '오늘 우중충하네.'], ['나', 'Turn on the light. It\'s <b>dark</b> in here.', '불 켜자. 안이 어두워.', true]], say: '바깥 분위기는 <b>gloomy</b>, 방의 빛은 <b>dark</b>.' },
+  };
+  const SLOTS = { first: ['dark', 'be'], slots: { be: 'be 뒤', noun: '명사 앞', get: '변할 때' }, verbs: {
+    dark: { be: { ok: [['It', 's'], ['is', 'v'], ['dark', 'a'], ['outside', 'x']], say: '밝기도 <b>It is …</b>로 말한다.' }, noun: { ok: [['dark', 'a'], ['hair', 'n']], say: '짙은 색 머리.' }, get: { ok: [['It', 's'], ['is', 'v'], ['getting', 'v'], ['dark', 'a']], bad: [['It', 's'], ['is', 'v'], ['getting', 'v'], ['darkly', 'd']], say: '어두워지고 있다 — get + <b>형용사</b>.' } },
+    bright: { be: { ok: [['The', 'x'], ['sun', 's'], ['is', 'v'], ['bright', 'a']], say: '해가 밝다.' }, noun: { ok: [['a', 'x'], ['bright', 'a'], ['idea', 'n']], say: '기발한 생각.' }, get: { ok: [['It', 's'], ['got', 'v'], ['bright', 'a']], say: '밝아졌다.' } },
+  } };
+</script>

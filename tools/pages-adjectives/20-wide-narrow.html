@@ -1,0 +1,42 @@
+<!-- title: WIDE ↔ NARROW 개념 -->
+<!-- pron: wide=/waɪd/[**와**이드]*, narrow=/ˈner.oʊ/[**내**로우]*, #wide/broad, #wide/spacious, #wide/vast, #narrow/cramped, #narrow/confined -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="19-tall-low.html">TALL · HIGH ↔ LOW</a> · 다음: <a href="21-thick-thin.html">THICK ↔ THIN</a></p>
+  <h1>WIDE ↔ NARROW — 같은 길, 다른 폭</h1>
+  <p class="lead">왼쪽에서 오른쪽까지 <b>멀면</b> wide, <b>가까우면</b> narrow. 폭인지, 방 안의 여유인지, 끝없는 들판인지에 따라 낱말이 갈린다. 한국어는 모두 "넓다 · 좁다"라서 조심한다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 넓고 좁은 장면이 바뀌는 그림|넓은 쪽은 넓은 길, 폭 넓은 도로, 넉넉한 거실, 광대한 사막이고 좁은 쪽은 좁은 골목, 가구로 꽉 찬 방, 갇힌 작업 공간이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>폭을 바꾸는 동사: <a href="../concepts/66-increase.html">66 INCREASE</a> · <a href="../concepts/67-decrease.html">67 DECREASE</a> · 재는 동사: <a href="../concepts/79-measure.html">79 MEASURE</a></li><li>자료: english-adjectives 노트의 wide · narrow 묶음</li></ul>
+</main>
+<script>
+  // 위로 갈수록 좁아지는 길. w = 아래 폭(그림용)
+  const ROAD = (w) => '<path d="M' + (225 - w / 2) + ' 240 L' + (225 - w / 4) + ' 60 H' + (225 + w / 4) + ' L' + (225 + w / 2) + ' 240 z" fill="var(--fog)" stroke="var(--obj-line)"/>' + LN('M225 230 V70', 'var(--bg)', 4, ' stroke-dasharray="16 14"') + AR(225, 252, 225 - w / 2, 252, 'var(--accent)', 3) + AR(225, 252, 225 + w / 2, 252, 'var(--accent)', 3);
+  const ROOM = (x, w) => RC(x, 60, w, 180, 'var(--card)', 'var(--obj-line)');
+  const EXIST = adverbPage({ noun: '형용사', start: 'spacious',
+    groups: [
+      { name: '넓은', items: [
+        { v: 'wide', k: '폭이 넓은', en: 'The road is wide.', note: '왼쪽에서 오른쪽까지가 멀다. 재서 말할 때도 쓴다.', from: 'width(폭) · widen(넓히다)', pic: () => ROAD(260), ex: ['폭이', '넓다', 'The road is big.', '어색하다. 폭이 안 나온다.', '폭이 넓은.'] },
+        { v: 'broad', k: '폭 · 범위가 넓은', base: 'WIDE', core: '어깨 · 도로 · 범위', from: 'broaden(넓히다)과 짝', en: 'He has broad shoulders.', note: '폭이 넓다. <b>범위</b>가 넓을 때도 쓴다(노트). 어깨에는 보통 broad.', pic: () => GRD + '<path d="M130 240 v-70 q10 -34 60 -40 h72 q50 6 60 40 v70 z" fill="var(--sleeve)" stroke="var(--obj-line)" stroke-width="2"/>' + CR(226, 92, 34, 'var(--skin)') + CR(216, 88, 3, '#333') + CR(238, 88, 3, '#333') + LN('M218 104 q8 6 16 0', '#333', 2) + AR(200, 154, 136, 154, 'var(--accent)', 3) + AR(252, 154, 316, 154, 'var(--accent)', 3), ex: ['어깨가', '넓다', 'He has wide shoulders.', '뜻은 간다. 어깨에는 broad가 더 자연스럽다.', '폭 · 범위가 넓은.'] },
+        { v: 'spacious', k: '안이 넉넉한', base: 'WIDE와 이웃', core: '쓸 공간이 여유로움', from: 'space(공간) + ious', en: 'The living room is spacious.', note: '<b>안에서 쓸 공간</b>이 넉넉하다. 폭만의 이야기가 아니다(노트).', pic: () => ROOM(40, 370) + RC(60, 196, 80, 40, 'var(--sleeve)', 'var(--obj-line)', 8) + MAN(270, { s: .6, f: 'smile', a: 'up', c: 'var(--ok)' }) + AR(250, 130, 160, 130, 'var(--fog)', 2) + AR(290, 130, 390, 130, 'var(--fog)', 2), ex: ['안이', '넉넉', 'The living room is wide.', '가로 폭만 말한다. 움직일 여유가 안 나온다.', '안이 넉넉한.'] },
+        { v: 'vast', k: '광대한', base: 'WIDE와 이웃', core: '규모가 아주 큼', from: '라틴어 vastus', en: 'The desert is vast.', note: '사막 · 바다 · 지식의 규모. 꼭 끝이 안 보여야 하는 것은 아니다(노트).', pic: () => CR(340, 80, 22, 'var(--gold)', 'none') + '<path d="M30 130 q100 -24 200 0 t190 0 V240 H30 z" fill="var(--gold)" opacity=".5"/>' + LN('M30 170 q110 -26 220 0 t170 0 M30 210 q80 -18 190 0 t200 0', 'var(--wood)', 2) + MAN(110, { y: 226, s: .28 }), ex: ['규모가', '광대', 'The desert is wide.', '폭만 말한다. 사방으로 펼쳐진 규모가 빠진다.', '광대한.'] },
+      ] },
+      { name: '좁은', items: [
+        { v: 'narrow', k: '폭이 좁은', en: 'The road is narrow.', note: '왼쪽에서 오른쪽까지가 가깝다. 방이 작다는 말에는 잘 안 쓴다.', from: 'narrow down(좁혀 가다)', pic: () => ROAD(70), ex: ['폭이', '좁다', 'The road is small.', '작다는 뜻. 폭이 안 나온다.', '폭이 좁은.'] },
+        { v: 'cramped', k: '비좁아 답답한', base: 'NARROW와 이웃', core: '공간이 부족해 불편', from: 'cramp(비좁게 하다) → cramped', en: 'This room feels cramped.', note: '방 · 좌석이 <b>비좁아 불편</b>하다. 가로 폭만의 이야기가 아니다(노트).', pic: () => ROOM(130, 190) + RC(136, 190, 90, 46, 'var(--sleeve)', 'var(--obj-line)', 6) + RC(262, 150, 54, 86, 'var(--wood)') + RC(136, 66, 70, 90, 'var(--wood)') + MAN(242, { s: .62, f: 'sad', a: 'hug' }), ex: ['비좁아', '답답', 'This room is narrow.', '폭이 좁다는 모양만 말한다. 답답함이 빠진다.', '비좁아 불편한.'] },
+        { v: 'confined', k: '갇힌 듯 제한된', base: 'NARROW와 이웃', core: '움직일 범위가 제한', from: 'confine(가두다 · 제한하다) → -d', en: 'We worked in a confined space.', note: '경계 때문에 <b>활동 범위</b>가 제한된다(노트).', pic: () => RC(40, 50, 370, 190, 'var(--fog)', 'var(--obj-line)', 6) + RC(180, 110, 92, 130, 'var(--bg)', 'var(--bad)') + MAN(226, { s: .8, f: 'flat', a: 'hip', c: 'var(--gold)' }) + LN('M190 120 l10 0 M262 120 l-10 0', 'var(--bad)', 4) },
+      ] },
+    ],
+    q: [['Q1. 폭이?', '넓다 → <b>wide</b> / 좁다 → <b>narrow</b>'], ['Q2. 넓은 무엇?', '어깨 · 범위 → <b>broad</b> / 방 안 → <b>spacious</b> / 들판 · 바다 → <b>vast</b>'], ['Q3. 좁은 무엇?', '답답함 → <b>cramped</b> / 활동 제한 → <b>confined</b>']],
+    body: ['<b>WIDE ↔ NARROW</b> — 두 손바닥 사이를 벌렸다 좁히기.', '<b>SPACIOUS</b> — 제자리에서 팔 벌려 한 바퀴. <b>CRAMPED</b> — 어깨를 움츠리기.'],
+    check: ['어깨에 broad를 쓴다는 예문과, 방에는 narrow보다 small · cramped라는 말은 노트 예문이 아니라 새로 지었다.', '노트 식의 vast "경계를 가늠할 수 없는"은 낱말 노트에서 필수가 아니라고 해 뺐다.'],
+  });
+  const SCENES = {
+    home: { btn: '새집', place: '새집 구경', pic: () => FL + BX(400, 50, 190, 100) + P(310, 150, 1.4, 'var(--ok)') + P(620, 150, 1.4, 'var(--sleeve)'), lines: [['친구', 'The living room is so <b>spacious</b>!', '거실 정말 넓다!'], ['나', 'But my bedroom is <b>cramped</b>.', '근데 내 방은 비좁아.', true]], say: '방의 짝은 <b>spacious ↔ cramped</b>.' },
+    road: { btn: '골목', place: '차로 가는 골목', pic: () => FL + CAR(400) + P(310, 150, 1.4, 'var(--ok)'), lines: [['친구', 'Can we get through?', '지나갈 수 있어?'], ['나', 'No, it\'s too <b>narrow</b>.', '아니, 너무 좁아.', true]], say: '길의 폭은 <b>wide ↔ narrow</b>.' },
+  };
+  const SLOTS = { first: ['wide', 'num'], slots: { be: 'be 뒤', num: '수와 함께', noun: '명사 앞' }, verbs: {
+    wide: { be: { ok: [['It', 's'], ['is', 'v'], ['wide', 'a']], say: '폭이 넓다.' }, num: { ok: [['It', 's'], ['is', 'v'], ['two', 'x'], ['meters', 'n'], ['wide', 'a']], bad: [['It', 's'], ['is', 'v'], ['two', 'x'], ['meters', 'n'], ['broad', 'a']], say: '폭을 잴 때는 보통 <b>wide</b>.' }, noun: { ok: [['a', 'x'], ['wide', 'a'], ['choice', 'n']], say: '폭넓은 선택.' } },
+    narrow: { be: { ok: [['The', 'x'], ['street', 's'], ['is', 'v'], ['narrow', 'a']], say: '길이 좁다.' }, num: { ok: [['It', 's'], ['is', 'v'], ['only', 'd'], ['1 m', 'n'], ['wide', 'a']], bad: [['It', 's'], ['is', 'v'], ['only', 'd'], ['1 m', 'n'], ['narrow', 'a']], say: '좁아도 잴 때는 <b>wide</b>.' }, noun: { ok: [['a', 'x'], ['narrow', 'a'], ['street', 'n']], say: '좁은 길.' } },
+  } };
+</script>

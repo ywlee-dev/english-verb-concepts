@@ -1,0 +1,41 @@
+<!-- title: SAFE ↔ DANGEROUS 개념 -->
+<!-- pron: safe=/seɪf/[**세**이프]*, dangerous=/ˈdeɪn.dʒɚ.əs/[**데**인저러스]*, #safe/secure, #safe/harmless, #dangerous/risky, #dangerous/hazardous, #dangerous/perilous -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="33-important-trivial.html">IMPORTANT ↔ TRIVIAL</a> · 다음: <a href="35-easy-difficult.html">EASY ↔ DIFFICULT</a></p>
+  <h1>SAFE ↔ DANGEROUS — 같은 다리, 건너도 될까</h1>
+  <p class="lead">다칠 걱정이 <b>없으면</b> safe, <b>있으면</b> dangerous. 지켜 주는 것이 있는지, 원래 해롭지 않은지, 선택의 위험인지, 물질 · 환경의 위험인지에 따라 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 안전하고 위험한 장면이 바뀌는 그림|안전한 쪽은 난간 있는 다리, 잠긴 계정, 해 없는 거미이고 위험한 쪽은 끊긴 다리, 불확실한 투자, 화학 물질 통, 폭풍 속 산길이다.}}
+  <p class="note">safe · secure · harmless 어느 것도 절대 안전을 보증하는 말은 아니다(노트).</p>
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>지키고 피하는 동사: <a href="../concepts/16-keep.html">16 KEEP</a> (keep safe) · <a href="../concepts/10-escape.html">10 ESCAPE</a> · <a href="../concepts/39-close.html">39 CLOSE</a> (lock)</li><li>자료: english-adjectives 노트의 safe · dangerous 묶음</li></ul>
+</main>
+<script>
+  const CLIFF = '<path d="M30 150 H120 V250 H30 z M330 150 H420 V250 H330 z" fill="var(--wood)" stroke="var(--obj-line)"/>';
+  const EXIST = adverbPage({ noun: '형용사', start: 'secure',
+    groups: [
+      { name: '안전한', items: [
+        { v: 'safe', k: '안전한', en: 'The bridge is safe.', note: '다칠 걱정이 없다. 명사로는 금고.', from: 'safety(안전) · save(구하다)', pic: () => CLIFF + RC(110, 142, 230, 14, 'var(--fog)') + LN('M116 104 H334 M130 104 V142 M175 104 V142 M225 104 V142 M275 104 V142 M320 104 V142', 'var(--obj-line)', 3) + MAN(225, { y: 142, s: .62, f: 'smile', c: 'var(--ok)' }), ex: ['걱정', '없음', 'The bridge is strong.', '튼튼하다는 뜻. 건너도 되는지는 다르다.', '안전한.'] },
+        { v: 'secure', k: '보호된', base: 'SAFE', core: '막는 장치가 있음', from: 'security(보안) — 동사 secure(확보하다)', en: 'The account is secure.', note: '밖의 위협을 <b>막아 놓았다</b>(노트).', pic: () => RC(150, 50, 150, 190, '#2a3038', 'var(--obj-line)', 16) + RC(162, 70, 126, 146, 'var(--water)', 'none') + RC(196, 130, 58, 48, 'var(--gold)') + LN('M206 130 v-16 a19 19 0 0 1 38 0 v16', 'var(--obj-line)', 6) + CR(225, 152, 6, '#333') + LN('M90 110 l30 20 l-30 20 M360 110 l-30 20 l30 20', 'var(--bad)', 4), ex: ['막아', '놓음', 'The account is harmless.', '틀리다. 해를 안 끼친다는 뜻이 된다.', '보호된.'] },
+        { v: 'harmless', k: '해롭지 않은', base: 'SAFE', core: '그것 자체가 무해', from: 'harm(해) + less', en: 'That spider is harmless.', note: '<b>그것이</b> 해를 안 끼친다(노트).', pic: () => GRD + LN('M280 30 V150', 'var(--fog)', 2) + CR(280, 170, 22, '#333') + CR(280, 144, 12, '#333') + [-1, 1].map((k) => [0, 1, 2].map((i) => LN('M' + (280 + k * 18) + ' ' + (162 + i * 9) + ' l' + k * 24 + ' ' + (-14 + i * 12) + ' l' + k * 10 + ' 16', '#666', 3)).join('')).join('') + MAN(140, { f: 'smile', a: 'point', c: 'var(--ok)' }) + SAYB(140, 74, '안 물어', 13), ex: ['그것이', '무해', 'That spider is safe.', '거미가 안전한 곳에 있다는 뜻일 수도 있다.', '해롭지 않은.'] },
+      ] },
+      { name: '위험한', items: [
+        { v: 'dangerous', k: '위험한', en: 'The bridge is dangerous.', note: '다칠 수 있다. 두루 쓴다.', from: 'danger(위험) + ous', pic: () => CLIFF + '<path d="M110 142 h70 l-6 14 h-64 z M340 142 h-70 l8 14 h62 z" fill="var(--fog)" stroke="var(--obj-line)"/>' + LN('M186 160 l8 24 M262 160 l-6 30', 'var(--fog)', 5) + MAN(90, { y: 150, s: .62, f: 'o', a: 'up' }) + CROSS(225, 100, 14), ex: ['다칠', '수 있음', 'The bridge is bad.', '나쁘다는 뜻뿐이다.', '위험한.'] },
+        { v: 'risky', k: '손해 볼 수 있는', base: 'DANGEROUS', core: '선택의 불확실함', from: 'risk(위험 부담) + y', en: 'That investment is risky.', note: '<b>선택 · 행동</b>의 부담. 몸의 위험이 아닐 수 있다(노트).', pic: () => LN('M60 220 H400 M60 220 V50', 'var(--obj-line)', 2) + LN('M70 150 L130 140 L190 160 L240 130', 'var(--accent)', 5) + LN('M240 130 L360 60', 'var(--ok)', 4, ' stroke-dasharray="8 8"') + LN('M240 130 L360 210', 'var(--bad)', 4, ' stroke-dasharray="8 8"') + tx(382, 138, 26, '?', 'var(--accent)', ' font-weight="700"'), ex: ['선택의', '부담', 'That investment is hazardous.', '어색하다. 물질처럼 해롭다는 말이 된다.', '손해 볼 수 있는.'] },
+        { v: 'hazardous', k: '해로울 수 있는', base: 'DANGEROUS', core: '물질 · 환경의 위해', from: 'hazard(위험 요소) + ous', en: 'Those chemicals are hazardous.', note: '물질 · 환경이 해를 줄 수 있다. 안내문에 많다(노트 · 표시).', pic: () => GRD + [100, 200, 300].map((x) => RC(x, 130, 76, 110, 'var(--gold)', 'var(--obj-line)', 6) + LN('M' + x + ' 150 h76 M' + x + ' 220 h76', 'var(--obj-line)', 3) + '<path d="M' + (x + 38) + ' 162 l20 36 h-40 z" fill="#222"/>' + tx(x + 38, 194, 18, '!', 'var(--gold)', ' font-weight="700"')).join(''), ex: ['물질의', '위해', 'Those chemicals are risky.', '선택의 부담처럼 들린다.', '해로울 수 있는.'] },
+        { v: 'perilous', k: '몹시 위태로운', base: 'DANGEROUS', core: '아주 위태로운 길 · 상황', from: 'peril(위기) + ous', en: 'The crossing was perilous.', note: '문어적인 말(노트). 이야기에 많다.', pic: () => '<path d="M30 240 L150 130 L210 170 L330 70 L420 150 V250 H30 z" fill="var(--fog)" stroke="var(--obj-line)"/>' + MAN(212, { y: 172, s: .5, f: 'o', a: 'up' }) + LN('M60 60 l30 30 M120 50 l30 30 M240 40 l30 30 M380 50 l24 24', 'var(--water)', 4) + '<path d="M300 30 l-18 34 h16 l-12 32 l34 -42 h-18 l12 -24 z" fill="var(--gold)"/>' },
+      ] },
+    ],
+    q: [['Q1. 다칠 걱정이?', '없다 → <b>safe</b> / 있다 → <b>dangerous</b>'], ['Q2. 왜 안전한가?', '막아 놓음 → <b>secure</b> / 원래 무해 → <b>harmless</b>'], ['Q3. 무엇이 위험한가?', '선택 → <b>risky</b> / 물질 · 환경 → <b>hazardous</b> / 위태로운 길 → <b>perilous</b>']],
+    body: ['<b>SECURE</b> — 자물쇠 채우기. <b>RISKY</b> — 동전 던지기.', '<b>HAZARDOUS</b> — 두 손으로 "접근 금지".'],
+    check: ['노트 식의 perilous "목숨이 위태로울 만큼"은 앞부분의 "몹시 위험한 길 · 상황"으로 적었다.', '거미가 정말 해로운지는 이 낱말만으로 정하지 않는다.'],
+  });
+  const SCENES = {
+    night: { btn: '밤길', place: '밤길을 물으며', pic: () => FL + P(330, 150, 1.4, 'var(--ok)') + P(560, 150, 1.4, 'var(--sleeve)'), lines: [['나', 'Is it <b>safe</b> to walk at night?', '밤에 걸어도 안전해요?', true], ['주민', 'Yes, but that road is <b>dangerous</b>.', '네, 근데 저 길은 위험해요.']], say: '<b>Is it safe to + 동사?</b>' },
+    plan: { btn: '결정', place: '새 사업 이야기', pic: () => MEET(BX(440, 76, 50, 32)), lines: [['친구', 'Should I quit and start a business?', '그만두고 사업할까?'], ['나', 'It sounds <b>risky</b>.', '위험 부담이 있어 보여.', true]], say: '선택의 위험 — <b>risky</b>.' },
+  };
+  const SLOTS = { first: ['safe', 'it'], slots: { be: 'be 뒤', it: 'It is … to', noun: '명사 앞' }, verbs: {
+    safe: { be: { ok: [['You', 's'], ['are', 'b'], ['safe', 'a']], bad: [['You', 's'], ['are', 'b'], ['safety', 'n']], say: 'safety는 명사.' }, it: { ok: [['It', 's'], ['is', 'v'], ['safe', 'a'], ['to', 'x'], ['go', 'v']], say: '가도 안전하다.' }, noun: { ok: [['a', 'x'], ['safe', 'a'], ['place', 'n']], say: '안전한 곳.' } },
+    dangerous: { be: { ok: [['It', 's'], ['is', 'v'], ['dangerous', 'a']], bad: [['I', 's'], ['am', 'b'], ['dangerous', 'a']], say: '"내가 위험에 처했다"는 <b>I\'m in danger</b>. I\'m dangerous는 "나는 위험한 사람".' }, it: { ok: [['It', 's'], ['is', 'v'], ['dangerous', 'a'], ['to', 'x'], ['swim', 'v']], say: '수영하면 위험하다.' }, noun: { ok: [['a', 'x'], ['dangerous', 'a'], ['road', 'n']], say: '위험한 길.' } },
+  } };
+</script>

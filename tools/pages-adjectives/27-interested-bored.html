@@ -1,0 +1,39 @@
+<!-- title: INTERESTED ↔ BORED 개념 -->
+<!-- pron: interested=/ˈɪn.trə.stɪd/[**인**트러스티드]*, bored=/bɔːrd/[**보**r드]*, #interested/fascinated, #interested/captivated, #bored/weary, #bored/indifferent -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="26-confident-doubtful.html">CONFIDENT ↔ DOUBTFUL</a> · 다음: <a href="28-kind-rude.html">KIND ↔ RUDE</a></p>
+  <h1>INTERESTED ↔ BORED — 같은 공연, 다른 자리</h1>
+  <p class="lead">마음이 <b>끌리면</b> interested, <b>재미가 없으면</b> bored. <b>느끼는 사람은 -ed, 그렇게 만드는 것은 -ing</b>가 이 장의 열쇠다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 끌리고 지루한 장면이 바뀌는 그림|끌리는 쪽은 책을 보는 사람, 문어를 보는 사람, 공연에 빠진 관객이고 지루한 쪽은 하품하는 사람, 같은 질문에 지친 사람, 어느 쪽이든 상관없는 사람이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>관심과 만나는 동사: <a href="../concepts/09-look.html">09 LOOK</a> · <a href="../concepts/27-feel.html">27 FEEL</a> · <a href="../concepts/11-get.html">11 GET</a> (get bored)</li><li>자료: english-adjectives 노트의 interested · bored 묶음</li></ul>
+</main>
+<script>
+  const GAZE = (x1, y1, x2, y2) => LN('M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2, 'var(--accent)', 2, ' stroke-dasharray="6 6"');
+  const EXIST = adverbPage({ noun: '형용사', start: 'fascinated',
+    groups: [
+      { name: '끌리는', items: [
+        { v: 'interested', k: '관심 있는', en: 'I\'m interested in history.', note: '관심이 있다. 사람이 <b>-ed</b>, 대상이 interesting.', from: 'interest(관심) → interested', pic: () => GRD + MAN(150, { f: 'smile', a: 'fwd', c: 'var(--ok)', s: 1.1 }) + RC(230, 110, 130, 90, 'var(--card)') + LN('M295 110 V200 M242 130 h40 M242 146 h34 M308 130 h40 M308 146 h34', 'var(--fog)', 3) + GAZE(176, 128, 232, 140), ex: ['관심', '있음', 'I know history.', '안다는 뜻. 관심이 안 나온다.', '관심 있는.'] },
+        { v: 'fascinated', k: '강하게 끌린', base: 'INTERESTED', core: '신기해서 눈을 못 뗌', from: 'fascinate(매혹하다) → -d', en: 'I was fascinated by the octopus.', note: '강한 호기심. 첫 순간에만 쓰는 말은 아니다(노트).', pic: () => GRD + RC(210, 50, 190, 180, 'var(--water)', 'var(--obj-line)', 8) + '<path d="M270 130 q0 -56 40 -56 q40 0 40 56 z" fill="var(--bad)" stroke="var(--obj-line)"/>' + [274, 292, 310, 328, 346].map((x, i) => LN('M' + x + ' 130 q' + (i % 2 ? 14 : -14) + ' 24 0 44 t0 24', 'var(--bad)', 8)).join('') + CR(300, 104, 4, '#222') + CR(322, 104, 4, '#222') + MAN(140, { f: 'o', a: 'both' }) + GAZE(166, 140, 290, 108), ex: ['강한', '호기심', 'I was interested in the octopus.', '눈을 못 뗄 만큼이라는 세기가 빠진다.', '강하게 끌린.'] },
+        { v: 'captivated', k: '마음을 빼앗긴', base: 'INTERESTED', core: '사로잡혀 몰입', from: 'captivate(사로잡다) → -d', en: 'The audience was captivated by the story.', note: '이야기 · 공연에 빠져듦. 꼭 오래여야 하는 것은 아니다(노트).', pic: () => RC(130, 46, 190, 100, 'var(--accent2)', 'var(--obj-line)') + '<path d="M130 46 q30 60 0 100 h-20 V46 z M320 46 q-30 60 0 100 h20 V46 z" fill="var(--bad)"/>' + MAN(226, { y: 144, s: .6, a: 'up', f: 'o' }) + [70, 130, 190, 250, 310, 370].map((x) => MAN(x, { y: 262, s: .62, f: 'smile', c: 'var(--obj)' }) + GAZE(x, 188, 226, 120)).join(''), ex: ['마음', '빼앗김', 'The audience liked the story.', '좋았다는 정도. 빠져든 그림이 빠진다.', '사로잡힌.'] },
+      ] },
+      { name: '안 끌리는', items: [
+        { v: 'bored', k: '지루한 (느낌)', en: 'I\'m bored.', note: '<b>내가</b> 지루하다. I\'m boring은 "나는 재미없는 사람이다".', from: 'bore(지루하게 하다) → bored', pic: () => GRD + DESK(130, 200, 190) + MAN(220, { f: 'o', a: 'hug', r: 8 }) + CLOCK(350, 90, 26, 2) + tx(280, 96, 16, '하암…', 'var(--muted)'), ex: ['재미', '없음', 'I\'m tired.', '피곤하다는 뜻이 된다.', '지루한.'] },
+        { v: 'weary', k: '오래돼 지친', base: 'BORED와 이웃', core: '반복에 지침', from: 'wear(닳다)와 이웃', en: 'I\'m weary of answering the same question.', note: '지루함보다 <b>지침</b>에 가깝다(노트). 글에서 더 자주 본다.', pic: () => GRD + MAN(330, { f: 'sad', a: 'bow', r: 6 }) + [0, 1, 2, 3].map((i) => SAYB(110 + i % 2 * 60, 60 + i * 42, '왜요?', 13, i === 3 ? 'var(--accent)' : 'var(--fog)')).join(''), ex: ['반복에', '지침', 'I\'m bored of answering it.', '재미없다는 뜻. 지친 느낌이 빠진다.', '오래돼 지친.'] },
+        { v: 'indifferent', k: '관심 없는 · 무심한', base: 'BORED와 이웃', core: '어느 쪽이든 상관없음', from: 'in(아닌) + different(다른)', en: 'I\'m indifferent to the result.', note: '크게 개의치 않는다. 무심하게 들릴 수 있다(노트).', pic: () => GRD + RC(60, 80, 90, 60, 'var(--sleeve)') + tx(105, 118, 22, 'A', 'var(--bg)', ' font-weight="700"') + RC(300, 80, 90, 60, 'var(--bad)') + tx(345, 118, 22, 'B', 'var(--bg)', ' font-weight="700"') + MAN(226, { f: 'flat', a: 'up', c: 'var(--fog)' }) + tx(226, 84, 14, '둘 다 뭐…', 'var(--muted)'), ex: ['상관', '없음', 'I\'m different to the result.', '틀리다. different는 "다른".', '개의치 않는.'] },
+      ] },
+    ],
+    q: [['Q1. 마음이?', '끌림 → <b>interested</b> / 재미없음 → <b>bored</b>'], ['Q2. 얼마나 끌리나?', '신기해서 → <b>fascinated</b> / 사로잡혀 → <b>captivated</b> (겹칠 수 있다)'], ['Q3. 지루함과 다른 것', '반복에 지침 → <b>weary</b> / 관심 자체가 적음 → <b>indifferent</b>'], ['Q4. 사람인가 대상인가?', '느끼는 사람 <b>-ed</b> / 그렇게 만드는 것 <b>-ing</b>']],
+    body: ['<b>FASCINATED</b> — 몸을 앞으로 내밀고 눈 크게. <b>BORED</b> — 턱 괴고 하품.', '<b>INDIFFERENT</b> — 어깨 으쓱.'],
+    check: ['노트 식의 "순간 / 지속" 구분은 같은 노트가 엄격하지 않다고 해 순서를 두지 않았다.', 'weary · indifferent는 노트도 지루함과 다르다고 해 "이웃"으로 적었다.', '-ed / -ing 설명은 노트 묶음 설명에 없는 문법 풀이다.'],
+  });
+  const SCENES = {
+    film: { btn: '영화', place: '영화를 보고', pic: () => MEET(''), lines: [['친구', 'How was the movie?', '영화 어땠어?'], ['나', 'It was <b>boring</b>. I was so <b>bored</b>.', '지루했어. 나 엄청 지루했어.', true]], say: '영화는 <b>boring</b>, 나는 <b>bored</b>.' },
+    aqua: { btn: '수족관', place: '수족관', pic: () => FL + BX(430, 50, 140, 100, 'var(--water)') + P(330, 150, 1.4, 'var(--ok)'), lines: [['친구', 'You\'ve been here for an hour!', '한 시간째 여기 있네!'], ['나', 'I\'m <b>fascinated</b> by the octopus.', '문어에 푹 빠졌어.', true]], say: 'fascinated <b>by</b>.' },
+  };
+  const SLOTS = { first: ['bored', 'who'], slots: { who: '느끼는 사람', what: '만드는 것', prep: '무엇에' }, verbs: {
+    interested: { who: { ok: [['I', 's'], ['am', 'b'], ['interested', 'a']], bad: [['I', 's'], ['am', 'b'], ['interesting', 'a']], say: '관심을 <b>느끼면</b> -ed.' }, what: { ok: [['It', 's'], ['is', 'v'], ['interesting', 'a']], bad: [['It', 's'], ['is', 'v'], ['interested', 'a']], say: '관심을 <b>만들면</b> -ing.' }, prep: { ok: [['interested', 'a'], ['in', 'x'], ['art', 'n']], bad: [['interested', 'a'], ['about', 'x'], ['art', 'n']], say: 'interested <b>in</b>.' } },
+    bored: { who: { ok: [['I', 's'], ['am', 'b'], ['bored', 'a']], bad: [['I', 's'], ['am', 'b'], ['boring', 'a']], say: 'I\'m boring은 "나는 따분한 사람".' }, what: { ok: [['The', 'x'], ['class', 's'], ['is', 'v'], ['boring', 'a']], say: '수업이 지루하다.' }, prep: { ok: [['bored', 'a'], ['with', 'x'], ['it', 'o']], say: 'bored <b>with</b>.' } },
+  } };
+</script>

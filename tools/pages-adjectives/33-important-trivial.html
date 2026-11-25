@@ -1,0 +1,42 @@
+<!-- title: IMPORTANT ↔ TRIVIAL 개념 -->
+<!-- pron: important=/ɪmˈpɔːr.tənt/[임**포**r턴트]*, trivial=/ˈtrɪv.i.əl/[**트리**비얼]*, #important/crucial, #important/essential, #important/vital, #trivial/minor, #trivial/negligible, #trivial/petty -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="32-real-fake.html">REAL ↔ FAKE</a> · 다음: <a href="34-safe-dangerous.html">SAFE ↔ DANGEROUS</a></p>
+  <h1>IMPORTANT ↔ TRIVIAL — 같은 배낭, 무엇을 뺄까</h1>
+  <p class="lead">빼면 <b>큰일이면</b> important, <b>괜찮으면</b> trivial. 결과를 가르는지, 없으면 안 되는지, 작은 흠인지, 다툴 거리도 아닌지에 따라 갈린다. 중요한 쪽 셋은 서로 겹친다(노트).</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 중요하고 사소한 장면이 바뀌는 그림|중요한 쪽은 별표 친 일, 갈림길의 회의, 캠핑의 물, 응급 알레르기 정보이고 사소한 쪽은 작은 메모, 차의 작은 흠집, 저울의 작은 차이, 하찮은 말다툼이다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>고르고 챙기는 동사: <a href="../concepts/56-plan.html">56 PLAN</a> · <a href="../concepts/16-keep.html">16 KEEP</a> · <a href="../concepts/12-take.html">12 TAKE</a></li><li>자료: english-adjectives 노트의 important · trivial 묶음</li></ul>
+</main>
+<script>
+  const MEMO = (x, y, w, h, t, c, s) => RC(x, y, w, h, c, 'var(--obj-line)', 4) + tx(x + w / 2, y + h / 2 + (s || 14) * .36, s || 14, t, '#333', ' font-weight="600"');
+  const SCALE = (d) => LN('M225 220 V110 M180 220 h90', 'var(--obj-line)', 6) + LN('M110 ' + (110 + d) + ' L340 ' + (110 - d), 'var(--obj-line)', 5) + [[110, d], [340, -d]].map(([x, k]) => LN('M' + x + ' ' + (110 + k) + ' v30', 'var(--obj-line)', 2) + RC(x - 34, 140 + k, 68, 40, 'var(--sleeve)')).join('');
+  const EXIST = adverbPage({ noun: '형용사', start: 'crucial',
+    groups: [
+      { name: '중요한', items: [
+        { v: 'important', k: '중요한', en: 'This meeting is important.', note: '영향이 크다. 두루 쓴다.', from: 'importance(중요성)', pic: () => MEMO(70, 70, 130, 60, '장보기', 'var(--card)').replace('#333', 'var(--text)') + MEMO(240, 60, 150, 120, '★ 회의', 'var(--gold)', 22) + MEMO(90, 170, 110, 50, '세차', 'var(--card)').replace('#333', 'var(--text)'), ex: ['영향이', '큼', 'This meeting is big.', '크다는 뜻일 수도 있다.', '중요한.'] },
+        { v: 'crucial', k: '결과를 가르는', base: 'IMPORTANT', core: '결정적인 갈림', from: '라틴어 crux(십자가 · 갈림길)', en: 'This meeting is crucial.', note: '이것에 따라 <b>결과가 갈린다</b>(노트).', pic: () => LN('M225 240 V170 L110 90 M225 170 L340 90', 'var(--fog)', 18) + MEMO(170, 150, 110, 44, '이 회의', 'var(--gold)', 15) + tx(90, 76, 15, '성공', 'var(--ok)', ' font-weight="700"') + tx(360, 76, 15, '실패', 'var(--bad)', ' font-weight="700"'), ex: ['결과를', '가름', 'This meeting is important.', '많이 겹친다. 갈림길 느낌이 약해진다.', '결과를 가르는.'] },
+        { v: 'essential', k: '없으면 안 되는', base: 'IMPORTANT', core: '꼭 필요한 조건', from: 'essence(본질) + ial', en: 'Water is essential for the trip.', note: '없으면 목적을 못 이룬다(노트).', pic: () => GRD + '<path d="M130 240 v-110 q0 -50 60 -50 q60 0 60 50 v110 z" fill="var(--ok)" stroke="var(--obj-line)" stroke-width="2"/>' + RC(150, 170, 80, 50, 'var(--bg)') + RC(300, 110, 44, 110, 'var(--water)', 'var(--accent)', 8) + RC(312, 94, 20, 16, 'var(--fog)') + tx(322, 244, 13, '꼭', 'var(--accent)', ' font-weight="700"') + AR(294, 166, 256, 166, 'var(--accent)', 4), ex: ['꼭', '필요', 'Water is good for the trip.', '있으면 좋다는 정도가 된다.', '없으면 안 되는.'] },
+        { v: 'vital', k: '매우 중대한', base: 'IMPORTANT', core: '생명 · 안전처럼 중대', from: '라틴어 vita(생명)', en: 'This information is vital.', note: '생명 · 안전에 자주. 다른 매우 중요한 일에도 쓴다(노트).', pic: () => GRD + MAN(120, { f: 'o', a: 'fwd' }) + PAPER(176, 130, 60, 70, 3) + '<g transform="translate(660 0) scale(-1 1)">' + MAN(330, { f: 'flat', a: 'both', c: 'var(--card)' }) + '</g>' + LN('M330 186 v20 M320 196 h20', 'var(--bad)', 5) + SAYB(180, 70, '땅콩 알레르기!', 14, 'var(--bad)'), ex: ['매우', '중대', 'This information is useful.', '쓸모 있다는 정도가 된다.', '매우 중대한.'] },
+      ] },
+      { name: '사소한', items: [
+        { v: 'trivial', k: '사소한', en: 'Don\'t worry about trivial things.', note: '영향이 거의 없다.', from: 'trivia(잡다한 상식)와 이웃', pic: () => RC(90, 60, 270, 170, 'var(--card)') + LN('M110 90 h200 M110 116 h170', 'var(--obj-line)', 4) + tx(330, 214, 9, '글꼴 크기?', 'var(--muted)') + CR(324, 210, 30, 'none', 'var(--fog)'), ex: ['영향', '거의 없음', 'Don\'t worry about easy things.', '쉽다는 뜻이 된다.', '사소한.'] },
+        { v: 'minor', k: '작은 · 가벼운', base: 'TRIVIAL', core: '정도가 작음', from: '반대는 major(큰)', en: 'It\'s a minor scratch.', note: '작다는 뜻. <b>무시해도 된다는 뜻은 아니다</b>(노트).', pic: () => '<path d="M60 206 q10 -34 70 -40 q50 -50 130 -46 q60 4 90 44 q44 6 50 42 z" fill="var(--accent)" stroke="var(--obj-line)" stroke-width="2"/><path d="M150 164 q40 -30 100 -30 q34 4 56 30 z" fill="var(--water)"/>' + CR(130, 208, 22, 'var(--obj-line)') + CR(330, 208, 22, 'var(--obj-line)') + LN('M216 184 l18 -6', 'var(--bg)', 3) + CR(225, 181, 20, 'none', 'var(--gold)'), ex: ['정도가', '작음', 'It\'s a trivial scratch.', '신경 쓸 것 없다는 평가가 세진다.', '가벼운.'] },
+        { v: 'negligible', k: '무시할 만큼 작은', base: 'TRIVIAL', core: '영향이 거의 없음', from: 'neglect(무시하다)와 이웃', en: 'The difference is negligible.', note: '수치 · 효과 · 위험이 <b>무시할 만큼</b>(노트).', pic: () => SCALE(3) + tx(110, 170, 13, '500 g', 'var(--bg)') + tx(340, 162, 13, '501 g', 'var(--bg)'), ex: ['무시', '할 만큼', 'The difference is small.', '작지만 영향이 있을 수도 있다.', '무시할 만한.'] },
+        { v: 'petty', k: '옹졸한 · 하찮은', base: 'TRIVIAL', core: '하찮은 일에 매달림', from: 'pettiness(옹졸함)', en: 'It\'s a petty argument.', note: '작은 일에 <b>옹졸하다는 나쁜 평가</b>(노트).', pic: () => GRD + MAN(110, { f: 'o', a: 'point', c: 'var(--bad)' }) + '<g transform="translate(450 0) scale(-1 1)">' + MAN(110, { f: 'o', a: 'point' }) + '</g>' + SAYB(110, 74, '네가 먼저!', 13, 'var(--bad)') + SAYB(340, 74, '네가 먼저!', 13) + RC(206, 204, 40, 34, 'var(--card)') + LN('M214 214 h24', 'var(--fog)', 3) },
+      ] },
+    ],
+    q: [['Q1. 없으면?', '큰일 → <b>important</b> / 괜찮음 → <b>trivial</b>'], ['Q2. 왜 중요한가?', '결과를 가름 → <b>crucial</b> / 꼭 필요 → <b>essential</b> / 생명처럼 중대 → <b>vital</b>'], ['Q3. 왜 사소한가?', '정도가 작음 → <b>minor</b> / 영향 거의 없음 → <b>negligible</b> / 옹졸함 → <b>petty</b>']],
+    body: ['<b>ESSENTIAL</b> — 물병을 가슴에 꼭. <b>CRUCIAL</b> — 두 갈래를 가리키기.', '<b>NEGLIGIBLE</b> — 손을 휘휘.'],
+    check: ['trivial 예문은 새로 지었다. 500 g · 501 g은 그림용 수다.', '노트 식의 vital "생사가 걸린"은 앞부분이 한정하지 않는다고 해 "매우 중대"로 적었다.'],
+  });
+  const SCENES = {
+    camp: { btn: '캠핑', place: '캠핑 짐 싸기', pic: () => MEET(BX(430, 70, 50, 38, 'var(--ok)')), lines: [['친구', 'Do we need all this?', '이거 다 필요해?'], ['나', 'Water is <b>essential</b>. The speaker isn\'t.', '물은 필수. 스피커는 아니고.', true]], say: '꼭 필요 — <b>essential</b>.' },
+    car: { btn: '접촉', place: '차에 흠집이 났을 때', pic: () => FL + CAR(400) + P(310, 150, 1.4, 'var(--ok)'), lines: [['친구', 'Is it serious?', '심각해?'], ['나', 'No, it\'s just a <b>minor</b> scratch.', '아니, 가벼운 흠집이야.', true]], say: '짝은 <b>minor ↔ major · serious</b>.' },
+  };
+  const SLOTS = { first: ['important', 'it'], slots: { be: 'be 뒤', it: 'It is … to', noun: '명사 앞' }, verbs: {
+    important: { be: { ok: [['It', 's'], ['is', 'v'], ['important', 'a']], bad: [['It', 's'], ['is', 'v'], ['importance', 'n']], say: 'importance는 명사.' }, it: { ok: [['It', 's'], ['is', 'v'], ['important', 'a'], ['to', 'x'], ['rest', 'v']], bad: [['It', 's'], ['is', 'v'], ['important', 'a'], ['rest', 'v']], say: 'to + 동사.' }, noun: { ok: [['an', 'x'], ['important', 'a'], ['call', 'n']], say: '중요한 전화.' } },
+    essential: { be: { ok: [['essential', 'a'], ['for', 'x'], ['the', 'x'], ['trip', 'n']], say: 'essential <b>for</b> · to.' }, it: { ok: [['It', 's'], ['is', 'v'], ['essential', 'a'], ['to', 'x'], ['go', 'v']], say: '꼭 가야 한다.' }, noun: { ok: [['essential', 'a'], ['oil', 'n']], say: '에센셜 오일 — 여기서는 "정수"의 뜻.' } },
+  } };
+</script>

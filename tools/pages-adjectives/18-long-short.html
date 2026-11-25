@@ -1,0 +1,39 @@
+<!-- title: LONG ↔ SHORT 개념 -->
+<!-- pron: long=/lɔːŋ/[**롱**]*, short=/ʃɔːrt/[**쇼**r트]*, #long/lengthy, #long/extended, #short/brief -->
+<main>
+  <p class="note"><a href="index.html">← 형용사 목록</a> · 이전: <a href="17-big-small.html">BIG ↔ SMALL</a> · 다음: <a href="19-tall-low.html">TALL · HIGH ↔ LOW</a></p>
+  <h1>LONG ↔ SHORT — 같은 줄, 같은 회의</h1>
+  <p class="lead">줄도 회의도 <b>길면</b> long, <b>짧으면</b> short. 한참 이어졌는지, 원래보다 늘렸는지, 짧게 끝냈는지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADJ|낱말을 누르면 길고 짧은 장면이 바뀌는 그림|긴 쪽은 긴 줄, 한참 이어진 회의, 늘어난 보증 기간이고 짧은 쪽은 짧은 줄, 짧은 보고다.}}
+  <h2>5. 동사와 연결하면</h2>
+  <ul><li>길이를 바꾸는 동사: <a href="../concepts/64-cut.html">64 CUT</a> (cut short) · <a href="../concepts/66-increase.html">66 INCREASE</a></li><li>자료: english-adjectives 노트의 long · short 묶음</li></ul>
+</main>
+<script>
+  const QUEUE = (n) => GRD + RC(40, 130, 60, 110, 'var(--card)') + Array.from({ length: n }, (_, i) => MAN(134 + i * 42, { s: .62, c: ['var(--sleeve)', 'var(--ok)', 'var(--accent2)'][i % 3] })).join('');
+  const BAR = (y, w, c, dash) => RC(60, y, w, 28, c, dash ? 'var(--accent)' : 'var(--obj-line)', 6);
+  const EXIST = adverbPage({ noun: '형용사', start: 'lengthy',
+    groups: [
+      { name: '긴', items: [
+        { v: 'long', k: '긴', en: 'The line is long.', note: '거리 · 시간이 길다. "얼마나 걸려?"는 <span class="en">How long …?</span>', from: 'length(길이) · lengthen(늘이다)', pic: () => QUEUE(7), ex: ['길게', '이어짐', 'The line is big.', '어색하다. 길이는 long.', '긴.'] },
+        { v: 'lengthy', k: '한참 이어진', base: 'LONG', core: '시간 · 분량이 상당함', from: 'length(길이) + y', en: 'It was a lengthy meeting.', note: '회의 · 글이 꽤 길다. <b>지루했는지는 따로</b>(노트). 머리카락에는 안 쓴다.', pic: () => DESK(150, 170, 190) + [130, 190, 280, 340].map((x) => MAN(x, { s: .7, f: 'flat' })).join('') + CLOCK(130, 80, 26, -1) + AR(166, 80, 270, 80, 'var(--muted)', 2) + CLOCK(310, 80, 26, 2.4), ex: ['한참', '이어짐', 'It was a big meeting.', '크다 · 중요하다는 뜻이 된다.', '시간 · 분량이 긴.'] },
+        { v: 'extended', k: '늘어난', base: 'LONG과 이웃', core: '원래보다 늘림', from: 'extend(늘이다) → extended', en: 'We have an extended warranty.', note: '<b>원래보다</b> 늘었다. 누가 일부러 늘렸는지까지는 모른다(노트).', pic: () => tx(60, 92, 13, '기본', 'var(--muted)', '', 'start') + BAR(100, 180, 'var(--fog)') + tx(60, 162, 13, '늘어남', 'var(--accent)', '', 'start') + BAR(170, 180, 'var(--fog)') + BAR(170, 320, 'none', true).replace('x="60"', 'x="60"') + RC(240, 170, 140, 28, 'var(--chip-on)', 'var(--accent)', 6) + tx(310, 189, 13, '+ 1년', 'var(--accent)', ' font-weight="700"'), ex: ['원래보다', '늘어남', 'We have a long warranty.', '처음부터 길었던 것일 수도 있다.', '늘어난.'] },
+      ] },
+      { name: '짧은', items: [
+        { v: 'short', k: '짧은', en: 'The line is short.', note: '길이 · 시간이 짧다. 키가 작다는 뜻도 있다.', from: 'shorten(줄이다)과 짝', pic: () => QUEUE(2), ex: ['짧다', '', 'The line is small.', '어색하다. 길이는 short.', '짧은.'] },
+        { v: 'brief', k: '짧게 끝나는', base: 'SHORT', core: '시간 · 말이 짧음', from: 'in brief(짧게 말해)', en: 'I\'ll give you a brief update.', note: '안내 · 방문 · 회의에. 충분했는지는 문맥으로(노트). 끈 · 머리카락에는 안 쓴다.', pic: () => GRD + MAN(120, { f: 'smile', a: 'point', c: 'var(--ok)' }) + MAN(350, { f: 'smile' }) + SAYB(222, 96, '딱 1분만요', 13, 'var(--accent)') + CLOCK(230, 180, 24, -1.3), ex: ['짧게', '끝남', 'I\'ll give you a short update.', '많이 겹친다. brief가 조금 더 격식 있다.', '시간이 짧은.'] },
+      ] },
+    ],
+    q: [['Q1. 길이 · 시간이?', '길다 → <b>long</b> / 짧다 → <b>short</b>'], ['Q2. 긴 무엇?', '회의 · 글이 한참 → <b>lengthy</b> / 원래보다 늘어남 → <b>extended</b>'], ['Q3. 짧은 말 · 방문', '<b>brief</b>']],
+    body: ['<b>LONG</b> — 두 손을 멀리 벌리기. <b>EXTENDED</b> — 벌린 손을 한 번 더 늘리기.', '<b>BRIEF</b> — 손가락 하나 세우고 "딱 1분".'],
+    check: ['노트 식은 lengthy를 "불필요하게 · 지루하게", brief를 "필요한 만큼만(긍정)"이라 하지만, 낱말 노트는 둘 다 필수가 아니라고 해 그쪽을 따랐다.', '노트에 SHORT 식구는 brief 하나뿐이라 억지로 늘리지 않았다.'],
+  });
+  const SCENES = {
+    line: { btn: '맛집', place: '식당 앞', pic: () => FL + BX(420, 60, 120, 90) + [400, 370, 340].map((x) => P(x, 150, 1, 'var(--sleeve)')).join('') + P(290, 150, 1.4, 'var(--ok)'), lines: [['친구', 'How <b>long</b> is the wait?', '얼마나 기다려야 해?'], ['나', 'The line is <b>short</b> today.', '오늘은 줄이 짧아.', true]], say: '시간을 물을 때 <b>How long …?</b>' },
+    meet: { btn: '회의', place: '회의 시작', pic: () => MEET(CLOCK(465, 80, 22, -1)), lines: [['상사', 'Any updates?', '새 소식 있나요?'], ['나', 'Yes, I\'ll be <b>brief</b>.', '네, 짧게 말씀드릴게요.', true]], say: '<b>I\'ll be brief</b> — 통째로 쓴다.' },
+  };
+  const SLOTS = { first: ['long', 'num'], slots: { num: '수와 함께', noun: '명사 앞', time: '시간' }, verbs: {
+    long: { num: { ok: [['It', 's'], ['is', 'v'], ['two', 'x'], ['meters', 'n'], ['long', 'a']], bad: [['It', 's'], ['is', 'v'], ['long', 'a'], ['two', 'x'], ['meters', 'n']], say: '수 + 단위 + <b>long</b>.' }, noun: { ok: [['a', 'x'], ['long', 'a'], ['day', 'n']], say: '고된 하루.' }, time: { ok: [['It', 's'], ['takes', 'v'], ['long', 'd']], say: '오래 걸린다 — 여기서는 부사. longly는 없다.' } },
+    short: { num: { ok: [['He', 's'], ['is', 'v'], ['short', 'a']], bad: [['He', 's'], ['is', 'v'], ['160 cm', 'n'], ['short', 'a']], say: '수를 말할 때는 <b>tall</b>: 160 cm tall.' }, noun: { ok: [['short', 'a'], ['hair', 'n']], say: '짧은 머리.' }, time: { ok: [['a', 'x'], ['short', 'a'], ['break', 'n']], say: '짧은 휴식. shortly는 "곧".' } },
+  } };
+</script>
