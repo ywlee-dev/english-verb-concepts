@@ -29,5 +29,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
+      # 방금 올린 배포 파일을 GitHub이 바로 못 찾아 실패하는 일이 있어 잠깐 기다린다 (2026-11-25)
+      - run: sleep 20
       - id: deploy
         uses: actions/deploy-pages@v4
