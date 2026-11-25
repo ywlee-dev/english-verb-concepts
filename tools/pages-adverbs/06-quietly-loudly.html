@@ -1,0 +1,41 @@
+<!-- title: QUIETLY ↔ LOUDLY 개념 -->
+<!-- pron: quietly=/ˈkwaɪ.ət.li/[**콰**이어틀리]*, loudly=/ˈlaʊd.li/[**라**우들리]*, ../english-adverbs/quietly/silently--making-no-sound.md, ../english-adverbs/quietly/faintly--barely-perceptible.md, ../english-adverbs/quietly/inaudibly--impossible-to-hear.md, ../english-adverbs/loudly/noisily--in-a-disorderly-clatter-of-sound.md, ../english-adverbs/loudly/deafeningly--overwhelmingly-loud.md -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="05-carefully-carelessly.html">CAREFULLY ↔ CARELESSLY</a> · 다음: <a href="07-easily-hard.html">EASILY ↔ HARD</a></p>
+  <h1>QUIETLY ↔ LOUDLY — 같은 말, 다른 소리 크기</h1>
+  <p class="lead">같은 말을 <b>작게</b> 하면 quietly, <b>크게</b> 하면 loudly. 소리가 <b>아예 없는지, 희미한지, 안 들리는지, 시끄러운지, 귀가 먹먹한지</b>까지 말하면 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 소리 크기와 장면이 바뀌는 그림|작은 쪽은 낮은 말, 소리 없이 들어가기, 옆방 음악, 뒷자리에 안 들리는 대답이고 큰 쪽은 큰 말, 떠드는 아이들, 경기장 환호다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 quietly · loudly 묶음</li><li>꾸며 주는 동사: <a href="../concepts/17-say.html">17 SAY</a> — whisper · shout는 낱말 안에 소리 크기가 있다. <a href="../concepts/52-hear.html">52 HEAR</a></li></ul>
+</main>
+<script>
+  const EXIST = adverbPage({
+    start: 'faintly',
+    groups: [
+      { name: '작은 소리', items: [
+        { v: 'quietly', k: '조용히', en: 'Mina spoke quietly.', note: '소리가 작다.', from: 'quiet(조용한) + ly', pic: () => GRD + MAN(150, { f: 'smile', c: 'var(--ok)' }) + SAYB(230, 130, '안녕', 11) + SOUND(260, 172, 1) + MAN(340, {}), ex: ['소리가', '작다', 'Mina spoke.', '얼마나 크게 말했는지 모른다.', '작은 소리로.'] },
+        { v: 'silently', k: '소리 없이', base: 'QUIETLY', core: '말 · 소리를 안 냄', from: 'silent(소리 없는) + ly', en: 'She entered silently.', note: '아기 방에 소리를 내지 않고 들어간다. 물리적 무음의 증명은 아니다(노트).', pic: () => GRD + DOOR(70, 30) + MAN(210, { f: 'shut', a: 'up' }) + RC(290, 190, 100, 40, 'var(--bg)', 'var(--obj-line)', 12) + CR(318, 194, 13, 'var(--skin)') + tx(356, 176, 14, 'z z', 'var(--muted)') + LN('M196 246 h8 M222 246 h8', 'var(--fog)', 3), ex: ['소리를', '안 냄', 'She entered quietly.', '작은 소리는 났을 수 있다.', '말 · 소리를 내지 않고.'] },
+        { v: 'faintly', k: '희미하게', base: 'QUIETLY', core: '희미하게 느껴짐', from: 'faint(희미한) + ly', en: 'I could hear the music faintly.', note: '옆방 노래가 아주 작게. 빛 · 냄새에도 쓴다(노트).', pic: () => GRD + NOTE(90, 140, 40) + NOTE(140, 180, 30) + RC(200, 60, 16, 180, 'var(--wood)') + NOTE(246, 160, 20, .5) + NOTE(276, 142, 16, .35) + MAN(350, { a: 'hip' }), ex: ['희미하게', '들린다', 'I could hear the music.', '얼마나 또렷한지 모른다.', '희미하게.'] },
+        { v: 'inaudibly', k: '안 들리게', base: 'QUIETLY', core: '듣는 사람에게 안 들림', from: 'in + audible(들리는) → inaudibly', en: 'He answered almost inaudibly.', note: '소리가 전혀 없다기보다 <b>듣는 쪽에 닿지 않는다</b>(노트).', pic: () => GRD + MAN(110, { f: 'o' }) + SOUND(146, 140, 2, 'var(--fog)') + LN('M196 100 V210', 'var(--fog)', 2, ' stroke-dasharray="4 5"') + MAN(340, { f: 'flat', a: 'hip', c: 'var(--ok)' }) + SAYB(300, 92, '뭐라고?', 13), ex: ['안', '들린다', 'He answered quietly.', '작아도 들렸을 수 있다.', '듣는 사람에게 안 들리게.'] },
+      ] },
+      { name: '큰 소리', items: [
+        { v: 'loudly', k: '크게', en: 'Mina spoke loudly.', note: '소리가 크다.', from: 'loud(큰 소리의) + ly', pic: () => GRD + MAN(120, { f: 'o', c: 'var(--ok)' }) + SAYB(210, 90, '안녕!', 26, 'var(--accent)') + SOUND(160, 156, 4) + MAN(350, {}), ex: ['소리가', '크다', 'Mina spoke.', '크게 말했다는 점이 빠진다.', '큰 소리로.'] },
+        { v: 'noisily', k: '시끄럽게', base: 'LOUDLY', core: '시끄러운 소리를 냄', from: 'noisy(시끄러운) → noisily (y → i)', en: 'The children played noisily.', note: '소란스럽게 소리를 낸다. 한 소리든 여러 소리든 된다(노트).', pic: () => GRD + [90, 180, 270, 350].map((x, i) => MAN(x, { s: .75, f: 'o', a: i % 2 ? 'up' : 'fwd', c: ['var(--accent)', 'var(--ok)', 'var(--gold)', 'var(--sleeve)'][i] })).join('') + [['와', 130, 110], ['쿵', 226, 92], ['하하', 310, 116]].map(([t, x, y]) => tx(x, y, 18, t, 'var(--accent)', ' font-weight="700"')).join(''), ex: ['시끄럽게', '소란스럽게', 'The children played loudly.', '많이 겹친다. 성가신 소란스러움이 약해진다.', '시끄러운 소리를 내며.'] },
+        { v: 'deafeningly', k: '귀청이 터질 듯', base: 'LOUDLY', core: '극도로 큰 소리', from: 'deafening(귀가 먹먹한) + ly', en: 'The crowd cheered deafeningly.', note: '극도로 크다는 강조. 실제로 귀가 안 들리게 된 것은 아니다(노트).', pic: () => GRD + [0, 1, 2, 3, 4, 5].map((i) => CR(60 + i * 30, 160 + i % 2 * 12, 13, 'var(--skin)') + LN('M' + (52 + i * 30) + ' ' + (150 + i % 2 * 12) + ' l-6 -24 M' + (68 + i * 30) + ' ' + (150 + i % 2 * 12) + ' l6 -24', 'var(--skin)', 5)).join('') + SAYB(140, 88, '와아아!', 26, 'var(--bad)') + SOUND(236, 160, 4, 'var(--bad)') + MAN(360, { f: 'sad', a: 'hug' }) },
+      ] },
+    ],
+    q: [['Q1. 크기만?', '<b>quietly · loudly</b>'], ['Q2. 작은데 어떻게?', '안 냄 → <b>silently</b> / 희미 → <b>faintly</b> / 안 들림 → <b>inaudibly</b>'], ['Q3. 큰데 어떻게?', '시끄럽게 → <b>noisily</b> / 극도로 → <b>deafeningly</b>']],
+    body: ['<b>SILENTLY</b> — 입을 다물고 발끝으로. <b>FAINTLY</b> — 귀에 손을 대고 겨우 듣기.', '<b>NOISILY</b> — 책상을 두드리기. <b>DEAFENINGLY</b> — 두 귀를 막기.'],
+    check: ['일상 회화에서는 <span class="en">Speak up · out loud</span>도 흔하다. loudly와의 차이는 노트에 없다.', 'noisily의 "성가심"은 노트에 없는 풀이다.'],
+  });
+  const desk = (b) => FL + TB(370, 560, 108) + b + P(310, 150, 1.4, 'var(--ok)') + P(610, 150, 1.4, 'var(--sleeve)');
+  const SCENES = {
+    lib: { btn: '도서관', place: '도서관 열람실', pic: () => desk(BX(430, 90, 70, 18)), lines: [['사서', 'Please talk <b>quietly</b>.', '조용히 말해 주세요.'], ['나', 'Sorry. We\'ll read <b>silently</b>.', '죄송해요. 소리 안 내고 읽을게요.', true]], say: '작은 소리는 <b>quietly</b>, 소리를 안 내면 <b>silently</b>.' },
+    call: { btn: '전화', place: '잘 안 들리는 전화', pic: () => desk(BX(452, 70, 24, 38)), lines: [['나', 'I can only hear you <b>faintly</b>.', '희미하게만 들려요.', true], ['친구', 'Sorry, they\'re playing music so <b>loudly</b>.', '미안, 여기 음악을 너무 크게 틀어.']], say: '희미하게 느껴지면 <b>faintly</b>.' },
+  };
+  const SLOTS = { first: ['quietly', 'end'], slots: { end: '동사 뒤', obj: '목적어 뒤', mid: '동사 앞' }, verbs: {
+    quietly: { end: { ok: [['She', 's'], ['spoke', 'v'], ['quietly', 'd']], bad: [['She', 's'], ['spoke', 'v'], ['quiet', 'a']], say: '동사를 꾸미면 quietly. 형용사는 <span class="en">Be quiet.</span>' }, obj: { ok: [['She', 's'], ['shut', 'v'], ['it', 'o'], ['quietly', 'd']], bad: [['She', 's'], ['shut', 'v'], ['quietly', 'd'], ['it', 'o']], say: '목적어 <b>뒤</b>.' }, mid: { ok: [['She', 's'], ['quietly', 'd'], ['left', 'v']], say: '동사 앞 — "조용히 (눈에 안 띄게) 떠났다".' } },
+    loudly: { end: { ok: [['He', 's'], ['laughed', 'v'], ['loudly', 'd']], say: '동사 뒤. 회화에서는 <span class="en">Don\'t talk so loud.</span>처럼 loud도 부사로 쓴다.' }, obj: { ok: [['He', 's'], ['sang', 'v'], ['it', 'o'], ['loudly', 'd']], bad: [['He', 's'], ['sang', 'v'], ['loudly', 'd'], ['it', 'o']], say: '목적어 뒤.' }, mid: { ok: [['He', 's'], ['loudly', 'd'], ['objected', 'v']], say: '동사 앞 — "큰 소리로 반대했다".' } },
+  } };
+</script>

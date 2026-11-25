@@ -1,0 +1,46 @@
+<!-- title: DEFINITELY · PROBABLY 개념 -->
+<!-- pron: definitely=/ˈdef.ən.ət.li/[**데**퍼니틀리]*, probably=/ˈprɑː.bə.bli/[프**라**버블리]*, obviously=/ˈɑːb.vi.əs.li/[**아**비어슬리]*, @definitely/undoubtedly, @definitely/surely, @probably/perhaps, @probably/possibly, @obviously/evidently, @obviously/plainly -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="15-already-still-yet.html">ALREADY · STILL · YET</a> · 다음: <a href="17-honestly-fortunately.html">HONESTLY · FORTUNATELY</a></p>
+  <h1>DEFINITELY · PROBABLY · OBVIOUSLY — 얼마나 믿나</h1>
+  <p class="lead">같은 일을 두고 <b>말하는 사람</b>이 얼마나 확신하는지를 얹는다. 확실하면 definitely, 그럴 것 같으면 probably, 누가 봐도 뻔하면 obviously. 확신이 커도 <b>사실이라는 증거는 아니다</b>(노트).</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 확신의 세기와 까닭이 바뀌는 그림|확신 쪽은 단단한 말풍선, 적임자, 되묻는 친구이고 추측 쪽은 점선 말풍선, 빈 약속 자리, 빡빡한 일정이며 뻔함 쪽은 모두 보는 장면, 물자국, 속상한 얼굴이다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 definitely · probably · obviously 묶음</li><li>꾸며 주는 동사: <a href="../concepts/22-know.html">22 KNOW</a> · <a href="../concepts/23-think.html">23 THINK</a></li></ul>
+</main>
+<script>
+  const THINK = (x, y, solid, body) => '<ellipse cx="' + x + '" cy="' + y + '" rx="76" ry="38" fill="var(--bg)" stroke="var(--accent)" stroke-width="' + (solid ? 4 : 2) + '"' + (solid ? '' : ' stroke-dasharray="6 5"') + '/>' + CR(x - 74, y + 38, 6) + CR(x - 88, y + 50, 4) + body;
+  const CLOUD = (x, y) => '<path d="M' + (x - 28) + ' ' + (y + 8) + ' a14 14 0 0 1 8 -24 a18 18 0 0 1 34 -2 a14 14 0 0 1 8 26 z" fill="var(--fog)"/>' + LN('M' + (x - 14) + ' ' + (y + 14) + ' l-4 10 M' + x + ' ' + (y + 14) + ' l-4 10 M' + (x + 14) + ' ' + (y + 14) + ' l-4 10', 'var(--water)', 3);
+  const EXIST = adverbPage({
+    start: 'evidently',
+    groups: [
+      { name: '확신', items: [
+        { v: 'definitely', k: '확실히', en: 'It will definitely rain.', note: '강하게 확신한다. 혼자 <span class="en">Definitely!</span>면 "당연하지!".', from: 'definite(확실한) + ly', pic: () => GRD + MAN(110, { f: 'smile', a: 'hip', c: 'var(--ok)' }) + THINK(270, 100, true, CLOUD(270, 98)), ex: ['강한', '확신', 'It will rain.', '얼마나 믿는지 안 나온다.', '확실하다고.'] },
+        { v: 'undoubtedly', k: '의심할 여지 없이', base: 'DEFINITELY', core: '의심이 없다고 강조', from: 'un + doubted(의심받는) + ly', en: 'She is undoubtedly qualified.', note: '힘주어 말한다. 증거가 꼭 따라야 하는 것은 아니다(노트).', pic: () => GRD + MAN(150, { f: 'smile', c: 'var(--accent2)' }) + RC(220, 80, 150, 110, 'var(--card)') + [0, 1, 2].map((i) => tick(236, 106 + i * 30) + LN('M270 ' + (104 + i * 30) + ' h80', 'var(--fog)', 3)).join(''), ex: ['의심', '없다', 'She is probably qualified.', '아마로 확신이 확 줄어든다.', '의심 없이.'] },
+        { v: 'surely', k: '분명 ~겠지?', base: 'DEFINITELY 쪽', core: '기대하며 확인', from: 'sure(확신하는) + ly', en: 'Surely he remembers the meeting?', note: '"그렇지 않겠어?" — 기대 · 놀람 · 동의를 구한다(노트).', pic: () => GRD + MAN(120, { f: 'o', a: 'hip', c: 'var(--ok)' }) + MAN(340, { f: 'flat' }) + SAYB(220, 92, '기억하겠지, 그치?', 13, 'var(--accent)'), ex: ['그치?', '확인', 'He definitely remembers.', '단정이 되어 되묻는 느낌이 사라진다.', '기대하며 확인.'] },
+      ] },
+      { name: '추측', items: [
+        { v: 'probably', k: '아마 (그럴 듯)', en: 'It will probably rain.', note: '가능성이 <b>높다</b>고 본다. 50%가 아니다(노트).', from: 'probable(있을 법한) → probably', pic: () => GRD + MAN(110, { f: 'flat', a: 'point', c: 'var(--ok)' }) + THINK(270, 100, false, CLOUD(270, 98)), ex: ['그럴', '듯하다', 'It will rain.', '확실한 것처럼 들린다.', '가능성이 높게.'] },
+        { v: 'perhaps', k: '어쩌면', base: 'MAYBE 쪽', core: '가능성 하나를 냄', from: 'per + hap(우연)', en: 'Perhaps she forgot the meeting.', note: 'maybe와 가깝다. 제안을 부드럽게 할 때도 쓴다(노트).', pic: () => GRD + LN('M280 160 V240 M280 200 h44 V240', 'var(--wood)', 6) + MAN(130, { f: 'flat' }) + CLOCK(380, 100, 22, 1) + tx(210, 110, 30, '?', 'var(--accent)', ' font-weight="700"'), ex: ['하나의', '가능성', 'She probably forgot.', '그럴 가능성이 높다고 말하게 된다.', '어쩌면.'] },
+        { v: 'possibly', k: '혹시 · 가능하면', base: 'MAYBE 쪽', core: '가능성을 열어 둠', from: 'possible(가능한) → possibly', en: 'We could possibly finish tomorrow.', note: '될 수도 있다. 정중한 부탁에도 쓴다(노트).', pic: () => [0, 1, 2, 3, 4].map((i) => RC(50 + i * 72, 100, 60, 60, 'var(--card)', i === 4 ? 'var(--accent)' : 'var(--line)', 6) + (i < 3 ? tick(68 + i * 72, 132) : tx(80 + i * 72, 138, 20, '?', 'var(--muted)'))).join('') },
+      ] },
+      { name: '뻔함', items: [
+        { v: 'obviously', k: '뻔히 · 당연히', en: 'He was obviously tired.', note: '누가 봐도 분명하다고 여긴다.', from: 'obvious(명백한) + ly', pic: () => GRD + MAN(226, { f: 'shut', a: 'bow', r: 10 }) + tx(260, 100, 18, 'z z', 'var(--muted)') + [70, 380].map((x) => CR(x, 120, 18, 'var(--skin)') + AR(x + (x < 200 ? 24 : -24), 120, x + (x < 200 ? 70 : -70), 126, 'var(--accent2)', 2, true)).join(''), ex: ['누가 봐도', '분명', 'He was tired.', '누구나 알 수 있었다는 점이 빠진다.', '뻔하게.'] },
+        { v: 'evidently', k: '보아하니', base: 'OBVIOUSLY 쪽', core: '드러난 정보로 보아', from: 'evident(드러난) + ly', en: 'Evidently, someone spilled water.', note: '본 정황으로 판단한다. 꼭 직접 본 것은 아니다(노트).', pic: () => GRD + '<ellipse cx="240" cy="238" rx="70" ry="9" fill="var(--water)"/><g transform="rotate(80 250 220)">' + GLASS(250, 226) + '</g>' + MAN(110, { f: 'flat', a: 'point' }), ex: ['정황을', '보니', 'Someone spilled water.', '직접 본 것처럼 들린다.', '보아하니.'] },
+        { v: 'plainly', k: '눈에 띄게 분명히', base: 'OBVIOUSLY 쪽', core: '분명함을 강조', from: 'plain(분명한) + ly', en: 'She was plainly upset.', note: '분명함을 강조한다. "알기 쉽게"라는 뜻도 있다(노트).', pic: () => GRD + MAN(226, { f: 'sad', a: 'hug', c: 'var(--ok)', s: 1.25 }) + LN('M214 118 l-6 12 M240 118 l6 12', 'var(--water)', 4) },
+      ] },
+    ],
+    q: [['Q1. 어떤 태도?', '강한 확신 → <b>definitely</b> / 그럴 듯 → <b>probably</b> / 누가 봐도 → <b>obviously</b>'], ['Q2. 확신, 초점은?', '의심 없음 → <b>undoubtedly</b> / 되묻기 → <b>surely</b>'], ['Q3. 열어 두기?', '<b>perhaps · possibly · maybe</b> (많이 겹침)'], ['Q4. 분명, 초점은?', '정황 → <b>evidently</b> / 분명함 강조 → <b>plainly</b>']],
+    body: ['<b>DEFINITELY</b> — 주먹으로 손바닥 탁. <b>PROBABLY</b> — 고개를 살짝 기울여 끄덕. <b>PERHAPS</b> — 어깨 으쓱.'],
+    check: ['Obviously를 상대에게 쓰면 "그것도 모르냐"로 들릴 수 있다. 노트에는 없다.'],
+  });
+  const SCENES = {
+    party: { btn: '초대', place: '주말 초대', pic: () => MEET(BX(440, 72, 50, 36)), lines: [['친구', 'Will you come to the party?', '파티 올 거야?'], ['나', '<b>Probably</b>. I have to check.', '아마. 확인해 봐야 해.', true]], say: '혼자 대답: <b>Definitely. / Probably. / Maybe.</b>' },
+    floor: { btn: '주방', place: '물이 고인 주방', pic: () => FL + '<ellipse cx="430" cy="148" rx="60" ry="7" fill="var(--water)"/>' + P(310, 150, 1.4, 'var(--ok)') + P(560, 150, 1.4, 'var(--sleeve)'), lines: [['가족', 'Why is the floor wet?', '바닥이 왜 젖었지?'], ['나', '<b>Obviously</b>, someone spilled water.', '보나 마나 누가 물을 쏟았네.', true]], say: '글에서는 <b>evidently</b>, 말에서는 obviously · clearly가 더 흔하다.' },
+  };
+  const SLOTS = { first: ['probably', 'modal'], slots: { front: '문장 맨 앞', mid: '동사 앞', modal: '조동사 뒤' }, verbs: {
+    probably: { front: { ok: [['Probably', 'd'], ['not', 'x']], say: '짧은 대답: 아마 아닐걸.' }, mid: { ok: [['He', 's'], ['probably', 'd'], ['knows', 'v']], say: '일반동사 앞.' }, modal: { ok: [['It', 's'], ['will', 'm'], ['probably', 'd'], ['rain', 'v']], bad: [['It', 's'], ['will', 'm'], ['rain', 'v'], ['probable', 'a']], say: '조동사와 동사 사이. won\'t는 앞에: <span class="en">It probably won\'t rain.</span>' } },
+    maybe: { front: { ok: [['Maybe', 'd'], ['it', 's'], ['will', 'm'], ['rain', 'v']], say: 'maybe는 맨 <b>앞</b>.' }, mid: { ok: [['Maybe', 'd'], ['he', 's'], ['knows', 'v']], bad: [['He', 's'], ['maybe', 'd'], ['knows', 'v']], say: '문장 가운데는 보통 피한다.' }, modal: { ok: [['It', 's'], ['may', 'm'], ['be', 'b'], ['true', 'a']], bad: [['It', 's'], ['maybe', 'd'], ['true', 'a']], say: '<b>may be</b>(두 낱말, 동사)와 <b>maybe</b>(부사)는 다르다.' } },
+  } };
+</script>

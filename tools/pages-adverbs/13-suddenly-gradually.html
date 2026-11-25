@@ -1,0 +1,43 @@
+<!-- title: SUDDENLY ↔ GRADUALLY 개념 -->
+<!-- pron: suddenly=/ˈsʌd.ən.li/[**서**든리]*, gradually=/ˈɡrædʒ.u.ə.li/[그**래**주얼리]*, @suddenly/abruptly, @suddenly/unexpectedly, @suddenly/instantaneously, @gradually/steadily, @gradually/incrementally, @gradually/progressively -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="12-barely-hardly.html">BARELY · HARDLY</a> · 다음: <a href="14-immediately-finally.html">IMMEDIATELY · FINALLY</a></p>
+  <h1>SUDDENLY ↔ GRADUALLY — 확, 아니면 서서히</h1>
+  <p class="lead">같은 변화가 <b>확</b> 일어나면 suddenly, <b>서서히</b> 이어지면 gradually. 뚝 끊겼는지, 예상 밖인지, 꾸준한지, 한 단계씩인지에 따라 갈린다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 갑작스럽거나 서서한 변화가 바뀌는 그림|갑자기 쪽은 확 꺾인 선, 끊긴 통화, 문 앞의 친구, 한순간에 바뀐 화면이고 서서히 쪽은 완만한 선, 꾸준한 오르막, 무게 계단, 점점 커지는 책이다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 suddenly · gradually 묶음</li><li>꾸며 주는 동사: <a href="../concepts/53-change.html">53 CHANGE</a> · <a href="../concepts/65-grow.html">65 GROW</a> · <a href="../concepts/66-increase.html">66 INCREASE</a></li></ul>
+</main>
+<script>
+  const AXIS = LN('M60 60 V220 H400', 'var(--obj-line)', 2) + tx(390, 240, 11, '시간 →', 'var(--muted)');
+  const PHONE = (x, y) => RC(x, y, 44, 76, 'var(--card)', 'var(--obj-line)', 8) + CR(x + 22, y + 66, 4);
+  const EXIST = adverbPage({
+    start: 'unexpectedly',
+    groups: [
+      { name: '갑자기', items: [
+        { v: 'suddenly', k: '갑자기', en: 'Suddenly, it started to rain.', note: '급작스럽게 일어났다.', from: 'sudden(갑작스러운) + ly', pic: () => AXIS + LN('M70 200 H220 V90 H390', 'var(--accent)', 5), ex: ['확', '일어남', 'It started to rain.', '갑작스러움이 빠진다.', '갑자기.'] },
+        { v: 'abruptly', k: '뚝 · 퉁명스럽게', base: 'SUDDENLY 쪽', core: '급작스런 끊김', from: 'abrupt(돌연한) + ly', en: 'He ended the call abruptly.', note: '흐름이 <b>뚝</b> 끊겼다. 말투가 퉁명스럽다는 뜻도 있다(노트).', pic: () => PHONE(90, 100) + PHONE(320, 100) + LN('M144 138 H206', 'var(--ok)', 4) + LN('M214 118 l-10 18 h14 l-10 20', 'var(--bad)', 3) + LN('M236 138 H312', 'var(--line)', 3, ' stroke-dasharray="4 7"'), ex: ['흐름이', '뚝', 'He ended the call.', '평범하게 끊은 것일 수 있다.', '뚝 끊어지듯.'] },
+        { v: 'unexpectedly', k: '뜻밖에', base: 'SUDDENLY와 이웃', core: '예상 밖', from: 'un + expected(예상된) + ly', en: 'She arrived unexpectedly.', note: '빨랐다는 뜻이 아니라 <b>올 줄 몰랐다</b>(노트).', pic: () => GRD + DOOR(290, 30) + MAN(250, { f: 'smile', a: 'up', c: 'var(--gold)' }) + MAN(110, { f: 'o', a: 'up' }) + tx(150, 100, 26, '?!', 'var(--accent)', ' font-weight="700"'), ex: ['예상', '밖', 'She arrived suddenly.', '급작스럽다는 말이 되어 올 줄 몰랐다는 초점이 흐려진다.', '예상과 다르게.'] },
+        { v: 'instantaneously', k: '한순간에', base: 'SUDDENLY와 이웃', core: '지연이 거의 없음', from: 'instantaneous(순간의) + ly', en: 'The screen changed instantaneously.', note: '걸린 시간이 매우 짧다. 여러 일이 동시일 필요는 없다(노트).', pic: () => RC(50, 100, 140, 92, 'var(--card)', 'var(--obj-line)', 8) + RC(260, 100, 140, 92, 'var(--accent)', 'var(--obj-line)', 8) + AR(200, 146, 250, 146, 'var(--accent)', 4) + tx(225, 130, 12, '0초', 'var(--accent)') },
+      ] },
+      { name: '서서히', items: [
+        { v: 'gradually', k: '서서히', en: 'The sky gradually got dark.', note: '한 번에 끝나지 않고 차츰 이어진다.', from: 'gradual(점진적인) + ly', pic: () => AXIS + LN('M70 200 C160 195 280 150 390 80', 'var(--accent)', 5), ex: ['차츰', '이어짐', 'The sky got dark.', '한순간인지 서서히인지 모른다.', '서서히.'] },
+        { v: 'steadily', k: '꾸준히', base: 'GRADUALLY', core: '꾸준하고 안정적', from: 'steady(꾸준한) → steadily (y → i)', en: 'Her skills improved steadily.', note: '큰 중단 없이 꾸준하다. 정확히 같은 속도는 아니다(노트).', pic: () => AXIS + LN('M70 205 L390 85', 'var(--accent)', 5) + [0, 1, 2, 3, 4].map((i) => CR(110 + i * 62, 190 - i * 23, 7, 'var(--bg)', 'var(--accent)')).join(''), ex: ['흔들림', '없이', 'Her skills improved.', '들쭉날쭉했는지 꾸준했는지 모른다.', '꾸준히.'] },
+        { v: 'incrementally', k: '한 단계씩', base: 'GRADUALLY', core: '나뉜 단계로 조금씩', from: 'incremental(단계적인) + ly', en: 'Increase the weight incrementally.', note: '작은 단위로 나누어 올린다(노트).', pic: () => GRD + LN('M60 230 h70 v-36 h70 v-36 h70 v-36 h70 v-36 h50', 'var(--accent)', 4) + [0, 1, 2, 3].map((i) => RC(80 + i * 70, 170 - i * 36, 30, 20 + 0, 'var(--fog)') + tx(95 + i * 70, 185 - i * 36, 11, 5 + i + 'kg')).join(''), ex: ['한 칸씩', '올림', 'Increase the weight gradually.', '많이 겹친다. 나뉜 단계라는 그림이 약해진다.', '작은 단계로.'] },
+        { v: 'progressively', k: '갈수록', base: 'GRADUALLY', core: '시간이 갈수록 변함', from: 'progressive(점진적인) + ly', en: 'Her reading improved progressively.', note: '갈수록 달라진다. 나빠질 때도 쓴다(노트).', pic: () => [0, 1, 2, 3].map((i) => { const w = 30 + i * 18; return '<path d="M' + (90 + i * 88) + ' 180 l-' + w / 2 + ' -' + w / 4 + ' v-' + w * .7 + ' l' + w / 2 + ' ' + w / 4 + ' l' + w / 2 + ' -' + w / 4 + ' v' + w * .7 + ' z" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/>'; }).join('') + AR(60, 220, 400, 220, 'var(--accent)', 3) },
+      ] },
+    ],
+    q: [['Q1. 확인가?', '확 → <b>suddenly</b> / 차츰 → <b>gradually</b>'], ['Q2. 확, 초점은?', '뚝 끊김 → <b>abruptly</b> / 예상 밖 → <b>unexpectedly</b> / 지연 없음 → <b>instantaneously</b>'], ['Q3. 차츰, 초점은?', '꾸준함 → <b>steadily</b> / 나뉜 단계 → <b>incrementally</b> / 갈수록 → <b>progressively</b>']],
+    body: ['<b>SUDDENLY</b> — 손뼉 짝! <b>GRADUALLY</b> — 손을 천천히 올리기.', '<b>INCREMENTALLY</b> — 손을 한 칸, 한 칸 올리기.'],
+    check: ['노트 Timing 표는 suddenly를 "예고 없이 순간적"이라 하지만, unexpectedly는 속도와 별개라고 한 설명을 따랐다.'],
+  });
+  const SCENES = {
+    rain: { btn: '길', place: '비가 쏟아진 길', pic: () => FL + P(310, 150, 1.4, 'var(--ok)') + P(400, 150, 1.4, 'var(--sleeve)') + [250, 300, 350, 400, 450, 500].map((x) => LN('M' + x + ' 34 l-8 22', 'var(--water)', 3)).join(''), lines: [['친구', 'You\'re all wet!', '흠뻑 젖었네!'], ['나', '<b>Suddenly</b>, it started pouring.', '갑자기 쏟아졌어.', true]], say: '이야기를 열 때 문장 <b>맨 앞</b>에 자주 온다.' },
+    gym: { btn: '체육관', place: '체육관', pic: () => MEET(CR(440, 96, 12) + CR(500, 96, 12) + LN('M440 96 H500', OL, 4)), lines: [['코치', 'Increase the weight <b>gradually</b>.', '무게는 서서히 늘려요.'], ['나', 'OK, I\'ll practice <b>steadily</b>.', '네, 꾸준히 할게요.', true]], say: '서서히는 <b>gradually</b>, 꾸준히는 <b>steadily</b>.' },
+  };
+  const SLOTS = { first: ['suddenly', 'front'], slots: { front: '문장 맨 앞', mid: '동사 앞', end: '문장 끝' }, verbs: {
+    suddenly: { front: { ok: [['Suddenly,', 'd'], ['he', 's'], ['left', 'v']], bad: [['Sudden,', 'a'], ['he', 's'], ['left', 'v']], say: '맨 앞에 오면 쉼표를 찍는 일이 많다.' }, mid: { ok: [['He', 's'], ['suddenly', 'd'], ['left', 'v']], say: '동사 앞.' }, end: { ok: [['He', 's'], ['left', 'v'], ['suddenly', 'd']], say: '끝도 된다.' } },
+    gradually: { front: { ok: [['Gradually,', 'd'], ['it', 's'], ['changed', 'v']], say: '맨 앞.' }, mid: { ok: [['It', 's'], ['gradually', 'd'], ['changed', 'v']], bad: [['It', 's'], ['gradual', 'a'], ['changed', 'v']], say: '동사를 꾸미면 -ly.' }, end: { ok: [['It', 's'], ['changed', 'v'], ['gradually', 'd']], say: '끝도 된다.' } },
+  } };
+</script>

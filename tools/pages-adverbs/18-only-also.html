@@ -1,0 +1,52 @@
+<!-- title: ONLY · ALSO · ESPECIALLY 개념 -->
+<!-- pron: only=/ˈoʊn.li/[**오**운리]*, also=/ˈɔːl.soʊ/[**올**소우]*, especially=/ɪˈspeʃ.əl.i/[이스**페**셜리]*, mainly=/ˈmeɪn.li/[**메**인리]*, @only/solely, @only/exclusively, @only/purely, @also/furthermore, @also/additionally, @especially/notably, @especially/singularly, @mainly/chiefly, @mainly/largely -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="17-honestly-fortunately.html">HONESTLY · FORTUNATELY</a> · 다음: <a href="19-about-exactly.html">ABOUT · EXACTLY · ACTUALLY</a></p>
+  <h1>ONLY · ALSO · ESPECIALLY · MAINLY — 어디를 비추나</h1>
+  <p class="lead">문장에 <b>손전등</b>을 비춘다. 하나만 남기면 only, 하나 더하면 also, 콕 집으면 especially, 큰 몫을 가리키면 mainly.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 비추는 자리가 바뀌는 그림|만 쪽은 하나만 켜진 동그라미, 날씨 하나, 회원만, 친절 하나이고 도 쪽은 하나 더해진 동그라미, 근거 더하기, 항목 더하기이며 특히 쪽은 커진 하나, 미나, 빛나는 설명이고 주로 쪽은 큰 조각, 가장 큰 원인, 대부분의 학생이다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 only · also · especially · mainly 묶음</li></ul>
+</main>
+<script>
+  const DOTS5 = (f) => Array.from({ length: 5 }, (_, i) => f(i, 74 + i * 76)).join('');
+  const PIE = (frac, c) => { const a = frac * 2 * Math.PI - Math.PI / 2; return CR(226, 140, 76, 'var(--fog)') + '<path d="M226 140 V64 A76 76 0 ' + (frac > .5 ? 1 : 0) + ' 1 ' + (226 + 76 * Math.cos(a)) + ' ' + (140 + 76 * Math.sin(a)) + ' Z" fill="' + c + '" stroke="var(--obj-line)"/>'; };
+  const EXIST = adverbPage({
+    start: 'only',
+    groups: [
+      { name: '만', items: [
+        { v: 'only', k: '오직 · ~만', en: 'I only drink tea.', note: '다른 것을 뺀다. <b>자리가 바뀌면 강조도 바뀐다</b>(노트).', from: 'one과 한 뿌리', pic: () => DOTS5((i, x) => CR(x, 140, 26, i === 2 ? 'var(--accent)' : 'var(--bg)', i === 2 ? 'var(--accent)' : 'var(--line)') + (i === 2 ? '' : CROSS(x, 140, 8))), ex: ['하나만', '남김', 'I drink tea.', '다른 것도 마실 수 있다.', '오직.'] },
+        { v: 'solely', k: '오로지 (그 하나)', base: 'ONLY', core: '다른 것은 관여 안 함', from: 'sole(유일한) + ly', en: 'The delay was caused solely by the weather.', note: '원인 · 책임을 하나로 한정(노트).', pic: () => '<path d="M60 130 a14 14 0 0 1 8 -26 a22 22 0 0 1 42 -2 a15 15 0 0 1 10 28 z" fill="var(--fog)"/>' + LN('M76 138 l-5 14 M94 138 l-5 14 M112 138 l-5 14', 'var(--water)', 3) + AR(150, 130, 270, 130, 'var(--accent)', 4) + CLOCK(330, 130, 40, 1) + tx(330, 198, 13, '늦어짐', 'var(--muted)') },
+        { v: 'exclusively', k: '독점적으로', base: 'ONLY', core: '그 대상에만', from: 'exclusive(배타적인) + ly', en: 'The offer is exclusively for members.', note: '대상 · 분야를 한정한다(노트).', pic: () => GRD + LN('M226 90 V240', 'var(--bad)', 4) + MAN(120, { f: 'smile', c: 'var(--gold)' }) + RC(146, 168, 40, 26, 'var(--gold)') + MAN(330, { f: 'sad', c: 'var(--fog)' }) + CROSS(290, 120, 10), ex: ['그 대상', '에만', 'The offer is for members.', '다른 사람도 될 수 있다.', '독점적으로.'] },
+        { v: 'purely', k: '순전히', base: 'ONLY', core: '한 측면만', from: 'pure(순수한) + ly', en: 'I helped purely out of kindness.', note: '다른 까닭이 안 섞였다. 도덕적으로 깨끗하다는 뜻은 아니다(노트).', pic: () => HEART(160, 160) + AR(200, 140, 310, 140, 'var(--accent)', 3) + CR(360, 140, 26, 'var(--gold)') + CROSS(360, 140, 12) },
+      ] },
+      { name: '도', items: [
+        { v: 'also', k: '또한 · ~도', en: 'She also speaks French.', note: '하나 더한다. 끝에서는 <span class="en">too</span>.', from: 'all + so', pic: () => DOTS5((i, x) => i > 2 ? (i === 3 ? tx(x - 20, 148, 26, '+', 'var(--accent)', ' font-weight="700"') + CR(x + 22, 140, 24, 'var(--accent)', 'var(--accent)') : '') : CR(x, 140, 24, 'var(--fog)')), ex: ['하나', '더함', 'She speaks French.', '앞말에 더한다는 연결이 빠진다.', '또한.'] },
+        { v: 'furthermore', k: '더욱이', base: 'ALSO', core: '앞 주장을 보강', from: 'further + more', en: 'Furthermore, the plan saves time.', note: '글에서 근거를 더할 때. 격식 있다(노트).', pic: () => [[70, 180, 'var(--fog)', '돈 절약'], [170, 130, 'var(--accent)', '시간 절약']].map(([x, y, c, t]) => RC(x, y, 170, 44, c, 'var(--obj-line)', 6) + tx(x + 85, y + 27, 14, t, 'var(--text)', ' font-weight="600"')).join('') + LN('M368 180 v-70 m-10 14 l10 -14 l10 14', 'var(--accent)', 3) },
+        { v: 'additionally', k: '추가로', base: 'ALSO', core: '항목을 덧붙임', from: 'additional(추가의) + ly', en: 'Additionally, a service fee applies.', note: '새 정보를 덧붙인다. 글말(노트).', pic: () => RC(140, 50, 170, 180, 'var(--card)') + [0, 1, 2].map((i) => LN('M160 ' + (84 + i * 30) + ' h130', 'var(--fog)', 4)).join('') + RC(156, 170, 138, 34, 'var(--chip-on)', 'var(--accent)', 5) + tx(225, 192, 13, '+ 수수료', 'var(--accent)', ' font-weight="600"') },
+      ] },
+      { name: '특히', items: [
+        { v: 'especially', k: '특히', en: 'I love fruit, especially mangoes.', note: '여럿 중 하나를 콕 집는다.', from: 'especial(특별한) + ly', pic: () => DOTS5((i, x) => CR(x, 140, i === 3 ? 38 : 20, i === 3 ? 'var(--accent)' : 'var(--fog)')), ex: ['콕', '집음', 'I love fruit and mangoes.', '나란히 놓일 뿐, 집어 강조하지 않는다.', '특히.'] },
+        { v: 'notably', k: '특히 (눈에 띄게)', base: 'ESPECIALLY', core: '주목할 사례', from: 'notable(눈에 띄는) → notably', en: 'Several people helped, notably Mina.', note: '여럿 중 주목할 대상을 짚는다(노트).', pic: () => GRD + [80, 160, 300, 380].map((x) => MAN(x, { s: .7, c: 'var(--fog)' })).join('') + '<path d="M200 40 h60 l30 200 h-120 z" fill="var(--gold)" opacity=".25"/>' + MAN(230, { f: 'smile', c: 'var(--ok)' }) },
+        { v: 'singularly', k: '유난히', base: 'ESPECIALLY', core: '정도가 유별남', from: 'singular(유별난) + ly', en: 'That explanation was singularly helpful.', note: '격식 있고 드물다. 보통 especially(노트).', pic: () => [60, 70, 55, 150, 64].map((h, i) => RC(70 + i * 66, 220 - h, 44, h, i === 3 ? 'var(--accent)' : 'var(--fog)', 'none')).join('') + LN('M50 220 H400', 'var(--obj-line)', 2) },
+      ] },
+      { name: '주로', items: [
+        { v: 'mainly', k: '주로', en: 'I mainly work from home.', note: '전부는 아니지만 가장 큰 몫.', from: 'main(주된) + ly', pic: () => PIE(.72, 'var(--accent)'), ex: ['가장 큰', '몫', 'I only work from home.', '전부로 좁아진다.', '주로.'] },
+        { v: 'chiefly', k: '주로 (격식)', base: 'MAINLY', core: '가장 중요한 것', from: 'chief(주된) + ly', en: 'The delay was chiefly due to budget issues.', note: '여러 까닭 중 주된 것. 조금 격식 있다(노트).', pic: () => [['예산', 190, 'var(--accent)'], ['날씨', 70, 'var(--fog)'], ['사람', 50, 'var(--fog)']].map(([t, w, c], i) => RC(110, 80 + i * 46, w, 30, c, 'none') + tx(80, 100 + i * 46, 13, t, 'var(--muted)')).join('') },
+        { v: 'largely', k: '대체로', base: 'MAINLY', core: '비중이 큼', from: 'large(큰) + ly', en: 'The audience was largely made up of students.', note: '전체의 큰 부분. 정확한 비율은 필요 없다(노트).', pic: () => Array.from({ length: 12 }, (_, i) => P(80 + i % 6 * 58, 130 + Math.floor(i / 6) * 76, 1, [3, 8].includes(i) ? 'var(--fog)' : 'var(--accent)')).join('') },
+      ] },
+    ],
+    q: [['Q1. 무엇을 하나?', '좁힘 → <b>only</b> / 더함 → <b>also</b> / 집음 → <b>especially</b> / 큰 몫 → <b>mainly</b>'], ['Q2. 좁힘, 초점은?', '원인 하나 → <b>solely</b> / 대상 한정 → <b>exclusively</b> / 한 측면 → <b>purely</b>'], ['Q3. 글에서 더함', '보강 → <b>furthermore</b> / 항목 → <b>additionally</b>'], ['Q4. 나머지', '사례 → <b>notably</b> / 유난함 → <b>singularly</b> / 주된 것 → <b>chiefly</b> / 비중 → <b>largely</b>']],
+    body: ['손가락 하나만 세우면 <b>ONLY</b>, 하나 더 펴면 <b>ALSO</b>, 하나를 가리키면 <b>ESPECIALLY</b>, 손바닥을 크게 펴면 <b>MAINLY</b>.'],
+    check: ['solely · exclusively · purely의 원인 · 자격 · 동기는 비교 장면일 뿐 전용 영역이 아니다(노트).', 'too · as well과 also의 자리 차이는 노트에 따로 없다.'],
+  });
+  const SCENES = {
+    cafe: { btn: '카페', place: '카페 주문', pic: () => MEET(BX(440, 76, 34, 32)), lines: [['친구', 'Do you drink coffee?', '커피 마셔?'], ['나', 'No, I <b>only</b> drink tea. <b>Especially</b> green tea.', '아니, 차만 마셔. 특히 녹차.', true]], say: '좁히기 <b>only</b>, 콕 집기 <b>especially</b>.' },
+    job: { btn: '자기소개', place: '새 동료와', pic: () => MEET(BX(430, 64, 70, 44)), lines: [['동료', 'What do you do?', '무슨 일 하세요?'], ['나', 'I <b>mainly</b> design. I <b>also</b> write.', '주로 디자인을 하고, 글도 써요.', true]], say: '큰 몫 <b>mainly</b>, 더하기 <b>also</b>.' },
+  };
+  const SLOTS = { first: ['only', 'verb'], slots: { verb: '동사 앞', noun: '강조할 말 앞', end: '문장 끝' }, verbs: {
+    only: { verb: { ok: [['I', 's'], ['only', 'd'], ['drink', 'v'], ['tea', 'o']], say: '차만 마신다(다른 건 안 마심).' }, noun: { ok: [['Only', 'd'], ['I', 's'], ['drink', 'v'], ['tea', 'o']], say: '<b>나만</b> 차를 마신다. 자리가 뜻을 바꾼다.' }, end: { ok: [['Members', 'x'], ['only', 'd']], say: '안내판: 회원만.' } },
+    also: { verb: { ok: [['She', 's'], ['also', 'd'], ['speaks', 'v'], ['French', 'o']], bad: [['She', 's'], ['speaks', 'v'], ['also', 'd'], ['French', 'o']], say: '일반동사 <b>앞</b>.' }, noun: { ok: [['She', 's'], ['is', 'b'], ['also', 'd'], ['kind', 'a']], say: 'be <b>뒤</b>.' }, end: { ok: [['She', 's'], ['speaks', 'v'], ['it', 'o'], ['too', 'd']], say: '문장 끝에서는 <b>too</b>가 자연스럽다.' } },
+  } };
+</script>

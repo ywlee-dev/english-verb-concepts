@@ -1,0 +1,42 @@
+<!-- title: COMPLETELY · ALMOST 개념 -->
+<!-- pron: completely=/kəmˈpliːt.li/[컴**플리**틀리]*, almost=/ˈɔːl.moʊst/[**올**모우스트]*, @completely/entirely, @completely/fully, @completely/thoroughly, @completely/utterly, @almost/practically, @almost/virtually -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="10-extremely-slightly.html">EXTREMELY ~ SLIGHTLY</a> · 다음: <a href="12-barely-hardly.html">BARELY · HARDLY</a></p>
+  <h1>COMPLETELY · ALMOST — 다 됐나, 거의인가</h1>
+  <p class="lead">끝까지 다 채우면 completely, 조금 모자라면 almost. "완전히"도 <b>전체인지 · 가득인지 · 구석구석인지 · 강조인지</b>로 갈린다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 완전하거나 거의인 장면이 바뀌는 그림|완전히 쪽은 다 찬 막대, 통째로 바뀐 계획, 가득 찬 배터리, 구석구석 점검, 깜짝 놀란 관객이고 거의 쪽은 조금 남은 막대, 제목만 남은 발표, 거의 같은 두 문서다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 completely · almost 묶음</li><li>꾸며 주는 동사: <a href="../concepts/73-fill.html">73 FILL</a> · <a href="../concepts/53-change.html">53 CHANGE</a> · <a href="../concepts/82-empty.html">82 EMPTY</a></li></ul>
+</main>
+<script>
+  const PLAN = (x, c) => RC(x, 70, 110, 130, 'var(--card)') + [0, 1, 2, 3].map((i) => RC(x + 14, 84 + i * 28, 82, 18, c, 'none')).join('');
+  const EXIST = adverbPage({
+    start: 'fully',
+    groups: [
+      { name: '완전히', items: [
+        { v: 'completely', k: '완전히', en: 'I completely forgot.', note: '남김없이 전부.', from: 'complete(완전한) + ly', pic: () => BARX(130, 1) + CAPT('남은 것이 없다'), ex: ['남김없이', '전부', 'I forgot.', '얼마나 잊었는지 빠진다.', '완전히.'] },
+        { v: 'entirely', k: '통째로', base: 'COMPLETELY', core: '부분이 아닌 전체', from: 'entire(전체의) + ly', en: 'We changed the plan entirely.', note: '일부가 아니라 <b>전체</b>를 바꿨다(노트).', pic: () => PLAN(60, 'var(--fog)') + AR(186, 136, 230, 136, 'var(--accent)', 3) + PLAN(250, 'var(--accent)'), ex: ['일부 말고', '전체', 'We changed the plan.', '조금 고친 것일 수도 있다.', '전체를.'] },
+        { v: 'fully', k: '충분히 · 가득', base: 'COMPLETELY', core: '최대까지 채움', from: 'full(가득 찬) + ly', en: 'I fully charged my phone.', note: '필요한 수준까지 가득. <span class="en">fully understand</span>도 된다(노트).', pic: () => RC(90, 110, 250, 84, 'var(--bg)', 'var(--obj-line)', 10) + RC(340, 136, 16, 32, 'var(--obj-line)') + [0, 1, 2, 3].map((i) => RC(102 + i * 58, 122, 50, 60, 'var(--ok)', 'none', 6)).join(''), ex: ['가득', '채움', 'I charged my phone.', '조금만 충전했을 수도 있다.', '최대까지.'] },
+        { v: 'thoroughly', k: '구석구석', base: 'COMPLETELY', core: '빈틈없이 살핌', from: 'thorough(철저한) + ly', en: 'Check the bike thoroughly.', note: '확인하는 <b>과정</b>에 빈틈이 없다. "매우"라는 뜻도 있다(노트).', pic: () => GRD + CR(140, 190, 48, 'none') + CR(310, 190, 48, 'none') + LN('M140 190 L200 120 H280 L310 190 M200 120 L225 190 H140 M225 190 L280 120 M280 120 V100 h18', 'var(--obj-line)', 4) + [[106, 130], [196, 100], [250, 150], [330, 128]].map(([x, y]) => tick(x, y)).join(''), ex: ['구석구석', '빈틈없이', 'Check the bike completely.', '어색하다. 꼼꼼히 살피는 과정이 안 그려진다.', '빈틈없이.'] },
+        { v: 'utterly', k: '완전히 · 극도로', base: 'COMPLETELY', core: '강한 강조', from: 'utter(순전한) + ly', en: 'The ending was utterly unexpected.', note: '강하게 평가하는 형용사와 어울린다. 꼭 부정적이지는 않다(노트).', pic: () => GRD + RC(40, 70, 130, 90, 'var(--card)') + tx(105, 124, 36, '!?', 'var(--bad)', ' font-weight="700"') + [230, 300, 370].map((x) => MAN(x, { f: 'o', a: 'up', s: .9 })).join('') },
+      ] },
+      { name: '거의', items: [
+        { v: 'almost', k: '거의', en: 'I almost fell.', note: '가까이 갔지만 <b>넘어지지는 않았다</b>. 정확히 80%라는 뜻이 아니다(노트).', from: 'nearly와 많이 겹친다', pic: () => GRD + '<g transform="rotate(24 210 240)">' + MAN(210, { f: 'o', a: 'up', c: 'var(--ok)' }) + '</g>' + '<path d="M168 240 l12 -14 l12 14 z" fill="var(--wood)"/>', ex: ['될 뻔', '안 됨', 'I fell.', '뜻이 바뀐다. 실제로 넘어진 것이 된다.', '거의 — 넘지는 않음.'] },
+        { v: 'practically', k: '사실상 거의', base: 'ALMOST', core: '사실상', from: 'practical(실질적인) + ly', en: 'We\'re practically done.', note: '엄밀히는 안 끝났지만 실제로는 거의 끝. "실용적으로"라는 뜻도 있다(노트).', pic: () => [0, 1, 2, 3, 4, 5].map((i) => RC(70 + i % 3 * 100, 80 + Math.floor(i / 3) * 70, 80, 54, 'var(--card)', i === 5 ? 'var(--accent2)' : 'var(--ok)') + (i === 5 ? tx(310, 182, 13, '제목만', 'var(--accent2)') : tick(100 + i % 3 * 100, 110 + Math.floor(i / 3) * 70))).join('') },
+        { v: 'virtually', k: '사실상 거의', base: 'ALMOST', core: '사실상', from: 'virtual(사실상의) + ly', en: 'The two versions are virtually identical.', note: 'practically와 거의 같다. "온라인으로"라는 뜻도 있다(노트).', pic: () => PAPER(80, 70, 110, 140, 8) + PAPER(250, 70, 110, 140, 8) + tx(220, 148, 26, '≒', 'var(--accent)', ' font-weight="700"') + CR(336, 190, 10, 'none', 'var(--accent2)') },
+      ] },
+    ],
+    q: [['Q1. 다 됐나?', '다 → <b>completely</b> / 조금 모자람 → <b>almost</b>'], ['Q2. 다, 초점은?', '전체 → <b>entirely</b> / 가득 → <b>fully</b> / 구석구석 → <b>thoroughly</b> / 강조 → <b>utterly</b>'], ['Q3. 거의, 초점은?', '사실상 → <b>practically · virtually</b> (거의 같음)']],
+    body: ['<b>FULLY</b> — 컵을 끝까지 채우는 시늉. <b>ALMOST</b> — 닿기 직전에 멈추기.', '<b>THOROUGHLY</b> — 손가락으로 구석구석 짚기.'],
+    check: ['practically와 virtually는 노트 식이 같다. 그림만 다르게 그렸다.'],
+  });
+  const SCENES = {
+    sorry: { btn: '약속', place: '약속을 잊은 날', pic: () => MEET(CLOCK(465, 80, 24, .5)), lines: [['친구', 'Where were you?', '어디 있었어?'], ['나', 'Sorry, I <b>completely</b> forgot!', '미안, 완전히 잊었어!', true]], say: '<b>completely forgot</b>은 통째로 자주 쓴다.' },
+    done: { btn: '마감', place: '마감 직전', pic: () => MEET(BX(430, 64, 70, 44)), lines: [['상사', 'Are you done?', '다 됐어요?'], ['나', '<b>Almost</b>. I\'ll check it <b>thoroughly</b>.', '거의요. 꼼꼼히 확인할게요.', true]], say: '혼자 대답할 때는 <b>Almost.</b> 한마디면 된다.' },
+  };
+  const SLOTS = { first: ['almost', 'verb'], slots: { verb: '동사 앞', adj: '형용사 앞', num: '수 · 전체 앞' }, verbs: {
+    almost: { verb: { ok: [['I', 's'], ['almost', 'd'], ['fell', 'v']], bad: [['I', 's'], ['fell', 'v'], ['almost', 'd']], say: '동사 <b>앞</b>.' }, adj: { ok: [['It', 's'], ['is', 'b'], ['almost', 'd'], ['ready', 'a']], say: '형용사 앞.' }, num: { ok: [['almost', 'd'], ['all', 'x'], ['students', 'x']], bad: [['almost', 'd'], ['students', 'x']], say: '"거의 모든 학생"은 <b>almost all</b>. almost 학생은 안 된다.' } },
+    completely: { verb: { ok: [['I', 's'], ['completely', 'd'], ['agree', 'v']], say: '동사 앞.' }, adj: { ok: [['It', 's'], ['is', 'b'], ['completely', 'd'], ['full', 'a']], bad: [['It', 's'], ['is', 'b'], ['complete', 'a'], ['full', 'a']], say: '형용사를 꾸미면 -ly.' }, num: { ok: [['They', 's'], ['are', 'b'], ['completely', 'd'], ['different', 'a']], say: '완전히 다르다.' } },
+  } };
+</script>

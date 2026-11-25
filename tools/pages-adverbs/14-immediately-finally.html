@@ -1,0 +1,40 @@
+<!-- title: IMMEDIATELY · FINALLY 개념 -->
+<!-- pron: immediately=/ɪˈmiː.di.ət.li/[이**미**디어틀리]*, finally=/ˈfaɪ.nəl.i/[**파**이널리]*, @immediately/instantly, @immediately/straightaway, @immediately/forthwith, @finally/ultimately, @finally/belatedly -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="13-suddenly-gradually.html">SUDDENLY ↔ GRADUALLY</a> · 다음: <a href="15-already-still-yet.html">ALREADY · STILL · YET</a></p>
+  <h1>IMMEDIATELY · FINALLY — 바로, 아니면 마침내</h1>
+  <p class="lead">지체 없이면 immediately, 과정 끝에면 finally. 언제나 반대는 아니다(노트). 말투와, 결과인지 늦음인지가 낱말을 가른다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 바로이거나 마침내인 장면이 바뀌는 그림|바로 쪽은 시간줄의 바로 다음 점, 켜진 전등, 전화 부탁, 공식 문서이고 마침내 쪽은 긴 시간줄 끝, 갈림길의 선택, 늦은 사과다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 immediately · finally 묶음</li><li>이웃: <a href="03-slowly-quickly.html">SLOWLY ↔ QUICKLY</a>의 promptly</li></ul>
+</main>
+<script>
+  const EXIST = adverbPage({
+    start: 'belatedly',
+    groups: [
+      { name: '바로', items: [
+        { v: 'immediately', k: '즉시', en: 'She called me immediately.', note: '지체가 없다. 편한 말로는 <span class="en">right away</span>.', from: 'immediate(즉각적인) + ly', pic: () => TL(150) + CR(110, 150, 12, 'var(--fog)') + CR(142, 150, 12, 'var(--accent)', 'var(--accent)') + tx(110, 196, 12, '소식', 'var(--muted)') + tx(160, 120, 12, '전화', 'var(--accent)'), ex: ['지체', '없음', 'She called me.', '언제 전화했는지 모른다.', '즉시.'] },
+        { v: 'instantly', k: '곧바로', base: 'IMMEDIATELY', core: '시간차가 거의 없음', from: 'instant(즉각적인) + ly', en: 'The light came on instantly.', note: '시간차가 거의 안 느껴진다(노트).', pic: () => RC(90, 130, 50, 70, 'var(--card)') + RC(104, 146, 22, 36, 'var(--accent)') + LN('M140 165 H250', 'var(--obj-line)', 2) + CR(300, 120, 34, 'var(--gold)') + RC(286, 152, 28, 22, 'var(--fog)') + [0, 1, 2, 3, 4].map((i) => { const a = Math.PI + i * Math.PI / 4; return LN('M' + (300 + 44 * Math.cos(a)) + ' ' + (120 + 44 * Math.sin(a)) + ' L' + (300 + 60 * Math.cos(a)) + ' ' + (120 + 60 * Math.sin(a)), 'var(--gold)', 3); }).join('') + LN('M314 174 q10 20 -60 20', 'none', 1), ex: ['누르자', '마자', 'The light came on soon.', '조금 기다린 뒤일 수 있다.', '시간차 없이.'] },
+        { v: 'straightaway', k: '바로 (영국식)', base: 'IMMEDIATELY', core: '영국식 일상 말', from: 'straight(곧장) + away', en: 'Call me straightaway when you get home.', note: '영국식에서 자연스럽다. 미국에서는 <span class="en">right away</span>(노트).', pic: () => GRD + '<path d="M60 160 l60 -50 l60 50 v80 h-120 z" fill="var(--card)" stroke="var(--obj-line)"/>' + MAN(230, { f: 'smile', a: 'point' }) + RC(276, 136, 18, 30, 'var(--card)') + SOUND(306, 140, 2) },
+        { v: 'forthwith', k: '즉시 (공식 문서)', base: 'IMMEDIATELY', core: '아주 격식 있는 말', from: 'forth + with', en: 'The work must cease forthwith.', note: '법률 · 공식 문서의 말. 평소에는 안 쓴다(노트).', pic: () => PAPER(150, 56, 150, 170, 8) + CR(270, 196, 24, 'none', 'var(--bad)') + CR(270, 196, 17, 'none', 'var(--bad)') },
+      ] },
+      { name: '마침내', items: [
+        { v: 'finally', k: '마침내', en: 'We finally arrived.', note: '과정 · 기다림 끝에. 순서의 "마지막으로"라는 뜻도 있다(노트).', from: 'final(마지막의) + ly', pic: () => TL(150) + [60, 120, 180, 240, 300].map((x) => CR(x, 150, 6, 'var(--fog)', 'none')).join('') + CR(380, 150, 14, 'var(--accent)', 'var(--accent)') + LN('M380 136 V84 l30 12 l-30 12', 'var(--accent)', 3), ex: ['기다림', '끝에', 'We arrived.', '오래 걸렸다는 느낌이 빠진다.', '마침내.'] },
+        { v: 'ultimately', k: '결국 · 궁극적으로', base: 'FINALLY 쪽', core: '최종 결과', from: 'ultimate(궁극의) + ly', en: 'We ultimately chose the simpler plan.', note: '여러 과정을 거친 <b>최종 결과</b>, 또는 가장 중요한 점(노트).', pic: () => [[70, 80], [70, 150], [70, 220]].map(([x, y]) => RC(x - 24, y - 18, 60, 36, 'var(--card)') + LN('M' + (x + 36) + ' ' + y + ' Q200 ' + y + ' 260 150', 'var(--fog)', 2.5)).join('') + AR(260, 150, 300, 150, 'var(--accent)', 4) + RC(310, 122, 90, 56, 'var(--chip-on)', 'var(--accent)', 8) + tick(344, 152), ex: ['최종', '결론', 'We finally chose it.', '많이 겹친다. 여러 과정의 결론이라는 초점이 약해진다.', '최종적으로.'] },
+        { v: 'belatedly', k: '뒤늦게', base: 'FINALLY와 이웃', core: '예상보다 늦음', from: 'belated(뒤늦은) + ly', en: 'He belatedly apologized.', note: '결국 했다는 결과보다 <b>늦었다</b>는 점(노트).', pic: () => GRD + MAN(150, { f: 'sad', a: 'bow', r: 14 }) + MAN(350, { f: 'flat', a: 'hip', c: 'var(--ok)' }) + SAYB(220, 96, '미안해…', 13) + RC(252, 170, 52, 46, 'var(--card)') + tx(278, 199, 13, '+5일', 'var(--bad)', ' font-weight="700"'), ex: ['늦게야', '함', 'He finally apologized.', '드디어 했다는 말이 되어 늦음의 초점이 약해진다.', '뒤늦게.'] },
+      ] },
+    ],
+    q: [['Q1. 지체 없나?', '없다 → <b>immediately</b> / 과정 끝에 → <b>finally</b>'], ['Q2. 바로, 말투는?', '시간차 없음 → <b>instantly</b> / 영국식 → <b>straightaway</b> / 공식 문서 → <b>forthwith</b>'], ['Q3. 끝, 초점은?', '최종 결과 → <b>ultimately</b> / 늦음 → <b>belatedly</b>']],
+    body: ['<b>INSTANTLY</b> — 손가락 딱! <b>FINALLY</b> — 이마의 땀을 닦으며 "휴".', '<b>BELATEDLY</b> — 시계를 보고 고개 숙이기.'],
+    check: ['eventually · at last와의 차이는 노트에 따로 없다. finally는 다행스러운 느낌, eventually는 시간이 지나서라는 느낌이 있다고 알려져 있다.'],
+  });
+  const SCENES = {
+    late: { btn: '도착', place: '한참 걸려 도착', pic: () => FL + CAR(400) + P(310, 150, 1.4, 'var(--ok)'), lines: [['가족', 'You\'re <b>finally</b> here!', '드디어 왔구나!'], ['나', 'I left <b>immediately</b>, but the traffic was bad.', '바로 나왔는데 차가 막혔어.', true]], say: '출발은 <b>immediately</b>, 도착은 <b>finally</b>.' },
+    plan: { btn: '회의', place: '방안을 고른 회의', pic: () => MEET(BX(430, 66, 34, 42) + BX(476, 66, 34, 42)), lines: [['동료', 'Which plan did you choose?', '어느 안을 골랐어?'], ['나', '<b>Ultimately</b>, we chose the simple one.', '결국 간단한 안으로 했어.', true]], say: '여러 과정을 거친 결론 — <b>ultimately</b>.' },
+  };
+  const SLOTS = { first: ['finally', 'mid'], slots: { front: '문장 맨 앞', mid: '동사 앞', end: '문장 끝' }, verbs: {
+    finally: { front: { ok: [['Finally,', 'd'], ['we', 's'], ['won', 'v']], say: '맨 앞이면 "드디어" 또는 "마지막으로".' }, mid: { ok: [['We', 's'], ['finally', 'd'], ['arrived', 'v']], bad: [['We', 's'], ['final', 'a'], ['arrived', 'v']], say: '"마침내"는 동사 <b>앞</b>이 가장 흔하다.' }, end: { ok: [['He', 's'], ['came', 'v'], ['finally', 'd']], say: '끝도 되지만 덜 흔하다.' } },
+    immediately: { front: { ok: [['Immediately,', 'd'], ['he', 's'], ['ran', 'v']], say: '맨 앞도 된다.' }, mid: { ok: [['He', 's'], ['immediately', 'd'], ['ran', 'v']], say: '동사 앞.' }, end: { ok: [['Call', 'v'], ['me', 'o'], ['immediately', 'd']], bad: [['Call', 'v'], ['immediately', 'd'], ['me', 'o']], say: '부탁할 때는 <b>끝</b>.' } },
+  } };
+</script>

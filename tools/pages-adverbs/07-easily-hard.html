@@ -1,0 +1,43 @@
+<!-- title: EASILY ↔ HARD 개념 -->
+<!-- pron: easily=/ˈiː.zə.li/[**이**절리]*, hard=/hɑːrd/[**하**r드]*, ../english-adverbs/easily/effortlessly--without-any-visible-effort.md, ../english-adverbs/easily/smoothly--without-obstacles-or-friction.md, ../english-adverbs/hard/strenuously--with-intense-physical-or-mental-effort.md, ../english-adverbs/hard/laboriously--slowly-and-with-great-effort.md -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="06-quietly-loudly.html">QUIETLY ↔ LOUDLY</a> · 다음: <a href="08-deliberately-accidentally.html">DELIBERATELY ↔ ACCIDENTALLY</a></p>
+  <h1>EASILY ↔ HARD — 같은 일, 다른 힘듦</h1>
+  <p class="lead">병뚜껑이 <b>쉽게</b> 열리면 easily, <b>힘을 많이</b> 들이면 hard. 힘이 안 드는 듯한지, 막힘이 없는지, 세게 애쓰는지, 오래 수고하는지에 따라 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 쉽거나 힘든 장면이 바뀌는 그림|쉬운 쪽은 병뚜껑 열기, 피아노 연주, 순조로운 절차이고 힘든 쪽은 안 열리는 병, 강한 반대, 손으로 옮겨 적기다.}}
+  <p><b>함정:</b> <span class="en">hardly</span>는 "열심히"가 아니라 <b>"거의 ~않다"</b>다. <span class="en">He works hard.</span>(열심히 일한다) ↔ <span class="en">He hardly works.</span>(거의 일을 안 한다).</p>
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 easily · hard 묶음</li><li>꾸며 주는 동사: <a href="../concepts/38-open.html">38 OPEN</a> · <a href="../concepts/74-achieve.html">74 ACHIEVE</a></li></ul>
+</main>
+<script>
+  const JAR = (x, y, open) => RC(x - 20, y - 50, 40, 50, 'var(--water)', 'var(--obj-line)', 6) + (open ? '<g transform="rotate(-30 ' + x + ' ' + (y - 80) + ')">' + RC(x - 22, y - 86, 44, 12, 'var(--gold)') + '</g>' : RC(x - 22, y - 62, 44, 12, 'var(--gold)'));
+  const SWEAT = (x, y) => '<path d="M' + x + ' ' + y + ' q-6 9 0 13 q6 -4 0 -13" fill="var(--water)" stroke="var(--obj-line)" stroke-width=".7"/>';
+  const EXIST = adverbPage({
+    start: 'effortlessly',
+    groups: [
+      { name: '쉽게', items: [
+        { v: 'easily', k: '쉽게', en: 'Mina opened the jar easily.', note: '어렵지 않게 된다.', from: 'easy(쉬운) → easily (y → i)', pic: () => GRD + DESK(230, 120) + JAR(290, 180, true) + MAN(190, { f: 'smile', a: 'fwd', c: 'var(--ok)' }), ex: ['어렵지', '않게', 'Mina opened the jar.', '쉬웠는지 애썼는지 모른다.', '쉽게.'] },
+        { v: 'effortlessly', k: '힘 안 들이듯', base: 'EASILY', core: '힘이 안 드는 듯', from: 'effortless(힘들이지 않는) + ly', en: 'She played it effortlessly.', note: '보기에 수월하다. 연습이나 노력이 없었다는 뜻은 아니다(노트).', pic: () => GRD + DESK(220, 180, 170) + Array.from({ length: 10 }, (_, i) => RC(226 + i * 16, 152, 16, 18, i % 3 === 1 ? '#333' : 'var(--card)')).join('') + MAN(190, { f: 'smile', a: 'both' }) + NOTE(300, 110, 30) + NOTE(350, 86, 24), ex: ['힘 안', '들이듯', 'She played it easily.', '많이 겹친다. 애쓰는 티가 없다는 그림이 약해진다.', '힘들이지 않는 듯.'] },
+        { v: 'smoothly', k: '순조롭게', base: 'EASILY', core: '막힘없는 흐름', from: 'smooth(매끄러운) + ly', en: 'The transition went smoothly.', note: '사람의 힘보다 <b>과정에 막힘이 없다</b>(노트).', pic: () => [0, 1, 2, 3].map((i) => RC(50 + i * 94, 120, 64, 54, 'var(--chip-on)', 'var(--accent)', 8) + tick(70 + i * 94, 150) + (i < 3 ? AR(118 + i * 94, 147, 140 + i * 94, 147, 'var(--accent)', 3) : '')).join('') + tx(226, 212, 13, '설치 → 옮기기 → 확인 → 끝, 막힘없음', 'var(--muted)'), ex: ['막힘없이', '흐른다', 'The transition was easy.', '어렵지 않았다는 것뿐, 흐름이 매끄럽다는 그림이 빠진다.', '막힘없이.'] },
+      ] },
+      { name: '힘들여', items: [
+        { v: 'hard', k: '열심히 · 세게', en: 'Tom worked hard.', note: '힘을 많이 들인다. 형용사 hard와 <b>모양이 같다</b>.', from: 'hard(힘든) = hard(열심히) — ly를 안 붙인다', pic: () => GRD + DESK(230, 120) + JAR(290, 180) + MAN(190, { f: 'sad', a: 'both', r: 6 }) + SWEAT(216, 118) + SWEAT(230, 136) + LN('M320 112 l14 -8 M324 128 h16', 'var(--bad)', 3), ex: ['힘을', '많이', 'Tom worked.', '열심히 했는지 모른다.', '힘을 많이 들여.'] },
+        { v: 'strenuously', k: '강하게 애써', base: 'HARD', core: '큰 노력 · 강한 주장', from: 'strenuous(몹시 힘든) + ly', en: 'They objected strenuously.', note: '힘뿐 아니라 <b>강한 반대</b>에도 쓴다. 짧은 순간만은 아니다(노트).', pic: () => GRD + [100, 190, 280].map((x, i) => MAN(x, { f: 'o', a: 'up', c: ['var(--accent)', 'var(--ok)', 'var(--sleeve)'][i] })).join('') + RC(330, 90, 70, 46, 'var(--card)', 'var(--bad)') + tx(365, 119, 16, '반대', 'var(--bad)', ' font-weight="700"') + LN('M365 136 V240', 'var(--wood)', 5), ex: ['강하게', '반대', 'They objected.', '얼마나 강했는지 빠진다.', '큰 힘 · 강한 의지로.'] },
+        { v: 'laboriously', k: '수고롭게', base: 'HARD', core: '많은 시간과 수고', from: 'laborious(고된) + ly', en: 'She copied the records laboriously.', note: '손 기록을 한 줄씩. 꼭 지루해야 하는 것은 아니다(노트).', pic: () => GRD + DESK(200, 200) + PAPER(220, 100, 60, 80, 5) + [0, 1, 2, 3, 4, 5].map((i) => RC(310, 172 - i * 11, 66, 8, 'var(--card)')).join('') + MAN(160, { f: 'flat', a: 'both' }) + SWEAT(188, 120) + CLOCK(344, 66, 24, 1.6), ex: ['오래', '수고롭게', 'She worked hard on it.', '한 줄씩 오래 걸린 수고가 흐려진다.', '시간과 수고를 많이 들여.'] },
+      ] },
+    ],
+    q: [['Q1. 어려웠나?', '아니다 → <b>easily</b> / 힘을 많이 → <b>hard</b>'], ['Q2. 쉬운 무엇?', '애쓰는 티가 없음 → <b>effortlessly</b> / 과정에 막힘없음 → <b>smoothly</b>'], ['Q3. 힘든 무엇?', '센 노력 · 강한 주장 → <b>strenuously</b> / 시간 · 수고 → <b>laboriously</b>']],
+    body: ['<b>EFFORTLESSLY</b> — 웃으며 손가락만. <b>SMOOTHLY</b> — 손바닥을 옆으로 스윽.', '<b>STRENUOUSLY</b> — 온몸에 힘. <b>LABORIOUSLY</b> — 한 칸씩 손으로 옮기기.'],
+    check: ['hardly의 함정은 노트의 hardly 묶음과 맞지만 예문은 새로 지었다.', '노트 표의 strenuously(안간힘) · laboriously(지루하게)보다, "필수 아님"이라고 한 설명을 따랐다.', '노트가 hard의 대체어가 아니라고 한 heavily는 넣지 않았다.'],
+  });
+  const desk = (b) => FL + TB(370, 560, 108) + b + P(310, 150, 1.4, 'var(--ok)') + P(610, 150, 1.4, 'var(--sleeve)');
+  const SCENES = {
+    test: { btn: '시험 뒤', place: '시험이 끝난 교실', pic: () => desk(BX(440, 66, 44, 42)), lines: [['친구', 'You passed <b>easily</b>!', '쉽게 붙었네!'], ['나', 'No, I studied <b>hard</b>.', '아냐, 열심히 공부했어.', true]], say: '결과가 쉬워 보임은 <b>easily</b>, 들인 힘은 <b>hard</b>.' },
+    move: { btn: '시스템 교체', place: '새 시스템 첫날', pic: () => desk(BX(420, 62, 90, 46)), lines: [['상사', 'How did it go?', '어떻게 됐어요?'], ['나', 'It went <b>smoothly</b>.', '순조롭게 됐어요.', true]], say: '과정에 막힘이 없음 — <b>smoothly</b>.' },
+  };
+  const SLOTS = { first: ['hard', 'end'], slots: { end: '동사 뒤', obj: '목적어 뒤', mid: '동사 앞' }, verbs: {
+    hard: { end: { ok: [['She', 's'], ['works', 'v'], ['hard', 'd']], bad: [['She', 's'], ['works', 'v'], ['hardly', 'd']], say: '열심히는 <b>hard</b>. hardly는 "거의 ~않다"라는 다른 말.' }, obj: { ok: [['She', 's'], ['pushed', 'v'], ['it', 'o'], ['hard', 'd']], say: '"세게"라는 뜻도 된다. 목적어 뒤.' }, mid: { ok: [['She', 's'], ['hardly', 'd'], ['works', 'v']], bad: [['She', 's'], ['hard', 'd'], ['works', 'v']], say: '동사 앞에 hard는 안 온다. 앞에 오는 hardly는 "거의 일을 안 한다".' } },
+    easily: { end: { ok: [['She', 's'], ['won', 'v'], ['easily', 'd']], bad: [['She', 's'], ['won', 'v'], ['easy', 'a']], say: '동사를 꾸미면 easily. (<span class="en">Take it easy.</span>는 굳은 표현.)' }, obj: { ok: [['She', 's'], ['opened', 'v'], ['it', 'o'], ['easily', 'd']], bad: [['She', 's'], ['opened', 'v'], ['easily', 'd'], ['it', 'o']], say: '목적어 <b>뒤</b>.' }, mid: { ok: [['She', 's'], ['easily', 'd'], ['won', 'v']], say: '동사 앞도 된다.' } },
+  } };
+</script>

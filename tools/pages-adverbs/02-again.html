@@ -1,0 +1,49 @@
+<!-- title: 되풀이되는 모양 개념 -->
+<!-- pron: ../english-adverbs/always/constantly--again-and-again-without-stopping.md, ../english-adverbs/always/perpetually--forever-without-end.md, ../english-adverbs/usually/normally--under-ordinary-circumstances.md, ../english-adverbs/usually/generally--as-a-broad-overall-tendency.md, ../english-adverbs/usually/typically--as-a-representative-characteristic-pattern.md, ../english-adverbs/often/frequently--with-notable-regularity-in-formal-register.md, ../english-adverbs/often/repeatedly--the-same-thing-over-and-over.md, ../english-adverbs/sometimes/occasionally--now-and-then-now-and-again.md, ../english-adverbs/sometimes/sporadically--at-irregular-unpredictable-intervals.md, ../english-adverbs/never/nevermore--never-again-from-this-point-on.md -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="01-always-never.html">ALWAYS ~ NEVER</a> · 다음: <a href="03-slowly-quickly.html">SLOWLY ↔ QUICKLY</a></p>
+  <h1>되풀이되는 모양 — 몇 번보다 어떻게</h1>
+  <p class="lead">always · usually · often · sometimes · never에 가까운 열 낱말이다. 횟수보다 <b>자꾸인지, 평소인지, 거듭인지, 제멋대로인지</b>를 그린다. 낱말마다 어울리는 장면이 달라 대상도 함께 바뀐다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 되풀이되는 모양이 바뀌는 그림|촘촘한 점, 늘 빈 프린터, 오늘만 다른 달력, 여러 손님, 비슷한 길이의 막대, 자주 잠기는 길, 같은 말 여러 번, 띄엄띄엄한 접시, 간격이 제멋대로인 번개, 끊긴 선이 차례로 나온다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 always · usually · often · sometimes · never 묶음</li><li>횟수만: <a href="01-always-never.html">ALWAYS ~ NEVER</a></li></ul>
+</main>
+<script>
+  const line = (a, b) => LN('M' + a + ' 150 H' + b, 'var(--line)', 4);
+  const dots = (xs) => xs.map((x) => CR(x, 150, 8, 'var(--accent)', 'var(--accent)')).join('');
+  const cap = (t, y) => tx(226, y || 206, 13, t, 'var(--muted)');
+  const EXIST = adverbPage({
+    start: 'repeatedly',
+    groups: [
+      { name: '자꾸', items: [
+        { v: 'constantly', k: '자꾸 · 끊임없이', base: 'ALWAYS 쪽', core: '자꾸 또는 내내', from: 'constant(끊임없는) + ly', en: 'He constantly complains about the weather.', note: '아주 자주 되풀이한다. 매초 불평한다는 뜻은 아니다(노트).', pic: () => line(50, 400) + dots(Array.from({ length: 18 }, (_, i) => 56 + i * 20)) + cap('점 = 날씨 불평 한 번'), ex: ['자꾸', '끊임없이', 'He always complains.', '뜻은 간다. 자꾸 이어지는 느낌이 약해진다.', '자꾸 되풀이되거나 내내 이어짐.'] },
+        { v: 'perpetually', k: '늘 (과장)', base: 'ALWAYS 쪽', core: '늘 그런 듯한 인상', from: 'perpetual(끝없는) + ly', en: 'The printer is perpetually out of paper.', note: '늘 그런 것 같다는 과장된 인상(노트).', pic: () => [0, 1, 2, 3].map((i) => { const x = 88 + i * 92; return RC(x - 34, 124, 68, 40, 'var(--bg)', 'var(--obj-line)', 5) + RC(x - 18, 106, 36, 18, 'none', 'var(--bad)') + tx(x, 149, 12, '종이 없음', 'var(--bad)'); }).join('') + cap('쓸 때마다 또') },
+        { v: 'repeatedly', k: '거듭', base: 'OFTEN 쪽', core: '같은 일을 여러 번', from: 'repeated(거듭된) + ly', en: 'I reminded him repeatedly.', note: '비율이 아니라 <b>같은 일을 거듭했다</b>(노트).', pic: () => [0, 1, 2, 3, 4].map((i) => SAYB(80 + i * 74, 150, '7시야', 13, 'var(--accent)')).join('') + cap('같은 말을 거듭'), ex: ['같은 일을', '거듭', 'I often reminded him.', '자주 그랬다는 말이 되어, 거듭한 그림이 약해진다.', '같은 일이 여러 번 거듭됨.'] },
+      ] },
+      { name: '기준', items: [
+        { v: 'normally', k: '평소에는', base: 'USUALLY 쪽', core: '평소 기준', from: 'normal(보통의) + ly', en: 'I normally get up at seven.', note: '평소 기준을 말한다. 예외를 꼭 덧붙일 필요는 없다(노트).', pic: () => [0, 1, 2, 3, 4].map((i) => CLOCK(86 + i * 70, 140, 26, i === 4 ? 0.2 : 2.6) + (i === 4 ? CR(86 + i * 70, 140, 32, 'none', 'var(--bad)') : '') + tx(86 + i * 70, 190, 12, i === 4 ? '오늘만 9시' : '7시', i === 4 ? 'var(--bad)' : 'var(--muted)')).join(''), ex: ['평소', '기준', 'I get up at seven.', '평소 이야기인지 매일 꼭 그런지 흐려진다.', '평소에는 그렇다.'] },
+        { v: 'generally', k: '전반적으로', base: 'USUALLY 쪽', core: '전체 경향', from: 'general(전반적인) + ly', en: 'Customers generally prefer this option.', note: '예외가 있어도 전체로 보면 그렇다(노트).', pic: () => Array.from({ length: 12 }, (_, i) => P(80 + i % 6 * 58, 130 + Math.floor(i / 6) * 76, 1, [4, 9].includes(i) ? 'var(--fog)' : 'var(--accent)')).join('') + cap('색칠한 사람 = 이 방식이 좋음', 236) },
+        { v: 'typically', k: '전형적으로', base: 'USUALLY 쪽', core: '흔한 모습', from: 'typical(전형적인) + ly', en: 'The repair typically takes an hour.', note: '이런 일의 흔한 모습. 예외는 있다(노트).', pic: () => [60, 66, 58, 62, 110, 60].map((w, i) => RC(60, 70 + i * 22, w * 2.4, 14, i === 4 ? 'var(--fog)' : 'var(--accent)', 'none')).join('') + LN('M204 60 V206', 'var(--muted)', 2, ' stroke-dasharray="4 4"') + tx(204, 52, 12, '1시간', 'var(--muted)') + cap('막대 = 수리마다 걸린 시간', 232) },
+      ] },
+      { name: '간격', items: [
+        { v: 'frequently', k: '자주 · 빈번히', base: 'OFTEN 쪽', core: '발생이 잦음', from: 'frequent(잦은) + ly', en: 'This road floods frequently.', note: 'often과 비슷하지만 조금 격식 있게 들릴 수 있다(노트).', pic: () => line(50, 400) + [70, 112, 150, 205, 240, 290, 330, 380].map((x) => '<path d="M' + x + ' 114 q-11 18 0 25 q11 -7 0 -25" fill="var(--water)" stroke="var(--obj-line)"/>').join('') + cap('물방울 = 길이 잠긴 날'), ex: ['발생이', '잦다', 'This road sometimes floods.', '잦다는 점이 사라진다.', '자주 일어남.'] },
+        { v: 'occasionally', k: '가끔', base: 'SOMETIMES 쪽', core: '자주는 아님', from: 'occasional(가끔의) + ly', en: 'We occasionally eat out.', note: '자주는 아니고 이따금. 정해진 주기가 필요하지 않다(노트).', pic: () => line(50, 400) + [120, 330].map((x) => CR(x, 130, 19, 'var(--bg)', 'var(--accent)') + CR(x, 130, 10, 'var(--chip-on)', 'var(--accent)')).join('') + cap('접시 = 밖에서 먹은 날'), ex: ['이따금', '한 번씩', 'We sometimes eat out.', '많이 겹친다. 자주는 아니라는 점이 조금 약해진다.', '자주는 아니게.'] },
+        { v: 'sporadically', k: '불규칙하게', base: 'SOMETIMES 쪽', core: '띄엄띄엄 제멋대로', from: 'sporadic(산발적인) + ally', en: 'The connection drops sporadically.', note: '적다는 것보다 <b>간격이 불규칙</b>하다는 점(노트).', pic: () => line(50, 400) + [64, 92, 190, 346, 370].map((x) => '<path d="M' + (x + 4) + ' 112 l-12 22 h9 l-5 18 l15 -24 h-9 z" fill="var(--gold)" stroke="var(--obj-line)"/>').join('') + cap('번개 = 연결이 끊긴 때'), ex: ['간격이', '제멋대로', 'It sometimes drops.', '끊기는 때가 있다는 것뿐, 불규칙하다는 점이 빠진다.', '규칙 없이 띄엄띄엄.'] },
+        { v: 'nevermore', k: '다시는 (문학)', base: 'NEVER 쪽', core: '오래된 문학 말투', from: 'never + more', en: 'They saw each other nevermore.', note: '작품에서 알아볼 말. 일상에서는 <span class="en">never … again</span>(노트).', pic: () => line(50, 200) + dots([70, 110, 150, 190]) + LN('M222 116 V184', 'var(--bad)', 3) + LN('M244 150 H400', 'var(--line)', 3, ' stroke-dasharray="3 9"') + tx(320, 132, 13, '다시는', 'var(--bad)') + cap('점 = 만남') },
+      ] },
+    ],
+    q: [['Q1. 자꾸?', '자꾸 · 내내 → <b>constantly</b> / 늘 그런 듯(과장) → <b>perpetually</b> / 같은 일을 거듭 → <b>repeatedly</b>'], ['Q2. 기준?', '평소 → <b>normally</b> / 전체 → <b>generally</b> / 흔한 모습 → <b>typically</b>'], ['Q3. 간격?', '잦음 → <b>frequently</b> / 가끔 → <b>occasionally</b> / 불규칙 → <b>sporadically</b>'], ['Q4. 다시는?', '문학 말투 → <b>nevermore</b> (일상: never again)']],
+    body: ['<b>REPEATEDLY</b> — 같은 자리를 톡톡톡.', '<b>SPORADICALLY</b> — 톡 … 톡톡 ……… 톡.', '<b>NORMALLY</b> — 고개를 끄덕이다가 "오늘만" 하고 옆으로.'],
+    check: ['자꾸 · 기준 · 간격 세 줄로 나눈 것은 그림을 위해 정했다. 노트는 다섯 묶음으로 나눈다.', '노트 앞부분은 perpetually를 "영원함이 필수 아님"이라 하고 뒤 Memory Scene은 "끝없는 지속"이라고 해, 앞쪽 설명을 따랐다.'],
+  });
+  const desk = (b) => FL + TB(370, 560, 108) + b + P(310, 150, 1.4, 'var(--ok)') + P(610, 150, 1.4, 'var(--sleeve)');
+  const SCENES = {
+    net: { btn: '고객 센터', place: '인터넷 고객 센터 전화', pic: () => desk(BX(420, 56, 90, 52) + LN('M436 98 L494 64', BAD, 4)), lines: [['상담원', 'How often does it drop?', '얼마나 자주 끊기나요?'], ['나', 'It drops <b>sporadically</b>. There\'s no pattern.', '불규칙하게 끊겨요. 규칙이 없어요.', true]], say: '횟수를 물었지만 답은 <b>모양</b>(불규칙)이다.' },
+    shop: { btn: '수리점', place: '자전거 수리점', pic: () => desk(CR(445, 92, 16) + CR(490, 92, 16)), lines: [['나', 'How long does it <b>normally</b> take?', '보통 얼마나 걸려요?', true], ['직원', 'It <b>typically</b> takes an hour.', '이런 수리는 대개 한 시간 걸려요.']], say: '둘은 많이 겹친다. 평소를 물으면 normally, 흔한 모습으로 답하면 typically.' },
+  };
+  const SLOTS = { first: ['constantly', 'mid'], slots: { mid: '동사 앞', end: '문장 끝', be: 'be 뒤' }, verbs: {
+    constantly: { mid: { ok: [['He', 's'], ['constantly', 'd'], ['complains', 'v']], bad: [['He', 's'], ['constant', 'a'], ['complains', 'v']], say: '동사를 꾸미면 형용사 constant가 아니라 <b>constantly</b>.' }, end: { ok: [['He', 's'], ['complains', 'v'], ['constantly', 'd']], say: '문장 끝도 된다.' }, be: { ok: [['He', 's'], ['is', 'b'], ['constantly', 'd'], ['late', 'x']], say: 'be <b>뒤</b>.' } },
+    repeatedly: { mid: { ok: [['I', 's'], ['repeatedly', 'd'], ['told', 'v'], ['him', 'o']], say: '동사 앞도 되고 문장 끝도 된다.' }, end: { ok: [['I', 's'], ['reminded', 'v'], ['him', 'o'], ['repeatedly', 'd']], bad: [['I', 's'], ['reminded', 'v'], ['repeatedly', 'd'], ['him', 'o']], say: '동사와 목적어 <b>사이에 끼우지 않는다</b>.' }, be: { ok: [['I', 's'], ['was', 'b'], ['repeatedly', 'd'], ['told', 'v']], say: 'be와 -ed형 사이 — 거듭 들었다.' } },
+  } };
+</script>

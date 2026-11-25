@@ -1,0 +1,40 @@
+<!-- title: CAREFULLY ↔ CARELESSLY 개념 -->
+<!-- pron: carefully=/ˈker.fəl.i/[**케**어풀리]*, carelessly=/ˈker.ləs.li/[**케**얼리슬리]*, ../english-adverbs/carefully/cautiously--watchful-of-danger.md, ../english-adverbs/carefully/meticulously--attentive-to-every-detail.md, ../english-adverbs/carelessly/recklessly--ignoring-danger.md, ../english-adverbs/carelessly/thoughtlessly--without-considering-others.md -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="04-gently-violently.html">GENTLY ↔ VIOLENTLY</a> · 다음: <a href="06-quietly-loudly.html">QUIETLY ↔ LOUDLY</a></p>
+  <h1>CAREFULLY ↔ CARELESSLY — 같은 물컵, 다른 주의</h1>
+  <p class="lead">물컵을 나르며 <b>주의</b>를 기울이면 carefully, 아니면 carelessly. 그 주의가 <b>위험 · 세부 · 남</b> 중 무엇을 향하는지까지 말하면 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 조심스럽거나 부주의한 장면이 바뀌는 그림|조심하는 쪽은 물컵 나르기, 젖은 계단, 숫자 대조이고 부주의한 쪽은 쏟은 물컵, 빗길 과속, 무심한 농담이다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 carefully · carelessly 묶음</li><li>꾸며 주는 동사: <a href="../concepts/32-bring.html">32 BRING</a> · <a href="../concepts/35-hold.html">35 HOLD</a></li></ul>
+</main>
+<script>
+  const EXIST = adverbPage({
+    start: 'cautiously',
+    groups: [
+      { name: '조심해서', items: [
+        { v: 'carefully', k: '조심스럽게', en: 'Mina carried the glass carefully.', note: '위험이나 실수를 막으려고 주의를 기울인다.', from: 'careful(조심하는) + ly — l이 두 개', pic: () => GRD + MAN(200, { a: 'both', c: 'var(--ok)' }) + GLASS(256, 190, true) + tx(256, 130, 12, '안 쏟음', 'var(--ok)', ' font-weight="600"'), ex: ['주의를', '기울임', 'Mina carried the glass.', '조심했는지 아닌지 모른다.', '주의를 기울여.'] },
+        { v: 'cautiously', k: '경계하며', base: 'CAREFULLY', core: '위험을 경계', from: 'cautious(조심성 있는) + ly', en: 'She walked cautiously down the steps.', note: '젖은 계단을 한 칸씩 확인하며. 확실하지 않은 결정에도 쓴다(노트).', pic: () => LN('M40 120 H130 V150 H210 V180 H290 V210 H370 V240 H410', 'var(--obj-line)', 2.5) + '<path d="M214 178 h70 v4 h-70 z M294 208 h70 v4 h-70 z" fill="var(--water)"/>' + MAN(170, { y: 150, a: 'up', f: 'flat' }) + tx(330, 170, 22, '!', 'var(--bad)', ' font-weight="700"'), ex: ['위험을', '경계', 'She walked carefully.', '많이 겹친다. 다칠까 봐 경계한다는 초점이 약해진다.', '위험을 경계하며.'] },
+        { v: 'meticulously', k: '꼼꼼하게', base: 'CAREFULLY', core: '세부까지 놓치지 않음', from: 'meticulous(꼼꼼한) + ly', en: 'He checked the report meticulously.', note: '무서워서가 아니라 <b>세부를 빠뜨리지 않으려고</b>(노트).', pic: () => PAPER(120, 60, 130, 170, 11) + [74, 100, 126, 152, 178].map((y) => tick(260, y)).join('') + CR(330, 130, 34, 'none') + LN('M354 154 l34 34', 'var(--obj-line)', 7), ex: ['세부까지', '꼼꼼히', 'He checked it carefully.', '하나하나 놓치지 않는 꼼꼼함이 약해진다.', '세부까지 꼼꼼하게.'] },
+      ] },
+      { name: '주의 없이', items: [
+        { v: 'carelessly', k: '부주의하게', en: 'Tom carried the glass carelessly.', note: '충분히 주의하지 않는다. 꼭 나쁜 마음은 아니다.', from: 'careless(부주의한) + ly', pic: () => GRD + MAN(190, { a: 'fwd', f: 'smile' }) + '<g transform="rotate(38 252 186)">' + GLASS(252, 190, true) + '</g>' + '<path d="M276 190 q8 16 0 22 q-8 -6 0 -22 M296 204 q8 16 0 22 q-8 -6 0 -22" fill="var(--water)"/><ellipse cx="300" cy="238" rx="34" ry="5" fill="var(--water)"/>', ex: ['주의를', '안 함', 'Tom carried the glass.', '부주의했다는 점이 빠진다.', '주의를 기울이지 않고.'] },
+        { v: 'recklessly', k: '무모하게', base: 'CARELESSLY', core: '위험 · 결과를 생각 안 함', from: 'reckless(무모한) + ly', en: 'He drove recklessly.', note: '빗길에서 속도를 안 줄인다. 위험을 미리 알았다는 증거는 아니다(노트).', pic: () => GRD + '<path d="M200 226 v-24 l28 -26 h80 l28 26 h34 v24 z" fill="var(--bad)" stroke="var(--obj-line)"/>' + CR(240, 228, 13, 'var(--obj-line)') + CR(330, 228, 13, 'var(--obj-line)') + FAST(180, 190) + [80, 130, 190, 250, 310, 370].map((x, i) => LN('M' + x + ' ' + (60 + i % 2 * 30) + ' l-10 26', 'var(--water)', 3)).join(''), ex: ['결과를', '생각 안 함', 'He drove carelessly.', '무모하게 위험한 정도가 약해진다.', '위험 · 결과를 충분히 생각하지 않고.'] },
+        { v: 'thoughtlessly', k: '배려 없이', base: 'CARELESSLY', core: '남에게 줄 영향을 안 살핌', from: 'thoughtless(생각 없는) + ly', en: 'I spoke thoughtlessly. I\'m sorry.', note: '걱정하는 친구에게 가벼운 농담. 해치려 했다기보다 <b>배려가 부족</b>했다(노트).', pic: () => GRD + MAN(130, { f: 'smile', a: 'hip' }) + MAN(330, { f: 'sad', c: 'var(--ok)' }) + SAYB(196, 106, '하하, 별거 아니네', 12) + tx(330, 106, 18, '…', 'var(--muted)'), ex: ['배려가', '없음', 'I spoke carelessly.', '많이 겹친다. 남을 안 살폈다는 초점이 약해진다.', '남에게 줄 영향을 생각하지 않고.'] },
+      ] },
+    ],
+    q: [['Q1. 주의했나?', '했다 → <b>carefully</b> / 안 했다 → <b>carelessly</b>'], ['Q2. 무엇을 조심?', '위험 → <b>cautiously</b> / 세부 → <b>meticulously</b>'], ['Q3. 무엇을 안 살폈나?', '위험 · 결과 → <b>recklessly</b> / 남의 마음 → <b>thoughtlessly</b>']],
+    body: ['<b>CAUTIOUSLY</b> — 발끝으로 바닥을 확인하며 한 걸음.', '<b>METICULOUSLY</b> — 손가락으로 한 줄씩 짚기.', '<b>THOUGHTLESSLY</b> — 말해 놓고 "아차" 입 막기.'],
+    check: ['recklessly 파일 이름(ignoring-danger)과 달리 본문은 위험을 알았다는 뜻이 아니라고 한다. 본문을 따랐다.', '일상에서는 <span class="en">Be careful! · Drive carefully.</span>가 cautiously보다 흔하다.'],
+  });
+  const desk = (b) => FL + TB(370, 560, 108) + b + P(310, 150, 1.4, 'var(--ok)') + P(610, 150, 1.4, 'var(--sleeve)');
+  const SCENES = {
+    rain: { btn: '빗길', place: '비 오는 날 차 앞', pic: () => FL + CAR(400) + P(310, 150, 1.4, 'var(--ok)'), lines: [['가족', 'Drive <b>carefully</b>. It\'s raining.', '조심해서 운전해. 비 와.'], ['나', 'I will. That guy drives so <b>recklessly</b>.', '그럴게. 저 사람은 너무 무모하게 모네.', true]], say: '조심은 <b>carefully</b>, 무모하면 <b>recklessly</b>.' },
+    report: { btn: '제출 전', place: '보고서 제출 전', pic: () => desk(BX(440, 66, 44, 42)), lines: [['상사', 'Did you check the numbers?', '숫자 확인했어요?'], ['나', 'Yes, I checked them <b>meticulously</b>.', '네, 꼼꼼히 대조했어요.', true]], say: '세부를 하나씩 — <b>meticulously</b>.' },
+  };
+  const SLOTS = { first: ['carefully', 'end'], slots: { end: '동사 뒤', obj: '목적어 뒤', mid: '동사 앞' }, verbs: {
+    carefully: { end: { ok: [['Drive', 'v'], ['carefully', 'd']], bad: [['Drive', 'v'], ['careful', 'a']], say: '동사를 꾸미면 <b>carefully</b>. 형용사는 be와 함께: <span class="en">Be careful.</span>' }, obj: { ok: [['Read', 'v'], ['it', 'o'], ['carefully', 'd']], bad: [['Read', 'v'], ['carefully', 'd'], ['it', 'o']], say: '목적어 <b>뒤</b>.' }, mid: { ok: [['She', 's'], ['carefully', 'd'], ['opened', 'v'], ['it', 'o']], say: '동사 앞도 된다.' } },
+    recklessly: { end: { ok: [['He', 's'], ['drove', 'v'], ['recklessly', 'd']], bad: [['He', 's'], ['drove', 'v'], ['reckless', 'a']], say: '동사를 꾸미면 -ly.' }, obj: { ok: [['He', 's'], ['spent', 'v'], ['it', 'o'], ['recklessly', 'd']], say: '돈을 무모하게 썼다. 목적어 뒤.' }, mid: { ok: [['He', 's'], ['recklessly', 'd'], ['spent', 'v'], ['it', 'o']], say: '동사 앞도 된다.' } },
+  } };
+</script>

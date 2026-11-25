@@ -1,0 +1,46 @@
+<!-- title: ABOUT · EXACTLY · ACTUALLY 개념 -->
+<!-- pron: approximately=/əˈprɑːk.sə.mət.li/[어프**락**서멋리]*, exactly=/ɪɡˈzækt.li/[이그**잭**틀리]*, actually=/ˈæk.tʃu.ə.li/[**액**추얼리]*, @approximately/about, @approximately/around, @exactly/just, @exactly/accurately, @actually/indeed, @actually/truly -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="18-only-also.html">ONLY · ALSO · ESPECIALLY</a></p>
+  <h1>ABOUT · EXACTLY · ACTUALLY — 대략, 딱, 사실은</h1>
+  <p class="lead">어림하면 about · approximately, 딱 맞으면 exactly, "생각과 달리 실은" 하면 actually.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 대략, 딱, 사실은 장면이 바뀌는 그림|대략 쪽은 넓은 과녁, 많은 사람, 세 시 언저리이고 딱 쪽은 한가운데 화살, 꼭 맞는 상자, 저울이며 사실은 쪽은 뒤집힌 짐작, 맞다는 확인, 진심 어린 감사다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 approximately · exactly · actually 묶음</li><li>꾸며 주는 동사: <a href="../concepts/79-measure.html">79 MEASURE</a> · <a href="../concepts/76-count.html">76 COUNT</a></li></ul>
+</main>
+<script>
+  const TARGET = (hits) => [80, 56, 32].map((r, i) => CR(226, 140, r, i % 2 ? 'var(--bg)' : 'var(--obj)')).join('') + CR(226, 140, 10, 'var(--bad)') + hits.map(([x, y]) => CR(x, y, 7, 'var(--accent)', 'var(--text)')).join('');
+  const EXIST = adverbPage({
+    start: 'just',
+    groups: [
+      { name: '대략', items: [
+        { v: 'approximately', k: '대략 (격식)', en: 'It takes approximately ten minutes.', note: '정확히 못 박지 않는다. 말할 때는 <b>about</b>.', from: 'approximate(대략의) + ly', pic: () => TARGET([[196, 110], [262, 120], [206, 178], [252, 170]]), ex: ['어림', '값', 'It takes ten minutes.', '딱 10분이라고 약속하는 것처럼 들린다.', '대략.'] },
+        { v: 'about', k: '약 · ~쯤', base: 'APPROXIMATELY', core: '편한 어림', from: '"~에 대해"라는 전치사이기도 하다', en: 'About 100 people came.', note: '숫자 · 시간 · 양 앞의 편한 말(노트).', pic: () => Array.from({ length: 27 }, (_, i) => CR(60 + i % 9 * 41, 90 + Math.floor(i / 9) * 46, 12, 'var(--skin)')).join('') + CAPT('세어 보지 않은 100명쯤', 236) },
+        { v: 'around', k: '~쯤', base: 'APPROXIMATELY', core: '그 언저리', from: '"주위에"라는 뜻도 있다', en: 'Let\'s meet around three.', note: 'about과 거의 바꿔 쓴다(노트).', pic: () => CR(226, 140, 80) + '<path d="M226 140 L294 98 A80 80 0 0 1 294 182 Z" fill="var(--chip-on)" stroke="var(--accent)"/>' + LN('M226 140 V80 M226 140 H278', 'var(--obj-line)', 4) + tx(324, 146, 15, '3시', 'var(--accent)', ' font-weight="700"') },
+      ] },
+      { name: '딱', items: [
+        { v: 'exactly', k: '정확히', en: 'It\'s exactly three o\'clock.', note: '오차 없이 맞다. 혼자 <span class="en">Exactly!</span>면 "바로 그거야!".', from: 'exact(정확한) + ly', pic: () => TARGET([[226, 140]]) + LN('M300 70 L234 132', 'var(--accent)', 4), ex: ['오차', '없이', 'It\'s about three.', '어림이 되어 뜻이 바뀐다.', '정확히.'] },
+        { v: 'just', k: '바로 · 딱', base: 'EXACTLY', core: '딱 그것', from: 'just에는 "방금 · 단지"도 있다', en: 'That\'s just what I needed.', note: '대상 · 때 · 정도가 딱 맞다고 짚는다(노트).', pic: () => RC(150, 90, 150, 110, 'none', 'var(--obj-line)', 4) + RC(156, 96, 138, 98, 'var(--chip-on)', 'var(--accent)', 3) + tick(212, 150) , ex: ['바로', '그것', 'That\'s what I needed.', '딱 맞는다는 강조가 약해진다.', '바로.'] },
+        { v: 'accurately', k: '정확하게 (재다)', base: 'EXACTLY 쪽', core: '실제 값과 맞게', from: 'accurate(정확한) + ly', en: 'Measure the ingredients accurately.', note: '재기 · 기록 · 설명이 실제와 맞다. just와 바꿔 쓰지 못한다(노트).', pic: () => RC(150, 170, 150, 50, 'var(--card)', 'var(--obj-line)', 6) + RC(186, 184, 78, 24, 'var(--obj)') + tx(225, 202, 15, '200 g', 'var(--text)', ' font-weight="700"') + RC(160, 158, 130, 10, 'var(--fog)') + '<path d="M190 158 q35 -60 70 0 z" fill="var(--gold)" stroke="var(--obj-line)"/>', ex: ['실제와', '맞게', 'Measure the ingredients.', '대충 재도 된다는 말일 수 있다.', '정확하게.'] },
+      ] },
+      { name: '사실은', items: [
+        { v: 'actually', k: '사실은 · 실제로', en: 'Actually, I\'m from Busan.', note: '예상 · 통념과 다른 실제를 꺼낸다. 부드러운 바로잡기.', from: 'actual(실제의) + ly', pic: () => GRD + MAN(120, { f: 'flat' }) + MAN(340, { f: 'smile', a: 'up', c: 'var(--ok)' }) + SAYB(146, 100, '서울?', 13, 'var(--muted)') + LN('M118 100 h56', 'var(--bad)', 3) + SAYB(290, 92, '실은 부산!', 13, 'var(--accent)'), ex: ['생각과', '다름', 'I\'m from Busan.', '상대의 짐작을 부드럽게 바로잡는 느낌이 빠진다.', '사실은.'] },
+        { v: 'indeed', k: '정말로 (확인)', base: 'ACTUALLY와 이웃', core: '앞말을 확인 · 강조', from: 'in + deed(행위)', en: 'It is indeed true.', note: '<b>맞다</b>고 확인한다. 바로잡는 actually와 바꿔 쓰지 않는다(노트).', pic: () => GRD + MAN(120, { f: 'flat' }) + MAN(340, { f: 'smile', c: 'var(--ok)' }) + SAYB(150, 100, '사실이야?', 13) + SAYB(320, 100, '맞아요', 13, 'var(--ok)') + tick(222, 106), ex: ['맞다고', '확인', 'It is actually true.', '생각과 달리 사실이라는 느낌으로 바뀐다.', '앞말을 확인.'] },
+        { v: 'truly', k: '진심으로 · 정말', base: 'REALLY 쪽', core: '진짜라고 강조', from: 'true(진실한) → truly (e 빠짐)', en: 'I\'m truly grateful.', note: '사실 · 성질 · 감정이 진짜라는 강조. 진심에만 쓰는 것은 아니다(노트).', pic: () => GRD + MAN(190, { f: 'smile', a: 'bow', r: 10, c: 'var(--ok)' }) + HEART(250, 120) + MAN(330, { f: 'smile' }), ex: ['진짜', '마음', 'I\'m grateful.', '정말 그렇다는 강조가 약해진다.', '진심으로.'] },
+      ] },
+    ],
+    q: [['Q1. 정확한가?', '어림 → <b>about · around · approximately</b> / 딱 → <b>exactly</b>'], ['Q2. 딱, 초점은?', '바로 그것 → <b>just</b> / 잰 값이 맞음 → <b>accurately</b>'], ['Q3. 실제를 말할 때', '짐작과 다름 → <b>actually</b> / 맞다고 확인 → <b>indeed</b> / 진짜라고 강조 → <b>truly</b>']],
+    body: ['<b>ABOUT</b> — 손바닥을 좌우로 흔들흔들. <b>EXACTLY</b> — 검지로 한 점을 콕. <b>ACTUALLY</b> — 손을 들며 "실은요".'],
+    check: ['노트 식은 just를 "주관적 일치감"이라 하지만 표는 "주관적 취향에만 한정되지 않음"이라 해, 표를 따랐다.', 'actually는 "지금(현재)"이라는 뜻이 아니다. 노트에는 없는 주의다.'],
+  });
+  const SCENES = {
+    time: { btn: '약속', place: '약속 잡기', pic: () => MEET(CLOCK(465, 80, 26, 0)), lines: [['친구', 'Let\'s meet <b>around</b> three.', '세 시쯤 보자.'], ['나', '<b>Actually</b>, can we make it four?', '실은, 네 시로 해도 될까?', true]], say: '부탁을 부드럽게 꺼내는 <b>Actually,</b>' },
+    bake: { btn: '주방', place: '케이크 만들기', pic: () => MEET(BX(430, 88, 70, 20)), lines: [['가족', '<b>About</b> 200 grams?', '200그램쯤?'], ['나', 'No, <b>exactly</b> 200.', '아니, 딱 200.', true]], say: '어림 <b>about</b> ↔ 딱 <b>exactly</b>.' },
+  };
+  const SLOTS = { first: ['exactly', 'num'], slots: { num: '수 앞', verb: '동사와', alone: '혼자 · 맨 앞' }, verbs: {
+    about: { num: { ok: [['about', 'd'], ['ten', 'x'], ['people', 'x']], bad: [['ten', 'x'], ['about', 'd'], ['people', 'x']], say: '수 <b>앞</b>.' }, verb: { ok: [['It', 's'], ['takes', 'v'], ['about', 'd'], ['an', 'x'], ['hour', 'x']], say: '동사 뒤, 수 앞.' }, alone: { ok: [['Around', 'd'], ['three?', 'x']], say: '짧게: 세 시쯤?' } },
+    exactly: { num: { ok: [['exactly', 'd'], ['ten', 'x'], ['people', 'x']], say: '수 앞.' }, verb: { ok: [['I', 's'], ['know', 'v'], ['exactly', 'd'], ['where', 'x']], bad: [['I', 's'], ['know', 'v'], ['exact', 'a'], ['where', 'x']], say: '어디인지 정확히 안다.' }, alone: { ok: [['Exactly!', 'd']], say: '바로 그거야!' } },
+    actually: { num: { ok: [['It', 's'], ['is', 'b'], ['actually', 'd'], ['ten', 'x']], say: 'be 뒤.' }, verb: { ok: [['I', 's'], ['actually', 'd'], ['like', 'v'], ['it', 'o']], bad: [['I', 's'], ['actual', 'a'], ['like', 'v'], ['it', 'o']], say: '일반동사 앞 — "(의외로) 실은 좋아해".' }, alone: { ok: [['Actually,', 'd'], ['I', 's'], ['agree', 'v']], say: '맨 앞 + 쉼표.' } },
+  } };
+</script>

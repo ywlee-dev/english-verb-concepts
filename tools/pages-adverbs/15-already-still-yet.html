@@ -1,0 +1,45 @@
+<!-- title: ALREADY · STILL · YET 개념 -->
+<!-- pron: already=/ɔːlˈred.i/[올**레**디]*, still=/stɪl/[스**틸**]*, yet=/jet/[**옛**]*, @already/beforehand, @already/previously, @still/continuously, @still/persistently, @yet/hitherto, @yet/heretofore -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="14-immediately-finally.html">IMMEDIATELY · FINALLY</a> · 다음: <a href="16-definitely-probably.html">DEFINITELY · PROBABLY</a></p>
+  <h1>ALREADY · STILL · YET — "지금"을 기준으로</h1>
+  <p class="lead">지금 보니 <b>벌써</b> 됐으면 already, <b>여전히</b> 그러면 still, <b>아직</b> 안 됐으면 not … yet. 셋은 같은 "지금" 선을 놓고 본다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 지금 선과 사건의 자리가 바뀌는 그림|벌써 쪽은 지금 선 앞에 찍힌 점, 공연 전의 예매, 예전 회사이고 여전히 쪽은 지금 선을 지나는 띠, 밤새 도는 기계, 거듭하는 시도이며 아직 쪽은 빈 동그라미, 책, 옛 문서다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 already · still · yet 묶음</li><li>꾸며 주는 동사: <a href="../concepts/31-stop.html">31 STOP</a> · <a href="../concepts/36-wait.html">36 WAIT</a></li></ul>
+</main>
+<script>
+  const EXIST = adverbPage({
+    start: 'already',
+    groups: [
+      { name: '벌써', items: [
+        { v: 'already', k: '벌써 · 이미', en: 'It\'s already raining.', note: '기준보다 <b>앞서</b> 그렇게 됐다. 꼭 끝났다는 뜻은 아니다 — 비는 지금 오고 있다(노트).', from: 'all + ready에서', pic: () => TL(150) + NOW(290, 150) + RC(150, 140, 250, 20, 'var(--water)', 'none', 10) + CR(150, 150, 12, 'var(--accent)', 'var(--accent)') + tx(150, 196, 12, '지금보다 앞서 시작', 'var(--muted)'), ex: ['지금보다', '앞서', 'It\'s raining.', '벌써 그렇게 됐다는 느낌이 빠진다.', '이미 · 벌써.'] },
+        { v: 'beforehand', k: '미리', base: 'ALREADY와 이웃', core: '어떤 일보다 먼저', from: 'before + hand', en: 'We booked the tickets beforehand.', note: '<b>특정한 일보다</b> 먼저. 준비 목적이 필수는 아니다(노트).', pic: () => TL(150) + NOW(310, 150, '공연') + RC(110, 122, 80, 44, 'var(--chip-on)', 'var(--accent)', 6) + LN('M164 122 v44', 'var(--accent)', 2, ' stroke-dasharray="4 4"') + tx(140, 150, 13, '표', 'var(--accent)', ' font-weight="700"') + AR(200, 190, 300, 190, 'var(--muted)', 2), ex: ['그 일', '전에', 'We booked the tickets.', '언제 했는지 모른다.', '어떤 일보다 먼저.'] },
+        { v: 'previously', k: '예전에', base: 'ALREADY와 이웃', core: '기준 시점 이전', from: 'previous(이전의) + ly', en: 'She previously worked here.', note: '지금보다 앞선 어느 때. 준비가 아니다(노트).', pic: () => TL(190) + NOW(330, 190) + RC(90, 90, 80, 86, 'var(--card)') + [0, 1, 2, 3].map((i) => RC(102 + i % 2 * 32, 102 + Math.floor(i / 2) * 32, 22, 20, 'var(--water)', 'none')).join('') + MAN(220, { y: 178, s: .7, c: 'var(--ok)' }) },
+      ] },
+      { name: '여전히', items: [
+        { v: 'still', k: '여전히 · 아직도', en: 'I still love that song.', note: '지금도 그렇다. 중간에 안 끊겼다는 보장은 아니다(노트).', from: '"가만히"라는 다른 뜻도 있다', pic: () => TL(150) + NOW(310, 150) + RC(80, 138, 230, 24, 'var(--accent)', 'none', 12) + AR(310, 150, 380, 150, 'var(--accent)', 4) + NOTE(190, 110, 34), ex: ['지금도', '그렇다', 'I love that song.', '예전부터 계속이라는 느낌이 빠진다.', '지금도.'] },
+        { v: 'continuously', k: '끊임없이', base: 'STILL과 이웃', core: '중단 없는 흐름', from: 'continuous(이어지는) + ly', en: 'The server ran continuously overnight.', note: '기간 내내 <b>끊기지 않았다</b>(노트).', pic: () => RC(60, 70, 330, 110, 'var(--obj)', 'var(--line)', 8) + CR(90, 94, 12, 'var(--gold)') + RC(190, 92, 70, 70, 'var(--card)') + [0, 1, 2].map((i) => RC(200, 102 + i * 18, 50, 10, 'var(--ok)', 'none')).join('') + RC(60, 206, 330, 14, 'var(--ok)', 'none', 7), ex: ['안 끊기고', '이어짐', 'The server ran overnight.', '중간에 멈췄을 수도 있다.', '끊김 없이.'] },
+        { v: 'persistently', k: '끈질기게', base: 'STILL과 이웃', core: '오래 · 거듭 계속', from: 'persistent(끈질긴) + ly', en: 'She persistently pursued a solution.', note: '포기하지 않는 노력. 알람이 계속 울릴 때도 쓴다(노트).', pic: () => GRD + MAN(90, { f: 'flat', a: 'fwd', c: 'var(--ok)' }) + [170, 226, 282].map((x) => CROSS(x, 160, 12)).join('') + AR(140, 204, 360, 204, 'var(--accent)', 3) + CR(370, 156, 20, 'var(--gold)'), ex: ['거듭', '안 놓음', 'She still looked for a solution.', '아직도 찾는 중이라는 말이 되어 끈질김이 약해진다.', '끈질기게.'] },
+      ] },
+      { name: '아직', items: [
+        { v: 'yet', k: '아직 (부정 · 질문)', en: 'It hasn\'t arrived yet.', note: '부정문에서 "아직", 질문에서 "벌써?": <span class="en">Has it arrived yet?</span>(노트)', from: '짧은 낱말 그대로', pic: () => TL(150) + NOW(250, 150) + CR(350, 150, 14, 'var(--bg)', 'var(--fog)') + tx(350, 196, 12, '도착 (아직 안 옴)', 'var(--muted)'), ex: ['아직', '안 됨', 'It hasn\'t arrived.', '앞으로 올 거라는 기대가 빠진다.', '아직.'] },
+        { v: 'hitherto', k: '지금까지 (글)', base: 'YET과 이웃', core: '격식 있는 "그때까지"', from: 'hither(이쪽으로) + to', en: 'This was a hitherto unknown species.', note: 'yet 자리에 바꿔 넣지 못한다. 평소에는 <span class="en">previously unknown</span>(노트).', pic: () => TL(210) + NOW(300, 210, '발견') + RC(60, 200, 240, 20, 'var(--fog)', 'none', 8) + '<path d="M300 120 q-30 -40 -60 0 q30 40 60 0 M240 120 l-20 -16 v32 z" fill="var(--ok)" stroke="var(--obj-line)"/>' },
+        { v: 'heretofore', k: '이전까지 (법률)', base: 'YET과 이웃', core: '아주 격식 · 법률', from: 'here + to + fore', en: 'Heretofore, the rule was different.', note: '공식 기록의 옛말. 일상에서는 안 쓴다(노트).', pic: () => PAPER(90, 70, 110, 140, 8) + AR(214, 140, 250, 140, 'var(--muted)', 3) + PAPER(264, 70, 110, 140, 8) + CROSS(145, 140, 18) },
+      ] },
+    ],
+    q: [['Q1. 지금 보니?', '벌써 됨 → <b>already</b> / 여전함 → <b>still</b> / 아직 안 됨 → <b>not … yet</b>'], ['Q2. 앞선 때?', '어떤 일보다 먼저 → <b>beforehand</b> / 예전에 → <b>previously</b>'], ['Q3. 이어짐?', '끊김 없이 → <b>continuously</b> / 끈질기게 → <b>persistently</b>'], ['Q4. 글에서 "지금까지"', '<b>hitherto</b> / 법률 <b>heretofore</b>']],
+    body: ['앞에 선 하나를 긋고 — 선을 넘은 발 <b>ALREADY</b>, 선 위에서 계속 걷기 <b>STILL</b>, 선 앞에서 기다리기 <b>YET</b>.'],
+    check: ['beforehand · previously · continuously · persistently · hitherto · heretofore는 노트가 바꿔 쓰는 말이 아니라고 밝혀 "이웃"으로 적었다.'],
+  });
+  const SCENES = {
+    pack: { btn: '택배', place: '택배를 기다리는 날', pic: () => MEET(BX(440, 68, 50, 40)), lines: [['가족', 'Has the package arrived <b>yet</b>?', '택배 왔어?'], ['나', 'No, I\'m <b>still</b> waiting.', '아니, 아직도 기다리는 중.', true]], say: '질문은 <b>yet</b>, 계속되는 기다림은 <b>still</b>.' },
+    work: { btn: '회사', place: '퇴근 무렵', pic: () => MEET(BX(430, 64, 70, 44)), lines: [['동료', 'Are you done <b>already</b>?', '벌써 끝났어?'], ['나', 'Not <b>yet</b>.', '아직.', true]], say: 'already 질문에는 <b>놀람</b>이 담긴다 — "벌써?"' },
+  };
+  const SLOTS = { first: ['yet', 'neg'], slots: { pos: '긍정문', neg: '부정문', q: '질문' }, verbs: {
+    already: { pos: { ok: [['I', 's'], ['have', 'm'], ['already', 'd'], ['eaten', 'v']], bad: [['I', 's'], ['have', 'm'], ['eaten', 'v'], ['yet', 'd']], say: '긍정문의 "벌써"는 <b>already</b>.' }, neg: { ok: [['I', 's'], ['haven\'t', 'm'], ['eaten', 'v'], ['yet', 'd']], bad: [['I', 's'], ['haven\'t', 'm'], ['eaten', 'v'], ['already', 'd']], say: '"아직 안"은 <b>yet</b>.' }, q: { ok: [['Have', 'm'], ['you', 's'], ['already', 'd'], ['eaten?', 'v']], say: '놀람: "벌써 먹었어?"' } },
+    still: { pos: { ok: [['I', 's'], ['still', 'd'], ['live', 'v'], ['here', 'x']], say: '일반동사 앞.' }, neg: { ok: [['I', 's'], ['still', 'd'], ['don\'t', 'm'], ['know', 'v']], bad: [['I', 's'], ['don\'t', 'm'], ['still', 'd'], ['know', 'v']], say: 'not <b>앞</b>에 온다.' }, q: { ok: [['Are', 'b'], ['you', 's'], ['still', 'd'], ['here?', 'x']], say: '아직도 여기 있어?' } },
+    yet: { pos: { ok: [['Not', 'x'], ['yet', 'd']], say: '짧은 대답: 아직.' }, neg: { ok: [['It', 's'], ['hasn\'t', 'm'], ['come', 'v'], ['yet', 'd']], bad: [['It', 's'], ['yet', 'd'], ['hasn\'t', 'm'], ['come', 'v']], say: '일상에서는 문장 <b>끝</b>.' }, q: { ok: [['Has', 'm'], ['it', 's'], ['come', 'v'], ['yet?', 'd']], say: '질문도 문장 <b>끝</b>.' } },
+  } };
+</script>

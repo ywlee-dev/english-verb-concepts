@@ -1,0 +1,48 @@
+<!-- title: EXTREMELY ~ SLIGHTLY 개념 -->
+<!-- pron: extremely=/ɪkˈstriːm.li/[익스트**림**리]*, quite=/kwaɪt/[**콰**잇]*, slightly=/ˈslaɪt.li/[슬**라**이틀리]*, @extremely/excessively, @extremely/intensely, @extremely/exceedingly, @quite/considerably, @quite/pretty, @quite/reasonably, @slightly/somewhat, @slightly/marginally -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="09-politely-rudely.html">POLITELY ↔ RUDELY</a> · 다음: <a href="11-completely-almost.html">COMPLETELY · ALMOST</a></p>
+  <h1>EXTREMELY ~ SLIGHTLY — 얼마나 센가</h1>
+  <p class="lead">같은 "좋다 · 변했다"에 <b>얼마나</b>를 붙인다. 막대 길이는 그림용이고 <b>퍼센트가 아니다</b>(노트). 적정선을 넘었는지, 감정이 센지, 차이가 작은지에 따라 갈린다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 정도가 다른 장면이 바뀌는 그림|아주 쪽은 긴 막대, 선을 넘은 커피, 긴장한 사람, 훌륭한 보고서이고 꽤 쪽은 늘어난 매출, 별점, 무난한 가격표이며 조금 쪽은 짧은 막대, 조금 나아진 이해, 근소한 점수차다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 extremely · quite · slightly 묶음</li><li>꾸며 주는 동사: <a href="../concepts/66-increase.html">66 INCREASE</a> · <a href="../concepts/53-change.html">53 CHANGE</a></li></ul>
+</main>
+<script>
+  const CUPS = (n, lim) => Array.from({ length: n }, (_, i) => RC(48 + i * 46, 150, 32, 34, i < lim ? 'var(--card)' : 'var(--chip-on)', i < lim ? 'var(--obj-line)' : 'var(--bad)', 4) + LN('M' + (56 + i * 46) + ' 140 q-4 -7 0 -14', 'var(--fog)', 2)).join('');
+  const STARS = (n) => Array.from({ length: 5 }, (_, i) => tx(110 + i * 58, 160, 46, '★', i < n ? 'var(--gold)' : 'var(--line)')).join('') + Array.from({ length: 5 }, (_, i) => CR(110 + i * 58, 190, 6, i < n ? 'var(--gold)' : 'var(--line)', 'none')).join('');
+  const EXIST = adverbPage({
+    start: 'excessively',
+    groups: [
+      { name: '아주', items: [
+        { v: 'extremely', k: '매우', en: 'The movie was extremely good.', note: '정도가 매우 높다. <b>too</b>(너무 지나침)와 다르다(노트).', from: 'extreme(극도의) + ly', pic: () => BARX(130, .95) + CAPT('정도가 매우 높다'), ex: ['정도가', '매우 높다', 'The movie was good.', '얼마나 좋은지 빠진다.', '매우.'] },
+        { v: 'excessively', k: '지나치게', base: 'EXTREMELY', core: '적정선을 넘음', from: 'excessive(과도한) + ly', en: 'He drinks coffee excessively.', note: '기준에 비해 <b>지나치다</b>는 평가가 담긴다(노트).', pic: () => CUPS(8, 3) + LN('M180 110 V206', 'var(--ok)', 3) + tx(180, 100, 12, '적정선', 'var(--ok)') + CAPT('선을 넘었다', 228, 'var(--bad)'), ex: ['적정선을', '넘음', 'He drinks a lot of coffee.', '많다는 사실뿐, 지나치다는 평가가 빠진다.', '지나치게.'] },
+        { v: 'intensely', k: '몹시 · 강하게', base: 'EXTREMELY', core: '감정 · 감각이 셈', from: 'intense(강렬한) + ly', en: 'She felt intensely nervous.', note: '감정 · 관심의 세기가 강하다(노트).', pic: () => GRD + MAN(226, { f: 'sad', a: 'hug', c: 'var(--accent)' }) + [1, 2, 3].map((i) => LN('M' + (196 - i * 16) + ' 120 v70 M' + (256 + i * 16) + ' 120 v70', 'var(--bad)', 3, ' opacity="' + (1 - i * .25) + '"')).join(''), ex: ['감정이', '세다', 'She felt very nervous.', '많이 겹친다. 강렬한 느낌이 조금 약해진다.', '강하게.'] },
+        { v: 'exceedingly', k: '대단히 (격식)', base: 'EXTREMELY', core: '격식 있는 강조', from: 'exceeding(넘어서는) + ly', en: 'The report was exceedingly good.', note: '격식 있는 "매우". 나쁜 지나침이 아니다(노트).', pic: () => PAPER(170, 60, 110, 140, 8) + '<circle cx="290" cy="180" r="30" fill="var(--gold)" stroke="var(--obj-line)"/>' + tick(280, 182) },
+      ] },
+      { name: '꽤', items: [
+        { v: 'quite', k: '꽤 (또는 완전히)', en: 'The movie was quite good.', note: '뒤에 오는 말에 따라 다르다. <span class="en">quite different</span>는 "완전히 다른"도 된다(노트).', from: 'quiet(조용한)와 철자 조심', pic: () => BARX(130, .65) + CAPT('꽤'), ex: ['꽤', '그렇다', 'The movie was good.', '정도가 안 나온다.', '꽤.'] },
+        { v: 'considerably', k: '상당히', base: 'QUITE', core: '차이가 눈에 띔', from: 'considerable(상당한) + ly', en: 'Sales increased considerably.', note: '눈에 띄게 큰 변화. 통계표가 필수는 아니다(노트).', pic: () => GRD + RC(120, 180, 70, 60, 'var(--fog)') + RC(250, 90, 70, 150, 'var(--accent)') + tx(155, 170, 12, '지난달', 'var(--muted)') + tx(285, 80, 12, '이번 달', 'var(--accent)'), ex: ['눈에 띄게', '크다', 'Sales increased.', '늘어난 크기가 안 나온다.', '상당히.'] },
+        { v: 'pretty', k: '꽤 (말할 때)', base: 'QUITE', core: '편한 말투', from: 'pretty(예쁜)와 모양이 같다', en: 'It was pretty good.', note: '"예쁜"이 아니라 일상 말투의 <b>꽤</b>(노트).', pic: () => STARS(4), ex: ['편하게', '꽤', 'It was quite good.', '많이 겹친다. 친구끼리 편한 말투가 줄어든다.', '구어체의 꽤.'] },
+        { v: 'reasonably', k: '무난하게', base: 'QUITE', core: '납득할 만한 수준', from: 'reasonable(합리적인) + ly', en: 'The food is reasonably priced.', note: '부담되지 않는 수준. "합리적으로"라는 뜻도 있다(노트).', pic: () => '<path d="M130 120 h150 l40 40 l-40 40 h-150 z" fill="var(--card)" stroke="var(--ok)" stroke-width="2"/>' + CR(296, 160, 7) + tx(200, 168, 24, '9,000원', 'var(--ok)', ' font-weight="700"') },
+      ] },
+      { name: '조금', items: [
+        { v: 'slightly', k: '약간', en: 'The door is slightly open.', note: '작은 정도. <b>a bit</b>가 편한 말이다.', from: 'slight(약간의) + ly', pic: () => GRD + DOOR(210, 10), ex: ['조금만', '그렇다', 'The door is open.', '활짝 열린 것일 수도 있다.', '작은 정도로.'] },
+        { v: 'somewhat', k: '어느 정도', base: 'SLIGHTLY 쪽', core: '어느 정도 그렇다', from: 'some + what', en: 'I understand it somewhat better now.', note: '폭이 넓다. 꼭 slightly만큼 작지는 않다(노트).', pic: () => GRD + MAN(170, { f: 'flat', c: 'var(--ok)' }) + [0, 1, 2, 3].map((i) => RC(240 + i * 40, 120, 30, 30, i < 2 ? 'var(--chip-on)' : 'var(--bg)', i < 2 ? 'var(--accent)' : 'var(--line)') + (i < 2 ? tick(245 + i * 40, 136) : tx(255 + i * 40, 141, 16, '?', 'var(--muted)'))).join('') },
+        { v: 'marginally', k: '근소하게', base: 'SLIGHTLY', core: '차이가 아주 작음', from: 'marginal(근소한) + ly', en: 'This one lasts marginally longer.', note: '비교에서 차이가 아주 작다. 무의미하다는 뜻은 아니다(노트).', pic: () => RC(50, 100, 300, 28, 'var(--fog)', 'none') + RC(50, 150, 314, 28, 'var(--accent)', 'none') + LN('M350 90 V190', 'var(--muted)', 1.5, ' stroke-dasharray="3 3"') + CAPT('막대 끝의 차이가 아주 작다') },
+      ] },
+    ],
+    q: [['Q1. 얼마나 센가?', '매우 → <b>extremely</b> / 꽤 → <b>quite · pretty</b> / 조금 → <b>slightly</b>'], ['Q2. 매우, 초점은?', '지나침 → <b>excessively</b> / 감정이 셈 → <b>intensely</b> / 격식 → <b>exceedingly</b>'], ['Q3. 꽤, 초점은?', '큰 차이 → <b>considerably</b> / 무난함 → <b>reasonably</b>'], ['Q4. 조금, 초점은?', '어느 정도 → <b>somewhat</b> / 근소한 차이 → <b>marginally</b>']],
+    body: ['두 손을 활짝 벌리면 <b>EXTREMELY</b>, 어깨 너비면 <b>QUITE</b>, 엄지와 검지 사이면 <b>SLIGHTLY</b>.', '<b>EXCESSIVELY</b> — 손이 선을 넘으면 고개를 절레절레.'],
+    check: ['매우 · 꽤 · 조금의 순서는 그림용이다. 노트는 한 줄 눈금에 올리지 말라고 한다.', 'quite는 영국과 미국에서 세기가 다르게 들린다고 알려져 있다. 노트에는 없다.'],
+  });
+  const SCENES = {
+    movie: { btn: '영화관', place: '영화가 끝난 뒤', pic: () => MEET(BX(430, 62, 80, 46)), lines: [['친구', 'How was it?', '어땠어?'], ['나', '<b>Pretty</b> good. A <b>slightly</b> long ending, though.', '꽤 좋았어. 끝이 조금 길긴 했지만.', true]], say: '친구에게는 <b>pretty</b>, 작은 흠은 <b>slightly</b>.' },
+    work: { btn: '회의', place: '매출 회의', pic: () => MEET(BX(430, 88, 18, 20) + BX(456, 74, 18, 34) + BX(482, 60, 18, 48)), lines: [['상사', 'Did sales go up?', '매출이 올랐나요?'], ['나', 'Yes, <b>considerably</b>.', '네, 상당히요.', true]], say: '눈에 띄는 차이 — <b>considerably</b>.' },
+  };
+  const SLOTS = { first: ['extremely', 'adj'], slots: { adj: '형용사 앞', verb: '동사와 함께', no: '짝 조심' }, verbs: {
+    extremely: { adj: { ok: [['It', 's'], ['is', 'b'], ['extremely', 'd'], ['hot', 'a']], bad: [['It', 's'], ['is', 'b'], ['extreme', 'a'], ['hot', 'a']], say: '형용사를 꾸미는 것도 부사다.' }, verb: { ok: [['She', 's'], ['runs', 'v'], ['extremely', 'd'], ['fast', 'd']], bad: [['I', 's'], ['extremely', 'd'], ['like', 'v'], ['it', 'o']], say: '동사에 바로 붙지 않는다. <span class="en">I like it very much.</span>' }, no: { ok: [['It', 's'], ['is', 'b'], ['extremely', 'd'], ['good', 'a']], say: '칭찬도 된다. <span class="en">too good</span>은 "너무 좋아서 (문제)".' } },
+    pretty: { adj: { ok: [['It', 's'], ['is', 'b'], ['pretty', 'd'], ['good', 'a']], say: '꽤 좋다.' }, verb: { ok: [['She', 's'], ['runs', 'v'], ['pretty', 'd'], ['fast', 'd']], bad: [['She', 's'], ['pretty', 'd'], ['runs', 'v']], say: '형용사 · 부사 앞에만. 동사를 바로 못 꾸민다.' }, no: { ok: [['a', 'x'], ['pretty', 'd'], ['big', 'a'], ['dog', 'x']], say: '꽤 큰 개. "예쁘고 큰"이 아니다.' } },
+  } };
+</script>

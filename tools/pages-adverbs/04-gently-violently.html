@@ -1,0 +1,42 @@
+<!-- title: GENTLY ↔ VIOLENTLY 개념 -->
+<!-- pron: gently=/ˈdʒent.li/[**젠**틀리]*, violently=/ˈvaɪə.lənt.li/[**바**이얼런틀리]*, ../english-adverbs/gently/softly--quietly-and-gently.md, ../english-adverbs/gently/lightly--with-little-weight-or-pressure.md, ../english-adverbs/gently/tenderly--with-love-and-care.md, ../english-adverbs/violently/harshly--cruelly-and-severely.md, ../english-adverbs/violently/fiercely--with-intense-and-uncontrolled-force.md -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="03-slowly-quickly.html">SLOWLY ↔ QUICKLY</a> · 다음: <a href="05-carefully-carelessly.html">CAREFULLY ↔ CARELESSLY</a></p>
+  <h1>GENTLY ↔ VIOLENTLY — 같은 문, 다른 힘</h1>
+  <p class="lead">문에 들어가는 <b>힘</b>을 줄이면 gently, 거칠고 격렬하면 violently. 힘 말고 <b>소리 · 압력 · 다정함 · 가혹함</b>을 말하고 싶으면 다른 낱말이 있다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 부드럽거나 거친 장면이 바뀌는 그림|부드러운 쪽은 살살 닫는 문, 아기 방의 낮은 말, 유리 장식 닦기, 아이 머리 쓰다듬기이고 거친 쪽은 바람에 흔들리는 문, 가혹한 비판, 거센 바람이다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 gently · violently 묶음</li><li>꾸며 주는 동사: <a href="../concepts/62-touch.html">62 TOUCH</a> · <a href="../concepts/06-nudge.html">06 NUDGE</a> — nudge는 낱말 안에 "살짝"이 들어 있다.</li></ul>
+</main>
+<script>
+  const GUST = (x, y) => LN('M' + x + ' ' + y + ' h90 q20 0 16 -16 M' + (x + 14) + ' ' + (y + 18) + ' h110 M' + x + ' ' + (y + 36) + ' h80 q20 0 16 14', 'var(--water)', 4);
+  const EXIST = adverbPage({
+    start: 'tenderly',
+    groups: [
+      { name: '부드럽게', items: [
+        { v: 'gently', k: '살살 · 부드럽게', en: 'Mina closed the door gently.', note: '세게 · 거칠게 하지 않는다.', from: 'gentle(부드러운) → gently', pic: () => GRD + DOOR(270, 24) + MAN(180, { f: 'smile', a: 'both', c: 'var(--ok)' }), ex: ['살살', '세지 않게', 'Mina closed the door.', '살살 닫았는지 쾅 닫았는지 모른다.', '세거나 거칠지 않게.'] },
+        { v: 'softly', k: '낮고 부드럽게', base: 'GENTLY', core: '소리 · 힘을 낮춰', from: 'soft(부드러운) + ly', en: 'Please speak softly.', note: '아기가 자는 옆방에서 낮은 소리로. 아끼는 마음이 꼭 들어 있지는 않다(노트).', pic: () => GRD + RC(270, 170, 120, 50, 'var(--bg)', 'var(--obj-line)', 14) + CR(310, 176, 15, 'var(--skin)') + tx(350, 150, 15, 'z z', 'var(--muted)') + MAN(130, { f: 'shut', c: 'var(--ok)' }) + SAYB(196, 112, '쉿', 11), ex: ['소리를', '낮춰', 'Please speak gently.', '목소리가 작다기보다 다정하게 말하라는 뜻에 가까워진다.', '낮은 소리 · 약한 강도로.'] },
+        { v: 'lightly', k: '가볍게', base: 'GENTLY', core: '압력을 적게 실어', from: 'light(가벼운) + ly', en: 'Wipe it lightly.', note: '깨질까 봐 힘을 거의 주지 않는다(노트).', pic: () => GRD + DESK(220, 170) + GLASS(310, 180) + MAN(190, { a: 'fwd' }) + RC(236, 170, 44, 10, 'var(--card)') + tx(310, 112, 12, '누르는 힘 ↓', 'var(--accent)'), ex: ['누르는', '힘이 적다', 'Wipe it gently.', '많이 겹친다. 압력이 적다는 초점이 흐려진다.', '압력 · 무게를 적게 실어.'] },
+        { v: 'tenderly', k: '다정하게', base: 'GENTLY', core: '다정한 마음', from: 'tender(다정한) + ly', en: 'She stroked his hair tenderly.', note: '약한 힘이 아니라 <b>다정함 · 돌봄</b>이 느껴진다(노트).', pic: () => GRD + MAN(170, { f: 'smile', a: 'fwd', c: 'var(--ok)' }) + MAN(236, { f: 'sad', s: .62, c: 'var(--gold)' }) + HEART(214, 110) + HEART(250, 92), ex: ['다정한', '마음', 'She stroked his hair gently.', '힘이 약했다는 것뿐, 다정한 마음이 빠진다.', '애정 · 돌봄을 담아.'] },
+      ] },
+      { name: '거칠고 세게', items: [
+        { v: 'violently', k: '격렬하게', en: 'The wind shook the door violently.', note: '거칠고 파괴적인 힘이다. 사람에게 쓰면 폭력적이라는 뜻이 된다.', from: 'violent(격렬한) + ly', pic: () => GRD + GUST(40, 110) + '<g transform="rotate(8 290 240)">' + DOOR(260) + '</g>' + LN('M352 110 l14 -8 M356 150 l16 0 M352 200 l14 8', 'var(--bad)', 3), ex: ['거칠고', '파괴적', 'The wind shook the door.', '얼마나 격렬했는지 빠진다.', '격렬하고 거칠게.'] },
+        { v: 'harshly', k: '가혹하게', base: 'VIOLENTLY 쪽', core: '가혹하고 거슬림', from: 'harsh(가혹한) + ly', en: 'He criticized her harshly.', note: '몸의 힘이 아니라 <b>말 · 대우가 가혹하다</b>. 빛 · 소리가 거슬릴 때도 쓴다(노트).', pic: () => GRD + MAN(120, { f: 'sad', a: 'point', c: 'var(--bad)' }) + MAN(340, { f: 'sad', c: 'var(--sleeve)' }) + '<path d="M180 90 l16 -18 l14 12 l18 -18 l14 18 l20 -10 l-4 24 l18 12 l-20 12 l4 22 l-22 -8 l-14 18 l-14 -18 l-20 8 l2 -22 l-18 -10 z" fill="var(--bg)" stroke="var(--bad)" stroke-width="2"/>' + tx(222, 112, 13, '형편없어', 'var(--bad)', ' font-weight="600"'), ex: ['말이', '가혹하다', 'He criticized her strongly.', '세게 말했다는 뜻뿐, 가혹함이 빠진다.', '가혹하게.'] },
+        { v: 'fiercely', k: '맹렬하게', base: 'VIOLENTLY 쪽', core: '매우 강한 힘 · 의지', from: 'fierce(맹렬한) + ly', en: 'The wind blew fiercely.', note: '강도가 매우 세다. 폭력 · 통제 상실이 필수가 아니고 <b>치열한 경쟁</b>에도 쓴다(노트).', pic: () => GRD + GUST(50, 80) + GUST(80, 160) + TREE(310, 22) },
+      ] },
+    ],
+    q: [['Q1. 힘이 어떤가?', '세지 않음 → <b>gently</b> / 거칠고 격렬 → <b>violently</b>'], ['Q2. 부드러운 무엇?', '낮은 소리 → <b>softly</b> / 적은 압력 → <b>lightly</b> / 다정함 → <b>tenderly</b>'], ['Q3. 강한 무엇?', '가혹한 말 · 대우 → <b>harshly</b> / 맹렬한 힘 · 의지 → <b>fiercely</b>']],
+    body: ['<b>LIGHTLY</b> — 손끝으로 스치듯. <b>TENDERLY</b> — 가슴에 손을 얹고 쓰다듬듯.', '<b>FIERCELY</b> — 온몸에 힘. <b>HARSHLY</b> — 손가락을 세워 쏘아붙이듯.'],
+    check: ['fiercely 파일 이름에는 uncontrolled가 있지만 본문은 통제 상실이 필수가 아니라고 한다. 본문을 따랐다.', '노트 한 곳에 lightly의 반대 짝이 없다고 되어 있다. 짝을 억지로 만들지 않았다.'],
+  });
+  const desk = (b) => FL + TB(370, 560, 108) + b + P(310, 150, 1.4, 'var(--ok)') + P(610, 150, 1.4, 'var(--sleeve)');
+  const SCENES = {
+    baby: { btn: '아기 방', place: '아기가 자는 집', pic: () => desk(BX(420, 78, 90, 30) + CR(440, 84, 10, 'var(--skin)')), lines: [['가족', 'Close the door <b>gently</b>.', '문 살살 닫아.'], ['나', 'OK. I\'ll speak <b>softly</b>, too.', '응, 말도 작게 할게.', true]], say: '문 닫는 힘은 <b>gently</b>, 목소리는 <b>softly</b>.' },
+    work: { btn: '회사', place: '회의가 끝난 뒤', pic: () => desk(BX(430, 78, 60, 30)), lines: [['나', 'He criticized me so <b>harshly</b>.', '나를 너무 가혹하게 비판했어.', true], ['동료', 'The teams compete <b>fiercely</b> here.', '여기는 팀끼리 경쟁이 치열해.']], say: '가혹한 말은 <b>harshly</b>, 치열한 경쟁은 <b>fiercely</b>.' },
+  };
+  const SLOTS = { first: ['gently', 'obj'], slots: { end: '동사 뒤', obj: '목적어 뒤', mid: '동사 앞' }, verbs: {
+    gently: { end: { ok: [['She', 's'], ['spoke', 'v'], ['gently', 'd']], bad: [['She', 's'], ['spoke', 'v'], ['gentle', 'a']], say: '동사를 꾸미면 <b>gently</b>.' }, obj: { ok: [['She', 's'], ['closed', 'v'], ['it', 'o'], ['gently', 'd']], bad: [['She', 's'], ['closed', 'v'], ['gently', 'd'], ['it', 'o']], say: '목적어 <b>뒤</b>.' }, mid: { ok: [['She', 's'], ['gently', 'd'], ['closed', 'v'], ['it', 'o']], say: '동사 앞도 된다.' } },
+    harshly: { end: { ok: [['He', 's'], ['spoke', 'v'], ['harshly', 'd']], bad: [['He', 's'], ['spoke', 'v'], ['harsh', 'a']], say: '동사를 꾸미면 -ly.' }, obj: { ok: [['He', 's'], ['judged', 'v'], ['her', 'o'], ['harshly', 'd']], bad: [['He', 's'], ['judged', 'v'], ['harshly', 'd'], ['her', 'o']], say: '목적어 <b>뒤</b>.' }, mid: { ok: [['He', 's'], ['harshly', 'd'], ['judged', 'v'], ['her', 'o']], say: '동사 앞도 된다(글말 느낌).' } },
+  } };
+</script>

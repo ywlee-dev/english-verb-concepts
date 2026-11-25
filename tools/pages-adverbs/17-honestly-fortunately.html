@@ -1,0 +1,45 @@
+<!-- title: HONESTLY · FORTUNATELY 개념 -->
+<!-- pron: honestly=/ˈɑː.nɪst.li/[**아**니스틀리]*, fortunately=/ˈfɔːr.tʃən.ət.li/[**포**r처너틀리]*, unfortunately=/ʌnˈfɔːr.tʃən.ət.li/[언**포**r처너틀리]*, @honestly/truthfully, @honestly/candidly, @fortunately/luckily, @fortunately/happily, @unfortunately/regrettably, @unfortunately/unluckily -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="16-definitely-probably.html">DEFINITELY · PROBABLY</a> · 다음: <a href="18-only-also.html">ONLY · ALSO · ESPECIALLY</a></p>
+  <h1>HONESTLY · FORTUNATELY — 말하는 사람의 마음</h1>
+  <p class="lead">문장 맨 앞에 놓여 <b>솔직히 · 다행히 · 안타깝게도</b> 하고 말하는 사람의 마음을 얹는다. 사건 자체는 바뀌지 않는다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 말하는 사람의 마음이 바뀌는 그림|솔직 쪽은 털어놓기, 사실대로 답하기, 터놓고 말하기이고 다행 쪽은 잡은 기차, 운 좋은 기차, 갠 날씨이며 안타까움 쪽은 놓친 버스, 취소 안내, 운 나쁜 버스다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 honestly · fortunately · unfortunately 묶음</li><li>꾸며 주는 동사: <a href="../concepts/17-say.html">17 SAY</a> · <a href="../concepts/18-tell.html">18 TELL</a></li></ul>
+</main>
+<script>
+  const BUS2 = (x, c) => RC(x, 150, 120, 70, c || 'var(--gold)', 'var(--obj-line)', 8) + [0, 1, 2].map((i) => RC(x + 10 + i * 36, 162, 28, 24, 'var(--water)', 'none')).join('') + CR(x + 28, 226, 12, 'var(--obj-line)') + CR(x + 94, 226, 12, 'var(--obj-line)');
+  const EXIST = adverbPage({
+    start: 'candidly',
+    groups: [
+      { name: '솔직히', items: [
+        { v: 'honestly', k: '솔직히', en: 'Honestly, I don\'t think this will work.', note: '꾸밈없이 말한다는 태도. 불편한 말을 꺼내기 전에 자주 온다(노트).', from: 'honest(정직한) + ly — h는 소리 안 남', pic: () => GRD + MAN(120, { f: 'flat', a: 'hug', c: 'var(--ok)' }) + MAN(340, {}) + SAYB(222, 92, '솔직히 말하면…', 13, 'var(--accent)'), ex: ['꾸밈', '없이', 'I don\'t think this will work.', '솔직하게 꺼낸다는 완충이 빠진다.', '솔직히.'] },
+        { v: 'truthfully', k: '사실대로', base: 'HONESTLY', core: '아는 바를 거짓 없이', from: 'truthful(진실한) + ly', en: 'I answered truthfully.', note: '말투보다 <b>내용이 사실인지</b>(노트). 기억이 틀릴 수는 있다.', pic: () => GRD + MAN(120, { f: 'flat', a: 'up', c: 'var(--ok)' }) + [['본 것', 'var(--ok)'], ['못 본 것', 'var(--bad)']].map(([t, c], i) => RC(210, 84 + i * 60, 160, 44, 'var(--card)', c, 8) + tx(306, 111 + i * 60, 14, t) + (i ? CROSS(236, 166, 8) : tick(226, 108))).join(''), ex: ['거짓', '없이', 'I answered.', '거짓말했는지 사실대로인지 모른다.', '사실대로.'] },
+        { v: 'candidly', k: '터놓고', base: 'HONESTLY', core: '숨김없이 털어놓음', from: 'candid(솔직한) + ly', en: 'She spoke candidly about the design.', note: '불편한 점도 숨기지 않는다. 거친 말투일 필요는 없다(노트).', pic: () => GRD + MAN(110, { f: 'smile', a: 'fwd', c: 'var(--ok)' }) + RC(220, 70, 150, 110, 'var(--card)') + CR(260, 110, 18, 'var(--water)') + RC(296, 100, 54, 30, 'var(--gold)') + CR(323, 115, 30, 'none', 'var(--bad)') + tx(295, 210, 12, '여기가 아쉬워요', 'var(--bad)'), ex: ['숨김', '없이', 'She spoke truthfully.', '사실을 말했다는 뜻. 터놓는 태도가 약해진다.', '터놓고.'] },
+      ] },
+      { name: '다행히', items: [
+        { v: 'fortunately', k: '다행히', en: 'Fortunately, we caught the train.', note: '결과를 다행으로 여긴다.', from: 'fortunate(운 좋은) + ly', pic: () => GRD + BUS2(250, 'var(--sleeve)') + MAN(200, { f: 'smile', run: true, r: 8, a: 'fwd', c: 'var(--ok)' }), ex: ['다행', '이다', 'We caught the train.', '다행이라는 마음이 빠진다.', '다행히.'] },
+        { v: 'luckily', k: '운 좋게', base: 'FORTUNATELY', core: '좋은 운', from: 'lucky(운 좋은) → luckily', en: 'Luckily, we caught the train.', note: '편한 말. 순전한 우연일 필요는 없다(노트).', pic: () => [[0, -26], [26, 0], [0, 26], [-26, 0]].map(([a, b]) => CR(226 + a, 130 + b, 24, 'var(--ok)', 'var(--obj-line)')).join('') + LN('M226 160 q6 40 26 56', 'var(--ok)', 5), ex: ['운이', '좋다', 'Fortunately, we caught it.', '많이 겹친다. 운이 좋았다는 느낌이 약해진다.', '운 좋게.'] },
+        { v: 'happily', k: '반갑게도 (글)', base: 'FORTUNATELY', core: '반가운 결과', from: 'happy(기쁜) → happily', en: 'Happily, the results were good.', note: '글말. 흔한 뜻은 "행복하게"다(노트).', pic: () => PAPER(150, 60, 150, 160, 8) + '<circle cx="290" cy="90" r="30" fill="var(--gold)" stroke="var(--obj-line)"/>' + LN('M278 96 q12 12 24 0', '#333', 3) + CR(280, 84, 2.5, '#333') + CR(300, 84, 2.5, '#333') },
+      ] },
+      { name: '안타깝게도', items: [
+        { v: 'unfortunately', k: '안타깝게도', en: 'Unfortunately, we missed the bus.', note: '가장 자연스러운 말(노트). 거절을 시작할 때도 쓴다.', from: 'un + fortunately', pic: () => GRD + BUS2(290) + FAST(270, 180, 2) + MAN(120, { f: 'sad', a: 'fwd' }), ex: ['안타깝다', '', 'We missed the bus.', '안타까운 마음이 빠진다.', '안타깝게도.'] },
+        { v: 'regrettably', k: '유감스럽게도', base: 'UNFORTUNATELY', core: '격식 있는 유감', from: 'regrettable(유감스러운) → -ly', en: 'Regrettably, the event has been canceled.', note: '공지 · 사과문의 말. 속마음을 증명하지는 않는다(노트).', pic: () => RC(120, 60, 210, 150, 'var(--card)', 'var(--obj-line)', 6) + tx(225, 110, 20, '행사 취소', 'var(--bad)', ' font-weight="700"') + [0, 1, 2].map((i) => LN('M150 ' + (140 + i * 20) + ' h150', 'var(--fog)', 3)).join('') + CR(225, 60, 6, 'var(--bad)'), ex: ['공지의', '유감', 'Unfortunately, it was canceled.', '뜻은 같다. 공지다운 격식이 줄어든다.', '격식 있는 유감.'] },
+        { v: 'unluckily', k: '운 나쁘게', base: 'UNFORTUNATELY', core: '나쁜 운', from: 'un + luckily', en: 'Unluckily, we missed the bus.', note: '쓸 수는 있지만 드물다. 보통 unfortunately(노트).', pic: () => GRD + '<path d="M196 110 a14 14 0 0 1 6 -26 a20 20 0 0 1 38 -2 a15 15 0 0 1 10 28 z" fill="var(--fog)"/>' + LN('M206 118 l-5 12 M224 118 l-5 12 M242 118 l-5 12', 'var(--water)', 3) + MAN(224, { f: 'sad', y: 240 }) + BUS2(296) },
+      ] },
+    ],
+    q: [['Q1. 어떤 마음?', '솔직 → <b>honestly</b> / 다행 → <b>fortunately</b> / 안타까움 → <b>unfortunately</b>'], ['Q2. 솔직, 초점은?', '내용이 사실 → <b>truthfully</b> / 터놓는 태도 → <b>candidly</b>'], ['Q3. 다행, 말투는?', '편하게 → <b>luckily</b> / 글 → <b>happily</b>'], ['Q4. 안타까움, 말투는?', '공지 → <b>regrettably</b> / 드묾 → <b>unluckily</b>']],
+    body: ['<b>HONESTLY</b> — 가슴에 손. <b>FORTUNATELY</b> — 가슴을 쓸어내리기. <b>UNFORTUNATELY</b> — 고개 젓기.'],
+    check: ['0절 truthfully와 candidly의 차이는 "강조점"일 뿐이다. 노트도 서로 배타적이지 않다고 한다.', 'frankly는 노트 묶음 이름에만 있고 낱말 노트가 없어 넣지 않았다.'],
+  });
+  const SCENES = {
+    ans: { btn: '의견', place: '의견을 묻는 자리', pic: () => MEET(BX(430, 64, 70, 44)), lines: [['동료', 'What do you think?', '어떻게 생각해?'], ['나', '<b>Honestly</b>, it needs more work.', '솔직히 더 손봐야 해.', true]], say: '불편한 말 앞의 완충 — <b>Honestly,</b>' },
+    no: { btn: '거절', place: '예약 전화', pic: () => MEET(BX(452, 70, 24, 38)), lines: [['직원', '<b>Unfortunately</b>, we\'re full today.', '죄송하지만 오늘은 자리가 없어요.'], ['나', '<b>Luckily</b>, I\'m free tomorrow.', '다행히 내일은 시간이 돼요.', true]], say: '나쁜 소식을 열 때 <b>Unfortunately,</b>' },
+  };
+  const SLOTS = { first: ['unfortunately', 'front'], slots: { front: '문장 맨 앞', mid: '가운데', manner: '방식일 때' }, verbs: {
+    unfortunately: { front: { ok: [['Unfortunately,', 'd'], ['I', 's'], ['can\'t', 'm'], ['go', 'v']], bad: [['Unfortunate,', 'a'], ['I', 's'], ['can\'t', 'm'], ['go', 'v']], say: '맨 앞 + 쉼표.' }, mid: { ok: [['I', 's'], ['unfortunately', 'd'], ['can\'t', 'm'], ['go', 'v']], say: '가운데도 된다.' }, manner: { ok: [['It', 's'], ['was', 'b'], ['unfortunate', 'a']], bad: [['It', 's'], ['was', 'b'], ['unfortunately', 'd']], say: 'be 뒤 혼자면 <b>형용사</b>.' } },
+    happily: { front: { ok: [['Happily,', 'd'], ['he', 's'], ['lived', 'v']], say: '맨 앞이면 "다행히" — 살아남았다.' }, mid: { ok: [['She', 's'], ['happily', 'd'], ['agreed', 'v']], say: '가운데면 "기꺼이".' }, manner: { ok: [['He', 's'], ['lived', 'v'], ['happily', 'd']], say: '끝이면 "행복하게" 살았다. <b>자리가 뜻을 바꾼다</b>.' } },
+  } };
+</script>

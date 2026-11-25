@@ -1,0 +1,42 @@
+<!-- title: DELIBERATELY ↔ ACCIDENTALLY 개념 -->
+<!-- pron: deliberately=/dɪˈlɪb.ɚ.ət.li/[딜**리**버러틀리]*, accidentally=/ˌæk.sɪˈden.təl.i/[액시**덴**털리]*, ../english-adverbs/deliberately/purposely--on-purpose-to-make-a-point.md, ../english-adverbs/deliberately/intentionally--with-conscious-intent.md, ../english-adverbs/accidentally/mistakenly--because-of-a-mistaken-belief.md, ../english-adverbs/accidentally/unintentionally--without-meaning-to.md -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="07-easily-hard.html">EASILY ↔ HARD</a> · 다음: <a href="09-politely-rudely.html">POLITELY ↔ RUDELY</a></p>
+  <h1>DELIBERATELY ↔ ACCIDENTALLY — 같은 컵, 다른 마음</h1>
+  <p class="lead">컵이 떨어진 것은 같다. <b>일부러</b>면 deliberately, <b>어쩌다</b>면 accidentally. 무슨 목적인지, 무엇이 잘못됐는지까지 말하면 낱말이 갈린다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 일부러 또는 어쩌다 한 장면이 바뀌는 그림|일부러 쪽은 컵 떨어뜨리기, 비워 둔 자리, 직접 지운 파일이고 어쩌다 쪽은 팔꿈치에 걸린 컵, 엉뚱한 사람에게 보낸 사진, 뜻하지 않게 상처 준 농담이다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 deliberately · accidentally 묶음</li><li>꾸며 주는 동사: <a href="../concepts/01-break.html">01 BREAK</a> · <a href="../concepts/43-send.html">43 SEND</a></li></ul>
+</main>
+<script>
+  const MIND = (x, y, t, c) => CR(x - 34, y + 34, 4, 'var(--bg)') + CR(x - 26, y + 24, 6, 'var(--bg)') + '<ellipse cx="' + x + '" cy="' + y + '" rx="' + (t.length * 7 + 20) + '" ry="20" fill="var(--bg)" stroke="' + (c || 'var(--obj-line)') + '" stroke-width="1.5"/>' + tx(x, y + 5, 13, t, c || 'var(--text)', ' font-weight="600"');
+  const CUP = (x, y, r) => '<g transform="rotate(' + r + ' ' + x + ' ' + y + ')">' + RC(x - 14, y - 14, 28, 28, 'var(--card)', 'var(--obj-line)', 4) + LN('M' + (x + 14) + ' ' + (y - 7) + ' q12 7 0 14', 'var(--obj-line)', 3) + '</g>';
+  const EXIST = adverbPage({
+    start: 'mistakenly',
+    groups: [
+      { name: '일부러', items: [
+        { v: 'deliberately', k: '일부러 · 고의로', en: 'Tom dropped the cup deliberately.', note: '우연이 아니라 그러려고 했다.', from: 'deliberate(고의의) + ly', pic: () => GRD + DESK(60, 110) + MAN(210, { a: 'fwd' }) + CUP(270, 206, 20) + AR(270, 170, 270, 186, 'var(--accent)', 3) + MIND(290, 90, '떨어뜨릴 거야', 'var(--accent)'), ex: ['그러려고', '했다', 'Tom dropped the cup.', '일부러인지 실수인지 모른다.', '일부러.'] },
+        { v: 'purposely', k: '목적이 있어 일부러', base: 'DELIBERATELY', core: '특정 목적', from: 'purpose(목적) + ly', en: 'I purposely left the seat empty.', note: '다음 사람을 위해. 대화에서는 <span class="en">on purpose</span>가 더 흔하다(노트).', pic: () => GRD + MAN(110, { f: 'smile', c: 'var(--ok)' }) + [210, 290].map((x) => LN('M' + x + ' 160 V240 M' + x + ' 200 h44 V240', 'var(--wood)', 6)).join('') + MIND(220, 92, '다음 사람 자리', 'var(--accent)'), ex: ['목적이', '있다', 'I left the seat empty.', '깜빡 비워 둔 것일 수도 있다.', '목적이 있어 일부러.'] },
+        { v: 'intentionally', k: '의도적으로', base: 'DELIBERATELY', core: '의도했음을 분명히', from: 'intentional(의도적인) + ly', en: 'The file was intentionally deleted.', note: '사고가 아니라 의도한 행동이었다. 법 · 일상에 다 쓴다. purposely와 많이 겹친다(노트).', pic: () => GRD + RC(150, 80, 200, 120, 'var(--card)', 'var(--obj-line)', 8) + tx(250, 118, 14, '정말 삭제할까요?', 'var(--text)') + RC(175, 144, 66, 32, 'var(--chip-on)', 'var(--bad)', 8) + tx(208, 165, 13, '예', 'var(--bad)', ' font-weight="700"') + RC(260, 144, 66, 32, 'var(--bg)', 'var(--line)', 8) + tx(293, 165, 13, '아니요', 'var(--muted)') + at(208, 180, 0, POINTER.replace(/height="56"/, 'height="18"')), ex: ['의도가', '분명', 'The file was deleted.', '사고인지 의도인지 모른다.', '의도한 행동임을 분명히.'] },
+      ] },
+      { name: '어쩌다', items: [
+        { v: 'accidentally', k: '실수로 · 우연히', en: 'Mina accidentally dropped the cup.', note: '그러려던 것이 아니다.', from: 'accidental(우연한) + ly', pic: () => GRD + DESK(220, 140) + MAN(190, { f: 'o', a: 'hip', c: 'var(--ok)' }) + CUP(262, 212, 60) + LN('M224 172 l14 4 M228 160 l14 -2', 'var(--bad)', 3) + MIND(300, 96, '앗!'), ex: ['그러려던', '게 아님', 'Mina dropped the cup.', '일부러라고 오해할 수도 있다.', '어쩌다 · 실수로.'] },
+        { v: 'mistakenly', k: '착각해서', base: 'ACCIDENTALLY', core: '잘못된 판단 · 행동', from: 'mistaken(잘못 안) + ly', en: 'I mistakenly sent it to the wrong person.', note: '같은 이름이 둘이라 엉뚱한 사람에게. <b>무엇이 틀렸는지</b>가 초점(노트).', pic: () => GRD + MAN(90, {}) + RC(116, 168, 24, 34, 'var(--card)') + [['김민수 (친구)', 96, 'var(--ok)'], ['김민수 (부장)', 182, 'var(--bad)']].map(([t, y, c]) => RC(260, y - 24, 140, 46, 'var(--card)', c, 8) + tx(330, y + 4, 14, t, c, ' font-weight="600"')).join('') + AR(150, 176, 250, 180, 'var(--bad)', 3) + AR(150, 166, 250, 102, 'var(--fog)', 2, true) + CROSS(206, 196, 8), ex: ['잘못', '알았다', 'I accidentally sent it to him.', '많이 겹친다. 사람을 잘못 안 것이 까닭이라는 점이 흐려진다.', '잘못 알고.'] },
+        { v: 'unintentionally', k: '의도 없이', base: 'ACCIDENTALLY', core: '의도하지 않은 결과', from: 'un + intentionally', en: 'I unintentionally hurt her feelings.', note: '말은 했지만 <b>그 결과를 바라지 않았다</b>(노트). 책임이 저절로 사라지지는 않는다.', pic: () => GRD + MAN(110, { f: 'smile', c: 'var(--sleeve)' }) + MAN(340, { f: 'sad', c: 'var(--ok)' }) + SAYB(180, 92, '농담이야', 13) + HEART(296, 150) + LN('M296 126 l-5 8 l8 6 l-5 8', 'var(--bg)', 3), ex: ['결과를', '안 바람', 'I hurt her feelings.', '일부러 상처 준 것처럼 들린다.', '의도하지 않고.'] },
+      ] },
+    ],
+    q: [['Q1. 일부러인가?', '그렇다 → <b>deliberately</b> / 아니다 → <b>accidentally</b>'], ['Q2. 일부러, 초점은?', '목적 → <b>purposely</b> / 의도 여부 → <b>intentionally</b> (많이 겹침)'], ['Q3. 아닌데, 초점은?', '잘못 알았다 → <b>mistakenly</b> / 바라지 않은 결과 → <b>unintentionally</b>']],
+    body: ['<b>DELIBERATELY</b> — 눈을 마주치며 천천히 손을 놓기. <b>ACCIDENTALLY</b> — 팔꿈치가 툭, "앗!"', '<b>MISTAKENLY</b> — 이마를 탁, "이게 아니었네".'],
+    check: ['deliberately에는 "신중하게 · 천천히"라는 다른 뜻도 있다. 노트에는 없다.', '고정 문장의 컵 장면은 새로 지었다.'],
+  });
+  const desk = (b) => FL + TB(370, 560, 108) + b + P(310, 150, 1.4, 'var(--ok)') + P(610, 150, 1.4, 'var(--sleeve)');
+  const SCENES = {
+    msg: { btn: '메시지', place: '잘못 보낸 메시지', pic: () => desk(BX(452, 70, 24, 38)), lines: [['친구', 'Why did you send me this?', '이거 왜 나한테 보냈어?'], ['나', 'Sorry, I <b>accidentally</b> sent it.', '미안, 실수로 보냈어.', true]], say: '일상에서는 <b>accidentally · by accident</b>가 가장 흔하다.' },
+    file: { btn: '회사', place: '파일이 사라진 회사', pic: () => desk(BX(420, 62, 90, 46)), lines: [['상사', 'Was it deleted <b>deliberately</b>?', '일부러 지운 건가요?'], ['나', 'No, it wasn\'t <b>intentional</b>.', '아니요, 의도한 건 아니에요.', true]], say: 'be 뒤에서는 부사가 아니라 <b>형용사 intentional</b>.' },
+  };
+  const SLOTS = { first: ['accidentally', 'mid'], slots: { mid: '동사 앞', end: '문장 끝', be: 'be 뒤' }, verbs: {
+    accidentally: { mid: { ok: [['I', 's'], ['accidentally', 'd'], ['broke', 'v'], ['it', 'o']], bad: [['I', 's'], ['accidental', 'a'], ['broke', 'v'], ['it', 'o']], say: '동사 <b>앞</b>이 흔하다. 같은 뜻: <span class="en">by accident</span>.' }, end: { ok: [['I', 's'], ['broke', 'v'], ['it', 'o'], ['accidentally', 'd']], bad: [['I', 's'], ['broke', 'v'], ['accidentally', 'd'], ['it', 'o']], say: '끝도 된다. 동사와 목적어 사이에는 안 온다.' }, be: { ok: [['It', 's'], ['was', 'b'], ['accidentally', 'd'], ['deleted', 'v']], say: 'be와 -ed형 사이.' } },
+    deliberately: { mid: { ok: [['He', 's'], ['deliberately', 'd'], ['lied', 'v']], say: '동사 앞.' }, end: { ok: [['He', 's'], ['did', 'v'], ['it', 'o'], ['deliberately', 'd']], bad: [['He', 's'], ['did', 'v'], ['it', 'o'], ['deliberate', 'a']], say: '같은 뜻: <span class="en">He did it on purpose.</span>' }, be: { ok: [['It', 's'], ['was', 'b'], ['deliberate', 'a']], bad: [['It', 's'], ['was', 'b'], ['deliberately', 'd']], say: 'be 뒤에 혼자 오면 <b>형용사</b> deliberate.' } },
+  } };
+</script>

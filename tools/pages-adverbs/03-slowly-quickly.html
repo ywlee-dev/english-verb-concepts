@@ -1,0 +1,43 @@
+<!-- title: SLOWLY ↔ QUICKLY 개념 -->
+<!-- pron: slowly=/ˈsloʊ.li/[슬**로**울리]*, quickly=/ˈkwɪk.li/[**퀵**클리]*, ../english-adverbs/slowly/sluggishly--slow-and-lacking-energy.md, ../english-adverbs/slowly/leisurely--slow-and-relaxed.md, ../english-adverbs/slowly/unhurriedly--calm-without-rushing.md, ../english-adverbs/quickly/hastily--hurriedly-and-carelessly.md, ../english-adverbs/quickly/swiftly--smoothly-and-fast.md, ../english-adverbs/quickly/rapidly--fast-and-intense.md, ../english-adverbs/quickly/promptly--right-on-time.md -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="02-again.html">되풀이되는 모양</a> · 다음: <a href="04-gently-violently.html">GENTLY ↔ VIOLENTLY</a></p>
+  <h1>SLOWLY ↔ QUICKLY — 빠르기와 그 까닭</h1>
+  <p class="lead">slowly · quickly는 <b>빠르기</b>만 말한다. 여기에 <b>굼떠서 · 여유로워서 · 서둘러서 · 지체 없이</b>가 붙으면 다른 낱말이 된다.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 느리거나 빠른 장면이 바뀌는 그림|느린 쪽은 걷기, 지친 계단, 공원 산책, 차근차근한 설명이고 빠른 쪽은 달리기, 급히 훑는 보고서, 출동하는 팀, 퍼지는 소식, 바로 온 답장이다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 slowly · quickly 묶음</li><li>꾸며 주는 동사: <a href="../concepts/08-go.html">08 GO</a> — run은 낱말 안에 빠르기가 있고, walk quickly는 부사로 붙인다.</li></ul>
+</main>
+<script>
+  const EXIST = adverbPage({
+    start: 'hastily',
+    groups: [
+      { name: '느리게', items: [
+        { v: 'slowly', k: '느리게', en: 'Mina walked slowly.', note: '빠르기만 느리다. 까닭은 말하지 않는다.', from: 'slow(느린) + ly', pic: () => GRD + MAN(230, {}) + LN('M130 234 h14 M164 234 h14 M198 234 h10', 'var(--fog)', 4) },
+        { v: 'sluggishly', k: '굼뜨게', base: 'SLOWLY', core: '굼뜨고 기운 없이', from: 'sluggish(굼뜬) + ly', en: 'He climbed the stairs sluggishly.', note: '지쳐서 몸이 둔하다. 시스템이 굼뜰 때도 쓴다(노트).', pic: () => LN('M40 240 H110 V214 H190 V188 H270 V162 H350 V136 H410', 'var(--obj-line)', 2.5) + MAN(226, { y: 188, f: 'sad', r: 10 }) + tx(300, 92, 18, 'z z', 'var(--muted)'), ex: ['기운 없어', '굼뜨다', 'He climbed slowly.', '느린 까닭(기운 없음)이 빠진다.', '굼뜨고 활력 없이.'] },
+        { v: 'leisurely', k: '느긋하게', base: 'SLOWLY', core: '즐기는 여유', from: 'leisure(여가) + ly — 형용사와 모양이 같다', en: 'We walked leisurely through the park.', note: '늦어서 문제가 아니라 <b>즐기는 여유</b>다(노트).', pic: () => GRD + TREE(90) + TREE(350) + MAN(200, { f: 'smile' }) + MAN(255, { f: 'smile', c: 'var(--ok)' }), ex: ['즐기며', '느긋하다', 'We walked slowly.', '여유롭고 즐겁다는 느낌이 빠진다.', '느긋하고 편안하게.'] },
+        { v: 'unhurriedly', k: '서두르지 않고', base: 'SLOWLY', core: '서두르지 않는 차분함', from: 'un + hurried(서두른) + ly', en: 'She explained it unhurriedly.', note: '차근차근 설명한다. 시간 압박이 꼭 있어야 하는 것은 아니다(노트).', pic: () => GRD + MAN(120, { f: 'smile', a: 'point', c: 'var(--ok)' }) + MAN(350, { f: 'smile' }) + ['①', '②', '③'].map((t, i) => SAYB(192 + i * 44, 110, t, 14)).join(''), ex: ['차분히', '안 서두름', 'She explained it slowly.', '말이 느렸다는 뜻이 되어 차분함이 흐려진다.', '서두르지 않고 차분하게.'] },
+      ] },
+      { name: '빠르게', items: [
+        { v: 'quickly', k: '빠르게', en: 'Mina walked quickly.', note: '짧은 시간에 한다. 까닭은 말하지 않는다.', from: 'quick(빠른) + ly', pic: () => GRD + MAN(250, { run: true, r: 10, a: 'up' }) + FAST(190, 150) },
+        { v: 'hastily', k: '서둘러', base: 'QUICKLY', core: '서두름', from: 'hasty(조급한) → hastily (y → i)', en: 'I read the report hastily.', note: '회의 직전에 급히 훑는다. 실수했어야만 쓰는 말은 아니다(노트).', pic: () => GRD + DESK(170, 180) + PAPER(220, 120, 60, 60, 4) + MAN(130, { f: 'sad', a: 'both' }) + CLOCK(360, 84, 30, 4.4) + tx(360, 134, 12, '회의 1분 전', 'var(--bad)'), ex: ['급히', '서둘러', 'I read it quickly.', '빠르다는 것뿐, 쫓기듯 서두른 느낌이 빠진다.', '서둘러.'] },
+        { v: 'swiftly', k: '신속하게', base: 'QUICKLY', core: '신속한 움직임 · 행동', from: 'swift(신속한) + ly', en: 'They acted swiftly.', note: '문제를 알고 재빨리 움직인다. 능숙함이 필수는 아니다(노트).', pic: () => GRD + [130, 200, 270].map((x, i) => MAN(x, { run: true, r: 10, a: 'fwd', c: ['var(--accent)', 'var(--ok)', 'var(--sleeve)'][i], s: .9 })).join('') + FAST(96, 160) + RC(350, 190, 44, 50, 'var(--gold)') + tx(372, 222, 24, '!', 'var(--bad)', ' font-weight="700"') },
+        { v: 'rapidly', k: '빠르게 번지듯', base: 'QUICKLY', core: '빠른 진행 · 변화', from: 'rapid(급격한) + ly', en: 'The news spread rapidly.', note: '퍼지고 늘고 바뀌는 <b>진행</b>이 빠르다(노트).', pic: () => { const pt = [[225, 150], [160, 110], [160, 190], [290, 110], [290, 190], [90, 80], [90, 150], [90, 220], [360, 80], [360, 150], [360, 220]]; return [[0, 1], [0, 2], [0, 3], [0, 4], [1, 5], [1, 6], [2, 6], [2, 7], [3, 8], [3, 9], [4, 9], [4, 10]].map(([a, b]) => LN('M' + pt[a] + ' L' + pt[b], 'var(--accent)', 2)).join('') + pt.map((q, i) => CR(q[0], q[1], i ? 15 : 22, i ? 'var(--chip-on)' : 'var(--accent)', 'var(--accent)')).join(''); }, ex: ['번짐이', '빠르다', 'The news spread quickly.', '많이 겹친다. 급하게 번지는 느낌이 조금 약해진다.', '진행 · 변화가 빠르게.'] },
+        { v: 'promptly', k: '지체 없이', base: 'QUICKLY', core: '지체 없는 대응', from: 'prompt(즉각적인) + ly', en: 'She replied promptly.', note: '요청에 바로 대응한다. "정시에"라는 뜻도 있다(노트).', pic: () => [[70, 70, '9:00 문의'], [250, 160, '9:02 답장']].map(([x, y, t]) => RC(x, y, 120, 72, 'var(--card)') + LN('M' + x + ' ' + y + ' l60 40 l60 -40', 'var(--obj-line)', 2) + tx(x + 60, y + 94, 13, t, 'var(--accent)', ' font-weight="600"')).join('') + AR(196, 120, 244, 168, 'var(--accent)', 3), ex: ['바로', '응하다', 'She replied quickly.', '많이 겹친다. 기다리게 하지 않았다는 초점이 약해진다.', '지체 없이.'] },
+      ] },
+    ],
+    q: [['Q1. 빠르기만?', '<b>slowly · quickly</b>'], ['Q2. 왜 느린가?', '굼떠서 → <b>sluggishly</b> / 즐기느라 → <b>leisurely</b> / 차분해서 → <b>unhurriedly</b>'], ['Q3. 무엇이 빠른가?', '쫓기듯 서두름 → <b>hastily</b> / 움직임 → <b>swiftly</b> / 진행 · 변화 → <b>rapidly</b> / 대응 → <b>promptly</b>']],
+    body: ['<b>SLUGGISHLY</b> — 발을 질질. <b>LEISURELY</b> — 뒷짐 지고 어슬렁.', '<b>HASTILY</b> — 종이를 급히 휙휙. <b>PROMPTLY</b> — 부르면 바로 "네!"'],
+    check: ['노트 파일 이름의 hastily(hurriedly-and-carelessly) · swiftly(smoothly)와 달리, 본문은 실수 · 능숙함이 필수가 아니라고 한다. 본문을 따랐다.', '부사 leisurely는 격식 있게 들릴 수 있다. 일상에서는 <span class="en">at a leisurely pace</span>도 흔하니 사전으로 확인할 것.', 'fast 풀이는 노트에 없는 문법 설명이다.'],
+  });
+  const desk = (b) => FL + TB(370, 560, 108) + b + P(310, 150, 1.4, 'var(--ok)') + P(610, 150, 1.4, 'var(--sleeve)');
+  const SCENES = {
+    meet: { btn: '회의 직전', place: '회의실 앞', pic: () => desk(BX(440, 72, 40, 36) + CLOCK(520, 70, 18, 4.4)), lines: [['동료', 'Did you read the report?', '보고서 읽었어?'], ['나', 'Only <b>hastily</b>. Can you speak <b>slowly</b>?', '급하게만. 천천히 말해 줄래?', true]], say: '쫓겨서 읽음은 <b>hastily</b>, 말 빠르기는 <b>slowly</b>.' },
+    mail: { btn: '고객 응대', place: '고객 센터', pic: () => desk(BX(430, 66, 76, 42) + LN('M430 66 l38 24 l38 -24', OL, 2)), lines: [['고객', 'Thank you for replying so <b>promptly</b>.', '이렇게 바로 답해 주셔서 고마워요.'], ['나', 'Of course. We\'ll act <b>quickly</b>.', '물론이죠. 빨리 처리할게요.', true]], say: '요청에 바로 응함 — <b>promptly</b>.' },
+  };
+  const SLOTS = { first: ['quickly', 'end'], slots: { end: '동사 뒤', obj: '목적어 뒤', mid: '동사 앞' }, verbs: {
+    quickly: { end: { ok: [['She', 's'], ['walked', 'v'], ['quickly', 'd']], bad: [['She', 's'], ['walked', 'v'], ['quick', 'a']], say: '동사를 꾸미면 <b>-ly</b>. (짧은 말 <span class="en">Come quick!</span>은 회화에서 쓴다.)' }, obj: { ok: [['She', 's'], ['read', 'v'], ['it', 'o'], ['quickly', 'd']], bad: [['She', 's'], ['read', 'v'], ['quickly', 'd'], ['it', 'o']], say: '동사와 목적어 사이에 끼우지 않는다.' }, mid: { ok: [['She', 's'], ['quickly', 'd'], ['left', 'v']], say: '동사 앞도 된다 — "얼른".' } },
+    fast: { end: { ok: [['She', 's'], ['runs', 'v'], ['fast', 'd']], bad: [['She', 's'], ['runs', 'v'], ['fastly', 'd']], say: 'fast는 형용사와 부사가 <b>같은 모양</b>. fastly는 없다.' }, obj: { ok: [['She', 's'], ['drove', 'v'], ['it', 'o'], ['fast', 'd']], say: '목적어 뒤.' }, mid: { ok: [['She', 's'], ['runs', 'v'], ['fast', 'd']], bad: [['She', 's'], ['fast', 'd'], ['runs', 'v']], say: 'fast는 동사 <b>뒤</b>에만. 동사 앞은 quickly.' } },
+  } };
+</script>

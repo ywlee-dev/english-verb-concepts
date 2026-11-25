@@ -1,0 +1,44 @@
+<!-- title: BARELY · HARDLY 개념 -->
+<!-- pron: barely=/ˈber.li/[**베**얼리]*, hardly=/ˈhɑːrd.li/[**하**r들리]*, not at all=/nɑːt ət ˈɔːl/[낫 애**롤**]*, @barely/narrowly, @barely/precariously, @hardly/negligibly, @hardly/insufficiently, @not-at-all/remotely, @not-at-all/whatsoever -->
+<main>
+  <p class="note"><a href="index.html">← 부사 목록</a> · 이전: <a href="11-completely-almost.html">COMPLETELY · ALMOST</a> · 다음: <a href="13-suddenly-gradually.html">SUDDENLY ↔ GRADUALLY</a></p>
+  <h1>BARELY · HARDLY · NOT AT ALL — 겨우, 거의 안, 전혀</h1>
+  <p class="lead">겨우 되면 barely, 거의 안 되면 hardly, 전혀 아니면 not at all. barely와 hardly는 겹치는 쓰임이 있다(노트). 한 줄 눈금이 아니라 <b>묻는 것이 다르다</b>.</p>
+  {{PRON}}
+  {{ADVERB|낱말을 누르면 겨우, 거의 안, 전혀 장면이 바뀌는 그림|겨우 쪽은 겨우 닿은 손, 한 점 차 승리, 모서리의 꽃병이고 거의 안 쪽은 잘 안 들리는 말, 거의 안 변한 온도, 모자란 예산이며 전혀 쪽은 안 피곤한 사람, 하나도 안 닮은 두 계획, 텅 빈 의견이다.}}
+  <h2>5. 연결하면</h2>
+  <ul><li>자료: english-adverbs 노트의 barely · hardly · not-at-all 묶음</li><li>함정 짝: <a href="07-easily-hard.html">EASILY ↔ HARD</a> — hard와 hardly는 다른 말</li></ul>
+</main>
+<script>
+  const EXIST = adverbPage({
+    start: 'narrowly',
+    groups: [
+      { name: '겨우', items: [
+        { v: 'barely', k: '겨우 · 간신히', en: 'I could barely reach it.', note: '문맥에 따라 "겨우" 또는 "거의 ~않게"(노트).', from: 'bare(맨, 겨우의) + ly', pic: () => GRD + RC(280, 76, 110, 10, 'var(--wood)') + CR(300, 62, 13, 'var(--gold)') + MAN(230, { a: 'point', y: 232, f: 'o' }) + LN('M278 150 L290 92', 'var(--skin)', 7) + LN('M222 240 h16', 'var(--fog)', 4), ex: ['겨우', '닿음', 'I could reach it.', '쉽게 닿은 것처럼 들린다.', '겨우.'] },
+        { v: 'narrowly', k: '근소한 차이로', base: 'BARELY 쪽', core: '결과의 작은 차이', from: 'narrow(좁은) + ly', en: 'We narrowly won the game.', note: '이기고 지고 피하는 <b>차이</b>가 아주 작다. 질 때도 쓴다(노트).', pic: () => RC(90, 100, 260, 100, 'var(--card)', 'var(--obj-line)', 10) + tx(160, 166, 46, '81', 'var(--accent)', ' font-weight="700"') + tx(220, 160, 30, ':', 'var(--muted)') + tx(280, 166, 46, '80', 'var(--muted)', ' font-weight="700"') + LN('M130 182 h60', 'var(--accent)', 5), ex: ['한 끗', '차이', 'We won the game.', '얼마나 아슬아슬했는지 빠진다.', '아주 작은 차이로.'] },
+        { v: 'precariously', k: '위태롭게', base: 'BARELY와 이웃', core: '떨어질 듯 불안정', from: 'precarious(위태로운) + ly', en: 'The vase sat precariously on the edge.', note: 'barely를 바꿔 쓰는 말이 아니다. <b>지금 상태가 위태롭다</b>(노트).', pic: () => GRD + DESK(90, 160) + '<g transform="rotate(14 250 180)"><path d="M236 180 q-14 -30 4 -50 h24 q18 20 4 50 z" fill="var(--sleeve)" stroke="var(--obj-line)"/></g>' + LN('M290 140 l10 -6 M292 156 h12', 'var(--bad)', 3), ex: ['떨어질', '듯하다', 'The vase sat on the edge.', '불안하다는 느낌이 약해진다.', '위태롭게.'] },
+      ] },
+      { name: '거의 안', items: [
+        { v: 'hardly', k: '거의 ~않다', en: 'I could hardly hear her.', note: '거의 안 들렸다. <b>hard(열심히)와 다른 말</b>.', from: 'hard + ly지만 뜻이 다르다', pic: () => GRD + MAN(110, { f: 'o', c: 'var(--ok)' }) + SOUND(146, 140, 1, 'var(--fog)') + MAN(330, { f: 'sad', a: 'hip' }) + LN('M356 128 q14 -14 6 -28', 'var(--accent2)', 3), ex: ['거의', '안 됨', 'I couldn\'t hear her.', '전혀 안 들렸다는 뜻이 된다.', '거의 ~않게.'] },
+        { v: 'negligibly', k: '무시할 만큼 작게', base: 'HARDLY와 이웃', core: '차이가 너무 작음', from: 'negligible(무시해도 될) + y', en: 'The temperature changed negligibly.', note: '변하긴 했지만 <b>영향을 무시해도 된다</b>(노트).', pic: () => [[130, 60], [290, 62]].map(([x, h]) => RC(x - 12, 70, 24, 110, 'var(--bg)', 'var(--obj-line)', 12) + CR(x, 190, 20, 'var(--bad)') + RC(x - 6, 176 - h, 12, h + 6, 'var(--bad)', 'none')).join('') + tx(130, 232, 13, '어제 20.0°', 'var(--muted)') + tx(290, 232, 13, '오늘 20.1°', 'var(--muted)') },
+        { v: 'insufficiently', k: '모자라게', base: 'HARDLY와 이웃', core: '필요한 수준에 부족', from: 'in + sufficient(충분한) + ly', en: 'The event was insufficiently funded.', note: '0에 가깝다는 뜻이 아니라 <b>필요한 만큼이 안 된다</b>(노트).', pic: () => BARX(130, .55, 'var(--accent2)', .85) + tx(348, 106, 12, '필요한 선', 'var(--ok)') + CAPT('모자라다') },
+      ] },
+      { name: '전혀', items: [
+        { v: 'not at all', k: '전혀 ~않다', en: 'I\'m not tired at all.', note: 'not … at all로 나뉘어 쓰기도 한다(노트). 혼자 <span class="en">Not at all.</span>이면 "전혀요, 천만에요".', from: '낱말 셋이 한 덩어리', pic: () => GRD + MAN(226, { f: 'smile', a: 'up', c: 'var(--ok)' }) + BARX(80, 0), ex: ['조금도', '아니다', 'I\'m not tired.', '전혀라는 힘이 빠진다.', '전혀.'] },
+        { v: 'remotely', k: '조금도 (부정문)', base: 'NOT AT ALL 쪽', core: 'not + remotely', from: 'remote(먼) + ly', en: 'The plans are not remotely similar.', note: 'not과 함께 "조금도". 혼자 쓰면 "원격으로"라는 다른 뜻(노트).', pic: () => RC(70, 100, 90, 90, 'var(--chip-on)', 'var(--accent)') + '<path d="M340 94 l52 96 h-104 z" fill="var(--water)" stroke="var(--obj-line)"/>' + CROSS(222, 145, 14) },
+        { v: 'whatsoever', k: '전혀 (뒤에서)', base: 'NOT AT ALL 쪽', core: 'no + 명사 + 강조', from: 'what + so + ever', en: 'I have no opinion whatsoever.', note: '부정된 명사 <b>뒤</b>에 붙는 강조(노트).', pic: () => GRD + MAN(150, { f: 'flat', a: 'hip' }) + '<ellipse cx="280" cy="100" rx="76" ry="38" fill="var(--bg)" stroke="var(--obj-line)" stroke-dasharray="5 4"/>' + CR(206, 140, 7) + CR(192, 152, 4), ex: ['명사 뒤', '강조', 'I have no opinion.', '아주 없다는 강조가 약해진다.', '부정을 뒤에서 강조.'] },
+      ] },
+    ],
+    q: [['Q1. 되긴 했나?', '겨우 됨 → <b>barely</b> / 거의 안 됨 → <b>hardly</b> / 전혀 → <b>not at all</b>'], ['Q2. 아슬아슬?', '결과 차이 → <b>narrowly</b> / 지금 상태 → <b>precariously</b>'], ['Q3. 적다?', '무시할 만큼 → <b>negligibly</b> / 필요보다 부족 → <b>insufficiently</b>'], ['Q4. 전혀, 자리는?', 'not 뒤 → <b>remotely</b> / 명사 뒤 → <b>whatsoever</b>']],
+    body: ['<b>BARELY</b> — 까치발로 손끝만 닿기. <b>NARROWLY</b> — 문틈을 옆으로 빠져나가기.', '<b>NOT AT ALL</b> — 두 손을 활짝 펴고 고개 젓기.'],
+    check: ['not at all은 사전의 한 낱말 부사가 아니라 표현이다.', 'negligibly · insufficiently · precariously는 노트가 "이웃 비교"라고 밝힌 것이라 "쪽"이 아니라 "이웃"으로 적었다.'],
+  });
+  const SCENES = {
+    phone: { btn: '전화', place: '소리가 작은 전화', pic: () => MEET(BX(452, 70, 24, 38)), lines: [['친구', 'Can you hear me?', '들려?'], ['나', 'I can <b>hardly</b> hear you.', '거의 안 들려.', true]], say: 'can <b>hardly</b> + 동사. can\'t를 또 쓰지 않는다.' },
+    help: { btn: '부탁', place: '자리를 비켜 달라는 부탁', pic: () => MEET(BX(440, 78, 50, 30)), lines: [['손님', 'Do you mind if I sit here?', '여기 앉아도 될까요?'], ['나', '<b>Not at all</b>.', '그럼요, 앉으세요.', true]], say: 'Do you mind?(꺼리나요?)에 <b>Not at all</b>은 "전혀 안 꺼려요" = 괜찮다.' },
+  };
+  const SLOTS = { first: ['hardly', 'modal'], slots: { verb: '동사 앞', modal: '조동사 뒤', any: '명사와' }, verbs: {
+    hardly: { verb: { ok: [['He', 's'], ['hardly', 'd'], ['works', 'v']], bad: [['He', 's'], ['doesn\'t', 'm'], ['hardly', 'd'], ['work', 'v']], say: 'hardly에 이미 "않다"가 있다. <b>not을 또 쓰지 않는다</b>.' }, modal: { ok: [['I', 's'], ['can', 'm'], ['hardly', 'd'], ['hear', 'v'], ['you', 'o']], bad: [['I', 's'], ['can\'t', 'm'], ['hardly', 'd'], ['hear', 'v'], ['you', 'o']], say: '조동사와 동사 사이.' }, any: { ok: [['hardly', 'd'], ['any', 'x'], ['money', 'x']], say: '거의 없는 돈 — <b>hardly any</b>.' } },
+    whatsoever: { verb: { ok: [['I', 's'], ['have', 'v'], ['no', 'x'], ['idea', 'o'], ['whatsoever', 'd']], bad: [['I', 's'], ['whatsoever', 'd'], ['know', 'v']], say: '동사 앞에 못 온다.' }, modal: { ok: [['There', 'x'], ['is', 'b'], ['no', 'x'], ['doubt', 'x'], ['whatsoever', 'd']], say: '의심의 여지가 전혀 없다.' }, any: { ok: [['no', 'x'], ['problem', 'x'], ['whatsoever', 'd']], bad: [['whatsoever', 'd'], ['no', 'x'], ['problem', 'x']], say: 'no + 명사 <b>뒤</b>.' } },
+  } };
+</script>
