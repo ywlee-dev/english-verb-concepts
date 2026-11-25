@@ -29,13 +29,39 @@
   th, td { border-bottom: 1px solid var(--line); padding: 8px 12px; text-align: left; vertical-align: top; }
   th { color: var(--muted); font-weight: 500; }
   .soon { color: var(--muted); }
+  /* 회차: 외울 것은 번호 하나 */
+  #study { background: var(--card); border: 2px solid #D85A30; border-radius: 12px; padding: 16px; margin-bottom: 32px; }
+  #study .pick { display: flex; align-items: center; justify-content: center; gap: 12px; }
+  #study button { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; min-width: 44px; min-height: 44px; cursor: pointer; }
+  #study button:disabled { opacity: .35; cursor: default; }
+  #study input { font: inherit; font-size: 24px; font-weight: 700; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; width: 76px; min-height: 44px; text-align: center; }
+  #study h2 { font-size: 15px; margin: 16px 0 8px; }
+  #study .note, #study .empty { color: var(--muted); font-size: 14px; margin: 12px 0 0; }
+  #study li { background: var(--bg); }
+  #study .rounds { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px; margin-top: 8px; }
+  #study .rounds button { text-align: left; padding: 4px 10px; font-size: 14px; }
+  #study .rounds button[aria-current] { border-color: #D85A30; font-weight: 700; }
+  #study summary { cursor: pointer; margin-top: 16px; min-height: 32px; }
+  .rno { color: var(--muted); font-size: 13px; float: right; margin-left: 8px; }
 </style>
 </head>
 <body>
 <main>
   <h1>영어 동사 개념 그림</h1>
   <p class="lead">english-verbs 노트의 동사를 움직여 볼 수 있는 그림으로 보는 모음. 파일을 브라우저로 열면 된다(인터넷 없이 열림).</p>
-  <ul>
+  <section id="study" hidden>
+    <div class="pick">
+      <button id="prev" aria-label="이전 회차">◀</button>
+      <label><input id="no" type="number" inputmode="numeric" min="1" aria-label="회차 번호"> 회차</label>
+      <button id="next" aria-label="다음 회차">▶</button>
+    </div>
+    <h2>새 것</h2><ul id="new"></ul>
+    <h2 id="oldh">복습</h2><ul id="old"></ul>
+    <p class="note" id="note"></p>
+    <details><summary>전체 회차 보기</summary><div class="rounds" id="rounds"></div></details>
+  </section>
+  <h2>전체 목록</h2>
+  <ul id="all">
     <li class="start"><span class="tag">출발점</span><a href="04-core-question.html">핵심 질문 하나 — 동사는 그림을 고르는 도구</a>
       <span class="desc">"듣는 사람 머릿속에 무엇을 그리게 하고 싶은가?" — 동작이면 사람이 주어, 결과면 물건이 주어, 이미 아는 것은 it으로 앞에. 아래 페이지의 질문은 모두 이 질문을 펼친 것이다</span></li>
     <li><a href="01-break.html">BREAK — 같은 화분, 다른 HOW</a>
@@ -217,5 +243,49 @@
     <tr><td>TARGET</td><td>무엇에</td><td>잘 깨지는 화분, 눌려 찌그러지는 캔</td></tr>
   </table>
 </main>
+<script>
+// 회차 순서(하루 두 장). 이미 정한 회차는 바꾸지 않는다 — 번호를 외워서 쓰기 때문. 새 페이지는 맨 뒤에 붙인다.
+const ROUNDS = `04 01,11 12,14 15,08 20,13 16,09 21,22 23,17 18,19 52,24 27,
+25 26,28 31,32 43,33 47,30 34,35 62,02 29,06 63,36 37,38 39,
+40 41,42 55,44 50,45 46,48 49,51 10,53 54,03 05,07 57,56 58,
+59 60,61 74,64 81,75 80,66 67,65 72,68 69,70 71,73 82,76 79,77 78`.split(',').map(r => r.trim().split(' '));
+const GAP = 3;                        // 복습은 3회차 전 것
+const LAST = ROUNDS.length + GAP;     // 마지막 세 번은 복습만
+const $ = id => document.getElementById(id);
+const items = {};
+document.querySelectorAll('#all > li').forEach(li => { items[li.querySelector('a').getAttribute('href').slice(0, 2)] = li; });
+const short = k => items[k].querySelector('a').textContent.split(' — ')[0].replace(' 묶음', '');
+const label = r => r <= ROUNDS.length ? ROUNDS[r - 1].map(short).join(' · ') : '복습만';
+
+function fill(ul, r) {
+  ul.replaceChildren(...(ROUNDS[r - 1] || []).map(k => items[k].cloneNode(true)));
+  ul.querySelectorAll('.rno').forEach(e => e.remove());
+}
+function show(n) {
+  n = Math.min(LAST, Math.max(1, Math.round(n) || 1));
+  $('no').value = n;
+  fill($('new'), n); fill($('old'), n - GAP);
+  if (n > ROUNDS.length) $('new').innerHTML = '<li class="empty">새 것은 다 봤다. 복습만 한다.</li>';
+  if (n <= GAP) $('old').innerHTML = '<li class="empty">' + (GAP + 1) + '회차부터 복습이 나온다.</li>';
+  $('oldh').textContent = n > GAP ? '복습 (' + (n - GAP) + '회차에 본 것)' : '복습';
+  $('note').textContent = n < LAST ? '다 봤으면 외울 것은 하나 — 다음은 ' + (n + 1) + '회차.' : '마지막 회차.';
+  $('prev').disabled = n === 1; $('next').disabled = n === LAST;
+  [...$('rounds').children].forEach((b, i) => i + 1 === n ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current'));
+  history.replaceState(null, '', '#' + n);   // 페이지를 보고 뒤로 와도 같은 회차
+}
+for (let r = 1; r <= LAST; r++) {
+  const b = document.createElement('button');
+  b.textContent = r + '회차  ' + label(r);
+  b.onclick = () => { show(r); $('study').scrollIntoView(); };
+  $('rounds').append(b);
+}
+ROUNDS.forEach((ks, i) => ks.forEach(k => items[k].insertAdjacentHTML('afterbegin', '<span class="rno">' + (i + 1) + '회차</span>')));
+$('prev').onclick = () => show(+$('no').value - 1);
+$('next').onclick = () => show(+$('no').value + 1);
+$('no').onchange = () => show(+$('no').value);
+window.onhashchange = () => show(+location.hash.slice(1));
+$('study').hidden = false;
+show(+location.hash.slice(1));
+</script>
 </body>
 </html>
