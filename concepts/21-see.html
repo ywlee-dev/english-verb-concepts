@@ -89,6 +89,24 @@
     .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
   }
 </style>
+<!-- COMIC:START -->
+<style>
+  .cm { display: flex; gap: 8px; margin: 12px 0; }
+  .cm figure { margin: 0; min-width: 0; outline: 3px solid #222; outline-offset: -3px; background: #fffdf6; overflow: hidden; }
+  .cm svg { display: block; width: 100%; height: auto; }
+  .cm text { font-family: "Malgun Gothic", system-ui, sans-serif; }
+  .cm-btns { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+  .cm-btns button { font: inherit; min-height: 44px; padding: 4px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  .cm-btns button[aria-pressed="true"] { border: 2px solid var(--accent); font-weight: 700; }
+  .cm-say { border-left: 4px solid var(--accent); padding: 8px 12px; background: var(--card); min-height: 44px; }
+  .cm.go figure { animation: cmIn .28s both; animation-delay: calc(var(--i) * var(--t)); }
+  .cm.go .sfx { animation: cmPop .32s both; animation-delay: calc(var(--i) * var(--t) + .18s); transform-box: fill-box; transform-origin: center; }
+  @keyframes cmIn { from { opacity: 0; transform: translateY(8px); } }
+  @keyframes cmPop { from { opacity: 0; transform: scale(.2); } 70% { opacity: 1; transform: scale(1.18); } }
+  @media (prefers-reduced-motion: reduce) { .cm.go figure, .cm.go .sfx { animation: none; } }
+  @media (max-width: 560px) { .cm { flex-direction: column; align-items: center; } .cm figure { flex: none !important; } .cm svg { height: 200px; width: auto; max-width: 100%; } }
+</style>
+<!-- COMIC:END -->
 </head>
 <body>
 <main>
@@ -102,6 +120,20 @@
     <button type="button" data-word="observe" title="observe 소리로 듣기"><span class="en">observe</span><span class="ipa">/əbˈzɜːrv/</span><span class="ko">[업<b>저</b>브]</span><span class="spk" aria-hidden="true">🔊</span></button>
     <button type="button" data-word="recognize" title="recognize 소리로 듣기"><span class="en">recognize</span><span class="ipa">/ˈrek.əɡ.naɪz/</span><span class="ko">[<b>레</b>커그나이즈]</span><span class="spk" aria-hidden="true">🔊</span></button>
   </div>
+<!-- COMIC:START -->
+  <h2 id="comic-h">만화로 먼저 느끼기</h2>
+  <p>설명을 읽기 전에 <b>동사를 누르고 만화만 본다.</b> 그다음 <b>장면 1 → 2 → 3</b>을 넘긴다. 앞뒤 칸은 바뀌어도 <b>가운데 칸의 느낌</b>은 남는다 — 그 남는 것이 동사다. 장면 3은 손에 안 잡히는 것까지 간다.</p>
+  <div class="cm-btns" id="cmBtns" role="group" aria-label="동사 고르기"></div>
+  <div class="cm-btns" id="cmSc" role="group" aria-label="장면 고르기"></div>
+  <div class="cm" id="cm"></div>
+  <div class="cm-say" id="cmSay" aria-live="polite"></div>
+  <p class="note">장면 하나가 뜻은 아니다. 세 장면에 다 남는 것이 동사의 느낌이다. 장면 1은 노트의 새 문장을 옮겼고, 장면 2 · 3과 감정은 새로 지었다. notice · recognize는 눈이 아닌 감각에도 쓴다.</p>
+  <h3>만화 보고 맞히기</h3>
+  <div class="cm" id="qz"></div>
+  <p class="en" style="font-size:18px;margin:8px 0" id="qzLine"></p>
+  <div class="cm-btns" id="qzBtns" role="group" aria-label="동사 맞히기"></div>
+  <div class="cm-say" id="qzSay" aria-live="polite"></div>
+<!-- COMIC:END -->
 
   <div class="card">
     <div class="fig">
@@ -299,7 +331,7 @@
   function existChart(E, gone) {
     const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
     const G = E.cards.find((c) => c.id === gone);
-    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 ' + (E.noun || '동사가') + ' 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
     E.cards.forEach((c, i) => {
       const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
       s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
@@ -698,5 +730,134 @@
     drawSlot();
   }
 </script>
+<!-- COMIC:START -->
+<script>
+  (() => {
+    // 만화 공통 부품. 칸 높이 240, 좌표는 그림용. 종이 색은 어두운 화면에서도 그대로 (l 선 · f 면 · g 옮기기 · t 글자 · sfx 효과음)
+    const K = '#222', ME = '#4a7fb5', OT = '#a84b40', OF = '#2b3550', SK = '#f0c49a';
+    const l = (d, w, c) => '<path d="' + d + '" fill="none" stroke="' + (c || K) + '" stroke-width="' + (w || 3) + '" stroke-linecap="round" stroke-linejoin="round"/>';
+    const f = (d, c, w) => '<path d="' + d + '" fill="' + c + '" stroke="' + K + '" stroke-width="' + (w === undefined ? 3 : w) + '" stroke-linejoin="round"/>';
+    const g = (x, y, r, k, b) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + (r || 0) + ') scale(' + (k || 1) + ')">' + b + '</g>';
+    const t = (x, y, z, v, c, r) => '<text x="' + x + '" y="' + y + '" font-size="' + z + '" text-anchor="middle" fill="' + (c || K) + '" font-weight="700"' + (r ? ' transform="rotate(' + r + ' ' + x + ' ' + y + ')"' : '') + '>' + v + '</text>';
+    // 효과음: 큰 한국어 + 작은 영어. 크기와 기울기가 힘
+    const sfx = (x, y, z, v, en, c, r) => '<g transform="rotate(' + (r || 0) + ' ' + x + ' ' + y + ')"><g class="sfx"><text x="' + x + '" y="' + y + '" font-size="' + z + '" text-anchor="middle" font-weight="900" fill="' + c + '" stroke="#fff" stroke-width="' + z / 7 + '" paint-order="stroke" stroke-linejoin="round">' + v + '</text>' + (en ? t(x, y + Math.max(15, z * .42), Math.max(11, z * .3), en, c) : '') + '</g></g>';
+    const FACE = {
+      calm: l('M-10 -4 v5 M10 -4 v5 M-7 13 h14'), smile: l('M-10 -4 v5 M10 -4 v5 M-9 10 q9 9 18 0'),
+      shock: '<circle cx="-10" cy="-4" r="7" fill="#fff" stroke="#222" stroke-width="2"/><circle cx="10" cy="-4" r="7" fill="#fff" stroke="#222" stroke-width="2"/><circle cx="-10" cy="-4" r="2" fill="#222"/><circle cx="10" cy="-4" r="2" fill="#222"/><ellipse cx="0" cy="15" rx="6" ry="8" fill="#222"/>',
+      phew: l('M-15 -2 q5 5 10 0 M5 -2 q5 5 10 0 M-6 13 q6 5 12 0') + f('M24 -14 q-7 11 0 15 q7 -4 0 -15', '#9fd3f0', 2),
+      sad: l('M-10 -4 v5 M10 -4 v5 M-8 15 q8 -8 16 0 M-16 -12 l10 -4 M16 -12 l-10 -4'), stern: l('M-17 -13 l12 5 M17 -13 l-12 5 M-10 -3 v4 M10 -3 v4 M-8 14 h16', 4),
+      down: l('M-14 0 q5 4 9 0 M5 0 q5 4 9 0 M-6 15 h12') };
+    const HEAD = (fc) => '<circle r="28" fill="' + SK + '" stroke="#222" stroke-width="3"/><path d="M-28 -4 q2 -30 28 -28 q26 -2 28 28 q-12 -14 -28 -14 q-16 0 -28 14" fill="#4a3424" stroke="#222" stroke-width="2"/>' + FACE[fc];
+    const PH = '<rect x="-12" y="-21" width="24" height="42" rx="4" fill="#222"/><rect x="-9" y="-16" width="18" height="30" fill="#8fd0ee"/>';
+    // 사람: (0,0)이 발. arm = 팔 그림
+    const MAN = (c, fc, arm, leg) => l(leg || 'M-12 -42 L-14 0 M12 -42 L14 0', 10) + f('M-24 -102 q24 -12 48 0 l4 64 h-56 z', c) + (arm ? l(arm, 13) + l(arm, 8, SK) : '') + g(0, -134, 0, 1, HEAD(fc));
+    // 큰 손: 팔이 왼쪽에서 오고 (0,0)이 손바닥. 휴대폰을 쥔 모양
+    const FIST = (c, item) => f('M-200 -24 H-40 V24 H-200 z', c) + f('M-44 -22 q20 -14 40 -8 q16 4 14 24 q2 22 -16 26 q-24 4 -38 -10 z', SK) + (item || g(12, -8, 8, 2.5, PH)) + [-22, -8, 6, 20].map((y) => f('M-6 ' + (y - 6) + ' h26 q8 6 0 12 h-26 z', SK, 2.5)).join('') + f('M-18 -26 q20 -18 34 -8 q2 8 -8 10 q-14 2 -22 8 z', SK, 2.5);
+    const FOC = (w, x, y, r, n, c) => Array.from({ length: n }, (_, i) => { const a = i * 2 * Math.PI / n, q = r + (i % 3) * 14, e = .016 + (i % 2) * .016; return '<path d="M' + (x + q * Math.cos(a)).toFixed(1) + ' ' + (y + q * Math.sin(a)).toFixed(1) + ' L' + (x + 420 * Math.cos(a - e)).toFixed(1) + ' ' + (y + 420 * Math.sin(a - e)).toFixed(1) + ' L' + (x + 420 * Math.cos(a + e)).toFixed(1) + ' ' + (y + 420 * Math.sin(a + e)).toFixed(1) + ' z" fill="' + (c || K) + '"/>'; }).join('');
+    const SPD = (x, y, n, w) => Array.from({ length: n }, (_, i) => l('M' + (x + (i % 2) * 14) + ' ' + (y + i * 15) + ' h' + (w - (i % 3) * 14), 2 + (i % 2))).join('');
+    const TBL = (x, y, w) => f('M' + x + ' ' + y + ' h' + w + ' v10 h-' + w + ' z', '#c9a171') + l('M' + (x + 12) + ' ' + (y + 10) + ' V240 M' + (x + w - 12) + ' ' + (y + 10) + ' V240', 6, '#8a6a48');
+    const BUB = (x, y, w, v, z) => '<ellipse cx="' + x + '" cy="' + y + '" rx="' + w / 2 + '" ry="20" fill="#fff" stroke="#222" stroke-width="2.5"/>' + t(x, y + 6, z || 16, v);
+    const CAR = (x, y, k) => g(x, y, 0, k, f('M-70 0 v-22 l26 -22 h56 l26 22 h32 v22 z', '#d8412f') + f('M-36 -24 l16 -14 h24 v14 z M10 -24 v-14 h6 l16 14 z', '#bfe6f5', 2) + '<circle cx="-38" cy="2" r="13" fill="#222"/><circle cx="42" cy="2" r="13" fill="#222"/>');
+    const BUS = (x, y, k) => g(x, y, 0, k, f('M0 0 v-110 q0 -14 14 -14 h150 q14 0 14 14 v110 z', '#3a9a6a') + [14, 60, 106].map((q) => f('M' + q + ' -104 h36 v34 h-36 z', '#bfe6f5', 2.5)).join('') + f('M144 0 v-100 h24 v100 z', '#fffdf6', 2.5) + '<circle cx="36" cy="2" r="15" fill="#222"/><circle cx="118" cy="2" r="15" fill="#222"/>');
+    const STAR = (x, y, r, c) => f(Array.from({ length: 10 }, (_, i) => { const q = -Math.PI / 2 + i * Math.PI / 5, d = i % 2 ? r * .45 : r; return (i ? 'L' : 'M') + (x + d * Math.cos(q)).toFixed(1) + ' ' + (y + d * Math.sin(q)).toFixed(1); }).join(' ') + ' z', c || '#f2b632');
+    const CASTLE = (x, y, k, flag) => g(x, y, 0, k, f('M-60 0 v-70 h18 v12 h16 v-12 h16 v12 h20 v-12 h16 v12 h16 v-12 h18 v70 z', '#b9b4a6') + f('M-12 0 v-28 q12 -16 24 0 v28 z', '#4a3424') + l('M0 -60 v-62', 4) + f('M0 -122 l44 12 l-44 14 z', flag));
+    const BEAR = (x, y, k) => g(x, y, 0, k, '<circle cx="-13" cy="-24" r="8" fill="#b9814a" stroke="#222" stroke-width="3"/><circle cx="13" cy="-24" r="8" fill="#b9814a" stroke="#222" stroke-width="3"/><circle cy="-10" r="20" fill="#b9814a" stroke="#222" stroke-width="3"/><circle cx="-7" cy="-13" r="2.5"/><circle cx="7" cy="-13" r="2.5"/>' + l('M-5 -2 q5 5 10 0', 2.5) + f('M-16 8 h32 l4 26 h-40 z', '#b9814a'));
+    const EYE = (x, y, k) => g(x, y, 0, k, f('M-34 0 q34 -38 68 0 q-34 38 -68 0 z', '#fff') + '<circle r="15" fill="#4a7fb5" stroke="#222" stroke-width="3"/><circle r="6"/>');
+    const BOOK = (x, y, k) => g(x, y, 0, k, f('M-30 -42 h60 v84 h-60 z', '#7a4a9a') + t(0, -10, 14, '비밀의', '#fff') + t(0, 12, 14, '문', '#fff'));
+    const DARK = (w, c) => '<rect width="' + w + '" height="240" fill="' + (c || '#1b1d26') + '"/>';
+    const ZZ = (x, y) => t(x, y, 18, 'z', '#555') + t(x + 14, y - 16, 24, 'z', '#555') + t(x + 32, y - 36, 30, 'Z', '#555');
+    // 짧게 쓰는 부품: A 사람(바닥 240) · BK 책 · HND 왼쪽에서 온 펼친 손 · ARW 화살표 · BOXG 상자 · COIN 동전
+    const A = (x, c, fc, arm, k, leg) => g(x, 240, 0, k || .88, MAN(c, fc, arm, leg));
+    const BK = (x, y, k, c, r) => g(x, y, r || 0, k || 1, f('M-20 -26 h36 q6 0 6 6 v46 h-42 z', c || '#a84b40') + f('M-20 20 h42 v6 h-42 z', '#fff', 2) + l('M-10 -12 h20 M-10 -4 h14', 2, '#fff'));
+    const HND = (x, y, k, c, flip) => '<g transform="translate(' + x + ' ' + y + ') scale(' + (flip ? -1 : 1) * (k || 1) + ' ' + (k || 1) + ')">' + f('M-200 -20 H-50 V22 H-200 z', c) + f('M-52 -18 q24 -8 44 -4 l44 4 q8 5 0 10 h-30 q34 4 34 8 q0 8 -10 8 h-50 q-20 2 -32 10 z', SK) + '</g>';
+    const ARW = (x1, y1, x2, y2, c, w) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 14; return l('M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)).toFixed(1) + ' ' + (y2 - h * Math.sin(a - .5)).toFixed(1) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)).toFixed(1) + ' ' + (y2 - h * Math.sin(a + .5)).toFixed(1), w || 4, c || '#888'); };
+    const BOXG = (x, y, w, h, c) => f('M' + x + ' ' + y + ' h' + w + ' v' + h + ' h-' + w + ' z', c || '#c9a171');
+    const COIN = (x, y, r) => '<circle cx="' + x + '" cy="' + y + '" r="' + (r || 12) + '" fill="#f2b632" stroke="#222" stroke-width="3"/>' + t(x, y + (r || 12) * .4, (r || 12) * 1.1, '$');
+    const GND = (w) => l('M0 238 H' + w, 2);
+    // MIX: 동사 다섯의 맞히기 순서(장면 15개를 섞는다) · SHIFT 옆으로 옮겨 여러 번 · SUN · MOON · DOC 파일 · BULB 전구
+    const MIX = (d) => [[4, 0], [1, 1], [2, 1], [0, 0], [3, 1], [4, 2], [1, 0], [2, 2], [0, 1], [3, 0], [4, 1], [1, 2], [0, 2], [3, 2], [2, 0]].map(([i, n]) => [d[i], n]);
+    const SUN = (x, y, r) => '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#f2b632" stroke="#222" stroke-width="3"/>';
+    const MOON = (x, y, k) => g(x, y, 0, k || 1, f('M6 -18 a20 20 0 1 0 8 34 a16 16 0 1 1 -8 -34', '#f2e6a0', 2.5));
+    const DOC = (x, y, k, r) => g(x, y, r || 0, k || 1, f('M-20 -28 h28 l12 12 v44 h-40 z', '#fff') + l('M8 -28 v12 h12', 2.5) + l('M-12 -6 h24 M-12 4 h24 M-12 14 h16', 2.5, '#4a7fb5'));
+    const BULB = (x, y, k) => g(x, y, 0, k || 1, f('M-20 -20 a24 24 0 1 1 40 0 q-8 12 -8 22 h-24 q0 -10 -8 -22 z', '#f2d34a') + f('M-11 4 h22 v12 h-22 z', '#999') + l('M0 -70 v-10 M-38 -58 l-8 -8 M38 -58 l8 -8', 3));
+    const CLK = (x, y, r, c) => '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#fff" stroke="' + (c || K) + '" stroke-width="3"/>' + l('M' + x + ' ' + y + ' v-' + r * .65 + ' M' + x + ' ' + y + ' l' + r * .5 + ' ' + r * .2);
+    // MIND 머릿속(옆얼굴 안의 방) · DRW 서랍 · BIRD 새 · PAINT 그림 액자 · BEYE 큰 눈(왼쪽에서 오른쪽을 봄)
+    const MIND = (w, body, bg) => DARK(w, bg || '#f2f0ea') + f('M30 240 V200 q-22 -30 -20 -84 q6 -104 ' + w * .42 + ' -104 q' + w * .4 + ' 0 ' + w * .42 + ' 96 l18 34 q4 8 -10 10 l-8 2 q4 40 -30 40 h-40 v46 z', SK) + '<ellipse cx="' + w * .44 + '" cy="112" rx="' + w * .33 + '" ry="82" fill="#fffdf6" stroke="#222" stroke-width="3"/>' + body;
+    const DRW = (x, y, w, h, open, v) => BOXG(x, y, w, h, '#c9a171') + (open ? BOXG(x - 4, y + 6, w + 8, h, '#e3c594') : '') + '<circle cx="' + (x + w / 2) + '" cy="' + (y + h / 2 + (open ? 8 : 0)) + '" r="4" fill="#7a4a2a"/>' + (v ? t(x + w / 2, y - 8, 15, v, '#d8412f') : '');
+    const BIRD = (x, y, k, c, w) => g(x, y, 0, k || 1, f('M-26 4 q0 -26 28 -26 q14 0 16 12 l14 4 l-12 6 q-4 20 -26 20 q-20 0 -20 -16 z', c || '#8a6a3a') + f('M-16 0 q14 -8 22 4 q-10 12 -22 -4', w || '#b9905a', 2.5) + '<circle cx="10" cy="-10" r="3"/>' + l('M-6 20 v10 M4 20 v10 M-26 4 l-14 8', 3));
+    const PAINT = (x, y, k) => g(x, y, 0, k || 1, f('M-50 -38 h100 v76 h-100 z', '#c9a171') + f('M-42 -30 h84 v60 h-84 z', '#bfe6f5', 2) + f('M-42 30 l26 -34 l20 22 l14 -14 l24 26 z', '#3a9a6a', 2) + '<circle cx="24" cy="-14" r="9" fill="#f2b632"/>');
+    const BEYE = (x, y, k, sq) => g(x, y, 0, k || 1, f('M-50 0 q50 -' + (sq ? 14 : 56) + ' 100 0 q-50 ' + (sq ? 14 : 56) + ' -100 0 z', '#fff') + '<circle cx="12" r="' + (sq ? 7 : 20) + '" fill="#4a7fb5" stroke="#222" stroke-width="3"/><circle cx="14" r="' + (sq ? 4 : 9) + '"/>' + l('M-54 -' + (sq ? 22 : 40) + ' q54 -' + (sq ? 6 : 30) + ' 108 0', 5));
+    const TREEC = (x, k) => g(x, 238, 0, k || 1, l('M0 0 V-90', 12, '#7a5a3a') + '<circle cy="-130" r="62" fill="#3a9a6a" stroke="#222" stroke-width="3"/>');
+    // note: 장면 하나가 뜻은 아니다. 세 장면에 다 남는 것이 동사의 느낌이다. 장면 1은 노트의 새 문장을 옮겼고, 장면 2 · 3과 감정은 새로 지었다. notice · recognize는 눈이 아닌 감각에도 쓴다.
+    const BASE = 'see', FIRST = 'spot', BASIC_B = '새';
+    const FX = { see: [.15, 600, 900, .08, .5], notice: [.12, 1200, 2200, .3, .6], spot: [.1, 1800, 3200, .5, .5], observe: [.9, 2500, 2300, .05, .9], recognize: [.12, 700, 400, .6, .7] };
+    const ORDER = MIX(['see', 'notice', 'spot', 'observe', 'recognize']);
+    const PK = '#a84b7a', GR = '#c4c4c4';
+    const SEE1 = (b) => b + ARW(112, 130, 78, 130, '#888', 5) + '<g transform="translate(40 130) scale(1 1)">' + BEYE(0, 0, .62) + '</g>' + sfx(100, 66, 20, '쏙', '', '#888');
+    // 회색 배경에서 하나만 색이 든다
+    const NOT = (gray, one) => DARK(260, '#e6e6e6') + '<g style="filter:grayscale(1)" opacity=".55">' + gray + '</g><circle cx="176" cy="126" r="46" fill="#fff6cf"/>' + one + sfx(66, 62, 34, '어?', '', '#d8412f', -6);
+    const SPO = (many, x, y) => many + '<circle cx="' + x + '" cy="' + y + '" r="24" fill="none" stroke="#d8412f" stroke-width="6"/>' + l('M' + (x + 60) + ' ' + (y + 60) + ' L' + (x + 20) + ' ' + (y + 20), 5, '#d8412f') + sfx(220, 212, 30, '찾았다!', '', '#d8412f', -4);
+    const OBS = (pics, u) => DARK(330, '#eef2f4') + pics.map((b, i) => BOXG(10 + i * 80, 74, 70, 110, '#fff') + g(45 + i * 80, 136, 0, 1, b) + t(45 + i * 80, 206, 13, u ? u[i] : (i * 3 + 1) + '분', '#888')).join('') + sfx(166, 50, 28, '가만히…', '', '#4a6a7a');
+    const REC = (a, b) => BOXG(20, 70, 100, 110, '#fff') + BOXG(150, 70, 100, 110, '#fff6cf') + a + b + t(70, 204, 13, '지금', '#888') + t(200, 204, 13, '기억', '#a8741a') + sfx(135, 136, 40, '=', '', '#3a9a6a') + sfx(135, 52, 30, '딱!', '', '#3a9a6a');
+    const CROWD = (me) => Array.from({ length: 24 }, (_, i) => g(26 + (i % 8) * 38, 90 + Math.floor(i / 8) * 66, 0, .42, MAN([GR, '#b5b5b5', '#d0d0d0'][i % 3], 'calm'))).join('') + (me || '');
+    const C = {
+      see: { n: 'see', past: 'saw', en: 'I saw the bird outside the classroom window.', ko: '교실 창밖의 새를 보았다.', feel: '<b>눈에 들어왔다.</b> 보려고 했는지는 상관없다.', t: .5,
+        p: [[180, '교실 창가에 있다', () => BOXG(80, 40, 84, 110, '#bfe6f5') + A(44, ME, 'calm', null, .8)], [200, '새가 눈에 들어온다', () => SEE1(BIRD(150, 130, 1.1))], [180, '새를 보고 있다', () => BOXG(80, 40, 84, 110, '#bfe6f5') + BIRD(124, 100, .8) + A(44, ME, 'calm', null, .8)]] },
+      notice: { n: 'notice', past: 'noticed', en: 'I noticed the bird moving in the tree.', ko: '나무에서 움직이는 새를 알아차렸다.', feel: '<b>배경이던 것에 색이 든다.</b> 아까부터 있었는데 이제야.', t: .6,
+        p: [[160, '나무를 지나간다', () => TREEC(110, .9) + A(36, ME, 'calm', null, .6)], [260, '회색 속에서 새만 색이 든다', () => NOT(TREEC(150, 1.2), BIRD(174, 126, 1))], [160, '멈춰서 본다', () => TREEC(110, .9) + BIRD(116, 110, .5) + A(36, ME, 'shock', null, .6)]] },
+      spot: { n: 'spot', past: 'spotted', en: 'I spotted the bird high in the tree.', ko: '나무 높은 곳의 새를 찾아냈다.', feel: '<b>많은 것 속에서 콕.</b> 찾기 어려운 하나가 걸렸다.', t: .45,
+        p: [[150, '높은 나무', () => TREEC(84, 1.25) + A(26, ME, 'calm', null, .35)], [320, '나뭇잎 속에서 새를 짚는다', () => SPO(DARK(320, '#3a9a6a') + Array.from({ length: 60 }, (_, i) => '<ellipse cx="' + (14 + (i % 12) * 27) + '" cy="' + (20 + Math.floor(i / 12) * 48) + '" rx="13" ry="8" fill="#2c7a53" transform="rotate(' + i * 37 + ' ' + (14 + (i % 12) * 27) + ' ' + (20 + Math.floor(i / 12) * 48) + ')"/>').join('') + BIRD(118, 92, .55, '#4a7a4a', '#5a8a5a'), 118, 92)], [150, '손가락으로 가리킨다', () => A(60, ME, 'smile', 'M18 -92 L46 -130') + t(116, 70, 20, '저기!', '#d8412f')]] },
+      observe: { n: 'observe', past: 'observed', en: 'I observed the bird for ten minutes.', ko: '새를 십 분 동안 관찰했다.', feel: '<b>칸이 여러 장이다.</b> 움직이지 않고 변하는 것을 지켜본다.', t: .85,
+        p: [[130, '자리를 잡는다', () => A(60, ME, 'stern', null, .8) + CLK(104, 60, 20)], [330, '새의 움직임을 차례로 본다', () => OBS([BIRD(0, 0, .8), BIRD(0, -12, .8), g(0, 0, 20, 1, BIRD(0, 0, .8)), BIRD(0, 10, .8)])], [140, '알게 된 것을 떠올린다', () => A(60, ME, 'calm', 'M18 -92 L34 -70', .8) + DOC(104, 170, .7)]] },
+      recognize: { n: 'recognize', past: 'recognized', no: 1, en: 'I recognized the bird by its red wing.', ko: '붉은 날개를 보고 무슨 새인지 알아보았다.', feel: '<b>지금과 기억이 겹친다.</b> "아, 그거!"', t: .6,
+        p: [[160, '붉은 날개가 보인다', () => TREEC(110, .9) + BIRD(116, 116, .6, '#555', '#d8412f') + A(34, ME, 'calm', null, .6)], [270, '기억 속 새와 딱 맞는다', () => REC(BIRD(72, 122, 1, '#555', '#d8412f'), BIRD(202, 122, 1, '#555', '#d8412f'))], [160, '반갑다', () => A(66, ME, 'smile') + BUB(104, 46, 96, '아, 너!', 17)]] } };
+    const MORE = {
+      see: [
+        { b: '영화', en: 'I saw a movie.', ko: '영화를 보았다.', feel: '눈앞에 펼쳐진 것이 <b>들어왔다.</b>', p: [[180, '극장에 앉는다', () => DARK(180, '#2a2d36') + A(90, ME, 'calm', null, .7)], [200, '장면이 눈에 들어온다', () => SEE1(BOXG(116, 96, 74, 60, '#222') + STAR(152, 126, 18))], [180, '화면이 빛난다', () => DARK(180, '#2a2d36') + BOXG(40, 40, 100, 70, '#fff') + A(90, ME, 'smile', null, .6)]] },
+        { b: '말뜻', en: 'I saw his point.', ko: '그 말의 요점을 알았다.', feel: '눈에 안 보이는 뜻도 <b>들어왔다.</b> "알겠다"의 see.', p: [[180, '설명을 듣는다', () => A(54, '#8a6a3a', 'smile', null, .8) + A(130, ME, 'calm', null, .8) + BUB(86, 44, 110, '그러니까…', 14)], [200, '요점이 눈에 들어온다', () => SEE1(BULB(150, 140, .9))], [180, '고개를 끄덕인다', () => A(90, ME, 'smile', null, .95) + BUB(130, 44, 80, '아하', 17)]] }],
+      notice: [
+        { b: '얼룩', en: 'I noticed a stain on my shirt.', ko: '셔츠의 얼룩을 알아챘다.', feel: '하루 종일 있었다. <b>이제야 눈에</b> 들어왔다.', p: [[160, '거울 앞을 지나간다', () => BOXG(90, 40, 60, 150, '#bfe6f5') + A(46, ME, 'calm', null, .75)], [260, '회색 속에서 얼룩만 색이 든다', () => NOT(f('M60 50 h160 l20 190 h-200 z', '#4a7fb5'), '<ellipse cx="176" cy="126" rx="24" ry="18" fill="#7a4a22"/>')], [160, '당황한다', () => A(80, ME, 'shock') + '<circle cx="92" cy="186" r="7" fill="#7a4a22"/>']] },
+        { b: '목소리', no: 1, en: 'I noticed a change in her voice.', ko: '목소리가 달라진 것을 느꼈다.', feel: '귀로도 notice한다. 흐르던 것에서 <b>하나가 튄다.</b>', p: [[160, '전화를 한다', () => A(70, ME, 'calm', 'M18 -92 L26 -126') + t(124, 100, 18, '~~~', '#888')], [260, '회색 소리 속에서 하나가 튄다', () => NOT([40, 80, 120].map((y) => l('M10 ' + (y + 60) + ' q20 -16 40 0 t40 0 t40 0 t40 0 t40 0 t40 0', 4)).join(''), l('M138 126 l14 -26 l16 50 l16 -50 l16 40 l12 -14', 6, '#d8412f'))], [160, '걱정스럽다', () => A(70, ME, 'sad', 'M18 -92 L26 -126') + BUB(104, 44, 100, '괜찮아?', 16)]] }],
+      spot: [
+        { b: '친구', en: 'She spotted her friend in the crowd.', ko: '사람들 속에서 친구를 찾아냈다.', feel: '새가 사람으로 바뀌어도 <b>많은 속에서 하나.</b>', p: [[150, '붐비는 광장', () => A(50, PK, 'calm', null, .8) + [100, 124].map((x) => A(x, GR, 'calm', null, .4)).join('')], [320, '사람들 속에서 친구를 짚는다', () => SPO(CROWD(g(140, 156, 0, .42, MAN('#e0a53a', 'smile'))), 140, 100)], [150, '손을 흔든다', () => A(60, PK, 'smile', 'M18 -92 L40 -130') + t(112, 60, 20, '야!', '#d8412f')]] },
+        { b: '실수', en: 'He spotted the mistake.', ko: '실수를 찾아냈다.', feel: '글자 숲에서 <b>하나가 걸렸다.</b>', p: [[150, '빽빽한 글', () => DOC(76, 130, 2)], [320, '숫자들 속에서 틀린 것을 짚는다', () => SPO(Array.from({ length: 40 }, (_, i) => t(26 + (i % 10) * 30, 60 + Math.floor(i / 10) * 44, 20, i === 13 ? '8' : '3', i === 13 ? '#222' : '#999')).join(''), 116, 97)], [150, '빨간 표시를 한다', () => A(56, '#8a6a3a', 'calm', 'M18 -92 L40 -84') + DOC(110, 130, 1) + t(112, 136, 26, '✗', '#d8412f')]] }],
+      observe: [
+        { b: '환자', en: 'The doctor observed the patient overnight.', ko: '의사가 밤새 환자를 지켜보았다.', feel: '목적이 있다. <b>달라지는 것</b>을 놓치지 않는다.', p: [[130, '침대 곁에 앉는다', () => A(40, '#fff', 'stern', null, .7) + BOXG(64, 170, 60, 40, '#fff')], [330, '환자를 차례로 본다', () => OBS(['sad', 'sad', 'down', 'smile'].map((v) => g(0, 0, 0, .8, HEAD(v))), ['밤 10시', '1시', '4시', '아침'])], [140, '아침이 온다', () => SUN(110, 50, 18) + A(60, '#fff', 'phew', null, .8)]] },
+        { b: '행동', en: 'We observed a change in his behavior.', ko: '행동이 달라진 것을 관찰했다.', feel: '행동도 <b>이어서 지켜보면</b> 보인다.', p: [[130, '공책을 편다', () => A(54, ME, 'stern', null, .75) + DOC(104, 150, .8)], [330, '날마다 행동을 본다', () => OBS([0, 1, 2, 3].map((i) => g(0, 46, 0, .56, MAN('#e0a53a', ['sad', 'sad', 'calm', 'smile'][i], i > 1 ? 'M18 -92 L40 -110' : null))), ['월', '화', '수', '목'])], [140, '적어 둔다', () => A(60, ME, 'calm', 'M18 -92 L34 -70', .8) + DOC(104, 170, .7)]] }],
+      recognize: [
+        { b: '옛 친구', en: 'I recognized an old friend.', ko: '옛 친구를 알아보았다.', feel: '얼굴이 변했어도 <b>기억과 겹쳤다.</b>', p: [[160, '누가 다가온다', () => A(44, ME, 'calm', null, .7) + A(120, '#e0a53a', 'smile', null, .8)], [270, '기억 속 얼굴과 딱 맞는다', () => REC(g(70, 130, 0, 1.2, HEAD('smile')), g(200, 130, 0, .9, HEAD('smile')))], [160, '끌어안는다', () => A(62, ME, 'smile', 'M18 -92 L46 -86', .85) + A(106, '#e0a53a', 'smile', 'M-18 -92 L-46 -86', .85)]] },
+        { b: '노래', no: 1, en: 'I recognized the song.', ko: '무슨 노래인지 알아들었다.', feel: '귀로 들은 것도 <b>기억과 딱</b> 맞는다.', p: [[160, '라디오 소리', () => BOXG(80, 150, 70, 46, '#7a5a3a') + t(120, 120, 26, '♪') + A(40, ME, 'calm', null, .7)], [270, '기억 속 가락과 딱 맞는다', () => REC(t(70, 146, 56, '♪'), t(200, 146, 56, '♪', '#a8741a'))], [160, '따라 부른다', () => A(70, ME, 'smile', 'M18 -92 L36 -120') + t(124, 70, 26, '♪', '#d8412f', 10)]] }] };
+    const CORE = { see: '<b>눈에 들어온다.</b> 뜻이 들어올 때도.', notice: '<b>배경이던 것을 알아차린다.</b>', spot: '<b>많은 것, 가려진 것 속에서 콕</b> 찾아낸다.', observe: '<b>목적을 두고 지켜본다.</b>', recognize: '<b>기억과 맞춰 알아본다.</b>' };
+    // 만화 공통 실행: 페이지 데이터(C · MORE · CORE · ORDER · FX · BASE · FIRST · BASIC_B)를 받아 단추 · 장면 · 맞히기를 만든다
+    const IDS = Object.keys(C), $ = (id) => document.getElementById(id);
+    const SC = {}; IDS.forEach((id) => { SC[id] = [Object.assign({ b: BASIC_B }, C[id]), ...MORE[id]]; });
+    const draw = (box, id, n, q) => { const c = SC[id][n]; box.style.setProperty('--t', C[id].t + 's'); box.classList.remove('go');
+      box.innerHTML = c.p.map(([w, a, b], i) => '<figure style="flex:' + w + ' 1 0;--i:' + i + '"><svg viewBox="0 0 ' + w + ' 240" role="img" aria-label="' + a + '">' + b(q) + '</svg></figure>').join('');
+      void box.offsetWidth; box.classList.add('go'); };
+    // 효과음: 파일 없이 만든 소리. 누른 다음에만 난다
+    let ac; const fx = (id) => { const A = window.AudioContext || window.webkitAudioContext; if (!A) return; ac = ac || new A(); ac.resume();
+      const [dur, f0, f1, vol, at] = FX[id], T = ac.currentTime + at;
+      const b = ac.createBuffer(1, ac.sampleRate * dur, ac.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);
+      const s = ac.createBufferSource(), flt = ac.createBiquadFilter(), v = ac.createGain(); s.buffer = b; flt.type = f0 < 300 ? 'lowpass' : 'bandpass'; flt.frequency.setValueAtTime(f0, T); flt.frequency.exponentialRampToValueAtTime(f1, T + dur); v.gain.value = vol; s.connect(flt).connect(v).connect(ac.destination); s.start(T); };
+    const say = (id, n) => { const c = SC[id][n]; return '<span class="en">' + c.en + '</span> <button type="button" class="speak" data-word="' + c.en + '" title="이 줄 듣기">🔊</button><br>' + c.ko + '<br>' + c.feel + '<br><span style="color:var(--accent)">세 장면에 남는 것 —</span> ' + CORE[id]; };
+    $('cmBtns').innerHTML = IDS.map((id) => '<button type="button" data-cm="' + id + '">' + C[id].n + '</button>').join('') + '<button type="button" id="cmAgain">↻ 효과음과 함께 다시</button>';
+    let cur = FIRST, no = 0;
+    const show = (id, n, snd) => { cur = id; no = n; draw($('cm'), id, n); $('cmSay').innerHTML = say(id, n);
+      $('cmSc').innerHTML = SC[id].map((c, i) => '<button type="button" data-sc="' + i + '" aria-pressed="' + (i === n) + '">장면 ' + (i + 1) + ' · ' + c.b + '</button>').join('');
+      $('cmBtns').querySelectorAll('[data-cm]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.cm === id)); if (snd) fx(id); };
+    $('cmBtns').onclick = (e) => { const b = e.target.closest('button'); if (b) b.dataset.cm ? show(b.dataset.cm, 0, true) : show(cur, no, true); };
+    $('cmSc').onclick = (e) => { const b = e.target.closest('button'); if (b) show(cur, +b.dataset.sc, true); };
+     let k = 0;
+    const ask = () => { const [id, n] = ORDER[k]; draw($('qz'), id, n, true); $('qzLine').textContent = SC[id][n].en.replace(SC[id][n].w || C[id].past, '_____'); $('qzSay').textContent = '어느 동사의 만화일까? (' + (k + 1) + ' / ' + ORDER.length + ')';
+      $('qzBtns').innerHTML = IDS.map((i) => '<button type="button" data-qz="' + i + '">' + C[i].past + '</button>').join('') + '<button type="button" id="qzNext">다음 만화 ▶</button>'; };
+    $('qzBtns').onclick = (e) => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'qzNext') { k = (k + 1) % ORDER.length; ask(); return; }
+      const [id, n] = ORDER[k], c = SC[id][n], x = b.dataset.qz; $('qzBtns').querySelectorAll('[data-qz]').forEach((z) => z.setAttribute('aria-pressed', z === b));
+      if (x === id) { $('qzLine').textContent = c.en; fx(id); $('qzSay').innerHTML = '✔ ' + say(id, n); }
+      else if (x === BASE) $('qzSay').innerHTML = c.no ? '<b>' + C[BASE].past + '</b> — 이 문장에는 어색하다. 더 꼭 맞는 것은?' : '<b>' + C[BASE].past + '</b> — 이것도 쓸 수 있다. 하지만 이 만화의 소리와 느낌이 빠진다. 더 꼭 맞는 것은?';
+      else $('qzSay').innerHTML = '<b>' + C[x].past + '</b>의 느낌은 ' + CORE[x] + ' 이 만화의 가운데 칸과 맞을까?'; };
+    show(cur, 0); ask();
+  })();
+</script>
+<!-- COMIC:END -->
 </body>
 </html>

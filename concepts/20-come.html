@@ -89,6 +89,24 @@
     .talk .who { grid-column: 1 / -1; text-align: left; padding: 0; }
   }
 </style>
+<!-- COMIC:START -->
+<style>
+  .cm { display: flex; gap: 8px; margin: 12px 0; }
+  .cm figure { margin: 0; min-width: 0; outline: 3px solid #222; outline-offset: -3px; background: #fffdf6; overflow: hidden; }
+  .cm svg { display: block; width: 100%; height: auto; }
+  .cm text { font-family: "Malgun Gothic", system-ui, sans-serif; }
+  .cm-btns { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+  .cm-btns button { font: inherit; min-height: 44px; padding: 4px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  .cm-btns button[aria-pressed="true"] { border: 2px solid var(--accent); font-weight: 700; }
+  .cm-say { border-left: 4px solid var(--accent); padding: 8px 12px; background: var(--card); min-height: 44px; }
+  .cm.go figure { animation: cmIn .28s both; animation-delay: calc(var(--i) * var(--t)); }
+  .cm.go .sfx { animation: cmPop .32s both; animation-delay: calc(var(--i) * var(--t) + .18s); transform-box: fill-box; transform-origin: center; }
+  @keyframes cmIn { from { opacity: 0; transform: translateY(8px); } }
+  @keyframes cmPop { from { opacity: 0; transform: scale(.2); } 70% { opacity: 1; transform: scale(1.18); } }
+  @media (prefers-reduced-motion: reduce) { .cm.go figure, .cm.go .sfx { animation: none; } }
+  @media (max-width: 560px) { .cm { flex-direction: column; align-items: center; } .cm figure { flex: none !important; } .cm svg { height: 200px; width: auto; max-width: 100%; } }
+</style>
+<!-- COMIC:END -->
 </head>
 <body>
 <main>
@@ -102,6 +120,20 @@
     <button type="button" data-word="approach" title="approach 소리로 듣기"><span class="en">approach</span><span class="ipa">/əˈproʊtʃ/</span><span class="ko">[어<b>프로우치</b>]</span><span class="spk" aria-hidden="true">🔊</span></button>
     <button type="button" data-word="enter" title="enter 소리로 듣기"><span class="en">enter</span><span class="ipa">/ˈen.t̬ɚ/</span><span class="ko">[<b>엔</b>터]</span><span class="spk" aria-hidden="true">🔊</span></button>
   </div>
+<!-- COMIC:START -->
+  <h2 id="comic-h">만화로 먼저 느끼기</h2>
+  <p>설명을 읽기 전에 <b>동사를 누르고 만화만 본다.</b> 그다음 <b>장면 1 → 2 → 3</b>을 넘긴다. 앞뒤 칸은 바뀌어도 <b>가운데 칸의 느낌</b>은 남는다 — 그 남는 것이 동사다. 장면 3은 손에 안 잡히는 것까지 간다.</p>
+  <div class="cm-btns" id="cmBtns" role="group" aria-label="동사 고르기"></div>
+  <div class="cm-btns" id="cmSc" role="group" aria-label="장면 고르기"></div>
+  <div class="cm" id="cm"></div>
+  <div class="cm-say" id="cmSay" aria-live="polite"></div>
+  <p class="note">장면 하나가 뜻은 아니다. 세 장면에 다 남는 것이 동사의 느낌이다. 장면 1은 노트의 문장(아이와 학교)을 옮겼고, 장면 2 · 3과 감정은 새로 지었다.</p>
+  <h3>만화 보고 맞히기</h3>
+  <div class="cm" id="qz"></div>
+  <p class="en" style="font-size:18px;margin:8px 0" id="qzLine"></p>
+  <div class="cm-btns" id="qzBtns" role="group" aria-label="동사 맞히기"></div>
+  <div class="cm-say" id="qzSay" aria-live="polite"></div>
+<!-- COMIC:END -->
 
   <div class="card">
     <div class="fig">
@@ -300,7 +332,7 @@
   function existChart(E, gone) {
     const tx = (x, y, s, t, fill, extra) => '<text x="' + x + '" y="' + y + '" font-size="' + s + '" text-anchor="middle" fill="' + fill + '"' + (extra || '') + '>' + t + '</text>';
     const G = E.cards.find((c) => c.id === gone);
-    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 동사가 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
+    let s = tx(340, 24, 13, G ? G.v + ' 없이 말하면 — 이 그림을 그릴 낱말이 빈다' : '말하고 싶은 그림마다 그것을 그리는 ' + (E.noun || '동사가') + ' 있다', G ? 'var(--bad)' : 'var(--muted)', ' font-weight="600"');
     E.cards.forEach((c, i) => {
       const x = 15 + i * 110, hole = c.id === gone, stroke = hole ? 'var(--bad)' : c.out ? E.outColor : 'var(--line)';
       s += '<rect x="' + x + '" y="38" width="100" height="126" rx="10" fill="var(--bg)" stroke="' + stroke + '" stroke-width="' + (hole ? 2 : 1.2) + '"' + (hole || c.out ? ' stroke-dasharray="5 4"' : '') + '/>' +
@@ -697,5 +729,137 @@
     drawSlot();
   }
 </script>
+<!-- COMIC:START -->
+<script>
+  (() => {
+    // 만화 공통 부품. 칸 높이 240, 좌표는 그림용. 종이 색은 어두운 화면에서도 그대로 (l 선 · f 면 · g 옮기기 · t 글자 · sfx 효과음)
+    const K = '#222', ME = '#4a7fb5', OT = '#a84b40', OF = '#2b3550', SK = '#f0c49a';
+    const l = (d, w, c) => '<path d="' + d + '" fill="none" stroke="' + (c || K) + '" stroke-width="' + (w || 3) + '" stroke-linecap="round" stroke-linejoin="round"/>';
+    const f = (d, c, w) => '<path d="' + d + '" fill="' + c + '" stroke="' + K + '" stroke-width="' + (w === undefined ? 3 : w) + '" stroke-linejoin="round"/>';
+    const g = (x, y, r, k, b) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + (r || 0) + ') scale(' + (k || 1) + ')">' + b + '</g>';
+    const t = (x, y, z, v, c, r) => '<text x="' + x + '" y="' + y + '" font-size="' + z + '" text-anchor="middle" fill="' + (c || K) + '" font-weight="700"' + (r ? ' transform="rotate(' + r + ' ' + x + ' ' + y + ')"' : '') + '>' + v + '</text>';
+    // 효과음: 큰 한국어 + 작은 영어. 크기와 기울기가 힘
+    const sfx = (x, y, z, v, en, c, r) => '<g transform="rotate(' + (r || 0) + ' ' + x + ' ' + y + ')"><g class="sfx"><text x="' + x + '" y="' + y + '" font-size="' + z + '" text-anchor="middle" font-weight="900" fill="' + c + '" stroke="#fff" stroke-width="' + z / 7 + '" paint-order="stroke" stroke-linejoin="round">' + v + '</text>' + (en ? t(x, y + Math.max(15, z * .42), Math.max(11, z * .3), en, c) : '') + '</g></g>';
+    const FACE = {
+      calm: l('M-10 -4 v5 M10 -4 v5 M-7 13 h14'), smile: l('M-10 -4 v5 M10 -4 v5 M-9 10 q9 9 18 0'),
+      shock: '<circle cx="-10" cy="-4" r="7" fill="#fff" stroke="#222" stroke-width="2"/><circle cx="10" cy="-4" r="7" fill="#fff" stroke="#222" stroke-width="2"/><circle cx="-10" cy="-4" r="2" fill="#222"/><circle cx="10" cy="-4" r="2" fill="#222"/><ellipse cx="0" cy="15" rx="6" ry="8" fill="#222"/>',
+      phew: l('M-15 -2 q5 5 10 0 M5 -2 q5 5 10 0 M-6 13 q6 5 12 0') + f('M24 -14 q-7 11 0 15 q7 -4 0 -15', '#9fd3f0', 2),
+      sad: l('M-10 -4 v5 M10 -4 v5 M-8 15 q8 -8 16 0 M-16 -12 l10 -4 M16 -12 l-10 -4'), stern: l('M-17 -13 l12 5 M17 -13 l-12 5 M-10 -3 v4 M10 -3 v4 M-8 14 h16', 4),
+      down: l('M-14 0 q5 4 9 0 M5 0 q5 4 9 0 M-6 15 h12') };
+    const HEAD = (fc) => '<circle r="28" fill="' + SK + '" stroke="#222" stroke-width="3"/><path d="M-28 -4 q2 -30 28 -28 q26 -2 28 28 q-12 -14 -28 -14 q-16 0 -28 14" fill="#4a3424" stroke="#222" stroke-width="2"/>' + FACE[fc];
+    const PH = '<rect x="-12" y="-21" width="24" height="42" rx="4" fill="#222"/><rect x="-9" y="-16" width="18" height="30" fill="#8fd0ee"/>';
+    // 사람: (0,0)이 발. arm = 팔 그림
+    const MAN = (c, fc, arm, leg) => l(leg || 'M-12 -42 L-14 0 M12 -42 L14 0', 10) + f('M-24 -102 q24 -12 48 0 l4 64 h-56 z', c) + (arm ? l(arm, 13) + l(arm, 8, SK) : '') + g(0, -134, 0, 1, HEAD(fc));
+    // 큰 손: 팔이 왼쪽에서 오고 (0,0)이 손바닥. 휴대폰을 쥔 모양
+    const FIST = (c, item) => f('M-200 -24 H-40 V24 H-200 z', c) + f('M-44 -22 q20 -14 40 -8 q16 4 14 24 q2 22 -16 26 q-24 4 -38 -10 z', SK) + (item || g(12, -8, 8, 2.5, PH)) + [-22, -8, 6, 20].map((y) => f('M-6 ' + (y - 6) + ' h26 q8 6 0 12 h-26 z', SK, 2.5)).join('') + f('M-18 -26 q20 -18 34 -8 q2 8 -8 10 q-14 2 -22 8 z', SK, 2.5);
+    const FOC = (w, x, y, r, n, c) => Array.from({ length: n }, (_, i) => { const a = i * 2 * Math.PI / n, q = r + (i % 3) * 14, e = .016 + (i % 2) * .016; return '<path d="M' + (x + q * Math.cos(a)).toFixed(1) + ' ' + (y + q * Math.sin(a)).toFixed(1) + ' L' + (x + 420 * Math.cos(a - e)).toFixed(1) + ' ' + (y + 420 * Math.sin(a - e)).toFixed(1) + ' L' + (x + 420 * Math.cos(a + e)).toFixed(1) + ' ' + (y + 420 * Math.sin(a + e)).toFixed(1) + ' z" fill="' + (c || K) + '"/>'; }).join('');
+    const SPD = (x, y, n, w) => Array.from({ length: n }, (_, i) => l('M' + (x + (i % 2) * 14) + ' ' + (y + i * 15) + ' h' + (w - (i % 3) * 14), 2 + (i % 2))).join('');
+    const TBL = (x, y, w) => f('M' + x + ' ' + y + ' h' + w + ' v10 h-' + w + ' z', '#c9a171') + l('M' + (x + 12) + ' ' + (y + 10) + ' V240 M' + (x + w - 12) + ' ' + (y + 10) + ' V240', 6, '#8a6a48');
+    const BUB = (x, y, w, v, z) => '<ellipse cx="' + x + '" cy="' + y + '" rx="' + w / 2 + '" ry="20" fill="#fff" stroke="#222" stroke-width="2.5"/>' + t(x, y + 6, z || 16, v);
+    const CAR = (x, y, k) => g(x, y, 0, k, f('M-70 0 v-22 l26 -22 h56 l26 22 h32 v22 z', '#d8412f') + f('M-36 -24 l16 -14 h24 v14 z M10 -24 v-14 h6 l16 14 z', '#bfe6f5', 2) + '<circle cx="-38" cy="2" r="13" fill="#222"/><circle cx="42" cy="2" r="13" fill="#222"/>');
+    const BUS = (x, y, k) => g(x, y, 0, k, f('M0 0 v-110 q0 -14 14 -14 h150 q14 0 14 14 v110 z', '#3a9a6a') + [14, 60, 106].map((q) => f('M' + q + ' -104 h36 v34 h-36 z', '#bfe6f5', 2.5)).join('') + f('M144 0 v-100 h24 v100 z', '#fffdf6', 2.5) + '<circle cx="36" cy="2" r="15" fill="#222"/><circle cx="118" cy="2" r="15" fill="#222"/>');
+    const STAR = (x, y, r, c) => f(Array.from({ length: 10 }, (_, i) => { const q = -Math.PI / 2 + i * Math.PI / 5, d = i % 2 ? r * .45 : r; return (i ? 'L' : 'M') + (x + d * Math.cos(q)).toFixed(1) + ' ' + (y + d * Math.sin(q)).toFixed(1); }).join(' ') + ' z', c || '#f2b632');
+    const CASTLE = (x, y, k, flag) => g(x, y, 0, k, f('M-60 0 v-70 h18 v12 h16 v-12 h16 v12 h20 v-12 h16 v12 h16 v-12 h18 v70 z', '#b9b4a6') + f('M-12 0 v-28 q12 -16 24 0 v28 z', '#4a3424') + l('M0 -60 v-62', 4) + f('M0 -122 l44 12 l-44 14 z', flag));
+    const BEAR = (x, y, k) => g(x, y, 0, k, '<circle cx="-13" cy="-24" r="8" fill="#b9814a" stroke="#222" stroke-width="3"/><circle cx="13" cy="-24" r="8" fill="#b9814a" stroke="#222" stroke-width="3"/><circle cy="-10" r="20" fill="#b9814a" stroke="#222" stroke-width="3"/><circle cx="-7" cy="-13" r="2.5"/><circle cx="7" cy="-13" r="2.5"/>' + l('M-5 -2 q5 5 10 0', 2.5) + f('M-16 8 h32 l4 26 h-40 z', '#b9814a'));
+    const EYE = (x, y, k) => g(x, y, 0, k, f('M-34 0 q34 -38 68 0 q-34 38 -68 0 z', '#fff') + '<circle r="15" fill="#4a7fb5" stroke="#222" stroke-width="3"/><circle r="6"/>');
+    const BOOK = (x, y, k) => g(x, y, 0, k, f('M-30 -42 h60 v84 h-60 z', '#7a4a9a') + t(0, -10, 14, '비밀의', '#fff') + t(0, 12, 14, '문', '#fff'));
+    const DARK = (w, c) => '<rect width="' + w + '" height="240" fill="' + (c || '#1b1d26') + '"/>';
+    const ZZ = (x, y) => t(x, y, 18, 'z', '#555') + t(x + 14, y - 16, 24, 'z', '#555') + t(x + 32, y - 36, 30, 'Z', '#555');
+    // 짧게 쓰는 부품: A 사람(바닥 240) · BK 책 · HND 왼쪽에서 온 펼친 손 · ARW 화살표 · BOXG 상자 · COIN 동전
+    const A = (x, c, fc, arm, k, leg) => g(x, 240, 0, k || .88, MAN(c, fc, arm, leg));
+    const BK = (x, y, k, c, r) => g(x, y, r || 0, k || 1, f('M-20 -26 h36 q6 0 6 6 v46 h-42 z', c || '#a84b40') + f('M-20 20 h42 v6 h-42 z', '#fff', 2) + l('M-10 -12 h20 M-10 -4 h14', 2, '#fff'));
+    const HND = (x, y, k, c, flip) => '<g transform="translate(' + x + ' ' + y + ') scale(' + (flip ? -1 : 1) * (k || 1) + ' ' + (k || 1) + ')">' + f('M-200 -20 H-50 V22 H-200 z', c) + f('M-52 -18 q24 -8 44 -4 l44 4 q8 5 0 10 h-30 q34 4 34 8 q0 8 -10 8 h-50 q-20 2 -32 10 z', SK) + '</g>';
+    const ARW = (x1, y1, x2, y2, c, w) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 14; return l('M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)).toFixed(1) + ' ' + (y2 - h * Math.sin(a - .5)).toFixed(1) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)).toFixed(1) + ' ' + (y2 - h * Math.sin(a + .5)).toFixed(1), w || 4, c || '#888'); };
+    const BOXG = (x, y, w, h, c) => f('M' + x + ' ' + y + ' h' + w + ' v' + h + ' h-' + w + ' z', c || '#c9a171');
+    const COIN = (x, y, r) => '<circle cx="' + x + '" cy="' + y + '" r="' + (r || 12) + '" fill="#f2b632" stroke="#222" stroke-width="3"/>' + t(x, y + (r || 12) * .4, (r || 12) * 1.1, '$');
+    const GND = (w) => l('M0 238 H' + w, 2);
+    // MIX: 동사 다섯의 맞히기 순서(장면 15개를 섞는다) · SHIFT 옆으로 옮겨 여러 번 · SUN · MOON · DOC 파일 · BULB 전구
+    const MIX = (d) => [[4, 0], [1, 1], [2, 1], [0, 0], [3, 1], [4, 2], [1, 0], [2, 2], [0, 1], [3, 0], [4, 1], [1, 2], [0, 2], [3, 2], [2, 0]].map(([i, n]) => [d[i], n]);
+    const SUN = (x, y, r) => '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#f2b632" stroke="#222" stroke-width="3"/>';
+    const MOON = (x, y, k) => g(x, y, 0, k || 1, f('M6 -18 a20 20 0 1 0 8 34 a16 16 0 1 1 -8 -34', '#f2e6a0', 2.5));
+    const DOC = (x, y, k, r) => g(x, y, r || 0, k || 1, f('M-20 -28 h28 l12 12 v44 h-40 z', '#fff') + l('M8 -28 v12 h12', 2.5) + l('M-12 -6 h24 M-12 4 h24 M-12 14 h16', 2.5, '#4a7fb5'));
+    const BULB = (x, y, k) => g(x, y, 0, k || 1, f('M-20 -20 a24 24 0 1 1 40 0 q-8 12 -8 22 h-24 q0 -10 -8 -22 z', '#f2d34a') + f('M-11 4 h22 v12 h-22 z', '#999') + l('M0 -70 v-10 M-38 -58 l-8 -8 M38 -58 l8 -8', 3));
+    const CLK = (x, y, r, c) => '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#fff" stroke="' + (c || K) + '" stroke-width="3"/>' + l('M' + x + ' ' + y + ' v-' + r * .65 + ' M' + x + ' ' + y + ' l' + r * .5 + ' ' + r * .2);
+    // MIND 머릿속(옆얼굴 안의 방) · DRW 서랍 · BIRD 새 · PAINT 그림 액자 · BEYE 큰 눈(왼쪽에서 오른쪽을 봄)
+    const MIND = (w, body, bg) => DARK(w, bg || '#f2f0ea') + f('M30 240 V200 q-22 -30 -20 -84 q6 -104 ' + w * .42 + ' -104 q' + w * .4 + ' 0 ' + w * .42 + ' 96 l18 34 q4 8 -10 10 l-8 2 q4 40 -30 40 h-40 v46 z', SK) + '<ellipse cx="' + w * .44 + '" cy="112" rx="' + w * .33 + '" ry="82" fill="#fffdf6" stroke="#222" stroke-width="3"/>' + body;
+    const DRW = (x, y, w, h, open, v) => BOXG(x, y, w, h, '#c9a171') + (open ? BOXG(x - 4, y + 6, w + 8, h, '#e3c594') : '') + '<circle cx="' + (x + w / 2) + '" cy="' + (y + h / 2 + (open ? 8 : 0)) + '" r="4" fill="#7a4a2a"/>' + (v ? t(x + w / 2, y - 8, 15, v, '#d8412f') : '');
+    const BIRD = (x, y, k, c, w) => g(x, y, 0, k || 1, f('M-26 4 q0 -26 28 -26 q14 0 16 12 l14 4 l-12 6 q-4 20 -26 20 q-20 0 -20 -16 z', c || '#8a6a3a') + f('M-16 0 q14 -8 22 4 q-10 12 -22 -4', w || '#b9905a', 2.5) + '<circle cx="10" cy="-10" r="3"/>' + l('M-6 20 v10 M4 20 v10 M-26 4 l-14 8', 3));
+    const PAINT = (x, y, k) => g(x, y, 0, k || 1, f('M-50 -38 h100 v76 h-100 z', '#c9a171') + f('M-42 -30 h84 v60 h-84 z', '#bfe6f5', 2) + f('M-42 30 l26 -34 l20 22 l14 -14 l24 26 z', '#3a9a6a', 2) + '<circle cx="24" cy="-14" r="9" fill="#f2b632"/>');
+    const BEYE = (x, y, k, sq) => g(x, y, 0, k || 1, f('M-50 0 q50 -' + (sq ? 14 : 56) + ' 100 0 q-50 ' + (sq ? 14 : 56) + ' -100 0 z', '#fff') + '<circle cx="12" r="' + (sq ? 7 : 20) + '" fill="#4a7fb5" stroke="#222" stroke-width="3"/><circle cx="14" r="' + (sq ? 4 : 9) + '"/>' + l('M-54 -' + (sq ? 22 : 40) + ' q54 -' + (sq ? 6 : 30) + ' 108 0', 5));
+    const TREEC = (x, k) => g(x, 238, 0, k || 1, l('M0 0 V-90', 12, '#7a5a3a') + '<circle cy="-130" r="62" fill="#3a9a6a" stroke="#222" stroke-width="3"/>');
+    // note: 장면 하나가 뜻은 아니다. 세 장면에 다 남는 것이 동사의 느낌이다. 장면 1은 노트의 문장(아이와 학교)을 옮겼고, 장면 2 · 3과 감정은 새로 지었다.
+    const BASE = 'come', FIRST = 'approach', BASIC_B = '학교';
+    const FX = { come: [.25, 400, 800, .1, .5], arrive: [.1, 400, 160, .8, .6], return: [.5, 900, 400, .2, .5], approach: [.9, 120, 320, .35, .8], enter: [.25, 1200, 300, .35, .5] };
+    const ORDER = MIX(['come', 'arrive', 'return', 'approach', 'enter']);
+    const KD = '#e0a53a', PK = '#a84b7a';
+    const WK = 'M-10 -42 L-24 0 M10 -42 L22 0';
+    const SCH = (x, k) => g(x, 238, 0, k || 1, f('M-50 0 v-90 h100 v90 z', '#e9e0c8') + f('M-60 -90 l60 -40 l60 40 z', '#d8412f') + f('M-14 0 v-40 h28 v40 z', '#7a5a3a') + t(0, -62, 18, '학교'));
+    const HERE = (x, y) => f('M' + x + ' ' + y + ' q-22 -26 -22 -42 a22 22 0 0 1 44 0 q0 16 -22 42 z', '#d8412f') + '<circle cx="' + x + '" cy="' + (y - 42) + '" r="8" fill="#fff"/>';
+    const COM = (b) => b + HERE(170, 226) + ARW(70, 214, 136, 214, '#888', 6) + t(170, 130, 15, '여기', '#d8412f') + sfx(60, 70, 20, '슥', '', '#888');
+    const ARV = (b) => l('M14 210 H230', 5, '#bbb') + HERE(170, 208) + b + sfx(74, 70, 44, '딱!', '', '#2b3550') + t(74, 108, 16, '도착', '#2b3550');
+    const RET = (b) => l('M100 120 H190 q44 0 44 40 t-44 40 H98 m16 -14 l-18 14 l18 14', 7, '#4a7fb5') + b + sfx(206, 62, 26, '빙—', '', '#4a7fb5');
+    const APP = (pic) => DARK(330, '#f2f2f6') + [.35, .6, .9].map((k, i) => '<g opacity="' + (.35 + i * .32) + '">' + pic(50 + i * 78, k) + '</g>').join('') + l('M252 40 V236', 3, '#d8412f') + t(290, 130, 14, '아직', '#d8412f') + sfx(150, 52, 28, '점점…', '', '#555');
+    const ENT = (b) => '<rect width="110" height="240" fill="#cfd3dc"/><rect x="110" width="130" height="240" fill="#fff3c4"/>' + l('M110 0 V240', 7) + b + sfx(176, 60, 34, '쑥', '', '#a8741a');
+    const C = {
+      come: { n: 'come', past: 'came', en: 'The child came to school.', ko: '아이가 학교에 왔다.', feel: '<b>여기 쪽으로 온다.</b> 화살표의 끝에 내가 있다.', t: .5,
+        p: [[180, '학교에서 길을 본다', () => SCH(120, .9) + A(30, KD, 'calm', null, .35)], [220, '아이가 여기로 온다', () => COM(A(50, KD, 'smile', null, .6, WK))], [180, '아이가 앞에 있다', () => SCH(130, .6) + A(70, KD, 'smile', 'M18 -92 L36 -122', .9)]] },
+      arrive: { n: 'arrive', past: 'arrived', no: 1, en: 'The child arrived at school.', ko: '아이가 학교에 도착했다.', feel: '<b>점이 찍힌다.</b> 오는 길은 안 보이고 닿은 순간만 있다.', t: .5,
+        p: [[160, '길 위의 아이', () => A(60, KD, 'calm', null, .6, WK) + l('M0 238 H160', 3) + CLK(120, 60, 22)], [240, '도착점에 딱 닿는다', () => ARV(A(170, KD, 'smile', null, .55))], [160, '교문 안에 선다', () => SCH(90, .9) + A(90, KD, 'smile', null, .5)]] },
+      return: { n: 'return', past: 'returned', en: 'The child returned to school.', ko: '아이가 학교로 돌아왔다.', feel: '<b>길이 되돌아온다.</b> 전에 있던 곳이다. 빈자리가 메워진다.', t: .55,
+        p: [[170, '빈 책상', () => TBL(40, 180, 90) + t(85, 140, 18, '빈자리', '#888')], [260, '갔던 길이 되돌아온다', () => RET(SCH(52, .6) + g(170, 226, 0, .5, MAN(KD, 'smile')))], [170, '다시 앉는다', () => A(86, KD, 'smile', null, .7) + TBL(40, 190, 90)]] },
+      approach: { n: 'approach', past: 'approached', no: 1, en: 'The child approached the school.', ko: '아이가 학교에 다가갔다.', feel: '<b>점점 커진다. 아직 안 닿았다.</b> 칸이 길고 긴장이 쌓인다.', t: .85,
+        p: [[140, '멀리 작은 아이', () => SCH(100, .7) + A(22, KD, 'calm', null, .25)], [330, '점점 가까워지지만 선 앞이다', () => APP((x, k) => g(x, 236, 0, k, MAN(KD, 'calm', '', WK)))], [150, '교문 앞에서 멈춘다', () => SCH(110, .8) + A(34, KD, 'calm', null, .6)]] },
+      enter: { n: 'enter', past: 'entered', no: 1, en: 'The child entered the school.', ko: '아이가 학교 안으로 들어갔다.', feel: '<b>금을 넘는다.</b> 밖과 안의 색이 다르다.', t: .5,
+        p: [[160, '문 앞에 선다', () => f('M80 40 h66 v198 h-66 z', '#7a5a3a') + A(44, KD, 'calm', null, .7)], [240, '경계를 넘어 안으로', () => ENT(A(116, KD, 'smile', 'M18 -92 L44 -84', .85, WK))], [160, '안에 있다', () => DARK(160, '#fff3c4') + A(80, KD, 'smile', null, .85)]] } };
+    const MORE = {
+      come: [
+        { b: '봄', en: 'Spring came.', ko: '봄이 왔다.', feel: '발이 없어도 <b>우리 쪽으로</b> 온다.', p: [[180, '추운 나무', () => l('M90 238 V120 M90 160 l-34 -30 M90 140 l34 -34', 8, '#7a5a3a')], [220, '봄이 여기로 온다', () => COM('<g transform="translate(46 170)">' + [0, 1, 2, 3, 4].map((i) => '<circle cx="' + 16 * Math.cos(i * 1.257) + '" cy="' + 16 * Math.sin(i * 1.257) + '" r="11" fill="#f7b6c8" stroke="#222" stroke-width="2"/>').join('') + '<circle r="8" fill="#f2b632"/></g>')], [180, '꽃 핀 나무', () => l('M90 238 V140', 8, '#7a5a3a') + '<circle cx="90" cy="110" r="52" fill="#f7b6c8" stroke="#222" stroke-width="3"/>' + A(150, ME, 'smile', null, .5)]] },
+        { b: '생각', en: 'An idea came to me.', ko: '생각이 떠올랐다.', feel: '내가 찾아간 것이 아니다. <b>저쪽에서 나에게</b> 왔다.', p: [[180, '막막하다', () => A(90, ME, 'sad') + t(140, 80, 24, '…')], [220, '생각이 여기로 온다', () => COM(BULB(46, 190, .9))], [180, '밝아진 얼굴', () => A(80, ME, 'shock') + BULB(132, 80, .7)]] }],
+      arrive: [
+        { b: '기차', en: 'The train arrived on time.', ko: '기차가 제시간에 도착했다.', feel: '달려온 길보다 <b>닿은 순간</b>이다.', p: [[160, '승강장에서 기다린다', () => CLK(110, 60, 26) + A(50, ME, 'calm')], [240, '기차가 도착점에 딱 선다', () => ARV(f('M20 150 h140 q24 0 24 26 v30 h-164 z', '#3a9a6a') + [40, 84, 128].map((x) => BOXG(x, 162, 30, 18, '#bfe6f5')).join(''))], [160, '문이 열린다', () => BOXG(20, 70, 120, 168, '#3a9a6a') + BOXG(54, 96, 52, 142, '#fff3c4')]] },
+        { b: '결정', no: 1, en: 'We arrived at a decision.', ko: '마침내 결정에 이르렀다.', feel: '길이 없는데 <b>닿았다.</b> 한참 이야기한 끝의 점이다.', p: [[160, '의견이 엇갈린다', () => A(44, ME, 'stern', null, .75) + A(116, PK, 'stern', null, .75) + t(80, 70, 22, '?!')], [240, '결정에 딱 닿는다', () => ARV(BOXG(136, 170, 68, 36, '#fff') + t(170, 195, 18, '결정', '#d8412f'))], [160, '손을 잡는다', () => A(46, ME, 'smile', 'M18 -92 L40 -84', .75) + A(114, PK, 'smile', 'M-18 -92 L-40 -84', .75)]] }],
+      return: [
+        { b: '고양이', en: 'The cat returned home.', ko: '고양이가 집에 돌아왔다.', feel: '나갔던 곳으로 <b>되돌아온다.</b>', p: [[170, '빈 방석', () => '<ellipse cx="85" cy="200" rx="50" ry="16" fill="#a84b7a" stroke="#222" stroke-width="3"/>'], [260, '갔던 길이 되돌아온다', () => RET(f('M20 160 h60 v78 h-60 z M12 160 l38 -30 l38 30 z', '#e9e0c8') + CATC(160, 200, .9))], [170, '방석 위 고양이', () => '<ellipse cx="85" cy="206" rx="50" ry="16" fill="#a84b7a" stroke="#222" stroke-width="3"/>' + CATC(85, 190)]] },
+        { b: '기운', no: 1, en: 'My strength returned.', ko: '기운이 돌아왔다.', feel: '잃었던 것이 <b>제자리로</b> 왔다.', p: [[170, '앓아눕는다', () => g(44, 160, -80, .8, HEAD('sad')) + BOXG(56, 160, 100, 46, ME)], [260, '기운이 되돌아온다', () => RET(A(52, ME, 'calm', null, .6) + STAR(160, 200, 22))], [170, '팔을 번쩍 든다', () => A(85, ME, 'smile', 'M18 -92 L46 -124 M-18 -92 L-46 -124', .95)]] }],
+      approach: [
+        { b: '개', no: 1, en: 'A dog approached me.', ko: '개 한 마리가 다가왔다.', feel: '아직 안 닿았다. <b>거리만 줄어든다</b> — 그래서 두근거린다.', p: [[140, '멀리 개가 보인다', () => DOGC(30, 120, .3) + A(100, ME, 'calm', null, .7)], [330, '개가 점점 커진다', () => APP((x, k) => DOGC(x - 34 * k, 234, k * .9))], [150, '바로 앞에서 멈춘 개', () => DOGC(46, 236, .9) + A(116, ME, 'shock', null, .7)]] },
+        { b: '마감', en: 'The deadline approached.', ko: '마감이 다가왔다.', feel: '날짜가 걸어온다. <b>점점 커지는데 아직</b>이다.', p: [[140, '달력의 먼 날', () => BOXG(30, 60, 80, 80, '#fff') + t(70, 112, 22, 'D-9')], [330, '마감이 점점 커진다', () => APP((x, k) => g(x, 180, 0, k, BOXG(-40, -50, 80, 80, '#fff') + t(0, 8, 34, 'D-' + [5, 3, 1][k < .5 ? 0 : k < .8 ? 1 : 2], '#d8412f')))], [150, '진땀이 난다', () => A(74, ME, 'shock') + f('M110 100 q-8 13 0 18 q8 -5 0 -18', '#9fd3f0', 2)]] }],
+      enter: [
+        { b: '고양이', no: 1, en: 'A cat entered the room.', ko: '고양이가 방에 들어왔다.', feel: '문턱이라는 <b>금을 넘었다.</b>', p: [[160, '문틈으로 들여다본다', () => f('M70 40 h70 v198 h-70 z', '#7a5a3a') + CATC(44, 210)], [240, '경계를 넘어 안으로', () => ENT(CATC(112, 200, 1.4))], [160, '방 안의 고양이', () => DARK(160, '#fff3c4') + CATC(80, 200, 1.2)]] },
+        { b: '대회', no: 1, en: 'She entered the contest.', ko: '대회에 참가했다.', feel: '문이 없어도 <b>밖에서 안으로</b> 들어갔다. 이제 참가자다.', p: [[160, '참가 신청서', () => A(50, PK, 'stern', null, .8) + DOC(116, 130, 1.1)], [240, '경계를 넘어 안으로', () => ENT(A(116, PK, 'stern', null, .85, WK) + t(190, 130, 18, '대회', '#a8741a'))], [160, '번호를 단다', () => DARK(160, '#fff3c4') + A(80, PK, 'smile', null, .95) + BOXG(62, 164, 36, 24, '#fff') + t(80, 182, 16, '27')]] }] };
+    const CORE = { come: '<b>여기(기준) 쪽으로</b> 온다.', arrive: '<b>닿은 순간.</b> 길의 끝점이다.', return: '<b>전에 있던 데로 되돌아온다.</b>', approach: '<b>거리가 줄어든다.</b> 닿았다고는 안 한다.', enter: '<b>금을 넘어 안으로.</b>' };
+    function CATC(x, y, k) { return g(x, y, 0, k || 1, f('M-26 0 q-4 -34 26 -34 q30 0 26 34 z', '#888') + '<circle cx="0" cy="-42" r="17" fill="#888" stroke="#222" stroke-width="3"/>' + f('M-16 -50 l2 -16 l10 8 z M16 -50 l-2 -16 l-10 8 z', '#888', 2.5) + '<circle cx="-6" cy="-44" r="2.5"/><circle cx="6" cy="-44" r="2.5"/>' + l('M26 -6 q18 -4 14 -22', 6, '#888')); }
+    function DOGC(x, y, k) { return g(x, y, 0, k || 1, l('M-28 -30 V0 M-12 -30 V0 M20 -30 V0 M34 -30 V0 M-38 -52 q-16 -8 -14 -24', 9, '#b9814a') + f('M-40 -64 h74 v36 h-74 z', '#b9814a') + '<circle cx="46" cy="-74" r="24" fill="#b9814a" stroke="#222" stroke-width="3"/><circle cx="50" cy="-78" r="3"/><circle cx="66" cy="-70" r="5"/>'); }
+    // 만화 공통 실행: 페이지 데이터(C · MORE · CORE · ORDER · FX · BASE · FIRST · BASIC_B)를 받아 단추 · 장면 · 맞히기를 만든다
+    const IDS = Object.keys(C), $ = (id) => document.getElementById(id);
+    const SC = {}; IDS.forEach((id) => { SC[id] = [Object.assign({ b: BASIC_B }, C[id]), ...MORE[id]]; });
+    const draw = (box, id, n, q) => { const c = SC[id][n]; box.style.setProperty('--t', C[id].t + 's'); box.classList.remove('go');
+      box.innerHTML = c.p.map(([w, a, b], i) => '<figure style="flex:' + w + ' 1 0;--i:' + i + '"><svg viewBox="0 0 ' + w + ' 240" role="img" aria-label="' + a + '">' + b(q) + '</svg></figure>').join('');
+      void box.offsetWidth; box.classList.add('go'); };
+    // 효과음: 파일 없이 만든 소리. 누른 다음에만 난다
+    let ac; const fx = (id) => { const A = window.AudioContext || window.webkitAudioContext; if (!A) return; ac = ac || new A(); ac.resume();
+      const [dur, f0, f1, vol, at] = FX[id], T = ac.currentTime + at;
+      const b = ac.createBuffer(1, ac.sampleRate * dur, ac.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);
+      const s = ac.createBufferSource(), flt = ac.createBiquadFilter(), v = ac.createGain(); s.buffer = b; flt.type = f0 < 300 ? 'lowpass' : 'bandpass'; flt.frequency.setValueAtTime(f0, T); flt.frequency.exponentialRampToValueAtTime(f1, T + dur); v.gain.value = vol; s.connect(flt).connect(v).connect(ac.destination); s.start(T); };
+    const say = (id, n) => { const c = SC[id][n]; return '<span class="en">' + c.en + '</span> <button type="button" class="speak" data-word="' + c.en + '" title="이 줄 듣기">🔊</button><br>' + c.ko + '<br>' + c.feel + '<br><span style="color:var(--accent)">세 장면에 남는 것 —</span> ' + CORE[id]; };
+    $('cmBtns').innerHTML = IDS.map((id) => '<button type="button" data-cm="' + id + '">' + C[id].n + '</button>').join('') + '<button type="button" id="cmAgain">↻ 효과음과 함께 다시</button>';
+    let cur = FIRST, no = 0;
+    const show = (id, n, snd) => { cur = id; no = n; draw($('cm'), id, n); $('cmSay').innerHTML = say(id, n);
+      $('cmSc').innerHTML = SC[id].map((c, i) => '<button type="button" data-sc="' + i + '" aria-pressed="' + (i === n) + '">장면 ' + (i + 1) + ' · ' + c.b + '</button>').join('');
+      $('cmBtns').querySelectorAll('[data-cm]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.cm === id)); if (snd) fx(id); };
+    $('cmBtns').onclick = (e) => { const b = e.target.closest('button'); if (b) b.dataset.cm ? show(b.dataset.cm, 0, true) : show(cur, no, true); };
+    $('cmSc').onclick = (e) => { const b = e.target.closest('button'); if (b) show(cur, +b.dataset.sc, true); };
+     let k = 0;
+    const ask = () => { const [id, n] = ORDER[k]; draw($('qz'), id, n, true); $('qzLine').textContent = SC[id][n].en.replace(SC[id][n].w || C[id].past, '_____'); $('qzSay').textContent = '어느 동사의 만화일까? (' + (k + 1) + ' / ' + ORDER.length + ')';
+      $('qzBtns').innerHTML = IDS.map((i) => '<button type="button" data-qz="' + i + '">' + C[i].past + '</button>').join('') + '<button type="button" id="qzNext">다음 만화 ▶</button>'; };
+    $('qzBtns').onclick = (e) => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'qzNext') { k = (k + 1) % ORDER.length; ask(); return; }
+      const [id, n] = ORDER[k], c = SC[id][n], x = b.dataset.qz; $('qzBtns').querySelectorAll('[data-qz]').forEach((z) => z.setAttribute('aria-pressed', z === b));
+      if (x === id) { $('qzLine').textContent = c.en; fx(id); $('qzSay').innerHTML = '✔ ' + say(id, n); }
+      else if (x === BASE) $('qzSay').innerHTML = c.no ? '<b>' + C[BASE].past + '</b> — 이 문장에는 어색하다. 더 꼭 맞는 것은?' : '<b>' + C[BASE].past + '</b> — 이것도 쓸 수 있다. 하지만 이 만화의 소리와 느낌이 빠진다. 더 꼭 맞는 것은?';
+      else $('qzSay').innerHTML = '<b>' + C[x].past + '</b>의 느낌은 ' + CORE[x] + ' 이 만화의 가운데 칸과 맞을까?'; };
+    show(cur, 0); ask();
+  })();
+</script>
+<!-- COMIC:END -->
 </body>
 </html>
