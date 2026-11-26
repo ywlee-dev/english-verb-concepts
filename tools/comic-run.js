@@ -18,7 +18,7 @@
     $('cmBtns').onclick = (e) => { const b = e.target.closest('button'); if (b) b.dataset.cm ? show(b.dataset.cm, 0, true) : show(cur, no, true); };
     $('cmSc').onclick = (e) => { const b = e.target.closest('button'); if (b) show(cur, +b.dataset.sc, true); };
      let k = 0;
-    const ask = () => { const [id, n] = ORDER[k]; draw($('qz'), id, n, true); $('qzLine').textContent = SC[id][n].en.replace(SC[id][n].w || C[id].past, '_____'); $('qzSay').textContent = '어느 동사의 만화일까? (' + (k + 1) + ' / ' + ORDER.length + ')';
+    const ask = () => { const [id, n] = ORDER[k]; draw($('qz'), id, n, true); $('qzLine').textContent = SC[id][n].en.replace(SC[id][n].w || C[id].past, '_____'); $('qzSay').textContent = '어느 ' + (typeof WORD === 'undefined' ? '동사' : WORD) + '의 만화일까? (' + (k + 1) + ' / ' + ORDER.length + ')';
       $('qzBtns').innerHTML = IDS.map((i) => '<button type="button" data-qz="' + i + '">' + C[i].past + '</button>').join('') + '<button type="button" id="qzNext">다음 만화 ▶</button>'; };
     $('qzBtns').onclick = (e) => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'qzNext') { k = (k + 1) % ORDER.length; ask(); return; }
       const [id, n] = ORDER[k], c = SC[id][n], x = b.dataset.qz; $('qzBtns').querySelectorAll('[data-qz]').forEach((z) => z.setAttribute('aria-pressed', z === b));

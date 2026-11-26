@@ -208,7 +208,7 @@ if __name__ == '__main__':
             if names and not any(n in src.name for n in names):
                 continue
             page = build(src, out)
-            if folder == 'pages':
+            if folder in ('pages', 'pages-adverbs'):
                 import comic
-                comic.apply(src.stem)
+                comic.apply(src.stem, 'verb' if folder == 'pages' else 'adverb')
             print('built', page.relative_to(ROOT.parent))
