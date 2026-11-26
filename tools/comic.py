@@ -7,7 +7,8 @@ OUT = T.parent / 'concepts'
 A, Z = 'COMIC:START', 'COMIC:END'
 
 
-ROOMS = {'verb': (OUT, 'comics', '동사'), 'adverb': (T.parent / 'adverbs', 'comics-adverbs', '부사')}
+ROOMS = {'verb': (OUT, 'comics', '동사'), 'adverb': (T.parent / 'adverbs', 'comics-adverbs', '부사'),
+         'adjective': (T.parent / 'adjectives', 'comics-adjectives', '형용사')}
 
 
 def apply(name, room='verb'):
@@ -45,7 +46,7 @@ def apply(name, room='verb'):
 
 
 if __name__ == '__main__':
-    room = 'adverb' if '--adverb' in sys.argv else 'verb'
+    room = 'adverb' if '--adverb' in sys.argv else 'adjective' if '--adjective' in sys.argv else 'verb'
     for n in [a for a in sys.argv[1:] if not a.startswith('--')]:
         apply(n, room)
         print('comic', n)

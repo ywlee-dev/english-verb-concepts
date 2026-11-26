@@ -91,6 +91,24 @@
   .dial { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; margin-top: 12px; font-size: 14px; color: var(--muted); }
   .dial input { width: 100%; min-height: 36px; accent-color: var(--accent); }
 </style>
+<!-- COMIC:START -->
+<style>
+  .cm { display: flex; gap: 8px; margin: 12px 0; }
+  .cm figure { margin: 0; min-width: 0; outline: 3px solid #222; outline-offset: -3px; background: #fffdf6; overflow: hidden; }
+  .cm svg { display: block; width: 100%; height: auto; }
+  .cm text { font-family: "Malgun Gothic", system-ui, sans-serif; }
+  .cm-btns { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+  .cm-btns button { font: inherit; min-height: 44px; padding: 4px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  .cm-btns button[aria-pressed="true"] { border: 2px solid var(--accent); font-weight: 700; }
+  .cm-say { border-left: 4px solid var(--accent); padding: 8px 12px; background: var(--card); min-height: 44px; }
+  .cm.go figure { animation: cmIn .28s both; animation-delay: calc(var(--i) * var(--t)); }
+  .cm.go .sfx { animation: cmPop .32s both; animation-delay: calc(var(--i) * var(--t) + .18s); transform-box: fill-box; transform-origin: center; }
+  @keyframes cmIn { from { opacity: 0; transform: translateY(8px); } }
+  @keyframes cmPop { from { opacity: 0; transform: scale(.2); } 70% { opacity: 1; transform: scale(1.18); } }
+  @media (prefers-reduced-motion: reduce) { .cm.go figure, .cm.go .sfx { animation: none; } }
+  @media (max-width: 560px) { .cm { flex-direction: column; align-items: center; } .cm figure { flex: none !important; } .cm svg { height: 200px; width: auto; max-width: 100%; } }
+</style>
+<!-- COMIC:END -->
 </head>
 <body>
 <main>
@@ -108,6 +126,20 @@
     <button type="button" data-word="lacking" title="lacking 소리로 듣기"><span class="en">lacking</span><span class="ipa">/ˈlæk.ɪŋ/</span><span class="ko">[<b>래</b>킹]</span><span class="spk" aria-hidden="true">🔊</span></button>
   </div>
   <p class="pron-note"><span style="color:var(--accent2)">*</span> 표시는 노트에 발음이 없어 사전 표기를 옮겨 둔 것이다. 나머지는 각 노트의 Pronunciation (US) 줄.</p>
+<!-- COMIC:START -->
+  <h2 id="comic-h">만화로 먼저 느끼기</h2>
+  <p>설명을 읽기 전에 <b>형용사를 누르고 만화만 본다.</b> 그다음 <b>장면 1 → 2 → 3</b>을 넘긴다. 앞뒤 칸은 바뀌어도 <b>가운데 칸의 느낌</b>은 남는다 — 그 남는 것이 형용사다. 장면 3은 손에 안 잡히는 것까지 간다.</p>
+  <div class="cm-btns" id="cmBtns" role="group" aria-label="형용사 고르기"></div>
+  <div class="cm-btns" id="cmSc" role="group" aria-label="장면 고르기"></div>
+  <div class="cm" id="cm"></div>
+  <div class="cm-say" id="cmSay" aria-live="polite"></div>
+  <p class="note">장면 하나가 뜻은 아니다. 세 장면에 다 남는 것이 형용사의 느낌이다. 장면 1은 노트의 문장을 옮겼고, 장면 2 · 3과 감정은 새로 지었다(rich 장면 2는 진한 맛, poor 장면 3은 질이 나쁜 쓰임). 가운데 칸은 늘 같은 "유리 단지 하나"와 "무엇이?" 칸이다 — 단지가 얼마나 찼나, 그리고 abundant · scarce(물자 · 자원) · affluent(생활 수준) · lacking(빠진 것)처럼 무엇이 많고 적은가만 바뀐다.</p>
+  <h3>만화 보고 맞히기</h3>
+  <div class="cm" id="qz"></div>
+  <p class="en" style="font-size:18px;margin:8px 0" id="qzLine"></p>
+  <div class="cm-btns" id="qzBtns" role="group" aria-label="형용사 맞히기"></div>
+  <div class="cm-say" id="qzSay" aria-live="polite"></div>
+<!-- COMIC:END -->
   <div class="card">
     <div class="fig">
     <svg width="100%" viewBox="0 0 680 300" role="img" aria-labelledby="tD dD"><title id="tD">낱말을 누르면 많고 적은 장면이 바뀌는 그림</title><desc id="dD">많은 쪽은 두둑한 지갑, 재산 많은 가족, 부유한 동네, 풍성한 사과이고 적은 쪽은 얇은 지갑, 빈 주머니, 마른 물통, 증거 빠진 보고서다.</desc><g id="dualScene"></g></svg>
@@ -518,5 +550,182 @@
     drawSlot();
   }
 </script>
+<!-- COMIC:START -->
+<script>
+  (() => {
+    // 만화 공통 부품. 칸 높이 240, 좌표는 그림용. 종이 색은 어두운 화면에서도 그대로 (l 선 · f 면 · g 옮기기 · t 글자 · sfx 효과음)
+    const K = '#222', ME = '#4a7fb5', OT = '#a84b40', OF = '#2b3550', SK = '#f0c49a';
+    const l = (d, w, c) => '<path d="' + d + '" fill="none" stroke="' + (c || K) + '" stroke-width="' + (w || 3) + '" stroke-linecap="round" stroke-linejoin="round"/>';
+    const f = (d, c, w) => '<path d="' + d + '" fill="' + c + '" stroke="' + K + '" stroke-width="' + (w === undefined ? 3 : w) + '" stroke-linejoin="round"/>';
+    const g = (x, y, r, k, b) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + (r || 0) + ') scale(' + (k || 1) + ')">' + b + '</g>';
+    const t = (x, y, z, v, c, r) => '<text x="' + x + '" y="' + y + '" font-size="' + z + '" text-anchor="middle" fill="' + (c || K) + '" font-weight="700"' + (r ? ' transform="rotate(' + r + ' ' + x + ' ' + y + ')"' : '') + '>' + v + '</text>';
+    // 효과음: 큰 한국어 + 작은 영어. 크기와 기울기가 힘
+    const sfx = (x, y, z, v, en, c, r) => '<g transform="rotate(' + (r || 0) + ' ' + x + ' ' + y + ')"><g class="sfx"><text x="' + x + '" y="' + y + '" font-size="' + z + '" text-anchor="middle" font-weight="900" fill="' + c + '" stroke="#fff" stroke-width="' + z / 7 + '" paint-order="stroke" stroke-linejoin="round">' + v + '</text>' + (en ? t(x, y + Math.max(15, z * .42), Math.max(11, z * .3), en, c) : '') + '</g></g>';
+    const FACE = {
+      calm: l('M-10 -4 v5 M10 -4 v5 M-7 13 h14'), smile: l('M-10 -4 v5 M10 -4 v5 M-9 10 q9 9 18 0'),
+      shock: '<circle cx="-10" cy="-4" r="7" fill="#fff" stroke="#222" stroke-width="2"/><circle cx="10" cy="-4" r="7" fill="#fff" stroke="#222" stroke-width="2"/><circle cx="-10" cy="-4" r="2" fill="#222"/><circle cx="10" cy="-4" r="2" fill="#222"/><ellipse cx="0" cy="15" rx="6" ry="8" fill="#222"/>',
+      phew: l('M-15 -2 q5 5 10 0 M5 -2 q5 5 10 0 M-6 13 q6 5 12 0') + f('M24 -14 q-7 11 0 15 q7 -4 0 -15', '#9fd3f0', 2),
+      sad: l('M-10 -4 v5 M10 -4 v5 M-8 15 q8 -8 16 0 M-16 -12 l10 -4 M16 -12 l-10 -4'), stern: l('M-17 -13 l12 5 M17 -13 l-12 5 M-10 -3 v4 M10 -3 v4 M-8 14 h16', 4),
+      down: l('M-14 0 q5 4 9 0 M5 0 q5 4 9 0 M-6 15 h12') };
+    const HEAD = (fc) => '<circle r="28" fill="' + SK + '" stroke="#222" stroke-width="3"/><path d="M-28 -4 q2 -30 28 -28 q26 -2 28 28 q-12 -14 -28 -14 q-16 0 -28 14" fill="#4a3424" stroke="#222" stroke-width="2"/>' + FACE[fc];
+    const PH = '<rect x="-12" y="-21" width="24" height="42" rx="4" fill="#222"/><rect x="-9" y="-16" width="18" height="30" fill="#8fd0ee"/>';
+    // 사람: (0,0)이 발. arm = 팔 그림
+    const MAN = (c, fc, arm, leg) => l(leg || 'M-12 -42 L-14 0 M12 -42 L14 0', 10) + f('M-24 -102 q24 -12 48 0 l4 64 h-56 z', c) + (arm ? l(arm, 13) + l(arm, 8, SK) : '') + g(0, -134, 0, 1, HEAD(fc));
+    // 큰 손: 팔이 왼쪽에서 오고 (0,0)이 손바닥. 휴대폰을 쥔 모양
+    const FIST = (c, item) => f('M-200 -24 H-40 V24 H-200 z', c) + f('M-44 -22 q20 -14 40 -8 q16 4 14 24 q2 22 -16 26 q-24 4 -38 -10 z', SK) + (item || g(12, -8, 8, 2.5, PH)) + [-22, -8, 6, 20].map((y) => f('M-6 ' + (y - 6) + ' h26 q8 6 0 12 h-26 z', SK, 2.5)).join('') + f('M-18 -26 q20 -18 34 -8 q2 8 -8 10 q-14 2 -22 8 z', SK, 2.5);
+    const FOC = (w, x, y, r, n, c) => Array.from({ length: n }, (_, i) => { const a = i * 2 * Math.PI / n, q = r + (i % 3) * 14, e = .016 + (i % 2) * .016; return '<path d="M' + (x + q * Math.cos(a)).toFixed(1) + ' ' + (y + q * Math.sin(a)).toFixed(1) + ' L' + (x + 420 * Math.cos(a - e)).toFixed(1) + ' ' + (y + 420 * Math.sin(a - e)).toFixed(1) + ' L' + (x + 420 * Math.cos(a + e)).toFixed(1) + ' ' + (y + 420 * Math.sin(a + e)).toFixed(1) + ' z" fill="' + (c || K) + '"/>'; }).join('');
+    const SPD = (x, y, n, w) => Array.from({ length: n }, (_, i) => l('M' + (x + (i % 2) * 14) + ' ' + (y + i * 15) + ' h' + (w - (i % 3) * 14), 2 + (i % 2))).join('');
+    const TBL = (x, y, w) => f('M' + x + ' ' + y + ' h' + w + ' v10 h-' + w + ' z', '#c9a171') + l('M' + (x + 12) + ' ' + (y + 10) + ' V240 M' + (x + w - 12) + ' ' + (y + 10) + ' V240', 6, '#8a6a48');
+    const BUB = (x, y, w, v, z) => '<ellipse cx="' + x + '" cy="' + y + '" rx="' + w / 2 + '" ry="20" fill="#fff" stroke="#222" stroke-width="2.5"/>' + t(x, y + 6, z || 16, v);
+    const CAR = (x, y, k) => g(x, y, 0, k, f('M-70 0 v-22 l26 -22 h56 l26 22 h32 v22 z', '#d8412f') + f('M-36 -24 l16 -14 h24 v14 z M10 -24 v-14 h6 l16 14 z', '#bfe6f5', 2) + '<circle cx="-38" cy="2" r="13" fill="#222"/><circle cx="42" cy="2" r="13" fill="#222"/>');
+    const BUS = (x, y, k) => g(x, y, 0, k, f('M0 0 v-110 q0 -14 14 -14 h150 q14 0 14 14 v110 z', '#3a9a6a') + [14, 60, 106].map((q) => f('M' + q + ' -104 h36 v34 h-36 z', '#bfe6f5', 2.5)).join('') + f('M144 0 v-100 h24 v100 z', '#fffdf6', 2.5) + '<circle cx="36" cy="2" r="15" fill="#222"/><circle cx="118" cy="2" r="15" fill="#222"/>');
+    const STAR = (x, y, r, c) => f(Array.from({ length: 10 }, (_, i) => { const q = -Math.PI / 2 + i * Math.PI / 5, d = i % 2 ? r * .45 : r; return (i ? 'L' : 'M') + (x + d * Math.cos(q)).toFixed(1) + ' ' + (y + d * Math.sin(q)).toFixed(1); }).join(' ') + ' z', c || '#f2b632');
+    const CASTLE = (x, y, k, flag) => g(x, y, 0, k, f('M-60 0 v-70 h18 v12 h16 v-12 h16 v12 h20 v-12 h16 v12 h16 v-12 h18 v70 z', '#b9b4a6') + f('M-12 0 v-28 q12 -16 24 0 v28 z', '#4a3424') + l('M0 -60 v-62', 4) + f('M0 -122 l44 12 l-44 14 z', flag));
+    const BEAR = (x, y, k) => g(x, y, 0, k, '<circle cx="-13" cy="-24" r="8" fill="#b9814a" stroke="#222" stroke-width="3"/><circle cx="13" cy="-24" r="8" fill="#b9814a" stroke="#222" stroke-width="3"/><circle cy="-10" r="20" fill="#b9814a" stroke="#222" stroke-width="3"/><circle cx="-7" cy="-13" r="2.5"/><circle cx="7" cy="-13" r="2.5"/>' + l('M-5 -2 q5 5 10 0', 2.5) + f('M-16 8 h32 l4 26 h-40 z', '#b9814a'));
+    const EYE = (x, y, k) => g(x, y, 0, k, f('M-34 0 q34 -38 68 0 q-34 38 -68 0 z', '#fff') + '<circle r="15" fill="#4a7fb5" stroke="#222" stroke-width="3"/><circle r="6"/>');
+    const BOOK = (x, y, k) => g(x, y, 0, k, f('M-30 -42 h60 v84 h-60 z', '#7a4a9a') + t(0, -10, 14, '비밀의', '#fff') + t(0, 12, 14, '문', '#fff'));
+    const DARK = (w, c) => '<rect width="' + w + '" height="240" fill="' + (c || '#1b1d26') + '"/>';
+    const ZZ = (x, y) => t(x, y, 18, 'z', '#555') + t(x + 14, y - 16, 24, 'z', '#555') + t(x + 32, y - 36, 30, 'Z', '#555');
+    // 짧게 쓰는 부품: A 사람(바닥 240) · BK 책 · HND 왼쪽에서 온 펼친 손 · ARW 화살표 · BOXG 상자 · COIN 동전
+    const A = (x, c, fc, arm, k, leg) => g(x, 240, 0, k || .88, MAN(c, fc, arm, leg));
+    const BK = (x, y, k, c, r) => g(x, y, r || 0, k || 1, f('M-20 -26 h36 q6 0 6 6 v46 h-42 z', c || '#a84b40') + f('M-20 20 h42 v6 h-42 z', '#fff', 2) + l('M-10 -12 h20 M-10 -4 h14', 2, '#fff'));
+    const HND = (x, y, k, c, flip) => '<g transform="translate(' + x + ' ' + y + ') scale(' + (flip ? -1 : 1) * (k || 1) + ' ' + (k || 1) + ')">' + f('M-200 -20 H-50 V22 H-200 z', c) + f('M-52 -18 q24 -8 44 -4 l44 4 q8 5 0 10 h-30 q34 4 34 8 q0 8 -10 8 h-50 q-20 2 -32 10 z', SK) + '</g>';
+    const ARW = (x1, y1, x2, y2, c, w) => { const a = Math.atan2(y2 - y1, x2 - x1), h = 14; return l('M' + x1 + ' ' + y1 + ' L' + x2 + ' ' + y2 + ' M' + (x2 - h * Math.cos(a - .5)).toFixed(1) + ' ' + (y2 - h * Math.sin(a - .5)).toFixed(1) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - h * Math.cos(a + .5)).toFixed(1) + ' ' + (y2 - h * Math.sin(a + .5)).toFixed(1), w || 4, c || '#888'); };
+    const BOXG = (x, y, w, h, c) => f('M' + x + ' ' + y + ' h' + w + ' v' + h + ' h-' + w + ' z', c || '#c9a171');
+    const COIN = (x, y, r) => '<circle cx="' + x + '" cy="' + y + '" r="' + (r || 12) + '" fill="#f2b632" stroke="#222" stroke-width="3"/>' + t(x, y + (r || 12) * .4, (r || 12) * 1.1, '$');
+    const GND = (w) => l('M0 238 H' + w, 2);
+    // MIX: 동사 다섯의 맞히기 순서(장면 15개를 섞는다) · SHIFT 옆으로 옮겨 여러 번 · SUN · MOON · DOC 파일 · BULB 전구
+    const MIX = (d) => [[4, 0], [1, 1], [2, 1], [0, 0], [3, 1], [4, 2], [1, 0], [2, 2], [0, 1], [3, 0], [4, 1], [1, 2], [0, 2], [3, 2], [2, 0]].filter(([i]) => i < d.length).map(([i, n]) => [d[i], n]);
+    const SUN = (x, y, r) => '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#f2b632" stroke="#222" stroke-width="3"/>';
+    const MOON = (x, y, k) => g(x, y, 0, k || 1, f('M6 -18 a20 20 0 1 0 8 34 a16 16 0 1 1 -8 -34', '#f2e6a0', 2.5));
+    const DOC = (x, y, k, r) => g(x, y, r || 0, k || 1, f('M-20 -28 h28 l12 12 v44 h-40 z', '#fff') + l('M8 -28 v12 h12', 2.5) + l('M-12 -6 h24 M-12 4 h24 M-12 14 h16', 2.5, '#4a7fb5'));
+    const BULB = (x, y, k) => g(x, y, 0, k || 1, f('M-20 -20 a24 24 0 1 1 40 0 q-8 12 -8 22 h-24 q0 -10 -8 -22 z', '#f2d34a') + f('M-11 4 h22 v12 h-22 z', '#999') + l('M0 -70 v-10 M-38 -58 l-8 -8 M38 -58 l8 -8', 3));
+    const CLK = (x, y, r, c) => '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#fff" stroke="' + (c || K) + '" stroke-width="3"/>' + l('M' + x + ' ' + y + ' v-' + r * .65 + ' M' + x + ' ' + y + ' l' + r * .5 + ' ' + r * .2);
+    // MIND 머릿속(옆얼굴 안의 방) · DRW 서랍 · BIRD 새 · PAINT 그림 액자 · BEYE 큰 눈(왼쪽에서 오른쪽을 봄)
+    const MIND = (w, body, bg) => DARK(w, bg || '#f2f0ea') + f('M30 240 V200 q-22 -30 -20 -84 q6 -104 ' + w * .42 + ' -104 q' + w * .4 + ' 0 ' + w * .42 + ' 96 l18 34 q4 8 -10 10 l-8 2 q4 40 -30 40 h-40 v46 z', SK) + '<ellipse cx="' + w * .44 + '" cy="112" rx="' + w * .33 + '" ry="82" fill="#fffdf6" stroke="#222" stroke-width="3"/>' + body;
+    const DRW = (x, y, w, h, open, v) => BOXG(x, y, w, h, '#c9a171') + (open ? BOXG(x - 4, y + 6, w + 8, h, '#e3c594') : '') + '<circle cx="' + (x + w / 2) + '" cy="' + (y + h / 2 + (open ? 8 : 0)) + '" r="4" fill="#7a4a2a"/>' + (v ? t(x + w / 2, y - 8, 15, v, '#d8412f') : '');
+    const BIRD = (x, y, k, c, w) => g(x, y, 0, k || 1, f('M-26 4 q0 -26 28 -26 q14 0 16 12 l14 4 l-12 6 q-4 20 -26 20 q-20 0 -20 -16 z', c || '#8a6a3a') + f('M-16 0 q14 -8 22 4 q-10 12 -22 -4', w || '#b9905a', 2.5) + '<circle cx="10" cy="-10" r="3"/>' + l('M-6 20 v10 M4 20 v10 M-26 4 l-14 8', 3));
+    const PAINT = (x, y, k) => g(x, y, 0, k || 1, f('M-50 -38 h100 v76 h-100 z', '#c9a171') + f('M-42 -30 h84 v60 h-84 z', '#bfe6f5', 2) + f('M-42 30 l26 -34 l20 22 l14 -14 l24 26 z', '#3a9a6a', 2) + '<circle cx="24" cy="-14" r="9" fill="#f2b632"/>');
+    const BEYE = (x, y, k, sq) => g(x, y, 0, k || 1, f('M-50 0 q50 -' + (sq ? 14 : 56) + ' 100 0 q-50 ' + (sq ? 14 : 56) + ' -100 0 z', '#fff') + '<circle cx="12" r="' + (sq ? 7 : 20) + '" fill="#4a7fb5" stroke="#222" stroke-width="3"/><circle cx="14" r="' + (sq ? 4 : 9) + '"/>' + l('M-54 -' + (sq ? 22 : 40) + ' q54 -' + (sq ? 6 : 30) + ' 108 0', 5));
+    const TREEC = (x, k) => g(x, 238, 0, k || 1, l('M0 0 V-90', 12, '#7a5a3a') + '<circle cy="-130" r="62" fill="#3a9a6a" stroke="#222" stroke-width="3"/>');
+    // EAR 큰 귀(왼쪽 소리를 듣는다) · LIP 큰 입 · SPIKE 뾰족 말풍선
+    const EAR = (x, y, k) => g(x, y, 0, k || 1, f('M-10 46 q-8 14 8 14 q22 0 26 -30 q18 -20 14 -48 q-8 -36 -40 -34 q-34 4 -34 40', SK) + l('M-18 -8 q2 -28 24 -28 q18 2 18 22 q-2 18 -16 22 q-8 4 -6 18', 4));
+    const LIP = (x, y, k, o) => g(x, y, 0, k || 1, f('M-44 0 q22 -26 44 -10 q22 -16 44 10 q-22 ' + (34 + (o || 0)) + ' -44 ' + (34 + (o || 0)) * .9 + ' q-22 0 -44 -' + (34 + (o || 0)) * .9 + ' z', '#e0705f') + f('M-30 2 q30 ' + (6 + (o || 0) * 1.4) + ' 60 0 q-30 ' + (10 + (o || 0) * 2) + ' -60 0 z', '#5b1d1d', 2));
+    const SPIKE = (x, y, w, h, c) => f(Array.from({ length: 24 }, (_, i) => { const a = i * Math.PI / 12, q = i % 2 ? .74 : 1; return (i ? 'L' : 'M') + (x + w / 2 * q * Math.cos(a)).toFixed(1) + ' ' + (y + h / 2 * q * Math.sin(a)).toFixed(1); }).join(' ') + ' z', c || '#fff');
+    // BIKE 자전거 · KEYI 열쇠 · HELM 헬멧
+    const BIKE = (x, y, k, c) => g(x, y, 0, k || 1, '<circle cx="-30" cy="0" r="24" fill="none" stroke="#222" stroke-width="5"/><circle cx="34" cy="0" r="24" fill="none" stroke="#222" stroke-width="5"/>' + l('M-30 0 l18 -38 h34 l12 38 M-12 -38 l-2 38 l36 -38 M22 -38 l-4 -12 h12', 5, c || '#d8412f'));
+    const KEYI = (x, y, k, r) => g(x, y, r || 0, k || 1, '<circle r="12" fill="#f2b632" stroke="#222" stroke-width="3"/><circle r="4" fill="#fffdf6"/>' + f('M12 -4 h36 v14 h-7 v-6 h-8 v6 h-7 v-6 h-14 z', '#f2b632'));
+    const HELM = (x, y, k) => g(x, y, 0, k || 1, f('M-34 10 q0 -44 36 -44 q32 2 34 34 l10 4 v6 z', '#3a9a6a') + l('M-10 -28 q-8 18 -6 36 M10 -32 q2 20 4 40', 3));
+    // PKG 소포 · ENV 편지 · FIRE 불꽃 · PHONE 큰 휴대폰
+    const PKG = (x, y, k) => g(x, y, 0, k || 1, f('M-28 -22 h56 v44 h-56 z', '#c9a171') + l('M0 -22 v44 M-28 -4 h56', 3, '#8a6a3a'));
+    const ENV = (x, y, k, c) => g(x, y, 0, k || 1, f('M-28 -18 h56 v36 h-56 z', c || '#fff') + l('M-28 -18 l28 22 l28 -22', 3));
+    const FIRE = (x, y, k) => g(x, y, 0, k || 1, f('M0 30 q-40 -8 -26 -46 q8 10 12 -2 q-4 -28 16 -44 q0 22 16 32 q6 -6 6 -14 q22 30 4 58 q-8 14 -28 16 z', '#f2722b') + f('M0 28 q-18 -6 -10 -28 q8 4 10 -10 q18 14 12 28 q-4 8 -12 10 z', '#f2d34a', 2));
+    const PHONE = (x, y, k, b) => g(x, y, 0, k || 1, f('M-44 -84 h88 q8 0 8 8 v152 q0 8 -8 8 h-88 q-8 0 -8 -8 v-152 q0 -8 8 -8 z', '#222') + f('M-42 -70 h84 v136 h-84 z', '#eaf4fb', 0) + (b || ''));
+    // note: 장면 하나가 뜻은 아니다. 세 장면에 다 남는 것이 형용사의 느낌이다. 장면 1은 노트의 문장을 옮겼고, 장면 2 · 3과 감정은 새로 지었다(rich 장면 2는 진한 맛, poor 장면 3은 질이 나쁜 쓰임). 가운데 칸은 늘 같은 "유리 단지 하나"와 "무엇이?" 칸이다 — 단지가 얼마나 찼나, 그리고 abundant · scarce(물자 · 자원) · affluent(생활 수준) · lacking(빠진 것)처럼 무엇이 많고 적은가만 바뀐다.
+    const WORD = '형용사', BASE = '', FIRST = 'scarce', BASIC_B = '노트 장면';
+    const FX = { rich: [.3, 1400, 1800, .15, .4], wealthy: [.5, 900, 1300, .15, .4], affluent: [.6, 800, 1000, .1, .4], abundant: [.6, 700, 1100, .15, .4], poor: [.5, 400, 300, .08, .5], penniless: [.6, 300, 160, .1, .5], scarce: [.3, 1600, 1600, .06, .5], lacking: [.4, 600, 400, .08, .5] };
+    const ORDER = MIX(['rich', 'wealthy', 'affluent', 'abundant', 'poor', 'penniless', 'scarce', 'lacking']);
+    const MN = '#a84b7a', BR = '#8a6a3a', RD = '#d8412f', GN = '#2c7a53', BL = '#2b5a8a', OR = '#e07a2b', WT = '#4a7fb5', GD = '#f2b632';
+    const FL = { abundant: 1, wealthy: .92, rich: .85, affluent: .75, lacking: .55, poor: .15, scarce: .08, penniless: 0 };
+    const WHAT = { rich: '돈이 많음', wealthy: '재산이 많음', affluent: '동네 · 생활 수준', abundant: '물자 · 수량이 넉넉', poor: '돈이 적음', penniless: '돈이 거의 없음', scarce: '물 · 자원이 모자람', lacking: '있어야 할 것이 빠짐' };
+    const TC = (v) => v > .5 ? GN : RD;
+    const JAR = (id) => { const v = FL[id], n = Math.round(v * 24), apple = id === 'abundant', drop = id === 'scarce';
+      let s = f('M34 70 h56 v12 h-56 z', '#888') + f('M30 82 h64 v118 h-64 z', 'rgba(207,230,245,.5)', 3);
+      s += Array.from({ length: n }, (_, i) => { const x = 40 + (i % 4) * 15, y = 190 - Math.floor(i / 4) * 18;
+        return apple ? '<circle cx="' + x + '" cy="' + y + '" r="8" fill="' + RD + '" stroke="#222" stroke-width="1.5"/>' : '<circle cx="' + x + '" cy="' + y + '" r="7" fill="' + GD + '" stroke="#222" stroke-width="1.5"/>'; }).join('');
+      if (drop) s = f('M34 70 h56 v12 h-56 z', '#888') + f('M30 82 h64 v118 h-64 z', 'rgba(207,230,245,.5)', 3) + f('M58 184 q-5 8 0 11 q5 -3 0 -11', '#8fd0ee', 2);
+      if (apple) s += '<circle cx="24" cy="206" r="8" fill="' + RD + '" stroke="#222" stroke-width="1.5"/><circle cx="102" cy="206" r="8" fill="' + RD + '" stroke="#222" stroke-width="1.5"/>';
+      if (id === 'lacking') s += '<rect x="70" y="120" width="18" height="18" fill="none" stroke="' + RD + '" stroke-width="2" stroke-dasharray="3 3"/>';
+      if (id === 'affluent') s += f('M14 60 l10 -10 l10 10 v14 h-20 z M90 60 l10 -10 l10 10 v14 h-20 z', '#e9e0c8');
+      if (id === 'penniless') s += t(62, 150, 14, '텅', '#aaa');
+      return s + t(62, 228, 12, apple ? '넘친다!' : '찬 정도 ' + Math.round(v * 100), TC(v)); };
+    const TP = (id, b, z) => DARK(280, '#f6f4ee') + JAR(id) + BOXG(124, 56, 144, 128, '#fff') + t(196, 76, 13, '무엇이?', '#888') + (b || t(196, 136, WHAT[id].length > 8 ? 13 : 17, WHAT[id], BL)) + sfx(196, 220, 24, z, '', TC(FL[id]));
+    const P = (id, z) => (b, zz) => TP(id, b, zz || z);
+    const W = { rich: P('rich', '두둑'), wealthy: P('wealthy', '넉넉'), affluent: P('affluent', '여유'), abundant: P('abundant', '주렁주렁'), poor: P('poor', '빠듯'), penniless: P('penniless', '빈털터리'), scarce: P('scarce', '바짝'), lacking: P('lacking', '뭔가 빠졌다') };
+    // 작은 그림들
+    const MANSION = (x, k) => g(x, 238, 0, k || 1, f('M-60 0 v-70 l60 -40 l60 40 v70 z', '#e9e0c8') + [-40, -10, 20].map((d) => BOXG(d, -56, 18, 20, '#fff6c0')).join('') + BOXG(-10, -26, 20, 26, '#a3743f'));
+    const HUT = (x, k) => g(x, 238, 0, k || 1, f('M-30 0 v-40 l30 -24 l30 24 v40 z', '#c9b48a') + l('M-20 -30 l10 6', 2, '#7a5a3a'));
+    const TREEA = (x, n) => TREEC(x, .7) + Array.from({ length: n }, (_, i) => '<circle cx="' + (x - 40 + (i % 5) * 20) + '" cy="' + (100 + Math.floor(i / 5) * 22) + '" r="7" fill="' + RD + '"/>').join('');
+    const WALLET = (x, y, empty) => f('M' + (x - 30) + ' ' + (y - 20) + ' h60 v40 h-60 z', BR) + (empty ? t(x, y + 6, 14, '텅', '#fff') : f('M' + (x - 20) + ' ' + (y - 30) + ' h40 v14 h-40 z', GN));
+    const WELL = (x) => f('M' + (x - 30) + ' 238 v-40 h60 v40 z', '#999') + l('M' + (x - 30) + ' 198 v-50 h60 v50 M' + x + ' 148 v30', 4, '#7a5a3a');
+    const CAKE = (x, y, k) => g(x, y, 0, k || 1, f('M-40 0 v-34 h80 v34 z', '#5a3a1a') + f('M-40 -34 q20 8 40 0 q20 8 40 0 v-6 h-80 z', '#3a2010'));
+    const BOWL = (x, y) => f('M' + (x - 34) + ' ' + (y - 20) + ' h68 q-4 26 -34 26 q-30 0 -34 -26 z', '#fff') + f('M' + (x - 30) + ' ' + (y - 22) + ' q30 -6 60 0', '#e9b86a', 2);
+    const SPEAKER = (x, y) => f('M' + (x - 18) + ' ' + (y - 40) + ' h36 v40 h-36 z', '#333') + '<circle cx="' + x + '" cy="' + (y - 20) + '" r="10" fill="#666"/>';
+    const C = {
+      rich: { n: 'rich', past: 'rich', en: 'She is rich.', ko: '그녀는 부자다.', feel: '<b>돈이 많다.</b> 맛 · 색 · 영양이 진할 때도.', t: .3,
+        p: [[150, '큰 집', () => MANSION(75, .9)], [280, '단지가 가득', () => W.rich()], [150, '"한턱낼게!"', () => A(75, MN, 'smile', 'M18 -92 L40 -120', .8)]] },
+      wealthy: { n: 'wealthy', past: 'wealthy', en: 'They are a wealthy family.', ko: '그들은 재산이 많은 집안이다.', feel: '<b>재산이 많다.</b> rich보다 점잖게 들린다.', t: .5,
+        p: [[150, '대대로 내려온 땅', () => f('M0 160 H150 V240 H0 z', '#9ac47a') + MANSION(110, .5)], [280, '재산이 많음', () => W.wealthy()], [150, '가족사진', () => [30, 60, 90, 120].map((x, i) => A(x, ['#2b3550', MN, '#2b3550', OR][i], 'smile', null, i > 1 ? .4 : .5)).join('')]] },
+      affluent: { n: 'affluent', past: 'affluent', en: 'It\'s an affluent neighborhood.', ko: '그곳은 부유한 동네다.', feel: '<b>지역 · 생활 수준이 넉넉하다.</b> 글 · 뉴스에 많다.', t: .6,
+        p: [[150, '넓은 정원 집들', () => MANSION(40, .45) + MANSION(110, .45) + TREEC(75, .3)], [280, '동네 · 생활 수준', () => W.affluent()], [150, '산책하는 사람들', () => A(40, MN, 'smile', null, .5) + A(100, BL, 'smile', null, .5)]] },
+      abundant: { n: 'abundant', past: 'abundant', en: 'Apples are abundant this year.', ko: '올해는 사과가 풍성하다.', feel: '<b>물자 · 수량이 넉넉하다.</b> 사람의 돈이 아니다.', t: .6,
+        p: [[150, '과수원', () => TREEA(75, 15)], [280, '물자가 넉넉', () => W.abundant()], [150, '바구니 가득', () => f('M30 180 h90 l-10 50 h-70 z', '#c9a171') + Array.from({ length: 8 }, (_, i) => '<circle cx="' + (42 + (i % 4) * 22) + '" cy="' + (176 - Math.floor(i / 4) * 12) + '" r="9" fill="' + RD + '" stroke="#222" stroke-width="2"/>').join('')]] },
+      poor: { n: 'poor', past: 'poor', en: 'He was poor as a child.', ko: '그는 어릴 때 가난했다.', feel: '<b>돈이 적다.</b> "불쌍한" · "질이 나쁜"이라는 뜻도.', t: .5,
+        p: [[150, '작은 집', () => HUT(75, 1.4)], [280, '단지가 조금', () => W.poor()], [150, '그래도 웃는 아이', () => HUT(110, .8) + A(50, OR, 'smile', null, .5)]] },
+      penniless: { n: 'penniless', past: 'penniless', en: 'He was left penniless.', ko: '그는 빈털터리가 되었다.', feel: '<b>돈이 거의 없다.</b> 극단적인 상황.', t: .6,
+        p: [[150, '사업 실패', () => DOC(75, 130, 1.6) + t(96, 100, 18, '↓', RD)], [280, '단지가 텅', () => W.penniless()], [150, '빈 지갑', () => WALLET(75, 140, true) + A(120, BR, 'down', null, .4)]] },
+      scarce: { n: 'scarce', past: 'scarce', en: 'Clean water is scarce here.', ko: '이곳은 깨끗한 물이 귀하다.', feel: '<b>물 · 자원이 모자라 드물다.</b> 사람에게는 안 쓴다.', t: .3,
+        p: [[150, '마른 땅', () => f('M0 200 H150 V240 H0 z', '#e2c48a') + l('M20 210 l10 8 M80 214 l-8 10', 2, BR) + SUN(110, 40, 16)], [280, '물 · 자원이 모자람', () => W.scarce()], [150, '우물 앞 긴 줄', () => WELL(120) + [20, 45, 70].map((x) => A(x, [BL, MN, OR][x % 3], 'calm', null, .35)).join('')]] },
+      lacking: { n: 'lacking', past: 'lacking', en: 'The report is lacking in evidence.', ko: '그 보고서는 증거가 부족하다.', feel: '<b>있어야 할 것이 빠졌다.</b> 보통 be lacking in.', t: .4,
+        p: [[150, '두툼한 보고서', () => DOC(75, 130, 1.6)], [280, '빠진 것', () => W.lacking()], [150, '"근거는요?"', () => A(75, '#888', 'stern', 'M18 -92 L40 -120', .8)]] }
+    };
+    const MORE = {
+      rich: [
+        { b: '케이크', en: 'This chocolate cake is rich.', ko: '이 초콜릿 케이크는 진하다.', feel: '맛도 <b>가득 차</b> 진하다.', p: [[150, '디저트', () => CAKE(75, 200, 1.4)], [280, '맛이 가득', () => W.rich(CAKE(196, 170, .9))], [150, '한 입이면 충분', () => A(75, MN, 'phew', 'M18 -92 L22 -126', .8)]] },
+        { b: '역사', en: 'The city has a rich history.', ko: '그 도시는 역사가 풍부하다.', feel: '이야기도 <b>가득 쌓였다.</b>', p: [[150, '오래된 성문', () => CASTLE(75, 236, .9, RD)], [280, '이야기가 가득', () => W.rich(BOOK(196, 140, .5))], [150, '가이드 설명', () => A(50, BR, 'smile', 'M18 -92 L40 -120', .6) + A(110, BL, 'shock', null, .5)]] }],
+      wealthy: [
+        { b: '후원자', en: 'A wealthy donor built the library.', ko: '재산이 많은 후원자가 도서관을 지었다.', feel: '<b>재산이 많아</b> 크게 나눈다.', p: [[150, '새 도서관', () => BOXG(20, 100, 110, 138, '#e9e0c8') + t(75, 150, 14, '도서관', BR)], [280, '재산이 많음', () => W.wealthy()], [150, '책 읽는 아이들', () => A(40, OR, 'smile', null, .5) + A(110, GN, 'smile', null, .5) + BOOK(75, 120, .3)]] },
+        { b: '나라', en: 'It\'s a wealthy country.', ko: '그곳은 부유한 나라다.', feel: '나라도 <b>재산이 많다.</b>', p: [[150, '지도', () => BOXG(20, 40, 110, 110, '#e9f0d8') + f('M50 80 q25 -20 50 0 q10 30 -20 40 q-30 0 -30 -40 z', GD)], [280, '재산이 많음', () => W.wealthy()], [150, '높은 빌딩들', () => [30, 70, 110].map((x, i) => BOXG(x - 15, 238 - 80 - i * 30, 30, 80 + i * 30, '#9aa8b8')).join('')]] }],
+      affluent: [
+        { b: '교외', en: 'They moved to an affluent suburb.', ko: '그들은 부유한 교외로 이사했다.', feel: '<b>생활 수준</b>이 넉넉한 곳.', p: [[150, '이삿짐 트럭', () => BOXG(20, 150, 110, 60, OR) + '<circle cx="40" cy="214" r="10" fill="#333"/><circle cx="110" cy="214" r="10" fill="#333"/>'], [280, '생활 수준', () => W.affluent()], [150, '잔디 마당', () => f('M0 200 H150 V240 H0 z', '#9ac47a') + MANSION(75, .6)]] },
+        { b: '사회', en: 'In affluent societies, people buy more.', ko: '부유한 사회에서는 사람들이 더 많이 산다.', feel: '사회 전체의 <b>생활이 넉넉하다.</b>', p: [[150, '쇼핑몰', () => BOXG(20, 80, 110, 158, '#f2d59a') + t(75, 120, 14, 'SALE', RD)], [280, '생활 수준', () => W.affluent()], [150, '쇼핑백 가득', () => A(75, MN, 'smile', 'M-20 -90 L-30 -50 M20 -90 L30 -50', .8) + f('M36 160 h20 v26 h-20 z M94 160 h20 v26 h-20 z', OR)]] }],
+      abundant: [
+        { b: '비', en: 'Rain is abundant in spring.', ko: '봄에는 비가 넉넉히 온다.', feel: '물이 <b>넉넉하다.</b>', p: [[150, '봄비', () => l('M20 30 l-6 20 M50 50 l-6 20 M80 30 l-6 20 M110 50 l-6 20 M135 30 l-6 20', 3, WT)], [280, '물자가 넉넉', () => W.abundant()], [150, '쑥쑥 자라는 새싹', () => f('M0 200 H150 V240 H0 z', '#9ac47a') + [30, 60, 90, 120].map((x) => l('M' + x + ' 200 v-20 M' + x + ' 190 q-8 -4 -10 -12 M' + x + ' 188 q8 -4 10 -12', 3, GN)).join('')]] },
+        { b: '증거', en: 'There is abundant evidence.', ko: '증거가 넉넉하다.', feel: '근거도 <b>넉넉하다.</b>', p: [[150, '수사 회의', () => [0, 1, 2, 3].map((i) => DOC(40 + i * 24, 140, 1)).join('')], [280, '근거가 넉넉', () => W.abundant([0, 1, 2].map((i) => DOC(176 + i * 20, 140, .7)).join(''))], [150, '"틀림없어"', () => A(75, BR, 'stern', 'M18 -92 L40 -120', .8)]] }],
+      poor: [
+        { b: '마을', en: 'The village was poor.', ko: '그 마을은 가난했다.', feel: '마을에 <b>돈이 적다.</b>', p: [[150, '산골 마을', () => HUT(40, .8) + HUT(110, .8)], [280, '단지가 조금', () => W.poor()], [150, '함께 나누는 밥', () => f('M30 190 h90 v8 h-90 z', '#a3743f') + A(40, OR, 'smile', null, .45) + A(110, GN, 'smile', null, .45)]] },
+        { b: '음질', en: 'The sound quality is poor.', ko: '소리 질이 나쁘다.', feel: '질이 <b>모자라다</b> — 가난한 질.', p: [[150, '옛 스피커', () => SPEAKER(75, 200)], [280, '질이 모자람', () => W.poor(l('M150 140 l10 -10 l6 20 l8 -16 l10 14 l6 -10 l10 10', 3, RD))], [150, '"치지직"', () => A(75, BL, 'stern', 'M-20 -90 L-28 -130 M20 -90 L28 -130', .8)]] }],
+      penniless: [
+        { b: '여행', en: 'I came home penniless after the trip.', ko: '여행 끝에 빈털터리로 집에 왔다.', feel: '돈이 <b>거의 없다.</b>', p: [[150, '기념품 잔뜩', () => [0, 1, 2].map((i) => PKG(40 + i * 35, 220 - i * 10, .7)).join('')], [280, '단지가 텅', () => W.penniless(WALLET(196, 140, true))], [150, '라면만 일주일', () => BOWL(75, 200) + A(120, BL, 'down', null, .45)]] },
+        { b: '첫 도시', en: 'He arrived in the city penniless.', ko: '그는 무일푼으로 도시에 왔다.', feel: '<b>아무것도 없이</b> 시작했다.', p: [[150, '기차역', () => BOXG(20, 80, 110, 60, '#c8ccd2') + t(75, 116, 14, '서울역', BL)], [280, '단지가 텅', () => W.penniless()], [150, '그래도 걷는다', () => [20, 50, 80, 110, 130].map((x, i) => BOXG(x, 238 - 60 - i * 10, 18, 60 + i * 10, '#9aa8b8')).join('') + A(60, BR, 'stern', null, .45, 'M-10 -42 L-24 0 M10 -42 L22 0')]] }],
+      scarce: [
+        { b: '먹이', en: 'Food is scarce in winter.', ko: '겨울에는 먹이가 귀하다.', feel: '먹을 것이 <b>모자라 드물다.</b>', p: [[150, '눈 덮인 숲', () => f('M0 200 H150 V240 H0 z', '#fff') + TREEC(40, .4) + TREEC(110, .4)], [280, '먹이가 모자람', () => W.scarce(t(196, 146, 26, '🌰', BR))], [150, '도토리 한 알', () => g(75, 220, 0, .9, '<ellipse cy="-14" rx="16" ry="12" fill="#8a6a3a" stroke="#222" stroke-width="2"/><circle cx="14" cy="-26" r="8" fill="#8a6a3a" stroke="#222" stroke-width="2"/>') + t(115, 200, 16, '🌰')]] },
+        { b: '시간', en: 'Free time is scarce these days.', ko: '요즘은 쉬는 시간이 귀하다.', feel: '시간도 <b>모자라 드물다.</b>', p: [[150, '꽉 찬 달력', () => BOXG(20, 40, 110, 110, '#fff') + [0, 1, 2, 3, 4].map((i) => BOXG(26 + i * 20, 60, 16, 80, OR)).join('')], [280, '시간이 모자람', () => W.scarce(CLK(196, 140, 22, RD))], [150, '5분 휴식', () => A(75, BL, 'phew', 'M18 -92 L22 -122', .8) + t(124, 50, 14, '5분', OR)]] }],
+      lacking: [
+        { b: '소금', en: 'The soup is lacking in salt.', ko: '수프에 소금이 모자라다.', feel: '있어야 할 맛이 <b>빠졌다.</b>', p: [[150, '수프 한 입', () => BOWL(75, 200) + A(120, MN, 'calm', null, .4)], [280, '빠진 것', () => W.lacking(t(196, 146, 18, '소금?', '#888'))], [150, '톡톡', () => f('M60 100 h20 v30 h-20 z', '#fff') + t(70, 150, 14, '· · ·', '#888')]] },
+        { b: '자신감', en: 'She is lacking in confidence.', ko: '그녀는 자신감이 부족하다.', feel: '마음에 <b>있어야 할 것이 빠졌다.</b>', p: [[150, '발표 전', () => A(75, MN, 'sad', null, .8)], [280, '빠진 것', () => W.lacking(t(196, 146, 26, '💪?'))], [150, '"넌 잘할 수 있어"', () => A(45, BL, 'smile', 'M18 -92 L46 -100', .6) + A(110, MN, 'phew', null, .55)]] }]
+    };
+    const CORE = { rich: '<b>돈이 많다.</b>', wealthy: '<b>재산이 많다.</b>', affluent: '<b>지역 · 생활 수준이 넉넉하다.</b>', abundant: '<b>물자 · 수량이 넉넉하다.</b>', poor: '<b>돈이 적다.</b>', penniless: '<b>돈이 거의 없다.</b>', scarce: '<b>물 · 자원이 모자라 드물다.</b>', lacking: '<b>있어야 할 것이 빠졌다.</b>' };
+    // 만화 공통 실행: 페이지 데이터(C · MORE · CORE · ORDER · FX · BASE · FIRST · BASIC_B)를 받아 단추 · 장면 · 맞히기를 만든다
+    const IDS = Object.keys(C), $ = (id) => document.getElementById(id);
+    const SC = {}; IDS.forEach((id) => { SC[id] = [Object.assign({ b: BASIC_B }, C[id]), ...MORE[id]]; });
+    const draw = (box, id, n, q) => { const c = SC[id][n]; box.style.setProperty('--t', C[id].t + 's'); box.classList.remove('go');
+      box.innerHTML = c.p.map(([w, a, b], i) => '<figure style="flex:' + w + ' 1 0;--i:' + i + '"><svg viewBox="0 0 ' + w + ' 240" role="img" aria-label="' + a + '">' + b(q) + '</svg></figure>').join('');
+      void box.offsetWidth; box.classList.add('go'); };
+    // 효과음: 파일 없이 만든 소리. 누른 다음에만 난다
+    let ac; const fx = (id) => { const A = window.AudioContext || window.webkitAudioContext; if (!A) return; ac = ac || new A(); ac.resume();
+      const [dur, f0, f1, vol, at] = FX[id], T = ac.currentTime + at;
+      const b = ac.createBuffer(1, ac.sampleRate * dur, ac.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);
+      const s = ac.createBufferSource(), flt = ac.createBiquadFilter(), v = ac.createGain(); s.buffer = b; flt.type = f0 < 300 ? 'lowpass' : 'bandpass'; flt.frequency.setValueAtTime(f0, T); flt.frequency.exponentialRampToValueAtTime(f1, T + dur); v.gain.value = vol; s.connect(flt).connect(v).connect(ac.destination); s.start(T); };
+    const say = (id, n) => { const c = SC[id][n]; return '<span class="en">' + c.en + '</span> <button type="button" class="speak" data-word="' + c.en + '" title="이 줄 듣기">🔊</button><br>' + c.ko + '<br>' + c.feel + '<br><span style="color:var(--accent)">세 장면에 남는 것 —</span> ' + CORE[id]; };
+    $('cmBtns').innerHTML = IDS.map((id) => '<button type="button" data-cm="' + id + '">' + C[id].n + '</button>').join('') + '<button type="button" id="cmAgain">↻ 효과음과 함께 다시</button>';
+    let cur = FIRST, no = 0;
+    const show = (id, n, snd) => { cur = id; no = n; draw($('cm'), id, n); $('cmSay').innerHTML = say(id, n);
+      $('cmSc').innerHTML = SC[id].map((c, i) => '<button type="button" data-sc="' + i + '" aria-pressed="' + (i === n) + '">장면 ' + (i + 1) + ' · ' + c.b + '</button>').join('');
+      $('cmBtns').querySelectorAll('[data-cm]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.cm === id)); if (snd) fx(id); };
+    $('cmBtns').onclick = (e) => { const b = e.target.closest('button'); if (b) b.dataset.cm ? show(b.dataset.cm, 0, true) : show(cur, no, true); };
+    $('cmSc').onclick = (e) => { const b = e.target.closest('button'); if (b) show(cur, +b.dataset.sc, true); };
+     let k = 0;
+    const ask = () => { const [id, n] = ORDER[k]; draw($('qz'), id, n, true); $('qzLine').textContent = SC[id][n].en.replace(SC[id][n].w || C[id].past, '_____'); $('qzSay').textContent = '어느 ' + (typeof WORD === 'undefined' ? '동사' : WORD) + '의 만화일까? (' + (k + 1) + ' / ' + ORDER.length + ')';
+      $('qzBtns').innerHTML = IDS.map((i) => '<button type="button" data-qz="' + i + '">' + C[i].past + '</button>').join('') + '<button type="button" id="qzNext">다음 만화 ▶</button>'; };
+    $('qzBtns').onclick = (e) => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'qzNext') { k = (k + 1) % ORDER.length; ask(); return; }
+      const [id, n] = ORDER[k], c = SC[id][n], x = b.dataset.qz; $('qzBtns').querySelectorAll('[data-qz]').forEach((z) => z.setAttribute('aria-pressed', z === b));
+      if (x === id) { $('qzLine').textContent = c.en; fx(id); $('qzSay').innerHTML = '✔ ' + say(id, n); }
+      else if (x === BASE) $('qzSay').innerHTML = c.no ? '<b>' + C[BASE].past + '</b> — 이 문장에는 어색하다. 더 꼭 맞는 것은?' : '<b>' + C[BASE].past + '</b> — 이것도 쓸 수 있다. 하지만 이 만화의 소리와 느낌이 빠진다. 더 꼭 맞는 것은?';
+      else $('qzSay').innerHTML = '<b>' + C[x].past + '</b>의 느낌은 ' + CORE[x] + ' 이 만화의 가운데 칸과 맞을까?'; };
+    show(cur, 0); ask();
+  })();
+</script>
+<!-- COMIC:END -->
 </body>
 </html>
